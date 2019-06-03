@@ -1,0 +1,47 @@
+<!--
+  ~
+  ~ Copyright 2019 RBKmoney
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="31dp"
+    android:height="19dp"
+    android:viewportWidth="31"
+    android:viewportHeight="19">
+  <path
+      android:pathData="M2,0L29,0A2,2 0,0 1,31 2L31,17A2,2 0,0 1,29 19L2,19A2,2 0,0 1,0 17L0,2A2,2 0,0 1,2 0z"
+      android:fillColor="#685BFF"/>
+  <path
+      android:pathData="M20.4816,6.2547C20.4134,6.767 20.3234,7.2591 20.2123,7.7308C19.7444,7.5881 19.2043,7.3591 18.4421,7.4069C17.9872,7.4354 17.449,7.5989 17.4416,7.9829C17.4335,8.4081 18.1804,8.6611 18.596,8.8471C19.3453,9.1826 20.1495,9.6298 20.2123,10.5395C20.2602,11.239 19.9133,11.8476 19.5195,12.1961C18.4707,13.1237 16.1438,13.2217 14.5557,12.6283C14.6547,12.1327 14.7446,11.6286 14.8252,11.1158C15.44,11.3604 16.2845,11.6909 17.2109,11.5839C17.6327,11.535 18.1492,11.3049 18.1344,10.8999C18.116,10.4056 17.1302,10.1116 16.6336,9.8555C16.0565,9.5579 15.3997,9.0627 15.3637,8.307C15.3398,7.8036 15.5493,7.3321 15.8255,7.0108C16.6455,6.0571 18.7527,5.7182 20.4816,6.2547Z"
+      android:fillColor="#ffffff"
+      android:fillType="evenOdd"/>
+  <path
+      android:pathData="M11.5928,13L12.8292,6H14.852L13.6156,13H11.5928Z"
+      android:fillColor="#ffffff"
+      android:fillType="evenOdd"/>
+  <path
+      android:pathData="M10.2366,6C9.5982,7.5505 9.0536,9.1981 8.3962,10.7288L8.2031,9.8103C8.2024,9.807 8.2008,9.8026 8.2002,9.7992L8.2326,9.9626C8.0898,9.4795 7.8471,9.0236 7.5365,8.6055C7.5282,8.5949 7.5202,8.584 7.5117,8.5732C7.4573,8.5012 7.3995,8.4314 7.3414,8.3617C7.306,8.319 7.2698,8.2768 7.2329,8.2345C6.7844,7.7288 6.2409,7.292 5.667,6.9458L7.3134,13H9.2984C10.2328,10.6376 11.241,8.352 12.1855,6C11.5359,6 10.8864,6 10.2366,6Z"
+      android:fillColor="#ffffff"
+      android:fillType="evenOdd"/>
+  <path
+      android:pathData="M6.1761,6H3V6.1458C4.8283,6.4814 7.1366,7.9251 7.7407,9.7917L7.0591,6.6708C6.9659,6.1898 6.6101,6 6.1761,6Z"
+      android:fillColor="#ffffff"
+      android:fillType="evenOdd"/>
+  <path
+      android:pathData="M23.9903,7.9293L22.9803,10.5185H24.6135L23.9903,7.9293ZM26.9998,13C26.3943,13 25.7888,13 25.1833,13C25.0659,12.668 25.0331,12.2551 24.9128,11.9258C24.0885,11.9258 23.2638,11.9258 22.4395,11.9258L21.9757,13C21.2801,13 20.5843,13 19.8887,13L22.5939,7.0372C22.7134,6.7754 22.9283,6.4184 23.0192,6.2592C23.1567,6.0181 23.6884,6 23.9143,6H25.4152L26.9998,13Z"
+      android:fillColor="#ffffff"
+      android:fillType="evenOdd"/>
+</vector>

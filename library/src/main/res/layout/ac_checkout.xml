@@ -16,35 +16,116 @@
   ~
   -->
 
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:background="@drawable/background_gradient">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
-        <TextView
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Top Text"
-            />
+            android:layout_marginStart="@dimen/large_value"
+            android:layout_marginTop="@dimen/default_value"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <TextView
+                android:id="@+id/tvPrice"
+                style="@style/Label.HeadlineWhite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="6 500, 50 ₽" />
+
+            <TextView
+                style="@style/Label.HeadlineBlueGrey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_value"
+                tools:text="ORDER DETAILS" />
+
+            <TextView
+                android:id="@+id/tvProduct"
+                style="@style/Label.White"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_value"
+                tools:text="Penny Board" />
+
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/ivLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_value"
+            android:layout_marginTop="@dimen/extra_large_value"
+            android:src="@drawable/ic_logo"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="linearLayout,ivLogo" />
 
         <FrameLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:layout_margin="@dimen/default_value"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/barrier" />
+
+        <ImageView
+            android:id="@+id/ivFooter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_value"
+            android:layout_marginTop="@dimen/default_value"
+            android:layout_marginEnd="@dimen/default_value"
+            android:scaleType="fitStart"
+            android:src="@drawable/ic_secure_payment"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/container" />
+
+        <ImageView
+            android:id="@+id/ivFooterLogos"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_footer_logos"
+            app:layout_constraintEnd_toEndOf="@+id/ivFooter"
+            app:layout_constraintStart_toStartOf="@+id/ivFooter"
+            app:layout_constraintTop_toBottomOf="@+id/ivFooter" />
 
         <TextView
+            android:id="@+id/tvFooter"
+            style="@style/Label.Footer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bottom Text"
-            />
-    </LinearLayout>
+            android:layout_marginStart="@dimen/default_value"
+            android:layout_marginTop="@dimen/default_value"
+            android:text="@string/footer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivFooterLogos" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

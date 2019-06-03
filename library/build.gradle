@@ -50,6 +50,8 @@ dependencies {
     implementation "androidx.fragment:fragment:$androidx.fragment"
     implementation "androidx.constraintlayout:constraintlayout:$androidx.constraintlayout"
     implementation "androidx.vectordrawable:vectordrawable:$androidx.vectordrawable"
+    implementation "androidx.cardview:cardview:$androidx.cardview"
+    implementation "androidx.recyclerview:recyclerview:$androidx.recyclerview"
 
     /* OkHttp */
     implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"

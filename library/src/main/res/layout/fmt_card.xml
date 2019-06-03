@@ -16,23 +16,129 @@
   ~
   -->
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-
-    <Button
-        android:id="@+id/btnTestPayment"
-        android:layout_width="wrap_content"
+<androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Оплатить по карте"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        android:orientation="vertical"
+        android:elevation="@dimen/elevation"
+        app:cardCornerRadius="@dimen/corner_radius"
+>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <TextView
+                android:id="@+id/tvChoosePaymentMethod"
+                style="@style/Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_value"
+                android:layout_marginTop="@dimen/default_value"
+                android:layout_marginEnd="@dimen/default_value"
+                android:text="@string/payment_by_card"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+
+        <EditText
+                android:id="@+id/edCardNumber"
+                style="@style/EditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_value"
+                android:layout_marginTop="@dimen/default_value"
+                android:layout_marginEnd="@dimen/default_value"
+                android:drawableLeft="@drawable/selector_card_small"
+                android:hint="@string/number_on_card"
+                android:inputType="number"
+                android:drawableRight="@drawable/selector_logo_visa"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvChoosePaymentMethod"/>
+
+        <EditText
+                android:id="@+id/edCardDate"
+                style="@style/EditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_value"
+                android:layout_marginTop="@dimen/medium_value"
+                android:drawableLeft="@drawable/selector_date"
+                android:hint="@string/date_card"
+                android:inputType="date"
+                app:layout_constraintEnd_toStartOf="@+id/edCardCvv"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edCardNumber"/>
+
+        <EditText
+                android:id="@+id/edCardCvv"
+                style="@style/EditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/medium_value"
+                android:layout_marginTop="@dimen/medium_value"
+                android:layout_marginEnd="@dimen/default_value"
+                android:drawableLeft="@drawable/selector_cvv"
+                android:hint="@string/ccv_card"
+                android:inputType="numberPassword"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/edCardDate"
+                app:layout_constraintTop_toBottomOf="@+id/edCardNumber"/>
+
+
+        <EditText
+                android:id="@+id/edCardName"
+
+                style="@style/EditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_value"
+                android:layout_marginTop="@dimen/medium_value"
+                android:layout_marginEnd="@dimen/default_value"
+                android:drawableLeft="@drawable/selector_person"
+                android:hint="@string/Name_on_the_card"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edCardDate"/>
+
+        <EditText
+                android:id="@+id/edEmail"
+                style="@style/EditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_value"
+                android:layout_marginTop="@dimen/medium_value"
+                android:layout_marginEnd="@dimen/default_value"
+                android:background="@drawable/background_edit_text"
+                android:drawableLeft="@drawable/selector_email"
+                android:hint="@string/email_for_check"
+                android:inputType="textEmailAddress"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edCardName"/>
+
+
+        <Button
+                android:id="@+id/button"
+                style="@style/Button.Accent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_value"
+                android:layout_marginTop="@dimen/default_value"
+                android:layout_marginEnd="@dimen/default_value"
+                android:layout_marginBottom="@dimen/default_value"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edEmail"
+                tools:text="Оплатить 6500. 50 Р"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
