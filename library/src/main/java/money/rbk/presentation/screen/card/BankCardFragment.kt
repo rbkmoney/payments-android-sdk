@@ -16,38 +16,38 @@
  *
  */
 
-package money.rbk.presentation.screen.methods
+package money.rbk.presentation.screen.card
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fmt_payment_methods.*
+import android.view.WindowManager
 import money.rbk.R
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.base.BasePresenter
-import money.rbk.presentation.screen.card.BankCardFragment
-import money.rbk.presentation.utils.replaceFragmentInActivity
 
-class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethodsView {
+class BankCardFragment : BaseFragment<BankCardView>() {
 
     companion object {
-        fun newInstance() = PaymentMethodsFragment() //TODO: Add Args
+        fun newInstance() = BankCardFragment() //TODO: Add Args
     }
+
+    override fun buildPresenter(): BasePresenter<BankCardView> = BankCardPresenter()
 
     override fun onCreateView(inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.fmt_payment_methods, container, false)
+        inflater.inflate(R.layout.fmt_card, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        //TODO: Make proper navigation
-        btnTestPaymentMethod.setOnClickListener {
-            activity?.replaceFragmentInActivity(BankCardFragment.newInstance(), R.id.container)
-        }
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
 
-    override fun buildPresenter(): BasePresenter<PaymentMethodsView> = PaymentMethodsPresenter()
-
+    override fun onDetach() {
+        activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        super.onDetach()
+    }
 }
