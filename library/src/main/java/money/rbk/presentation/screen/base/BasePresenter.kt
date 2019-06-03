@@ -16,21 +16,21 @@
  *
  */
 
-package money.rbk.sample
+package money.rbk.presentation.screen.base
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import money.rbk.RbkMoney
+abstract class BasePresenter<View : BaseView>() {
 
-class MainActivity : AppCompatActivity() {
+    private var view: View? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        btnPerformPayment.setOnClickListener {
-            RbkMoney.startCheckout(this, "", "", "")
-        }
+    fun onAttachView(view: View) {
+        this.view = view
+        onViewAttached()
     }
+
+    fun onDetachView() {
+        this.view = null
+    }
+
+    open fun onViewAttached() = Unit
+
 }

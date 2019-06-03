@@ -16,21 +16,14 @@
  *
  */
 
-package money.rbk.sample
+package money.rbk.presentation.screen.methods
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import money.rbk.RbkMoney
+import money.rbk.presentation.screen.base.BasePresenter
 
-class MainActivity : AppCompatActivity() {
+class PaymentMethodsPresenter : BasePresenter<PaymentMethodsView>() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        btnPerformPayment.setOnClickListener {
-            RbkMoney.startCheckout(this, "", "", "")
-        }
+    override fun onViewAttached() {
+        //TODO: Load Payment Methods
     }
+
 }

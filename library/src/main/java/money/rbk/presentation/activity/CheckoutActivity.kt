@@ -16,21 +16,29 @@
  *
  */
 
-package money.rbk.sample
+package money.rbk.presentation.activity
 
 import android.os.Bundle
+import android.os.PersistableBundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import money.rbk.RbkMoney
+import money.rbk.R
+import money.rbk.presentation.screen.methods.PaymentMethodsFragment
+import money.rbk.presentation.utils.replaceFragmentInActivity
 
-class MainActivity : AppCompatActivity() {
+class CheckoutActivity : AppCompatActivity() {
+
+    companion object {
+        const val KEY_INVOICE_ID = "invoice_id"
+        const val KEY_INVOICE_ACCESS_TOKEN = "invoice_access_token"
+        const val KEY_SHOP_ID = "shop_id"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        btnPerformPayment.setOnClickListener {
-            RbkMoney.startCheckout(this, "", "", "")
-        }
+        setContentView(R.layout.ac_checkout)
+        // TODO: Make Proper Navigation
+        replaceFragmentInActivity(PaymentMethodsFragment.newInstance(), R.id.container)
     }
+
 }

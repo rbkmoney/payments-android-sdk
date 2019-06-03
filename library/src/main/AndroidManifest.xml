@@ -26,6 +26,8 @@
 
     <application>
 
+        <activity android:name="money.rbk.presentation.activity.CheckoutActivity" />
+
     </application>
 
 </manifest>

@@ -16,21 +16,28 @@
  *
  */
 
-package money.rbk.sample
+package money.rbk.presentation.screen.base
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import money.rbk.RbkMoney
+import android.view.View
+import androidx.fragment.app.Fragment
 
-class MainActivity : AppCompatActivity() {
+abstract class BaseFragment<T : BaseView> : Fragment(), BaseView {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        btnPerformPayment.setOnClickListener {
-            RbkMoney.startCheckout(this, "", "", "")
-        }
+    protected val presenter: BasePresenter<T> by lazy {
+        buildPresenter()
     }
+
+    abstract fun buildPresenter(): BasePresenter<T>
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        presenter.onAttachView(this as T) //TODO: Check it
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.onDetachView()
+    }
+
 }
