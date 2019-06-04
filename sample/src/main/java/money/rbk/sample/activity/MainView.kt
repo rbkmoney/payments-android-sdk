@@ -16,20 +16,27 @@
  *
  */
 
-package money.rbk
+package money.rbk.sample.activity
 
-import android.app.Activity
-import android.content.Intent
-import money.rbk.presentation.activity.CheckoutActivity
+import money.rbk.sample.network.model.InvoiceResponse
+import money.rbk.sample.network.model.InvoiceTemplateResponse
 
-object RbkMoney {
+/**
+ * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
+ * @since 04.06.19
+ */
+interface MainView {
 
-    fun buildCheckoutIntent(activity: Activity, shopId: String, invoiceId: String,
-        invoiceAccessToken: String): Intent =
-        Intent(activity, CheckoutActivity::class.java).apply {
-            putExtra(CheckoutActivity.KEY_SHOP_ID, shopId)
-            putExtra(CheckoutActivity.KEY_INVOICE_ID, invoiceId)
-            putExtra(CheckoutActivity.KEY_INVOICE_ACCESS_TOKEN, invoiceAccessToken)
-        }
+    fun initTemplate(templateResponse: InvoiceTemplateResponse)
+
+    fun showInvoiceTemplateError()
+
+    fun startCheckout(invoiceResponse: InvoiceResponse)
+
+    fun showInvoiceCreateError()
+
+    fun hideProgress()
+
+    fun showProgress()
 
 }

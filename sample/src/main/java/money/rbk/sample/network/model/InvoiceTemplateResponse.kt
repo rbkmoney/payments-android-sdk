@@ -16,20 +16,15 @@
  *
  */
 
-package money.rbk
+package money.rbk.sample.network.model
 
-import android.app.Activity
-import android.content.Intent
-import money.rbk.presentation.activity.CheckoutActivity
-
-object RbkMoney {
-
-    fun buildCheckoutIntent(activity: Activity, shopId: String, invoiceId: String,
-        invoiceAccessToken: String): Intent =
-        Intent(activity, CheckoutActivity::class.java).apply {
-            putExtra(CheckoutActivity.KEY_SHOP_ID, shopId)
-            putExtra(CheckoutActivity.KEY_INVOICE_ID, invoiceId)
-            putExtra(CheckoutActivity.KEY_INVOICE_ACCESS_TOKEN, invoiceAccessToken)
-        }
-
-}
+/**
+ * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
+ * @since 04.06.19
+ */
+class InvoiceTemplateResponse(
+    val id: String,
+    val shopID: String,
+    val description: String?,
+    val details: InvoiceTemplateDetails
+)

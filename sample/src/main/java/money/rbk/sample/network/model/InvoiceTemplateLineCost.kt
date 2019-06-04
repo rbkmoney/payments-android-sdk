@@ -16,21 +16,13 @@
  *
  */
 
-package money.rbk.sample
+package money.rbk.sample.network.model
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import money.rbk.RbkMoney
-
-class MainActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        btnPerformPayment.setOnClickListener {
-            RbkMoney.startCheckout(this, "", "", "")
-        }
-    }
-}
+/**
+ * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
+ * @since 04.06.19
+ */
+class InvoiceTemplateLineCost(
+    val currency: Currency,
+    val amount: Int
+)

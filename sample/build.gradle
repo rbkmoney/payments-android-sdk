@@ -57,12 +57,20 @@ android {
     }
 }
 
+def retrofitVersion = '2.5.0'
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "androidx.appcompat:appcompat:$androidx.appcompat"
 
     releaseImplementation project(':library')
     debugImplementation project(':library')
+
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
+
+    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
 
     /* Debugging and crash analytics */
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanaryVersion"

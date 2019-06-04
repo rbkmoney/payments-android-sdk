@@ -16,20 +16,14 @@
  *
  */
 
-package money.rbk
+package money.rbk.sample.dialog
 
-import android.app.Activity
-import android.content.Intent
-import money.rbk.presentation.activity.CheckoutActivity
+import android.content.Context
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 
-object RbkMoney {
-
-    fun buildCheckoutIntent(activity: Activity, shopId: String, invoiceId: String,
-        invoiceAccessToken: String): Intent =
-        Intent(activity, CheckoutActivity::class.java).apply {
-            putExtra(CheckoutActivity.KEY_SHOP_ID, shopId)
-            putExtra(CheckoutActivity.KEY_INVOICE_ID, invoiceId)
-            putExtra(CheckoutActivity.KEY_INVOICE_ACCESS_TOKEN, invoiceAccessToken)
-        }
-
-}
+fun Context.showAlert(@StringRes titleId: Int, @StringRes messageId: Int) =
+    AlertDialog.Builder(this)
+        .setTitle(titleId)
+        .setMessage(messageId)
+        .show()
