@@ -80,3 +80,5 @@ dependencies {
         transitive = true
     }
 }
+
+apply from: "${project.rootDir}/gradle/modules/config.gradle"

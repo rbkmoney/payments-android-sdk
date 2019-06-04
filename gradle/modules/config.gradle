@@ -1,0 +1,67 @@
+import java.text.NumberFormat
+import java.text.ParsePosition
+
+class ConfigPlugin implements Plugin<Project> {
+
+    private
+    def timeSpecClassName = "com.ertelecom.domru.router.data.service.settings.entity.TimeSpec"
+
+    private def timeUnitMinutes = "java.util.concurrent.TimeUnit.MINUTES"
+    private def timeUnitSeconds = "java.util.concurrent.TimeUnit.SECONDS"
+
+    private def configFiles = ["default.properties"]
+    private def configFolder = "config"
+
+    void apply(Project project) {
+        configFiles.forEach { writeProperties(project, it) }
+    }
+
+    def writeProperties(Project project, filePath) {
+        Properties props = new Properties()
+        def propFile = new File("${project.rootDir}/$configFolder/$filePath")
+        props.load(new FileInputStream(propFile))
+        project.android.buildTypes.each {
+            props.forEach { key, value ->
+                if (isInteger(value)) {
+                    it.buildConfigField("int", key, value)
+                } else if (isLong(value)) {
+                    it.buildConfigField("long", key, value)
+                } else if (isTimeMins(value)) {
+                    it.buildConfigField(timeSpecClassName, key,
+                            "new $timeSpecClassName(${cropLast(value)}, $timeUnitMinutes)")
+                } else if (isTimeSeconds(value)) {
+                    it.buildConfigField(timeSpecClassName, key,
+                            "new $timeSpecClassName(${cropLast(value)}, $timeUnitSeconds)")
+                } else {
+                    it.buildConfigField("String", key, value)
+                }
+            }
+        }
+    }
+
+    def isInteger = {
+        def formatter = NumberFormat.instance
+        def pos = [0] as ParsePosition
+        formatter.parse(it, pos)
+        pos.index == it.size()
+    }
+
+    def isLong = { isNumberWithEnd(it, "L") || isNumberWithEnd(it, "l") }
+
+    def isTimeMins = { isNumberWithEnd(it, "m") }
+
+    def isTimeSeconds = { isNumberWithEnd(it, "s") }
+
+    def cropLast = {
+        it.substring(0, it.size() - 1)
+    }
+
+    static boolean isNumberWithEnd(String value, String end) {
+        def formatter = NumberFormat.instance
+        def pos = [0] as ParsePosition
+        formatter.parse(value, pos)
+        return (pos.index == value.size() - 1) && (value.endsWith(end))
+    }
+}
+
+apply plugin: ConfigPlugin
