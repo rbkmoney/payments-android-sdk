@@ -23,5 +23,5 @@
     <solid android:color="@color/white" />
     <stroke
         android:width="@dimen/divider_height"
-        android:color="@color/grey" />
+        android:color="@color/light_grey" />
 </shape>

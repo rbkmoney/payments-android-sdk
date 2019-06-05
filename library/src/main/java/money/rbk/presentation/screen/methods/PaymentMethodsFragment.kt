@@ -39,9 +39,9 @@ class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethod
     }
 
     override fun onCreateView(inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.fmt_payment_methods, container, false)
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fmt_payment_methods, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,12 +50,12 @@ class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethod
             activity?.replaceFragmentInActivity(BankCardFragment.newInstance(), R.id.container)
         }
 
-
+        initTestData()
 
     }
 
     //TODO: remove after testing
-    private fun initTestData(){
+    private fun initTestData() {
         val payments = with(ArrayList<PaymentTestItem>()) {
             add(
                     PaymentTestItem(
@@ -77,6 +77,14 @@ class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethod
                             description = null,
                             icon = R.drawable.ic_wallet
                     )
+
+            )
+            add(
+                    PaymentTestItem(
+                            name = null,
+                            description = null,
+                            icon = R.drawable.ic_apple_pay
+                    )
             )
             this
         }
@@ -87,6 +95,7 @@ class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethod
         rvPaymentMethods.layoutManager = LinearLayoutManager(activity)
 
     }
+
     override fun buildPresenter(): BasePresenter<PaymentMethodsView> = PaymentMethodsPresenter()
 
 }
