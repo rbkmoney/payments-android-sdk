@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~
   ~ Copyright 2019 RBKmoney
@@ -16,20 +17,22 @@
   ~
   -->
 
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    package="money.rbk"
-    >
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <color name="purple_light">#8330EC</color>
+    <color name="blue_light">#685BFF</color>
 
-    <application>
+    <color name="black">#292929</color>
 
-        <activity
-            android:theme="@style/Theme.RBKMoney"
-            android:name="money.rbk.presentation.activity.CheckoutActivity" />
+    <color name="transparent">#00FFFFFF</color>
 
-    </application>
+    <color name="white">#FFFFFF</color>
+    <color name="green">#38CD8F</color>
+    <color name="grey">#BABABA</color>
 
-</manifest>
+    <color name="light_blue_grey">#ADBFFF</color>
+    <color name="light_pink">#FFF8E5</color>
+</resources>

@@ -1,0 +1,37 @@
+<!--
+  ~
+  ~ Copyright 2019 RBKmoney
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="18dp"
+    android:height="11dp"
+    android:viewportWidth="18"
+    android:viewportHeight="11">
+  <path
+      android:pathData="M6.5615,1.1829h4.8461v8.5303h-4.8461z"
+      android:fillColor="#FF5F00"/>
+  <path
+      android:pathData="M6.8688,5.4487C6.867,3.7838 7.6471,2.2107 8.9842,1.1828C6.7134,-0.5651 3.4524,-0.3105 1.493,1.7677C-0.4664,3.8459 -0.4664,7.05 1.493,9.1282C3.4524,11.2064 6.7134,11.461 8.9842,9.7131C7.6475,8.6855 6.8674,7.113 6.8688,5.4487Z"
+      android:fillColor="#EB001B"/>
+  <path
+      android:pathData="M17.9459,5.4488C17.9459,7.5257 16.7351,9.4203 14.8277,10.3279C12.9204,11.2356 10.6514,10.9968 8.9844,9.7132C10.3205,8.6847 11.1006,7.1124 11.1006,5.448C11.1006,3.7836 10.3205,2.2113 8.9844,1.1829C10.6514,-0.1008 12.9204,-0.3395 14.8277,0.5681C16.7351,1.4757 17.9459,3.3703 17.9459,5.4473V5.4488Z"
+      android:fillColor="#F79E1B"/>
+  <path
+      android:pathData="M17.4164,8.6343V8.8091H17.3841V8.6343H17.3057V8.5981H17.4887V8.6343H17.4164ZM17.7718,8.5981V8.8091L17.7395,8.8106V8.6509L17.6795,8.788H17.638L17.578,8.6509V8.8091H17.538V8.5981H17.5872L17.6518,8.7488L17.7164,8.5981H17.7718Z"
+      android:fillColor="#F79E1B"
+      android:fillType="evenOdd"/>
+</vector>

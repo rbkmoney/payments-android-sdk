@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~
+  ~ Copyright 2019 RBKmoney
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="32"
+    android:viewportHeight="33">
+
+
+    <path
+        android:fillColor="#685BFF"
+        android:fillType="evenOdd"
+        android:pathData="M25.2417 16.3501C25.2417 15.5244 24.5716 14.8543 23.746 14.8543C22.9193 14.8543 22.2502 15.5244 22.2502 16.3501C22.2502 17.1758 22.9193 17.8459 23.746 17.8459C24.5716 17.8459 25.2417 17.1758 25.2417 16.3501ZM29 13.3585V19.3417H21.4824C20.942 19.3417 20.4853 18.885 20.4853 18.3445V14.3557C20.4853 13.8152 20.942 13.3585 21.4824 13.3585H29ZM29 21.3361V26.8585C29 28.5109 27.6608 29.8501 26.0085 29.8501H4.99147C3.33918 29.8501 2 28.5109 2 26.8585V5.84168C2 4.18933 3.33918 2.8501 4.99147 2.8501H26.0085C27.6608 2.8501 29 4.18933 29 5.84168V11.3641H21.4824C19.8381 11.3641 18.491 12.7103 18.491 14.3557V18.3445C18.491 19.9899 19.8381 21.3361 21.4824 21.3361H29Z" />
+</vector>

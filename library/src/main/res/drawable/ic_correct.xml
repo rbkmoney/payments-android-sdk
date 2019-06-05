@@ -16,20 +16,20 @@
   ~
   -->
 
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    package="money.rbk"
-    >
-
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <application>
-
-        <activity
-            android:theme="@style/Theme.RBKMoney"
-            android:name="money.rbk.presentation.activity.CheckoutActivity" />
-
-    </application>
-
-</manifest>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="13dp"
+    android:height="10dp"
+    android:viewportWidth="13"
+    android:viewportHeight="10">
+  <path
+      android:pathData="M11.6459,1.3545L4.292,8.7084"
+      android:strokeWidth="2"
+      android:fillColor="#00000000"
+      android:strokeColor="#38CD8F"/>
+  <path
+      android:pathData="M1,4L5,8L1,4Z"
+      android:strokeWidth="2"
+      android:fillColor="#00000000"
+      android:fillType="evenOdd"
+      android:strokeColor="#38CD8F"/>
+</vector>

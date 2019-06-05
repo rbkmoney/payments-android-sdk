@@ -1,0 +1,39 @@
+<!--
+  ~
+  ~ Copyright 2019 RBKmoney
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="13dp"
+    android:height="17dp"
+    android:viewportWidth="13"
+    android:viewportHeight="17">
+  <path
+      android:strokeWidth="1"
+      android:pathData="M3.5,6V4C3.5,2.3431 4.8432,1 6.5,1V1C8.1568,1 9.5,2.3431 9.5,4V6L3.5,6Z"
+      android:fillColor="#00000000"
+      android:fillType="evenOdd"
+      android:strokeColor="#685BFF"/>
+  <path
+      android:pathData="M1,8C1,6.8954 1.8954,6 3,6L10,6C11.1046,6 12,6.8954 12,8V14C12,15.1046 11.1046,16 10,16H3C1.8954,16 1,15.1046 1,14V8Z"
+      android:strokeWidth="2"
+      android:fillColor="#00000000"
+      android:fillType="evenOdd"
+      android:strokeColor="#685BFF"/>
+  <path
+      android:pathData="M6,9h1v4h-1z"
+      android:fillColor="#685BFF"/>
+</vector>
