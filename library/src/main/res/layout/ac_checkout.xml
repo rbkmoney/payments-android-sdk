@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textAppearance="@style/TextAppearance.Normal"
+                android:textAppearance="@style/TextAppearance.RBKMoney.Normal"
                 tools:text="shop.ru" />
 
             <ImageButton
@@ -74,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="6 500, 50 ₽"
-                android:textAppearance="@style/TextAppearance.HeadlineWhite" />
+                android:textAppearance="@style/TextAppearance.RBKMoney.HeadlineWhite" />
 
             <TextView
                 android:id="@+id/tvOrderDetails"
@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_default"
                 android:text="ORDER DETAILS"
-                android:textAppearance="@style/TextAppearance.HeadlineBlueGrey" />
+                android:textAppearance="@style/TextAppearance.RBKMoney.HeadlineBlueGrey" />
 
             <TextView
                 android:id="@+id/tvProduct"
@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_xsmall"
                 android:text="Penny Board"
-                android:textAppearance="@style/TextAppearance.White" />
+                android:textAppearance="@style/TextAppearance.RBKMoney.White" />
 
         </LinearLayout>
 
@@ -121,7 +121,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_small"
             android:text="@string/secure_payment_with"
-            android:textAppearance="@style/TextAppearance.FooterCaps"
+            android:textAppearance="@style/TextAppearance.RBKMoney.FooterCaps"
             app:layout_constraintBottom_toBottomOf="@+id/ivFooterLock"
             app:layout_constraintStart_toEndOf="@+id/ivFooterLock"
             app:layout_constraintTop_toTopOf="@+id/ivFooterLock" />
@@ -152,7 +152,7 @@
             android:layout_marginStart="@dimen/spacing_default"
             android:layout_marginTop="@dimen/spacing_default"
             android:text="@string/footer"
-            android:textAppearance="@style/TextAppearance.Footer"
+            android:textAppearance="@style/TextAppearance.RBKMoney.Footer"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivFooterLogos" />
 
