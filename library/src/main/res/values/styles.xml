@@ -33,6 +33,7 @@
 
     <style name="Button.Flat" parent="Button">
         <item name="android:background">?selectableItemBackground</item>
+        <item name="android:textAppearance">@style/TextAppearance.RBKMoney.Accent</item>
     </style>
 
     <style name="EditText" parent="RBKMoney">
