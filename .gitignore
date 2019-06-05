@@ -33,4 +33,6 @@ local.properties
 # Error Logs
 *err_*.log
 
+config/private.properties
+
 sample/fabric.properties

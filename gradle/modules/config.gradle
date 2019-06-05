@@ -9,31 +9,44 @@ class ConfigPlugin implements Plugin<Project> {
     private def timeUnitMinutes = "java.util.concurrent.TimeUnit.MINUTES"
     private def timeUnitSeconds = "java.util.concurrent.TimeUnit.SECONDS"
 
-    private def configFiles = ["default.properties"]
+    private def configDefault = "default.properties"
     private def configFolder = "config"
 
     void apply(Project project) {
-        configFiles.forEach { writeProperties(project, it) }
+        def propsFolder = new File("${project.rootDir}/$configFolder")
+
+        propsFolder.listFiles(new FilenameFilter() {
+            @Override
+            boolean accept(File file, String s) {
+                return s != configDefault
+            }
+        })
+                .each { writeProperties(project, it) }
+
+        writeProperties(project, new File("${project.rootDir}/$configFolder/$configDefault"))
     }
 
-    def writeProperties(Project project, filePath) {
+    def writeProperties(Project project, File propFile) {
         Properties props = new Properties()
-        def propFile = new File("${project.rootDir}/$configFolder/$filePath")
         props.load(new FileInputStream(propFile))
         project.android.buildTypes.each {
+            TreeMap fields = it.getBuildConfigFields()
+
             props.forEach { key, value ->
-                if (isInteger(value)) {
-                    it.buildConfigField("int", key, value)
-                } else if (isLong(value)) {
-                    it.buildConfigField("long", key, value)
-                } else if (isTimeMins(value)) {
-                    it.buildConfigField(timeSpecClassName, key,
-                            "new $timeSpecClassName(${cropLast(value)}, $timeUnitMinutes)")
-                } else if (isTimeSeconds(value)) {
-                    it.buildConfigField(timeSpecClassName, key,
-                            "new $timeSpecClassName(${cropLast(value)}, $timeUnitSeconds)")
-                } else {
-                    it.buildConfigField("String", key, value)
+                if (!fields.containsKey(key)) {
+                    if (isInteger(value)) {
+                        it.buildConfigField("int", key, value)
+                    } else if (isLong(value)) {
+                        it.buildConfigField("long", key, value)
+                    } else if (isTimeMins(value)) {
+                        it.buildConfigField(timeSpecClassName, key,
+                                "new $timeSpecClassName(${cropLast(value)}, $timeUnitMinutes)")
+                    } else if (isTimeSeconds(value)) {
+                        it.buildConfigField(timeSpecClassName, key,
+                                "new $timeSpecClassName(${cropLast(value)}, $timeUnitSeconds)")
+                    } else {
+                        it.buildConfigField("String", key, value)
+                    }
                 }
             }
         }
