@@ -28,8 +28,9 @@
     <string name="wallet">Электронные кошельки</string>
     <string name="payment_by_card">Оплата банковской картой</string>
     <string name="email_for_check">Email для чека</string>
-    <string name="Name_on_the_card">Имя на карте</string>
+    <string name="name_on_the_card">Имя на карте</string>
     <string name="date_card">ММ/ГГ</string>
     <string name="ccv_card">CVV/CVC</string>
     <string name="number_on_card">Номер на карте</string>
+    <string name="secure_payment_with">Безопасная оплата с</string>
 </resources>

@@ -19,11 +19,9 @@
 package money.rbk.presentation.activity
 
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import money.rbk.R
-import money.rbk.presentation.screen.methods.PaymentMethodsFragment
+import money.rbk.presentation.screen.card.BankCardFragment
 import money.rbk.presentation.utils.replaceFragmentInActivity
 
 class CheckoutActivity : AppCompatActivity() {
@@ -38,7 +36,7 @@ class CheckoutActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ac_checkout)
         // TODO: Make Proper Navigation
-        replaceFragmentInActivity(PaymentMethodsFragment.newInstance(), R.id.container)
+        replaceFragmentInActivity(BankCardFragment.newInstance(), R.id.container)
     }
 
 }

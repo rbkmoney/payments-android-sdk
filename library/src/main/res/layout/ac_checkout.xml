@@ -29,99 +29,131 @@
         android:orientation="vertical">
 
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tbMain"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/large_value"
-            android:layout_marginTop="@dimen/default_value"
-            android:orientation="vertical"
+            android:background="@color/white"
+            android:minHeight="?attr/actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
 
             <TextView
-                android:id="@+id/tvPrice"
-                style="@style/Label.HeadlineWhite"
+                android:id="@+id/tvShopName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="6 500, 50 ₽" />
+                android:layout_gravity="center"
+                android:textAppearance="@style/TextAppearance.Normal"
+                tools:text="shop.ru" />
+
+            <ImageButton
+                android:id="@+id/ibtnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:src="@drawable/ic_back" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_large"
+            android:layout_marginTop="@dimen/spacing_default"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tbMain">
+
 
             <TextView
-                style="@style/Label.HeadlineBlueGrey"
+                android:id="@+id/tvPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/default_value"
-                tools:text="ORDER DETAILS" />
+                android:text="6 500, 50 ₽"
+                android:textAppearance="@style/TextAppearance.HeadlineWhite" />
+
+            <TextView
+                android:id="@+id/tvOrderDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_default"
+                android:text="ORDER DETAILS"
+                android:textAppearance="@style/TextAppearance.HeadlineBlueGrey" />
 
             <TextView
                 android:id="@+id/tvProduct"
-                style="@style/Label.White"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/small_value"
-                tools:text="Penny Board" />
+                android:layout_marginTop="@dimen/spacing_xsmall"
+                android:text="Penny Board"
+                android:textAppearance="@style/TextAppearance.White" />
 
         </LinearLayout>
 
-
-        <ImageView
-            android:id="@+id/ivLogo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/large_value"
-            android:layout_marginTop="@dimen/extra_large_value"
-            android:src="@drawable/ic_logo"
-            android:visibility="invisible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/barrier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
-            app:constraint_referenced_ids="linearLayout,ivLogo" />
 
         <FrameLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/default_value"
+            android:layout_margin="@dimen/spacing_default"
+            android:layout_marginTop="@dimen/spacing_small"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/barrier" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
         <ImageView
-            android:id="@+id/ivFooter"
+            android:id="@+id/ivFooterLock"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/default_value"
-            android:layout_marginTop="@dimen/default_value"
-            android:layout_marginEnd="@dimen/default_value"
-            android:scaleType="fitStart"
-            android:src="@drawable/ic_secure_payment"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="@dimen/spacing_default"
+            android:layout_marginTop="@dimen/spacing_default"
+            android:src="@drawable/ic_lock"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/container" />
+
+        <TextView
+            android:id="@+id/tvFooterSecurity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/secure_payment_with"
+            android:textAppearance="@style/TextAppearance.FooterCaps"
+            app:layout_constraintBottom_toBottomOf="@+id/ivFooterLock"
+            app:layout_constraintStart_toEndOf="@+id/ivFooterLock"
+            app:layout_constraintTop_toTopOf="@+id/ivFooterLock" />
+
+        <ImageView
+            android:id="@+id/ivFooterLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_logo"
+            app:layout_constraintBottom_toBottomOf="@+id/tvFooterSecurity"
+            app:layout_constraintStart_toEndOf="@+id/tvFooterSecurity" />
 
         <ImageView
             android:id="@+id/ivFooterLogos"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:src="@drawable/ic_footer_logos"
-            app:layout_constraintEnd_toEndOf="@+id/ivFooter"
-            app:layout_constraintStart_toStartOf="@+id/ivFooter"
-            app:layout_constraintTop_toBottomOf="@+id/ivFooter" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/ivFooterLock"
+            app:layout_constraintTop_toBottomOf="@+id/ivFooterLock" />
 
         <TextView
-            android:id="@+id/tvFooter"
-            style="@style/Label.Footer"
+            android:id="@+id/tvFooterCopyright"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/default_value"
-            android:layout_marginTop="@dimen/default_value"
+            android:layout_marginStart="@dimen/spacing_default"
+            android:layout_marginTop="@dimen/spacing_default"
             android:text="@string/footer"
+            android:textAppearance="@style/TextAppearance.Footer"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivFooterLogos" />
 

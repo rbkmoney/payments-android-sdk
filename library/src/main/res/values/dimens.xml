@@ -18,16 +18,17 @@
   -->
 
 <resources>
-    <dimen name="small_value">4dp</dimen>
-    <dimen name="medium_value">8dp</dimen>
-    <dimen name="average_value">12dp</dimen>
-    <dimen name="default_value">16dp</dimen>
-    <dimen name="large_value">24dp</dimen>
-    <dimen name="extra_large_value">32dp</dimen>
+    <dimen name="spacing_xsmall">4dp</dimen>
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_medium">12dp</dimen>
+    <dimen name="spacing_default">16dp</dimen>
+    <dimen name="spacing_large">24dp</dimen>
+    <dimen name="spacing_xlarge">32dp</dimen>
 
 
     <dimen name="elevation">10dp</dimen>
 
+    <dimen name="xsmall_text_size">12sp</dimen>
     <dimen name="small_text_size">14sp</dimen>
     <dimen name="medium_text_size">16sp</dimen>
     <dimen name="default_text_size">20sp</dimen>
