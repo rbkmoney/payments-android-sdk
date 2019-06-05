@@ -22,14 +22,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_height"
-    android:layout_marginTop="@dimen/spacing_small"
     android:background="@drawable/background_payment"
     android:paddingStart="@dimen/spacing_default"
     android:paddingEnd="@dimen/spacing_default"
     app:cardCornerRadius="@dimen/corner_radius">
-
-
-
 
     <ImageView
         android:id="@+id/ivPaymentIcon"
@@ -42,7 +38,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tvPaymentType"
         />
-
 
     <TextView
         android:id="@+id/tvPaymentType"
@@ -77,8 +72,5 @@
 
         tools:text="@string/cash_description"
         tools:visibility="visible" />
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.fmt_payment_methods.*
 import money.rbk.R
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.base.BasePresenter
+import money.rbk.presentation.screen.methods.temmporary.MarginItemDecoration
 import money.rbk.presentation.screen.methods.temmporary.PaymentAdapter
 import money.rbk.presentation.screen.methods.temmporary.PaymentTestItem
 
@@ -73,6 +74,7 @@ class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethod
         adapter.payments = payments
         rvPaymentMethods.adapter = adapter
         rvPaymentMethods.layoutManager = LinearLayoutManager(activity)
+        rvPaymentMethods.addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.spacing_small).toInt()))
 
     }
 
