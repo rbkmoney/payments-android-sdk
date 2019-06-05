@@ -27,10 +27,8 @@ import kotlinx.android.synthetic.main.fmt_payment_methods.*
 import money.rbk.R
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.base.BasePresenter
-import money.rbk.presentation.screen.card.BankCardFragment
 import money.rbk.presentation.screen.methods.temmporary.PaymentAdapter
 import money.rbk.presentation.screen.methods.temmporary.PaymentTestItem
-import money.rbk.presentation.utils.replaceFragmentInActivity
 
 class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethodsView {
 
@@ -45,10 +43,6 @@ class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethod
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //TODO: Make proper navigation
-        btnOtherMethods.setOnClickListener {
-            activity?.replaceFragmentInActivity(BankCardFragment.newInstance(), R.id.container)
-        }
 
         initTestData()
 
@@ -57,13 +51,7 @@ class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethod
     //TODO: remove after testing
     private fun initTestData() {
         val payments = with(ArrayList<PaymentTestItem>()) {
-            add(
-                    PaymentTestItem(
-                            name = R.string.cash,
-                            description = R.string.cash_description,
-                            icon = R.drawable.ic_cash
-                    )
-            )
+
             add(
                     PaymentTestItem(
                             name = R.string.card,
@@ -73,17 +61,9 @@ class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethod
             )
             add(
                     PaymentTestItem(
-                            name = R.string.wallet,
-                            description = null,
-                            icon = R.drawable.ic_wallet
-                    )
-
-            )
-            add(
-                    PaymentTestItem(
                             name = null,
                             description = null,
-                            icon = R.drawable.ic_apple_pay
+                            icon = R.drawable.ic_google_pay
                     )
             )
             this
