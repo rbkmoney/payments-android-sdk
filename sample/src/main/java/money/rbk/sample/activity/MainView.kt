@@ -21,19 +21,15 @@ package money.rbk.sample.activity
 import money.rbk.sample.network.model.InvoiceResponse
 import money.rbk.sample.network.model.InvoiceTemplateResponse
 
-/**
- * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
- * @since 04.06.19
- */
 interface MainView {
 
-    fun initTemplate(templateResponse: InvoiceTemplateResponse)
+    fun setTemplates(invoiceTemplates: List<InvoiceTemplateResponse>)
 
-    fun showInvoiceTemplateError()
+    fun showInvoiceTemplateError(error: String?)
 
     fun startCheckout(invoiceResponse: InvoiceResponse)
 
-    fun showInvoiceCreateError()
+    fun showInvoiceCreateError(error: String?)
 
     fun hideProgress()
 

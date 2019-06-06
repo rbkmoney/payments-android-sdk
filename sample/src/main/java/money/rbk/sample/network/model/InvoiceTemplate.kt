@@ -18,7 +18,7 @@
 
 package money.rbk.sample.network.model
 
-class InvoiceTemplateDetails(
-    val product: String,
-    val price: InvoiceTemplateLineCost
+class InvoiceTemplate(
+    val id: String,
+    val accessToken: String
 )

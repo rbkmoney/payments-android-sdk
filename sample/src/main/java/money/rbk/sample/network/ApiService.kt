@@ -18,20 +18,16 @@
 
 package money.rbk.sample.network
 
+import io.reactivex.Single
 import money.rbk.sample.network.model.EmptyRequest
 import money.rbk.sample.network.model.InvoiceResponse
 import money.rbk.sample.network.model.InvoiceTemplateResponse
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-/**
- * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
- * @since 04.06.19
- */
 interface ApiService {
 
     @POST("processing/invoice-templates/{invoice_template_id}/invoices")
@@ -41,7 +37,7 @@ interface ApiService {
         @Header("Content-Type") contentType: String = "application/json; charset=utf-8",
         @Path("invoice_template_id") invoiceTemplateId: String,
         @Body request: EmptyRequest = EmptyRequest
-    ): Call<InvoiceResponse>
+    ): Single<InvoiceResponse>
 
     @GET("processing/invoice-templates/{invoice_template_id}")
     fun getInvoiceTemplateByID(
@@ -49,5 +45,6 @@ interface ApiService {
         @Header("X-Request-ID") requestId: Long = System.currentTimeMillis(),
         @Header("Content-Type") contentType: String = "application/json; charset=utf-8",
         @Path("invoice_template_id") invoiceTemplateId: String
-    ): Call<InvoiceTemplateResponse>
+    ): Single<InvoiceTemplateResponse>
+
 }

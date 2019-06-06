@@ -18,10 +18,6 @@
 
 package money.rbk.sample.network.model
 
-/**
- * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
- * @since 04.06.19
- */
 class InvoiceResponse(
     val invoice: Invoice,
     val invoiceAccessToken: AccessToken

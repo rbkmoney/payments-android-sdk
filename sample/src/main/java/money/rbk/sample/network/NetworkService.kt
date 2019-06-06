@@ -19,20 +19,19 @@
 package money.rbk.sample.network
 
 import com.squareup.moshi.Moshi
+import io.reactivex.Observable
+import io.reactivex.Single
 import money.rbk.sample.BuildConfig
 import money.rbk.sample.network.model.InvoiceResponse
+import money.rbk.sample.network.model.InvoiceTemplate
 import money.rbk.sample.network.model.InvoiceTemplateResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
-/**
- * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
- * @since 04.06.19
- */
 object NetworkService {
 
     private const val DEFAULT_TIMEOUT: Long = 180
@@ -41,10 +40,31 @@ object NetworkService {
         Retrofit.Builder()
             .baseUrl(BuildConfig.API_URL)
             .addConverterFactory(MoshiConverterFactory.create(Moshi.Builder().build()))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .client(newHttpClient())
             .build()
             .create(ApiService::class.java)
     }
+
+    fun createInvoiceWithTemplate(invoiceTemplateId: String): Single<InvoiceResponse> =
+        Single.just(getBuiltInInvoiceTemplates())
+            .map { templates -> templates.first { it.id == invoiceTemplateId } }
+            .map { it.accessToken }
+            .flatMap { invoiceTemplateAccessToken ->
+                apiService.createInvoiceWithTemplate(
+                    authorization = "Bearer $invoiceTemplateAccessToken",
+                    invoiceTemplateId = invoiceTemplateId)
+            }
+
+    fun getInvoiceTemplates(): Single<List<InvoiceTemplateResponse>> =
+        Observable
+            .fromIterable(getBuiltInInvoiceTemplates())
+            .flatMapSingle { invoiceTemplate ->
+                apiService.getInvoiceTemplateByID(
+                    authorization = "Bearer ${invoiceTemplate.accessToken}",
+                    invoiceTemplateId = invoiceTemplate.id)
+            }
+            .toList()
 
     private fun newHttpClient(): OkHttpClient = OkHttpClient.Builder()
         .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
@@ -54,18 +74,13 @@ object NetworkService {
         })
         .build()
 
-    fun createInvoiceWithTemplate(
-        invoiceTemplateId: String,
-        invoiceTemplateAccessToken: String): Call<InvoiceResponse> =
-        apiService.createInvoiceWithTemplate(
-            authorization = "Bearer $invoiceTemplateAccessToken",
-            invoiceTemplateId = invoiceTemplateId)
-
-    fun getInvoiceTemplateByID(
-        invoiceTemplateId: String,
-        invoiceTemplateAccessToken: String): Call<InvoiceTemplateResponse> =
-        apiService.getInvoiceTemplateByID(
-            authorization = "Bearer $invoiceTemplateAccessToken",
-            invoiceTemplateId = invoiceTemplateId)
+    private fun getBuiltInInvoiceTemplates() = listOf(
+        InvoiceTemplate(BuildConfig.INVOICE_TEMPLATE_ID_RUB,
+            BuildConfig.INVOICE_TEMPLATE_ACCESS_TOKEN_RUB),
+        InvoiceTemplate(BuildConfig.INVOICE_TEMPLATE_ID_EUR,
+            BuildConfig.INVOICE_TEMPLATE_ACCESS_TOKEN_EUR),
+        InvoiceTemplate(BuildConfig.INVOICE_TEMPLATE_ID_UDS,
+            BuildConfig.INVOICE_TEMPLATE_ACCESS_TOKEN_USD)
+    )
 
 }

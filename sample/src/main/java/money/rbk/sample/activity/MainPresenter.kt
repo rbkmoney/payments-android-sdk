@@ -18,51 +18,49 @@
 
 package money.rbk.sample.activity
 
-import money.rbk.sample.BuildConfig
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import money.rbk.sample.network.NetworkService
 import money.rbk.sample.network.model.InvoiceResponse
 import money.rbk.sample.network.model.InvoiceTemplateResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-/**
- * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
- * @since 04.06.19
- */
 class MainPresenter {
 
     private var mainView: MainView? = null
-    private var call: Call<*>? = null
+
+    private val compositeDisposable = CompositeDisposable()
 
     fun attachView(view: MainView) {
         mainView = view
-
-        NetworkService.getInvoiceTemplateByID(
-            BuildConfig.INVOICE_TEMPLATE_ID,
-            BuildConfig.INVOICE_TEMPLATE_ACCESS_TOKEN)
-            .performRequest(::onTemplateLoaded, ::onTemplateLoadError)
+        view.showProgress()
+        NetworkService.getInvoiceTemplates()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(::onTemplatesLoaded, ::onTemplatesLoadError)
+            .disposeWhenDetach()
     }
 
     fun detachView() {
-        cancelPreviousRequest()
+        compositeDisposable.clear()
         mainView = null
     }
 
-    fun onBuyClick() {
+    fun onBuyClick(invoiceTemplate: InvoiceTemplateResponse) {
         mainView?.apply {
             showProgress()
-            NetworkService.createInvoiceWithTemplate(
-                BuildConfig.INVOICE_TEMPLATE_ID,
-                BuildConfig.INVOICE_TEMPLATE_ACCESS_TOKEN)
-                .performRequest(::onInvoiceCreated, ::onInvoiceCreateError)
-
+            NetworkService.createInvoiceWithTemplate(invoiceTemplate.id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(::onInvoiceCreated, ::onInvoiceCreateError)
+                .disposeWhenDetach()
         }
     }
 
-    private fun onInvoiceCreated(response: Response<InvoiceResponse>) {
+    private fun onInvoiceCreated(response: InvoiceResponse) {
         mainView?.apply {
-            response.body()?.apply(::startCheckout) ?: showInvoiceCreateError()
+            startCheckout(response)
             hideProgress()
         }
     }
@@ -70,42 +68,28 @@ class MainPresenter {
     private fun onInvoiceCreateError(throwable: Throwable) {
         throwable.printStackTrace()
         mainView?.apply {
-            showInvoiceCreateError()
+            showInvoiceCreateError(throwable.message ?: throwable.cause?.message)
             hideProgress()
         }
     }
 
-    private fun onTemplateLoaded(response: Response<InvoiceTemplateResponse>) {
+    private fun onTemplatesLoaded(invoiceTemplatesList: List<InvoiceTemplateResponse>) {
         mainView?.apply {
-            response.body()?.apply(::initTemplate) ?: showInvoiceTemplateError()
+            setTemplates(invoiceTemplatesList)
             hideProgress()
         }
     }
 
-    private fun onTemplateLoadError(throwable: Throwable) {
+    private fun onTemplatesLoadError(throwable: Throwable) {
         throwable.printStackTrace()
         mainView?.apply {
-            showInvoiceTemplateError()
+            showInvoiceTemplateError(throwable.message ?: throwable.cause?.message)
             hideProgress()
         }
     }
 
-    private fun <T> Call<T>.performRequest(onResponseCallback: (Response<T>) -> Unit,
-        onFailureCallback: (Throwable) -> Unit) {
-        cancelPreviousRequest()
-
-        enqueue(object : Callback<T> {
-            override fun onFailure(call: Call<T>, t: Throwable) = onFailureCallback(t)
-            override fun onResponse(call: Call<T>, response: Response<T>) =
-                onResponseCallback(response)
-        })
-
-        call = this
-    }
-
-    private fun cancelPreviousRequest() {
-        call?.takeIf { !it.isCanceled && !it.isExecuted }
-            ?.cancel()
+    private fun Disposable.disposeWhenDetach() {
+        compositeDisposable.add(this)
     }
 
 }

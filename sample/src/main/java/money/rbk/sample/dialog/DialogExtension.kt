@@ -22,8 +22,8 @@ import android.content.Context
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 
-fun Context.showAlert(@StringRes titleId: Int, @StringRes messageId: Int) =
+fun Context.showAlert(@StringRes titleId: Int, message: CharSequence): AlertDialog =
     AlertDialog.Builder(this)
         .setTitle(titleId)
-        .setMessage(messageId)
+        .setMessage(message)
         .show()

@@ -18,7 +18,6 @@
 
 package money.rbk.sample.network.model
 
-class InvoiceTemplateDetails(
-    val product: String,
-    val price: InvoiceTemplateLineCost
+class CustomMetadata(
+    val emoji: String?
 )

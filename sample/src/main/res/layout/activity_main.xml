@@ -24,57 +24,20 @@
     tools:context=".activity.MainActivity"
     >
 
-    <LinearLayout
-        android:id="@+id/lProduct"
-        android:visibility="gone"
-        tools:visibility="visible"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTemplates"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
-
-        <TextView
-            android:id="@+id/tvProduct"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            tools:text="Продукт: Название"
-            />
-
-        <TextView
-            android:id="@+id/tvDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:textSize="16sp"
-            tools:text="@tools:sample/lorem"
-            />
-
-        <TextView
-            android:id="@+id/tvCost"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:textSize="18sp"
-            tools:text="Цена: 100Р"
-            />
-
-        <Button
-            android:id="@+id/btnPerformPayment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/label_buy"
-            />
-
-    </LinearLayout>
+        android:layout_margin="@dimen/spacing_medium"
+        android:background="@drawable/bg_rounded_white"
+        android:padding="@dimen/spacing_medium"
+        />
 
     <FrameLayout
         android:id="@+id/lLoader"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/grey_overlay"
         android:visibility="visible"
         tools:visibility="gone"
         >
@@ -83,8 +46,7 @@
             android:id="@+id/pbLoader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|top"
-            android:layout_margin="16dp"
+            android:layout_gravity="center"
             />
 
     </FrameLayout>

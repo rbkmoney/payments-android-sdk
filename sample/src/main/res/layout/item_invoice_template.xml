@@ -1,6 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<!--
+  ~
+  ~ Copyright 2019 RBKmoney
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
 
-</LinearLayout>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="8dp"
+    android:background="@drawable/bg_rounded_grey"
+    android:orientation="vertical"
+    android:padding="@dimen/margin_small"
+    >
+
+    <TextView
+        android:id="@+id/tvIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="🍎"
+        android:visibility="visible"
+        android:textSize="@dimen/text_size_emiji"
+        />
+
+    <TextView
+        android:id="@+id/tvProductName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/tvIcon"
+        android:ellipsize="end"
+        android:layout_margin="@dimen/margin_small"
+        android:lines="1"
+        tools:text="Яблоко"
+        android:textSize="@dimen/text_size_large"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/tvProductDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/tvIcon"
+        android:layout_below="@+id/tvProductName"
+        android:ellipsize="end"
+        android:layout_margin="@dimen/margin_small"
+        android:lines="1"
+        tools:text="Очень вкусное и сладкое"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold"
+        />
+
+    <Button
+        android:id="@+id/btnBuy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvProductDescription"
+        android:lines="1"
+        android:layout_margin="@dimen/margin_small"
+        android:layout_toEndOf="@+id/tvIcon"
+        tools:text="Купить за 100р"
+        android:background="@drawable/bg_rounded_white"
+        />
+
+</RelativeLayout>

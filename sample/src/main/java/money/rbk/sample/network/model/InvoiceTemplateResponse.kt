@@ -18,13 +18,10 @@
 
 package money.rbk.sample.network.model
 
-/**
- * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
- * @since 04.06.19
- */
 class InvoiceTemplateResponse(
     val id: String,
     val shopID: String,
     val description: String?,
+    val metadata: CustomMetadata?,
     val details: InvoiceTemplateDetails
 )

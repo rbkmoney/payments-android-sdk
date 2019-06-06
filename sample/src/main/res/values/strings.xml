@@ -17,7 +17,7 @@
   -->
 
 <resources>
-    <string name="app_name">RBKMoney</string>
+    <string name="app_name">RBKMoneySample</string>
 
     <string name="label_error">Ошибка</string>
     <string name="label_buy">Купить</string>
@@ -29,6 +29,8 @@
     <string name="label_payment_canceled">Платёж отменён</string>
     <string name="label_payment_success">Платёж совершён</string>
 
-    <string name="error_cant_load_invoice">Невозможно создать новый инвойс по шаблон</string>
-    <string name="error_cant_load_invoice_template">Невозможно загрузить шаблон инвойса</string>
+    <string name="error_cant_load_invoice">Невозможно создать новый инвойс по шаблон. %1$s</string>
+    <string name="error_cant_load_invoice_template">Невозможно загрузить шаблон инвойса. %1$s</string>
+    <string name="error_f">Ошибка: %1$s</string>
+    <string name="error_unknown">Неизвестная ошибка</string>
 </resources>
