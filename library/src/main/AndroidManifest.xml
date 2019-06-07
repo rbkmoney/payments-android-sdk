@@ -27,8 +27,10 @@
     <application>
 
         <activity
+            android:name="money.rbk.presentation.activity.CheckoutActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.RBKMoney"
-            android:name="money.rbk.presentation.activity.CheckoutActivity" />
+            />
 
     </application>
 
