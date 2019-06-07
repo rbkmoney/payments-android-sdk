@@ -16,13 +16,16 @@
   ~
   -->
 
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:elevation="@dimen/elevation"
     android:orientation="vertical"
-    app:cardCornerRadius="@dimen/corner_radius">
+    app:cardCornerRadius="@dimen/corner_radius"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -54,6 +57,7 @@
             android:drawableEnd="@drawable/selector_logo_visa"
             android:hint="@string/number_on_card"
             android:inputType="number"
+            android:nextFocusDown="@+id/edCardDate"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvChoosePaymentMethod" />
@@ -68,6 +72,7 @@
             android:drawableStart="@drawable/selector_date"
             android:hint="@string/date_card"
             android:inputType="date"
+            android:nextFocusDown="@+id/edCardCvv"
             app:layout_constraintEnd_toStartOf="@+id/edCardCvv"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
@@ -85,10 +90,10 @@
             android:hint="@string/ccv_card"
             android:inputType="numberPassword"
             android:maxLength="3"
+            android:nextFocusDown="@+id/edCardName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/edCardDate"
             app:layout_constraintTop_toBottomOf="@+id/edCardNumber" />
-
 
         <EditText
             android:id="@+id/edCardName"
@@ -103,12 +108,14 @@
             android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:nextFocusDown="@+id/edEmail"
             app:layout_constraintTop_toBottomOf="@+id/edCardDate" />
 
         <EditText
             android:id="@+id/edEmail"
             style="@style/EditText"
             android:layout_width="0dp"
+            android:imeOptions="actionDone"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_default"
             android:layout_marginTop="@dimen/spacing_small"
@@ -119,7 +126,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edCardName" />
-
 
         <Button
             android:id="@+id/btnPay"
@@ -134,7 +140,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edEmail"
-            android:text="Оплатить 6500. 50 Р" />
+            tools:text="Оплатить 6500. 50 Р" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

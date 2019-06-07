@@ -24,7 +24,7 @@
     <string name="footer">© 2008–2018 RBKmoney | Direct Payments Ltd.</string>
     <string name="cash">Наличные</string>
     <string name="cash_description">Оплата через терминал, банкомат или салон связи</string>
-    <string name="card">Бансковская карта</string>
+    <string name="card">Банковская карта</string>
     <string name="wallet">Электронные кошельки</string>
     <string name="payment_by_card">Оплата банковской картой</string>
     <string name="email_for_check">Email для чека</string>
@@ -33,4 +33,6 @@
     <string name="ccv_card">CVV/CVC</string>
     <string name="number_on_card">Номер на карте</string>
     <string name="secure_payment_with">Безопасная оплата с</string>
+    <string name="label_order_details">Детали заказа</string>
+    <string name="label_pay_f">Опталить %1$s</string>
 </resources>

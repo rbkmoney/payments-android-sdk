@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~
-  ~ Copyright  2019 RBKmoney
+  ~ Copyright 2019 RBKmoney
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~
-  ~
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,35 +25,48 @@
     android:background="@drawable/background_gradient"
     >
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/tbMain"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:minHeight="?attr/actionBarSize"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:background="@color/white"
+            android:id="@+id/tbMain"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
 
-        <TextView
-            android:id="@+id/tvShopName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAppearance="@style/TextAppearance.RBKMoney.Normal"
-            tools:text="shop.ru"
-            />
+            <ImageButton
+                android:id="@+id/ibtnBack"
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?selectableItemBackground"
+                android:src="@drawable/ic_back"
+                android:gravity="center"
+                android:layout_weight="0"
+                />
 
-        <ImageButton
-            android:id="@+id/ibtnBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/transparent"
-            android:src="@drawable/ic_back"
-            />
+            <TextView
+                android:id="@+id/tvShopName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.RBKMoney.Normal"
+                android:layout_weight="1"
+                tools:text="shop.ru"
+                />
 
-    </androidx.appcompat.widget.Toolbar>
+            <ImageButton
+                android:id="@+id/ibtnClose"
+                android:layout_width="?attr/actionBarSize"
+                android:gravity="center"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?selectableItemBackground"
+                android:src="@drawable/ic_cross_green"
+                android:layout_weight="0"
+                />
+
+        </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -69,56 +81,63 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="@dimen/spacing_xsmall"
             >
 
-            <LinearLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tvPrice"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_large"
+                android:layout_marginStart="@dimen/spacing_xxlarge"
                 android:layout_marginTop="@dimen/spacing_default"
-                android:orientation="vertical"
+                android:layout_marginEnd="@dimen/spacing_xxlarge"
+                android:textAppearance="@style/TextAppearance.RBKMoney.Title.White"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                >
+                tools:text="6 500, 50 ₽"
+                />
 
-                <TextView
-                    android:id="@+id/tvPrice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.RBKMoney.HeadlineWhite"
-                    tools:text="6 500, 50 ₽"
-                    />
+            <TextView
+                android:id="@+id/tvOrderDetailsLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_xxlarge"
+                android:layout_marginTop="@dimen/spacing_default"
+                android:layout_marginEnd="@dimen/spacing_xxlarge"
+                android:text="@string/label_order_details"
+                android:textAppearance="@style/TextAppearance.RBKMoney.Headline.BlueGrey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvPrice"
+                />
 
-                <TextView
-                    android:id="@+id/tvOrderDetails"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_default"
-                    android:textAppearance="@style/TextAppearance.RBKMoney.HeadlineBlueGrey"
-                    tools:text="ORDER DETAILS"
-                    />
+            <TextView
+                android:id="@+id/tvOrderDetails"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_xxlarge"
+                android:layout_marginTop="@dimen/spacing_xsmall"
+                android:layout_marginEnd="@dimen/spacing_xxlarge"
+                android:textAppearance="@style/TextAppearance.RBKMoney.Normal.White"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvOrderDetailsLabel"
+                tools:text="@tools:sample/lorem"
+                />
 
-                <TextView
-                    android:id="@+id/tvProduct"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_xsmall"
-                    android:textAppearance="@style/TextAppearance.RBKMoney.White"
-                    tools:text="Penny Board"
-                    />
-
-            </LinearLayout>
 
             <FrameLayout
                 android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/spacing_default"
-                android:layout_marginTop="@dimen/spacing_small"
+                android:layout_marginTop="@dimen/spacing_xxlarge"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                app:layout_constraintTop_toBottomOf="@+id/tvOrderDetails"
                 />
 
             <ImageView
@@ -126,10 +145,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_default"
-                android:layout_marginTop="@dimen/spacing_default"
                 android:src="@drawable/ic_lock"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/container"
+                app:layout_constraintTop_toTopOf="@+id/tvFooterSecurity"
                 />
 
             <TextView
@@ -137,11 +155,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_small"
+                android:layout_marginTop="@dimen/spacing_default"
                 android:text="@string/secure_payment_with"
-                android:textAppearance="@style/TextAppearance.RBKMoney.FooterCaps"
-                app:layout_constraintBottom_toBottomOf="@+id/ivFooterLock"
+                android:textAppearance="@style/TextAppearance.RBKMoney.Headline.White"
                 app:layout_constraintStart_toEndOf="@+id/ivFooterLock"
-                app:layout_constraintTop_toTopOf="@+id/ivFooterLock"
+                app:layout_constraintTop_toBottomOf="@+id/container"
                 />
 
             <ImageView
@@ -158,10 +176,12 @@
                 android:id="@+id/ivFooterLogos"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_default"
+                android:layout_marginTop="@dimen/spacing_medium"
                 android:layout_marginEnd="@dimen/spacing_default"
                 android:src="@drawable/ic_footer_logos"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/ivFooterLock"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ivFooterLock"
                 />
 
@@ -170,7 +190,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_default"
-                android:layout_marginTop="@dimen/spacing_default"
+                android:layout_marginTop="@dimen/spacing_medium"
                 android:text="@string/footer"
                 android:textAppearance="@style/TextAppearance.RBKMoney.Footer"
                 app:layout_constraintStart_toStartOf="parent"
@@ -180,5 +200,21 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/lLoader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:visibility="gone"
+        >
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
