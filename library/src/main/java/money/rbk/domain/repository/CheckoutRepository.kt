@@ -16,20 +16,21 @@
  *
  */
 
-package money.rbk.domain.entity
+package money.rbk.domain.repository
 
-import money.rbk.data.extension.findEnum
-import money.rbk.data.serialization.Deserializer
+import money.rbk.domain.entity.Invoice
+import money.rbk.domain.entity.Shop
 
-internal enum class Currency(val symbol: String) {
-    RUB("\u20BD"),
-    EUR("€"),
-    USD("$"),
+internal interface CheckoutRepository {
 
-    UNKNOWN("");
+    var invoiceId: String
 
-    companion object : Deserializer<String, Currency> {
-        override fun fromJson(json: String) = findEnum(json, UNKNOWN)
-    }
+    var invoiceAccessToken: String
+
+    var shopName: String
+
+    fun loadShop(): Shop
+
+    fun loadInvoice(): Invoice
 
 }

@@ -18,18 +18,24 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.extension.findEnum
+import money.rbk.data.extension.parse
 import money.rbk.data.serialization.Deserializer
+import org.json.JSONObject
 
-internal enum class Currency(val symbol: String) {
-    RUB("\u20BD"),
-    EUR("€"),
-    USD("$"),
+internal data class Shop(
+    val id: String,
+    val isBlocked: Boolean,
+    val isSuspended: Boolean,
+    val details: ShopDetails
+) {
 
-    UNKNOWN("");
-
-    companion object : Deserializer<String, Currency> {
-        override fun fromJson(json: String) = findEnum(json, UNKNOWN)
+    companion object : Deserializer<JSONObject, Shop> {
+        override fun fromJson(json: JSONObject): Shop = Shop(
+            id = json.getString("id"),
+            isBlocked = json.getBoolean("isBlocked"),
+            isSuspended = json.getBoolean("isSuspended"),
+            details = json.parse("details", ShopDetails.Companion)
+        )
     }
 
 }

@@ -18,18 +18,16 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.extension.findEnum
 import money.rbk.data.serialization.Deserializer
+import org.json.JSONObject
 
-internal enum class Currency(val symbol: String) {
-    RUB("\u20BD"),
-    EUR("€"),
-    USD("$"),
+class ShopDetails(
+    val name: String
+) {
 
-    UNKNOWN("");
-
-    companion object : Deserializer<String, Currency> {
-        override fun fromJson(json: String) = findEnum(json, UNKNOWN)
+    companion object : Deserializer<JSONObject, ShopDetails> {
+        override fun fromJson(json: JSONObject): ShopDetails = ShopDetails(
+            name = json.getString("name")
+        )
     }
-
 }

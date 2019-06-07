@@ -16,20 +16,9 @@
  *
  */
 
-package money.rbk.domain.entity
+package money.rbk.presentation.exception
 
-import money.rbk.data.extension.findEnum
-import money.rbk.data.serialization.Deserializer
+import android.app.Activity
 
-internal enum class Currency(val symbol: String) {
-    RUB("\u20BD"),
-    EUR("€"),
-    USD("$"),
-
-    UNKNOWN("");
-
-    companion object : Deserializer<String, Currency> {
-        override fun fromJson(json: String) = findEnum(json, UNKNOWN)
-    }
-
-}
+class ActivityExtraNonnullException(activity: Class<in Activity>, argumentName: String) :
+    RuntimeException("Activity ${activity.name} must contain non-null extra $argumentName")

@@ -16,20 +16,11 @@
  *
  */
 
-package money.rbk.domain.entity
+package money.rbk.presentation.exception
 
-import money.rbk.data.extension.findEnum
-import money.rbk.data.serialization.Deserializer
+import androidx.fragment.app.Fragment
 
-internal enum class Currency(val symbol: String) {
-    RUB("\u20BD"),
-    EUR("€"),
-    USD("$"),
-
-    UNKNOWN("");
-
-    companion object : Deserializer<String, Currency> {
-        override fun fromJson(json: String) = findEnum(json, UNKNOWN)
-    }
-
-}
+class FragmentArgumentNonnullException(
+    fragmentClass: Class<in Fragment>,
+    argumentName: String) :
+    RuntimeException("Fragment ${fragmentClass.name} must contain non-null argument $argumentName")
