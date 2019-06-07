@@ -29,9 +29,10 @@ internal class InvoiceUseCase(private val repository: CheckoutRepository = Injec
     override fun invoke(
         onResultCallback: (InvoiceModel) -> Unit,
         onErrorCallback: (Throwable) -> Unit) {
-        bgExecutor(onErrorCallback) {
 
+        bgExecutor(onErrorCallback) {
             val invoice = repository.loadInvoice()
+            repository.loadPaymentMethods()
 
             //TODO Process Errors
 
@@ -39,7 +40,7 @@ internal class InvoiceUseCase(private val repository: CheckoutRepository = Injec
                 invoice.id,
                 repository.shopName,
                 "${invoice.amount.formatPrice()} ${invoice.currency.symbol}",
-                invoice.product + invoice.description?.let { ". $it" }.orEmpty()
+                invoice.product + invoice.description?.let { ". $it" }.orEmpty() // TODO: For testing purposes
             )
 
             uiExecutor {

@@ -16,20 +16,9 @@
  *
  */
 
-package money.rbk.domain.repository
+package money.rbk.presentation.exception
 
-import money.rbk.domain.entity.Invoice
-import money.rbk.domain.entity.PaymentMethod
+import money.rbk.presentation.model.BaseIUModel
+import kotlin.reflect.KClass
 
-internal interface CheckoutRepository {
-
-    var invoiceId: String
-
-    var invoiceAccessToken: String
-
-    var shopName: String
-
-    fun loadInvoice(): Invoice
-
-    fun loadPaymentMethods(): List<PaymentMethod>
-}
+class UnknownUseCaseException(baseModelClass: KClass<out BaseIUModel>) : Throwable("Unknown use case with model: $baseModelClass")

@@ -46,6 +46,7 @@
             android:id="@+id/rvPaymentMethods"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="30dp"
             android:layout_marginStart="@dimen/spacing_default"
             android:layout_marginTop="@dimen/spacing_default"
             android:layout_marginEnd="@dimen/spacing_default"
@@ -54,6 +55,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvChoosePaymentMethod" />
+
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            app:layout_constraintBottom_toBottomOf="@+id/rvPaymentMethods"
+            app:layout_constraintEnd_toEndOf="@+id/rvPaymentMethods"
+            app:layout_constraintStart_toStartOf="@+id/rvPaymentMethods"
+            app:layout_constraintTop_toTopOf="@+id/rvPaymentMethods"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

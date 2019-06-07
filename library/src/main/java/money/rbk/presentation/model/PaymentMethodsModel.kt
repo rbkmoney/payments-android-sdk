@@ -16,13 +16,6 @@
  *
  */
 
-package money.rbk.presentation.screen.methods.temmporary
+package money.rbk.presentation.model
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
-
-data class PaymentTestItem(
-    @StringRes val name: Int?,
-    @StringRes val description: Int?,
-    @DrawableRes val icon: Int
-)
+class PaymentMethodsModel(val paymentMethods: List<PaymentMethodModel>) : BaseIUModel()

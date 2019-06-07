@@ -18,13 +18,14 @@
 
 package money.rbk.presentation.activity
 
+import money.rbk.di.Injector
 import money.rbk.domain.interactor.BaseUseCase
 import money.rbk.domain.interactor.InvoiceUseCase
 import money.rbk.presentation.model.InvoiceModel
 import money.rbk.presentation.screen.base.BasePresenter
 
 class CheckoutPresenter(
-    private val invoiceUseCase: BaseUseCase<InvoiceModel> = InvoiceUseCase()
+    private val invoiceUseCase: BaseUseCase<InvoiceModel> = Injector.resolveUseCase()
 ) : BasePresenter<CheckoutView>() {
 
     override fun onViewAttached(view: CheckoutView) {

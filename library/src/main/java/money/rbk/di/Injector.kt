@@ -19,8 +19,15 @@
 package money.rbk.di
 
 import android.content.Context
-import money.rbk.data.CheckoutRepositoryImpl
+import money.rbk.data.repository.CheckoutRepositoryImpl
+import money.rbk.domain.interactor.BaseUseCase
+import money.rbk.domain.interactor.InvoiceUseCase
+import money.rbk.domain.interactor.PaymentMethodsUseCase
 import money.rbk.domain.repository.CheckoutRepository
+import money.rbk.presentation.exception.UnknownUseCaseException
+import money.rbk.presentation.model.BaseIUModel
+import money.rbk.presentation.model.InvoiceModel
+import money.rbk.presentation.model.PaymentMethodsModel
 import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -36,7 +43,10 @@ object Injector {
 
     fun init(context: Context, invoiceId: String, invoiceAccessToken: String, shopName: String) {
         okHttpClient = newHttpClient(context)
-        checkoutRepository = CheckoutRepositoryImpl(invoiceId, invoiceAccessToken, shopName, okHttpClient)
+        checkoutRepository = CheckoutRepositoryImpl(invoiceId,
+            invoiceAccessToken,
+            shopName,
+            okHttpClient)
     }
 
     private fun newHttpClient(context: Context): OkHttpClient = OkHttpClient.Builder()
@@ -52,5 +62,13 @@ object Injector {
         // .addUserAgent(context)
         // .applyLogging()
         .build()
+
+    @Suppress("UNCHECKED_CAST")
+    internal inline fun <reified T : BaseIUModel> resolveUseCase(): BaseUseCase<T> =
+        when (T::class) {
+            InvoiceModel::class -> InvoiceUseCase()
+            PaymentMethodsModel::class -> PaymentMethodsUseCase()
+            else -> throw UnknownUseCaseException(T::class)
+        } as BaseUseCase<T>
 
 }

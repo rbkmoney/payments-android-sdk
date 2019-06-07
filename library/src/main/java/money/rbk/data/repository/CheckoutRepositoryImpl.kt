@@ -16,11 +16,13 @@
  *
  */
 
-package money.rbk.data
+package money.rbk.data.repository
 
 import money.rbk.data.extension.execute
 import money.rbk.data.methods.GetInvoiceByID
+import money.rbk.data.methods.GetInvoicePaymentMethods
 import money.rbk.domain.entity.Invoice
+import money.rbk.domain.entity.PaymentMethod
 import money.rbk.domain.repository.CheckoutRepository
 import okhttp3.OkHttpClient
 
@@ -34,6 +36,12 @@ internal class CheckoutRepositoryImpl(
         okHttpClient.execute(GetInvoiceByID(invoiceAccessToken, invoiceId))
     }
 
+    private val paymentMethods: List<PaymentMethod> by lazy {
+        okHttpClient.execute(GetInvoicePaymentMethods(invoiceAccessToken, invoiceId))
+    }
+
     override fun loadInvoice(): Invoice = invoice
+
+    override fun loadPaymentMethods(): List<PaymentMethod> = paymentMethods
 
 }

@@ -18,8 +18,10 @@
 
 package money.rbk.presentation.screen.methods
 
+import money.rbk.presentation.model.PaymentMethodModel
 import money.rbk.presentation.screen.base.BaseView
 
 interface PaymentMethodsView : BaseView {
 
+    fun setPaymentMethods(paymentMethods: List<PaymentMethodModel>)
 }

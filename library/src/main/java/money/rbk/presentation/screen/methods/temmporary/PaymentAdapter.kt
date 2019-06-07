@@ -25,13 +25,14 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import kotlinx.android.synthetic.main.item_payment_methods.view.*
 import money.rbk.R
+import money.rbk.presentation.model.PaymentMethodModel
 import money.rbk.presentation.screen.methods.temmporary.PaymentAdapter.PaymentHolder
 import java.util.Collections
 
-class PaymentAdapter(private val onItemClickListener: (PaymentTestItem) -> Unit) :
+class PaymentAdapter(private val onItemClickListener: (PaymentMethodModel) -> Unit) :
     RecyclerView.Adapter<PaymentHolder>() {
 
-    var payments: List<PaymentTestItem> = Collections.emptyList()
+    var payments: List<PaymentMethodModel> = Collections.emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PaymentHolder =
         PaymentHolder(
@@ -48,15 +49,15 @@ class PaymentAdapter(private val onItemClickListener: (PaymentTestItem) -> Unit)
 
     class PaymentHolder(
         private val view: View,
-        onItemClickListener: (PaymentTestItem) -> Unit) : ViewHolder(view) {
+        onItemClickListener: (PaymentMethodModel) -> Unit) : ViewHolder(view) {
 
-        private lateinit var paymentItem: PaymentTestItem
+        private lateinit var paymentItem: PaymentMethodModel
 
         init {
             view.setOnClickListener { onItemClickListener(paymentItem) }
         }
 
-        fun bind(payment: PaymentTestItem) =
+        fun bind(payment: PaymentMethodModel) =
             with(payment) {
                 paymentItem = this
 

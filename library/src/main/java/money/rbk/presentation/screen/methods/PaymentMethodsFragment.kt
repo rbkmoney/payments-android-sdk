@@ -27,12 +27,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fmt_payment_methods.*
 import money.rbk.R
 import money.rbk.presentation.activity.CheckoutActivity
+import money.rbk.presentation.model.PaymentMethodModel
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.base.BasePresenter
 import money.rbk.presentation.screen.card.BankCardFragment
 import money.rbk.presentation.screen.methods.temmporary.MarginItemDecoration
 import money.rbk.presentation.screen.methods.temmporary.PaymentAdapter
-import money.rbk.presentation.screen.methods.temmporary.PaymentTestItem
 import money.rbk.presentation.utils.replaceFragmentInActivity
 
 class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethodsView {
@@ -48,41 +48,19 @@ class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethod
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initTestData()
-
         (activity as? CheckoutActivity)?.setBackButtonVisibility(false)
     }
 
-    //TODO: remove after testing
-    private fun initTestData() {
-        val payments = with(ArrayList<PaymentTestItem>()) {
-
-            add(
-                PaymentTestItem(
-                    name = R.string.card,
-                    description = null,
-                    icon = R.drawable.ic_card
-                )
-            )
-            add(
-                PaymentTestItem(
-                    name = null,
-                    description = null,
-                    icon = R.drawable.ic_google_pay
-                )
-            )
-            this
-        }
+    override fun setPaymentMethods(paymentMethods: List<PaymentMethodModel>) {
 
         val adapter = PaymentAdapter(::onPaymentClick)
-        adapter.payments = payments
+        adapter.payments = paymentMethods
         rvPaymentMethods.adapter = adapter
         rvPaymentMethods.layoutManager = LinearLayoutManager(activity)
         rvPaymentMethods.addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.spacing_small).toInt()))
-
     }
 
-    private fun onPaymentClick(payment: PaymentTestItem) {
+    private fun onPaymentClick(payment: PaymentMethodModel) {
         if (payment.name == null) {
             Toast.makeText(context, "Данный функционал находится в разработке", Toast.LENGTH_LONG)
                 .show()
@@ -94,9 +72,11 @@ class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethod
     override fun buildPresenter(): BasePresenter<PaymentMethodsView> = PaymentMethodsPresenter()
 
     override fun showProgress() {
+        pbLoading.visibility = View.VISIBLE
     }
 
     override fun hideProgress() {
+        pbLoading.visibility = View.GONE
     }
 
 }

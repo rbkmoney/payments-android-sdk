@@ -18,12 +18,32 @@
 
 package money.rbk.presentation.screen.methods
 
+import money.rbk.di.Injector
+import money.rbk.domain.interactor.BaseUseCase
+import money.rbk.presentation.model.PaymentMethodsModel
 import money.rbk.presentation.screen.base.BasePresenter
 
-class PaymentMethodsPresenter : BasePresenter<PaymentMethodsView>() {
+class PaymentMethodsPresenter(
+    private val paymentMethodsUseCase: BaseUseCase<PaymentMethodsModel> = Injector.resolveUseCase()
+) : BasePresenter<PaymentMethodsView>() {
 
     override fun onViewAttached(view: PaymentMethodsView) {
+        view.showProgress()
+        paymentMethodsUseCase(::onPaymentMethodsLoaded, ::onPaymentMethodsError)
+    }
 
+    private fun onPaymentMethodsLoaded(paymentMethods: PaymentMethodsModel) {
+        view?.apply {
+            hideProgress()
+            setPaymentMethods(paymentMethods.paymentMethods)
+        }
+    }
+
+    private fun onPaymentMethodsError(throwable: Throwable) {
+        view?.apply {
+            hideProgress()
+        }
+        throwable.printStackTrace()
     }
 
 }

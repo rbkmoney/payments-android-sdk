@@ -16,20 +16,20 @@
  *
  */
 
-package money.rbk.domain.repository
+package money.rbk.presentation.model
 
-import money.rbk.domain.entity.Invoice
-import money.rbk.domain.entity.PaymentMethod
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import money.rbk.R
 
-internal interface CheckoutRepository {
+sealed class PaymentMethodModel(
+    @StringRes val name: Int? = null,
+    @StringRes val description: Int? = null,
+    @DrawableRes val icon: Int
+) : BaseIUModel() {
 
-    var invoiceId: String
+    object BankCard : PaymentMethodModel(name = R.string.label_card, icon = R.drawable.ic_card)
 
-    var invoiceAccessToken: String
+    object GooglePay : PaymentMethodModel(icon = R.drawable.ic_google_pay)
 
-    var shopName: String
-
-    fun loadInvoice(): Invoice
-
-    fun loadPaymentMethods(): List<PaymentMethod>
 }
