@@ -16,7 +16,7 @@
  *
  */
 
-package money.rbk.presentation.screen.methods.temmporary
+package money.rbk.presentation.screen.methods.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -26,7 +26,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import kotlinx.android.synthetic.main.item_payment_methods.view.*
 import money.rbk.R
 import money.rbk.presentation.model.PaymentMethodModel
-import money.rbk.presentation.screen.methods.temmporary.PaymentAdapter.PaymentHolder
+import money.rbk.presentation.screen.methods.adapter.PaymentAdapter.PaymentHolder
 import java.util.Collections
 
 class PaymentAdapter(private val onItemClickListener: (PaymentMethodModel) -> Unit) :
@@ -66,7 +66,6 @@ class PaymentAdapter(private val onItemClickListener: (PaymentMethodModel) -> Un
                 } else {
                     view.tvPaymentType.setText(name)
                 }
-
 
                 if (description == null) {
                     view.tvDescription.visibility = View.GONE

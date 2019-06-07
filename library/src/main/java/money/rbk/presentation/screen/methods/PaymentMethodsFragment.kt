@@ -31,8 +31,8 @@ import money.rbk.presentation.model.PaymentMethodModel
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.base.BasePresenter
 import money.rbk.presentation.screen.card.BankCardFragment
-import money.rbk.presentation.screen.methods.temmporary.MarginItemDecoration
-import money.rbk.presentation.screen.methods.temmporary.PaymentAdapter
+import money.rbk.presentation.screen.common.MarginItemDecoration
+import money.rbk.presentation.screen.methods.adapter.PaymentAdapter
 import money.rbk.presentation.utils.replaceFragmentInActivity
 
 class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethodsView {
@@ -57,7 +57,8 @@ class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethod
         adapter.payments = paymentMethods
         rvPaymentMethods.adapter = adapter
         rvPaymentMethods.layoutManager = LinearLayoutManager(activity)
-        rvPaymentMethods.addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.spacing_small).toInt()))
+        rvPaymentMethods.addItemDecoration(MarginItemDecoration(
+            resources.getDimension(R.dimen.spacing_small).toInt()))
     }
 
     private fun onPaymentClick(payment: PaymentMethodModel) {
