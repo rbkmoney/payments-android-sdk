@@ -16,7 +16,7 @@
  *
  */
 
-package money.rbk.presentation.screen.methods.temmporary
+package money.rbk.presentation.screen.common
 
 import android.graphics.Rect
 import android.view.View

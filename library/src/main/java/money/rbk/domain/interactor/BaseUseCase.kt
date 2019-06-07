@@ -42,7 +42,6 @@ abstract class BaseUseCase<T : BaseIUModel> {
                 }
             }
         }
-
     }
 
     protected val uiExecutor: UiExecutor = { handler.post(it) }
