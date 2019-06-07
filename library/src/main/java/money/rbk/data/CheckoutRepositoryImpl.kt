@@ -21,8 +21,6 @@ package money.rbk.data
 import money.rbk.data.extension.execute
 import money.rbk.data.methods.GetInvoiceByID
 import money.rbk.domain.entity.Invoice
-import money.rbk.domain.entity.Shop
-import money.rbk.domain.entity.ShopDetails
 import money.rbk.domain.repository.CheckoutRepository
 import okhttp3.OkHttpClient
 
@@ -32,15 +30,9 @@ internal class CheckoutRepositoryImpl(
     override var shopName: String,
     private val okHttpClient: OkHttpClient) : CheckoutRepository {
 
-    private val shop: Shop by lazy {
-        Shop("", false, false, ShopDetails(shopName))
-    }
-
     private val invoice: Invoice by lazy {
         okHttpClient.execute(GetInvoiceByID(invoiceAccessToken, invoiceId))
     }
-
-    override fun loadShop(): Shop = shop
 
     override fun loadInvoice(): Invoice = invoice
 

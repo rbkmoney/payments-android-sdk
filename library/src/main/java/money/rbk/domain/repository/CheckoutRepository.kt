@@ -19,7 +19,6 @@
 package money.rbk.domain.repository
 
 import money.rbk.domain.entity.Invoice
-import money.rbk.domain.entity.Shop
 
 internal interface CheckoutRepository {
 
@@ -28,8 +27,6 @@ internal interface CheckoutRepository {
     var invoiceAccessToken: String
 
     var shopName: String
-
-    fun loadShop(): Shop
 
     fun loadInvoice(): Invoice
 

@@ -32,13 +32,12 @@ internal class InvoiceUseCase(private val repository: CheckoutRepository = Injec
         bgExecutor(onErrorCallback) {
 
             val invoice = repository.loadInvoice()
-            val shop = repository.loadShop()
 
             //TODO Process Errors
 
             val invoiceModel = InvoiceModel(
                 invoice.id,
-                shop.details.name,
+                repository.shopName,
                 "${invoice.amount.formatPrice()} ${invoice.currency.symbol}",
                 invoice.product + invoice.description?.let { ". $it" }.orEmpty()
             )
