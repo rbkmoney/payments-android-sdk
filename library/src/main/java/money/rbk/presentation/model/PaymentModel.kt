@@ -16,22 +16,6 @@
  *
  */
 
-package money.rbk.presentation.screen.card
+package money.rbk.presentation.model
 
-import money.rbk.di.Injector
-import money.rbk.domain.interactor.BaseUseCase
-import money.rbk.domain.interactor.PaymentPrepareUseCase
-import money.rbk.presentation.model.PaymentModel
-import money.rbk.presentation.screen.base.BasePresenter
-
-internal class BankCardPresenter(
-    private val paymentPrepareUseCase: PaymentPrepareUseCase = PaymentPrepareUseCase(),
-    private val paymentUseCase : BaseUseCase<PaymentModel> = Injector.resolveUseCase()
-
-) : BasePresenter<BankCardView>() {
-
-    override fun onViewAttached(view: BankCardView) {
-
-    }
-
-}
+class PaymentModel(val isSuccess: Boolean) : BaseIUModel()

@@ -30,7 +30,7 @@ import money.rbk.presentation.activity.CheckoutActivity
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.base.BasePresenter
 
-class BankCardFragment : BaseFragment<BankCardView>() {
+class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
 
     companion object {
         fun newInstance() = BankCardFragment()

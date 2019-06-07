@@ -18,8 +18,11 @@
 
 package money.rbk.domain.repository
 
+import money.rbk.data.response.CreatePaymentResponse
+import money.rbk.domain.entity.ContactInfo
 import money.rbk.domain.entity.Invoice
 import money.rbk.domain.entity.PaymentMethod
+import money.rbk.domain.entity.PaymentTool
 
 internal interface CheckoutRepository {
 
@@ -32,4 +35,6 @@ internal interface CheckoutRepository {
     fun loadInvoice(): Invoice
 
     fun loadPaymentMethods(): List<PaymentMethod>
+    fun preparePayment(paymentTool: PaymentTool, contactInfo: ContactInfo)
+    fun loadPayment(): CreatePaymentResponse
 }

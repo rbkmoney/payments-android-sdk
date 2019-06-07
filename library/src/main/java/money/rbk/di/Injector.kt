@@ -23,11 +23,13 @@ import money.rbk.data.repository.CheckoutRepositoryImpl
 import money.rbk.domain.interactor.BaseUseCase
 import money.rbk.domain.interactor.InvoiceUseCase
 import money.rbk.domain.interactor.PaymentMethodsUseCase
+import money.rbk.domain.interactor.PaymentUseCase
 import money.rbk.domain.repository.CheckoutRepository
 import money.rbk.presentation.exception.UnknownUseCaseException
 import money.rbk.presentation.model.BaseIUModel
 import money.rbk.presentation.model.InvoiceModel
 import money.rbk.presentation.model.PaymentMethodsModel
+import money.rbk.presentation.model.PaymentModel
 import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -68,6 +70,7 @@ object Injector {
         when (T::class) {
             InvoiceModel::class -> InvoiceUseCase()
             PaymentMethodsModel::class -> PaymentMethodsUseCase()
+            PaymentModel::class -> PaymentUseCase()
             else -> throw UnknownUseCaseException(T::class)
         } as BaseUseCase<T>
 

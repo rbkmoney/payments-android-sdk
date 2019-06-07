@@ -24,11 +24,11 @@ import money.rbk.data.extension.getNullable
 import money.rbk.data.extension.parseNullableString
 import money.rbk.data.serialization.Deserializer
 
-const val PaymentToolDetailsBankCardType = "PaymentToolDetailsBankCard"
+const val PaymentToolDetailsBankCardType = "BankCard"
 
 sealed class PaymentToolDetails(val detailsType: String) {
 
-    data class PaymentToolDetailsBankCard(
+    data class BankCard(
         val cardNumberMask: String,
         val bin: String?,
         val lastDigits: String?,
@@ -36,10 +36,10 @@ sealed class PaymentToolDetails(val detailsType: String) {
         val tokenProvider: TokenProvider?
     ) : PaymentToolDetails(PaymentToolDetailsBankCardType) {
 
-        companion object : Deserializer<JSONObject, PaymentToolDetailsBankCard> {
+        companion object : Deserializer<JSONObject, BankCard> {
 
-            override fun fromJson(json: JSONObject): PaymentToolDetailsBankCard =
-                PaymentToolDetailsBankCard(
+            override fun fromJson(json: JSONObject): BankCard =
+                BankCard(
                     cardNumberMask = json.getString("cardNumberMask"),
                     bin = json.getNullable("bin"),
                     lastDigits = json.getNullable("lastDigits"),
@@ -55,7 +55,7 @@ sealed class PaymentToolDetails(val detailsType: String) {
         override fun fromJson(json: JSONObject): PaymentToolDetails {
             val detailsType = json.getString("detailsType")
             return when (detailsType) {
-                PaymentToolDetailsBankCardType -> PaymentToolDetailsBankCard.fromJson(json)
+                PaymentToolDetailsBankCardType -> BankCard.fromJson(json)
                 else -> throw UnsupportedPaymentToolDetails(detailsType)
 
             }

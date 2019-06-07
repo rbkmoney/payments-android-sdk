@@ -16,22 +16,27 @@
  *
  */
 
-package money.rbk.presentation.screen.card
+package money.rbk.domain.interactor
 
 import money.rbk.di.Injector
-import money.rbk.domain.interactor.BaseUseCase
-import money.rbk.domain.interactor.PaymentPrepareUseCase
+import money.rbk.domain.repository.CheckoutRepository
 import money.rbk.presentation.model.PaymentModel
-import money.rbk.presentation.screen.base.BasePresenter
 
-internal class BankCardPresenter(
-    private val paymentPrepareUseCase: PaymentPrepareUseCase = PaymentPrepareUseCase(),
-    private val paymentUseCase : BaseUseCase<PaymentModel> = Injector.resolveUseCase()
+internal class PaymentUseCase(
+    private val checkoutRepository: CheckoutRepository = Injector.checkoutRepository
+) : BaseUseCase<PaymentModel>() {
 
-) : BasePresenter<BankCardView>() {
+    override fun invoke(
+        onResultCallback: (PaymentModel) -> Unit,
+        onErrorCallback: (Throwable) -> Unit) {
+        bgExecutor(onErrorCallback) {
+            val payment = checkoutRepository.loadPayment()
 
-    override fun onViewAttached(view: BankCardView) {
+            uiExecutor {
+                onResultCallback(PaymentModel(true))
+            }
 
+        }
     }
 
 }
