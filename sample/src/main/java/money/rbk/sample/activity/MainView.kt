@@ -27,7 +27,7 @@ interface MainView {
 
     fun showInvoiceTemplateError(error: String?)
 
-    fun startCheckout(invoiceResponse: InvoiceResponse)
+    fun startCheckout(shopAndInvoice: Pair<String, InvoiceResponse>)
 
     fun showInvoiceCreateError(error: String?)
 

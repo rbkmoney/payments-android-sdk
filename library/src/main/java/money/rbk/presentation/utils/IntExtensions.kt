@@ -16,10 +16,16 @@
  *
  */
 
-package money.rbk.sample.network.model
+package money.rbk.sample.activity.utils
 
-class InvoiceTemplate(
-    val id: String,
-    val accessToken: String,
-    val shopName: String
-)
+import java.text.NumberFormat
+
+private val format by lazy {
+    NumberFormat.getInstance()
+        .apply {
+            minimumFractionDigits = 2
+        }
+}
+
+fun Int.formatPrice() : String =
+    format.format(this / 100.0)

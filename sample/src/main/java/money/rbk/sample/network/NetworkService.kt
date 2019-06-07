@@ -46,14 +46,14 @@ object NetworkService {
             .create(ApiService::class.java)
     }
 
-    fun createInvoiceWithTemplate(invoiceTemplateId: String): Single<InvoiceResponse> =
+    fun createInvoiceWithTemplate(invoiceTemplateId: String): Single<Pair<String, InvoiceResponse>> =
         Single.just(getBuiltInInvoiceTemplates())
             .map { templates -> templates.first { it.id == invoiceTemplateId } }
-            .map { it.accessToken }
-            .flatMap { invoiceTemplateAccessToken ->
+            .flatMap { invoiceTemplate ->
                 apiService.createInvoiceWithTemplate(
-                    authorization = "Bearer $invoiceTemplateAccessToken",
+                    authorization = "Bearer ${invoiceTemplate.accessToken}",
                     invoiceTemplateId = invoiceTemplateId)
+                    .map { response -> invoiceTemplate.shopName to response }
             }
 
     fun getInvoiceTemplates(): Single<List<InvoiceTemplateResponse>> =
@@ -76,11 +76,14 @@ object NetworkService {
 
     private fun getBuiltInInvoiceTemplates() = listOf(
         InvoiceTemplate(BuildConfig.INVOICE_TEMPLATE_ID_RUB,
-            BuildConfig.INVOICE_TEMPLATE_ACCESS_TOKEN_RUB),
+            BuildConfig.INVOICE_TEMPLATE_ACCESS_TOKEN_RUB,
+            BuildConfig.SHOP_NAME_RUB),
         InvoiceTemplate(BuildConfig.INVOICE_TEMPLATE_ID_EUR,
-            BuildConfig.INVOICE_TEMPLATE_ACCESS_TOKEN_EUR),
+            BuildConfig.INVOICE_TEMPLATE_ACCESS_TOKEN_EUR,
+            BuildConfig.SHOP_NAME_EUR),
         InvoiceTemplate(BuildConfig.INVOICE_TEMPLATE_ID_UDS,
-            BuildConfig.INVOICE_TEMPLATE_ACCESS_TOKEN_USD)
+            BuildConfig.INVOICE_TEMPLATE_ACCESS_TOKEN_USD,
+            BuildConfig.SHOP_NAME_USD)
     )
 
 }

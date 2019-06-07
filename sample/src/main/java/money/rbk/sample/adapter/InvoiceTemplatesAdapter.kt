@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_invoice_template.view.*
 import money.rbk.sample.R
+import money.rbk.sample.activity.utils.formatPrice
 import money.rbk.sample.network.model.InvoiceTemplateResponse
 
 class InvoiceTemplatesAdapter(
@@ -72,7 +73,7 @@ class InvoiceTemplatesAdapter(
             }
 
             itemView.btnBuy.text = context.getString(R.string.label_cost,
-                invoiceTemplate.details.price.amount,
+                invoiceTemplate.details.price.amount.formatPrice(),
                 invoiceTemplate.details.price.currency.symbol)
         }
     }

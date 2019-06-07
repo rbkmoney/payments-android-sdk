@@ -58,7 +58,7 @@ class MainPresenter {
         }
     }
 
-    private fun onInvoiceCreated(response: InvoiceResponse) {
+    private fun onInvoiceCreated(response: Pair<String, InvoiceResponse>) {
         mainView?.apply {
             startCheckout(response)
             hideProgress()

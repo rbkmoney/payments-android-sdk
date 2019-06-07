@@ -68,11 +68,13 @@ class MainActivity : AppCompatActivity(), MainView {
                 }))
     }
 
-    override fun startCheckout(invoiceResponse: InvoiceResponse) {
+    override fun startCheckout(shopAndInvoice: Pair<String, InvoiceResponse>) {
+        val (shopName, invoiceResponse) = shopAndInvoice
         startActivityForResult(RbkMoney.buildCheckoutIntent(this,
-            invoiceResponse.invoice.shopID,
             invoiceResponse.invoice.id,
-            invoiceResponse.invoiceAccessToken.payload),
+            invoiceResponse.invoiceAccessToken.payload,
+            shopName
+        ),
             CHECKOUT_REQUEST_CODE)
     }
 
