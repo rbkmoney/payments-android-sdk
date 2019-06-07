@@ -45,7 +45,6 @@ class BankCardFragment : BaseFragment<BankCardView>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         btnPay.text =
             getString(R.string.label_pay_f, (activity as? CheckoutActivity)?.getCost().orEmpty())
         (activity as? CheckoutActivity)?.setBackButtonVisibility(true)
@@ -53,8 +52,6 @@ class BankCardFragment : BaseFragment<BankCardView>() {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-
-
         activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
 
@@ -64,8 +61,10 @@ class BankCardFragment : BaseFragment<BankCardView>() {
     }
 
     override fun showProgress() {
+        pbLoading.visibility = View.VISIBLE
     }
 
     override fun hideProgress() {
+        pbLoading.visibility = View.GONE
     }
 }
