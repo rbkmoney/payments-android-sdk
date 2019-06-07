@@ -20,17 +20,17 @@ package money.rbk.presentation.screen.base
 
 abstract class BasePresenter<View : BaseView>() {
 
-    private var view: View? = null
+    protected var view: View? = null
 
-    fun onAttachView(view: View) {
+    fun attachView(view: View) {
         this.view = view
-        onViewAttached()
+        onViewAttached(view)
     }
 
-    fun onDetachView() {
+    fun detachView() {
         this.view = null
     }
 
-    open fun onViewAttached() = Unit
+    open fun onViewAttached(view: View) = Unit
 
 }

@@ -26,54 +26,54 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import kotlinx.android.synthetic.main.item_payment_methods.view.*
 import money.rbk.R
 import money.rbk.presentation.screen.methods.temmporary.PaymentAdapter.PaymentHolder
-import java.util.*
+import java.util.Collections
 
-class PaymentAdapter : RecyclerView.Adapter<PaymentHolder>() {
-
-    companion object {
-        private const val TYPE_NORMAL = 0
-        private const val TYPE_DESCRIPTION = 1
-        private const val TYPE_ICON = 2
-    }
+class PaymentAdapter(private val onItemClickListener: (PaymentTestItem) -> Unit) :
+    RecyclerView.Adapter<PaymentHolder>() {
 
     var payments: List<PaymentTestItem> = Collections.emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PaymentHolder =
-            PaymentHolder(
-                    LayoutInflater
-                            .from(parent.context)
-                            .inflate(R.layout.item_payment_methods, parent, false)
-            )
-
+        PaymentHolder(
+            LayoutInflater
+                .from(parent.context)
+                .inflate(R.layout.item_payment_methods, parent, false),
+            onItemClickListener
+        )
 
     override fun getItemCount(): Int = payments.size
 
     override fun onBindViewHolder(holder: PaymentHolder, position: Int) =
-            holder.bind(payments[position])
+        holder.bind(payments[position])
 
+    class PaymentHolder(
+        private val view: View,
+        onItemClickListener: (PaymentTestItem) -> Unit) : ViewHolder(view) {
 
-    class PaymentHolder(private val view: View) : ViewHolder(view) {
+        private lateinit var paymentItem: PaymentTestItem
+
+        init {
+            view.setOnClickListener { onItemClickListener(paymentItem) }
+        }
 
         fun bind(payment: PaymentTestItem) =
-                with(payment) {
+            with(payment) {
+                paymentItem = this
 
-                    if (name == null) {
-                        view.tvPaymentType.visibility = View.GONE
-                    } else {
-                        view.tvPaymentType.setText(name)
-                    }
-
-
-                    if (description == null) {
-                        view.tvDescription.visibility = View.GONE
-                    } else {
-                        view.tvDescription.setText(description)
-                    }
-
-                    view.ivPaymentIcon.setImageResource(icon)
+                if (name == null) {
+                    view.tvPaymentType.visibility = View.GONE
+                } else {
+                    view.tvPaymentType.setText(name)
                 }
 
+
+                if (description == null) {
+                    view.tvDescription.visibility = View.GONE
+                } else {
+                    view.tvDescription.setText(description)
+                }
+
+                view.ivPaymentIcon.setImageResource(icon)
+            }
     }
-
-
 }

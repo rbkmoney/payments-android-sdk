@@ -16,14 +16,11 @@
  *
  */
 
-package money.rbk.presentation.screen.methods
+package money.rbk.presentation.model
 
-import money.rbk.presentation.screen.base.BasePresenter
-
-class PaymentMethodsPresenter : BasePresenter<PaymentMethodsView>() {
-
-    override fun onViewAttached(view: PaymentMethodsView) {
-
-    }
-
-}
+data class InvoiceModel(
+    val id: String,
+    val shopName: String,
+    val cost: String,
+    val orderDetails: String
+) : BaseIUModel()

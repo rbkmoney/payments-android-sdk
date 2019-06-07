@@ -18,25 +18,99 @@
 
 package money.rbk.presentation.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.ac_checkout.*
 import money.rbk.R
+import money.rbk.di.Injector
+import money.rbk.presentation.model.InvoiceModel
+import money.rbk.presentation.screen.card.BankCardFragment
 import money.rbk.presentation.screen.methods.PaymentMethodsFragment
+import money.rbk.presentation.utils.extra
 import money.rbk.presentation.utils.replaceFragmentInActivity
 
-class CheckoutActivity : AppCompatActivity() {
+class CheckoutActivity : AppCompatActivity(), CheckoutView {
 
     companion object {
-        const val KEY_INVOICE_ID = "invoice_id"
-        const val KEY_INVOICE_ACCESS_TOKEN = "invoice_access_token"
-        const val KEY_SHOP_ID = "shop_id"
+        private const val KEY_INVOICE_ID = "invoice_id"
+        private const val KEY_INVOICE_ACCESS_TOKEN = "invoice_access_token"
+        private const val KEY_SHOP_NAME = "shop_name"
+
+        fun buildIntent(activity: Activity,
+            invoiceId: String,
+            invoiceAccessToken: String,
+            shopName: String) = Intent(activity, CheckoutActivity::class.java)
+            .apply {
+                putExtra(KEY_INVOICE_ID, invoiceId)
+                putExtra(KEY_INVOICE_ACCESS_TOKEN, invoiceAccessToken)
+                putExtra(KEY_SHOP_NAME, shopName)
+            }
     }
+
+    private lateinit var cost: String
+    private val invoiceId by extra<String>(KEY_INVOICE_ID)
+    private val invoiceAccessToken by extra<String>(KEY_INVOICE_ACCESS_TOKEN)
+    private val shopName by extra<String>(KEY_SHOP_NAME)
+    private val presenter by lazy { CheckoutPresenter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ac_checkout)
+        Injector.init(applicationContext, invoiceId, invoiceAccessToken, shopName)
+        presenter.attachView(this)
         // TODO: Make Proper Navigation
         replaceFragmentInActivity(PaymentMethodsFragment.newInstance(), R.id.container)
+
+        initViews()
     }
+
+    override fun showInvoice(invoiceModel: InvoiceModel) {
+        cost = invoiceModel.cost
+        tvShopName.text = invoiceModel.shopName
+        tvPrice.text = invoiceModel.cost
+        tvOrderDetails.text = invoiceModel.orderDetails
+    }
+
+    override fun onDestroy() {
+        presenter.detachView()
+        super.onDestroy()
+    }
+
+    private fun initViews() {
+        ibtnBack.setOnClickListener {
+            back()
+        }
+        ibtnClose.setOnClickListener {
+            finish()
+        }
+    }
+
+    // TODO: Make Proper Navigation
+    private fun back() {
+        if (supportFragmentManager.findFragmentById(R.id.container) is BankCardFragment) {
+            replaceFragmentInActivity(PaymentMethodsFragment.newInstance(), R.id.container)
+        } else {
+            finish()
+        }
+    }
+
+    //TODO: Only for a while
+    fun setBackButtonVisibility(isVisible: Boolean) {
+        ibtnBack.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+    }
+
+    override fun showProgress() {
+        lLoader.visibility = View.VISIBLE
+    }
+
+    override fun hideProgress() {
+        lLoader.visibility = View.INVISIBLE
+    }
+
+    //TODO: Temporary Workaround
+    fun getCost(): String? = cost
 
 }

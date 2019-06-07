@@ -16,14 +16,6 @@
  *
  */
 
-package money.rbk.presentation.screen.methods
+package money.rbk.presentation.model
 
-import money.rbk.presentation.screen.base.BasePresenter
-
-class PaymentMethodsPresenter : BasePresenter<PaymentMethodsView>() {
-
-    override fun onViewAttached(view: PaymentMethodsView) {
-
-    }
-
-}
+abstract class BaseIUModel

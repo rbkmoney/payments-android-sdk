@@ -22,31 +22,35 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fmt_payment_methods.*
 import money.rbk.R
+import money.rbk.presentation.activity.CheckoutActivity
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.base.BasePresenter
+import money.rbk.presentation.screen.card.BankCardFragment
 import money.rbk.presentation.screen.methods.temmporary.MarginItemDecoration
 import money.rbk.presentation.screen.methods.temmporary.PaymentAdapter
 import money.rbk.presentation.screen.methods.temmporary.PaymentTestItem
+import money.rbk.presentation.utils.replaceFragmentInActivity
 
 class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethodsView {
 
     companion object {
-        fun newInstance() = PaymentMethodsFragment() //TODO: Add Args
+        fun newInstance() = PaymentMethodsFragment()
     }
 
     override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fmt_payment_methods, container, false)
+        container: ViewGroup?,
+        savedInstanceState: Bundle?): View? =
+        inflater.inflate(R.layout.fmt_payment_methods, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initTestData()
 
+        (activity as? CheckoutActivity)?.setBackButtonVisibility(false)
     }
 
     //TODO: remove after testing
@@ -54,23 +58,23 @@ class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethod
         val payments = with(ArrayList<PaymentTestItem>()) {
 
             add(
-                    PaymentTestItem(
-                            name = R.string.card,
-                            description = null,
-                            icon = R.drawable.ic_card
-                    )
+                PaymentTestItem(
+                    name = R.string.card,
+                    description = null,
+                    icon = R.drawable.ic_card
+                )
             )
             add(
-                    PaymentTestItem(
-                            name = null,
-                            description = null,
-                            icon = R.drawable.ic_google_pay
-                    )
+                PaymentTestItem(
+                    name = null,
+                    description = null,
+                    icon = R.drawable.ic_google_pay
+                )
             )
             this
         }
 
-        val adapter = PaymentAdapter()
+        val adapter = PaymentAdapter(::onPaymentClick)
         adapter.payments = payments
         rvPaymentMethods.adapter = adapter
         rvPaymentMethods.layoutManager = LinearLayoutManager(activity)
@@ -78,6 +82,21 @@ class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethod
 
     }
 
+    private fun onPaymentClick(payment: PaymentTestItem) {
+        if (payment.name == null) {
+            Toast.makeText(context, "Данный функционал находится в разработке", Toast.LENGTH_LONG)
+                .show()
+        } else {
+            activity?.replaceFragmentInActivity(BankCardFragment.newInstance(), R.id.container)
+        }
+    }
+
     override fun buildPresenter(): BasePresenter<PaymentMethodsView> = PaymentMethodsPresenter()
+
+    override fun showProgress() {
+    }
+
+    override fun hideProgress() {
+    }
 
 }

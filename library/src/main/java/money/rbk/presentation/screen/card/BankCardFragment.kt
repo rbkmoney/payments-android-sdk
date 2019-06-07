@@ -24,14 +24,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import kotlinx.android.synthetic.main.fmt_card.*
 import money.rbk.R
+import money.rbk.presentation.activity.CheckoutActivity
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.base.BasePresenter
 
 class BankCardFragment : BaseFragment<BankCardView>() {
 
     companion object {
-        fun newInstance() = BankCardFragment() //TODO: Add Args
+        fun newInstance() = BankCardFragment()
     }
 
     override fun buildPresenter(): BasePresenter<BankCardView> = BankCardPresenter()
@@ -41,13 +43,29 @@ class BankCardFragment : BaseFragment<BankCardView>() {
         savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fmt_card, container, false)
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        btnPay.text =
+            getString(R.string.label_pay_f, (activity as? CheckoutActivity)?.getCost().orEmpty())
+        (activity as? CheckoutActivity)?.setBackButtonVisibility(true)
+    }
+
     override fun onAttach(context: Context?) {
         super.onAttach(context)
+
+
         activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
 
     override fun onDetach() {
         activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         super.onDetach()
+    }
+
+    override fun showProgress() {
+    }
+
+    override fun hideProgress() {
     }
 }

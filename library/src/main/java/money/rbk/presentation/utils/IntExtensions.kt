@@ -16,7 +16,7 @@
  *
  */
 
-package money.rbk.sample.activity.utils
+package money.rbk.presentation.utils
 
 import java.text.NumberFormat
 
@@ -27,5 +27,5 @@ private val format by lazy {
         }
 }
 
-fun Int.formatPrice() : String =
+internal fun Int.formatPrice(): String =
     format.format(this / 100.0)

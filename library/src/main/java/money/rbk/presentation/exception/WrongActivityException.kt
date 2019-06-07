@@ -16,28 +16,10 @@
  *
  */
 
-package money.rbk.presentation.screen.base
+package money.rbk.presentation.exception
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.Fragment
 
-abstract class BaseFragment<T : BaseView> : Fragment(), BaseView {
-
-    protected val presenter: BasePresenter<T> by lazy {
-        buildPresenter()
-    }
-
-    abstract fun buildPresenter(): BasePresenter<T>
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        presenter.attachView(this as T) //TODO: Check it
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        presenter.detachView()
-    }
-
-}
+class WrongActivityException(fragment: Fragment, expectedActivityClass: Class<*>) :
+        RuntimeException("Fragment ${fragment.javaClass.name} has to be added " +
+                "to ${expectedActivityClass.name} but it added to " + fragment.activity)

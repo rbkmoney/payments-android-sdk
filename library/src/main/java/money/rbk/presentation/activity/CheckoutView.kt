@@ -16,14 +16,13 @@
  *
  */
 
-package money.rbk.presentation.screen.methods
+package money.rbk.presentation.activity
 
-import money.rbk.presentation.screen.base.BasePresenter
+import money.rbk.presentation.model.InvoiceModel
+import money.rbk.presentation.screen.base.BaseView
 
-class PaymentMethodsPresenter : BasePresenter<PaymentMethodsView>() {
+interface CheckoutView : BaseView {
 
-    override fun onViewAttached(view: PaymentMethodsView) {
-
-    }
+    fun showInvoice(invoiceModel: InvoiceModel)
 
 }

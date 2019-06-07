@@ -16,14 +16,9 @@
  *
  */
 
-package money.rbk.presentation.screen.methods
+package money.rbk.presentation.exception
 
-import money.rbk.presentation.screen.base.BasePresenter
+import kotlin.reflect.KClass
 
-class PaymentMethodsPresenter : BasePresenter<PaymentMethodsView>() {
-
-    override fun onViewAttached(view: PaymentMethodsView) {
-
-    }
-
-}
+class WrongFragmentArgumentException(wrongClass: KClass<*>) :
+    RuntimeException("Class $wrongClass is not supported as fragment argument")
