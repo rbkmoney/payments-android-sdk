@@ -34,8 +34,8 @@ android {
         applicationId "money.rbk.sample"
         minSdkVersion app.minSdkVersion
         targetSdkVersion app.targetSdkVersion
-        versionCode 1
-        versionName "0.0.1"
+        versionCode 3
+        versionName "0.0.3"
 
         vectorDrawables.useSupportLibrary = true
     }
