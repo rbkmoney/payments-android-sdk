@@ -18,8 +18,36 @@
 
 package money.rbk.presentation.screen.card
 
+import android.util.Patterns
 import money.rbk.presentation.screen.base.BasePresenter
 
 class BankCardPresenter : BasePresenter<BankCardView>() {
 
+
+    fun onBuyClick(cardNumber: String, cardDate: String, cardCcv: String, cardName: String, cardEmail: String) {
+        if (isEmailValid(cardEmail).not()) {
+            view?.showEmailValid(false)
+        }
+    }
+
+
+    private fun isEmailValid(email: String): Boolean =
+        email.isNotEmpty() and Patterns.EMAIL_ADDRESS.matcher(email).matches()
+
+
+    //TODO make proper validation
+    private fun isDataValid(date: String) : Boolean{
+        return true
+    }
+
+    fun onEmail(email: String) =
+        view?.showEmailValid(isEmailValid(email))
+
+
+    fun onName(name: String) =
+        view?.showNameValid(name.isNotEmpty())
+
+    fun onDate(date: String) {
+        view?.showDateValid(isDataValid(date))
+    }
 }

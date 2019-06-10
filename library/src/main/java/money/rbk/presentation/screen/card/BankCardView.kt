@@ -22,4 +22,7 @@ import money.rbk.presentation.screen.base.BaseView
 
 interface BankCardView : BaseView {
 
+    fun showEmailValid(isValid : Boolean)
+    fun showDateValid(isValid : Boolean)
+    fun showNameValid(isValid: Boolean)
 }

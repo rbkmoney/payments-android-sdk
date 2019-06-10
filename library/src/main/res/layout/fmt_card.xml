@@ -56,7 +56,7 @@
             android:drawableStart="@drawable/selector_card_small"
             android:drawableEnd="@drawable/selector_logo_visa"
             android:hint="@string/number_on_card"
-            android:inputType="number"
+            android:inputType="phone"
             android:nextFocusDown="@+id/edCardDate"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
