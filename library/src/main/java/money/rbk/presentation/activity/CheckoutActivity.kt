@@ -25,6 +25,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.ac_checkout.*
 import money.rbk.R
+import money.rbk.data.extension.isTablet
 import money.rbk.di.Injector
 import money.rbk.presentation.model.InvoiceModel
 import money.rbk.presentation.screen.card.BankCardFragment
@@ -58,6 +59,9 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (isTablet()){
+            setTheme(R.style.Theme_RBKMoney_Dialog)
+        }
         setContentView(R.layout.ac_checkout)
         Injector.init(applicationContext, invoiceId, invoiceAccessToken, shopName)
         presenter.attachView(this)
