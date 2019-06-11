@@ -103,6 +103,14 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
         edCardName.setValid(isValid)
     }
 
+    override fun showCcvValid(isValid: Boolean) {
+        edCardCvv.setValid(isValid)
+    }
+
+    override fun showNumberValid(isValid: Boolean) {
+        edCardNumber.setValid(isValid)
+    }
+
     private fun setUpWatchers() {
 
         edEmail.setOnFocusChangeListener { v, hasFocus ->
@@ -120,6 +128,18 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
         edCardDate.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus.not()) {
                 (presenter as BankCardPresenter).onDate(edCardDate.text.toString())
+            }
+        }
+
+        edCardCvv.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus.not()) {
+                (presenter as BankCardPresenter).onCcv(edCardCvv.text.toString())
+            }
+        }
+
+        edCardNumber.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus.not()) {
+                (presenter as BankCardPresenter).onNumber(edCardNumber.text.toString())
             }
         }
         var watcher: MaskFormatWatcher

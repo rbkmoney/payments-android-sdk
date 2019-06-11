@@ -20,6 +20,9 @@ package money.rbk.presentation.screen.card
 
 import android.util.Patterns
 import money.rbk.presentation.screen.base.BasePresenter
+import java.util.*
+import java.util.Calendar.MONTH
+import java.util.Calendar.YEAR
 
 class BankCardPresenter : BasePresenter<BankCardView>() {
 
@@ -35,9 +38,26 @@ class BankCardPresenter : BasePresenter<BankCardView>() {
         email.isNotEmpty() and Patterns.EMAIL_ADDRESS.matcher(email).matches()
 
 
-    //TODO make proper validation
-    private fun isDataValid(date: String) : Boolean{
-        return true
+    private fun isDataValid(date: String): Boolean {
+        if (date.isBlank() or (date.length == 5).not()){
+            return false
+        }
+
+        val currentDate = Calendar.getInstance()
+        val currentYear = currentDate.get(YEAR) % 100
+        val currentMonth = currentDate.get(MONTH) + 1
+
+        val monthYear = date.split("/")
+
+        val userMonth = monthYear[0].toInt()
+        val userYear = monthYear[1].toInt()
+
+        return when {
+            userMonth > 12 -> false
+            currentYear > userYear -> false
+            currentYear == userYear -> userMonth >= currentMonth
+            else -> true
+        }
     }
 
     fun onEmail(email: String) =
@@ -47,7 +67,13 @@ class BankCardPresenter : BasePresenter<BankCardView>() {
     fun onName(name: String) =
         view?.showNameValid(name.isNotEmpty())
 
-    fun onDate(date: String) {
+    fun onDate(date: String) =
         view?.showDateValid(isDataValid(date))
-    }
+
+    fun onCcv(name: String) =
+        view?.showCcvValid(name.length == 3)
+
+    fun onNumber(number: String) =
+        view?.showNumberValid(number.isNotBlank() and (number.length == 19))
+
 }
