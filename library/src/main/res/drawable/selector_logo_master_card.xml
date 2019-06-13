@@ -17,9 +17,8 @@
   ~
   -->
 
-<shape android:shape="rectangle" xmlns:android="http://schemas.android.com/apk/res/android">
-    <corners android:radius="@dimen/corner_radius_small"/>
-    <solid android:color="@color/white"/>
-    <stroke android:color="@color/red" android:width="@dimen/divider_height"/>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-</shape>
+    <item android:state_focused="true" android:drawable="@drawable/ic_master_card_logo"/>
+    <item android:state_focused="false" android:drawable="@drawable/ic_master_card_logo"/>
+</selector>

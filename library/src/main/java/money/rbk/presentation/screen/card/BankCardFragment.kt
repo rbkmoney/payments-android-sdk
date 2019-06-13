@@ -26,14 +26,12 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.fmt_card.*
 import money.rbk.R
+import money.rbk.data.CreditCardType
+import money.rbk.data.CreditCardType.*
 import money.rbk.presentation.activity.CheckoutActivity
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.base.BasePresenter
 import money.rbk.presentation.utils.setValid
-import ru.tinkoff.decoro.MaskImpl
-import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser
-import ru.tinkoff.decoro.slots.PredefinedSlots
-import ru.tinkoff.decoro.watchers.MaskFormatWatcher
 
 
 class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
@@ -107,8 +105,15 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
         edCardCvv.setValid(isValid)
     }
 
-    override fun showNumberValid(isValid: Boolean) {
-        edCardNumber.setValid(isValid)
+    override fun showNumberValid(isValid: Boolean, cardType: CreditCardType) {
+        val cardDrawableId : Int = when(cardType){
+            VISA -> R.drawable.selector_logo_visa
+            MASTERCARD -> R.drawable.selector_logo_master_card
+            UNKNOWN -> R.drawable.ic_unkwon_card
+            else -> R.drawable.ic_unkwon_card
+        }
+
+        edCardNumber.setValid(isValid,cardDrawableId)
     }
 
     private fun setUpWatchers() {

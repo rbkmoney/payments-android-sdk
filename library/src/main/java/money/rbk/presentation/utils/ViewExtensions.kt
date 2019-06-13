@@ -19,6 +19,7 @@
 package money.rbk.presentation.utils
 
 import android.widget.EditText
+import androidx.annotation.DrawableRes
 import money.rbk.R
 
 private fun EditText.setErrorState() {
@@ -29,17 +30,17 @@ private fun EditText.setErrorState() {
 }
 
 
-private fun EditText.setOkayState() {
+private fun EditText.setOkayState(onOkayDrawable: Int) {
     setBackgroundResource(R.drawable.background_edit_text)
     val drawables = this.compoundDrawables
-    val check = context.getDrawable(R.drawable.ic_check)
+    val check = context.getDrawable(onOkayDrawable)
     this.setCompoundDrawablesWithIntrinsicBounds(drawables[0], drawables[1], check, drawables[3])
 }
 
 
-fun EditText.setValid(isValid: Boolean) =
+fun EditText.setValid(isValid: Boolean, @DrawableRes onOkayDrawable: Int = R.drawable.ic_check) =
     if (isValid) {
-        this.setOkayState()
+        this.setOkayState(onOkayDrawable)
     } else {
         this.setErrorState()
     }
