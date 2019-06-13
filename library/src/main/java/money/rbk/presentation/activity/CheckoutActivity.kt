@@ -22,15 +22,18 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.ac_checkout.*
 import money.rbk.R
+import money.rbk.data.extension.isTablet
 import money.rbk.di.Injector
 import money.rbk.presentation.model.InvoiceModel
 import money.rbk.presentation.screen.card.BankCardFragment
 import money.rbk.presentation.screen.methods.PaymentMethodsFragment
 import money.rbk.presentation.utils.extra
 import money.rbk.presentation.utils.replaceFragmentInActivity
+
 
 class CheckoutActivity : AppCompatActivity(), CheckoutView {
 
@@ -39,10 +42,12 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
         private const val KEY_INVOICE_ACCESS_TOKEN = "invoice_access_token"
         private const val KEY_SHOP_NAME = "shop_name"
 
-        fun buildIntent(activity: Activity,
+        fun buildIntent(
+            activity: Activity,
             invoiceId: String,
             invoiceAccessToken: String,
-            shopName: String) = Intent(activity, CheckoutActivity::class.java)
+            shopName: String
+        ) = Intent(activity, CheckoutActivity::class.java)
             .apply {
                 putExtra(KEY_INVOICE_ID, invoiceId)
                 putExtra(KEY_INVOICE_ACCESS_TOKEN, invoiceAccessToken)
@@ -57,14 +62,30 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
     private val presenter by lazy { CheckoutPresenter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (isTablet().not()) {
+            setTheme(R.style.Theme_RBKMoney)
+        }
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ac_checkout)
+        adjustSize()
+
         Injector.init(applicationContext, invoiceId, invoiceAccessToken, shopName)
         presenter.attachView(this)
         // TODO: Make Proper Navigation
         replaceFragmentInActivity(PaymentMethodsFragment.newInstance(), R.id.container)
 
         initViews()
+    }
+
+    private fun adjustSize() {
+        if (isTablet()) {
+            val lp = WindowManager.LayoutParams()
+            lp.copyFrom(window.attributes)
+            lp.width = WindowManager.LayoutParams.WRAP_CONTENT
+            lp.height = WindowManager.LayoutParams.MATCH_PARENT
+            window.attributes = lp
+        }
     }
 
     override fun showInvoice(invoiceModel: InvoiceModel) {
