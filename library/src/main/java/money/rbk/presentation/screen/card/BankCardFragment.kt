@@ -24,13 +24,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import com.whiteelephant.monthpicker.MonthPickerDialog
 import kotlinx.android.synthetic.main.fmt_card.*
 import money.rbk.R
 import money.rbk.presentation.activity.CheckoutActivity
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.base.BasePresenter
+import java.util.*
+import java.util.Calendar.MONTH
+import java.util.Calendar.YEAR
 
-class BankCardFragment : BaseFragment<BankCardView>() {
+class BankCardFragment : BaseFragment<BankCardView>(), MonthPickerDialog.OnDateSetListener {
 
     companion object {
         fun newInstance() = BankCardFragment()
@@ -38,9 +42,11 @@ class BankCardFragment : BaseFragment<BankCardView>() {
 
     override fun buildPresenter(): BasePresenter<BankCardView> = BankCardPresenter()
 
-    override fun onCreateView(inflater: LayoutInflater,
+    override fun onCreateView(
+        inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?): View? =
+        savedInstanceState: Bundle?
+    ): View? =
         inflater.inflate(R.layout.fmt_card, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,6 +54,34 @@ class BankCardFragment : BaseFragment<BankCardView>() {
         btnPay.text =
             getString(R.string.label_pay_f, (activity as? CheckoutActivity)?.getCost().orEmpty())
         (activity as? CheckoutActivity)?.setBackButtonVisibility(true)
+
+        edCardDate.setOnClickListener {
+            setUpDateDialog().show()
+        }
+    }
+
+    override fun onDateSet(selectedMonth: Int, selectedYear: Int) {
+
+    }
+
+
+    private fun setUpDateDialog(): MonthPickerDialog {
+
+        val currentDate = Calendar.getInstance()
+        val currentMonth = currentDate.get(MONTH)
+        val currentYear = currentDate.get(YEAR)
+        return MonthPickerDialog.Builder(
+            activity,
+            this,
+            currentYear,
+            currentMonth
+        )
+            .setActivatedMonth(currentMonth)
+            .setActivatedYear(currentYear)
+            .setMaxYear(3000)
+            .setMinYear(currentYear)
+            .build()
+
     }
 
     override fun onAttach(context: Context?) {
