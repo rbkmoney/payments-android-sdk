@@ -56,4 +56,6 @@ dependencies {
     /* OkHttp */
     implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+
+    implementation "com.whiteelephant:monthandyearpicker:$datepickerVersion"
 }
