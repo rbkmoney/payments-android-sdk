@@ -31,7 +31,7 @@ import money.rbk.data.CreditCardType.*
 import money.rbk.presentation.activity.CheckoutActivity
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.base.BasePresenter
-import money.rbk.presentation.utils.setValid
+import money.rbk.presentation.utils.extensions.setValid
 import ru.tinkoff.decoro.MaskImpl
 import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser
 import ru.tinkoff.decoro.slots.PredefinedSlots
@@ -110,14 +110,14 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
     }
 
     override fun showNumberValid(isValid: Boolean, cardType: CreditCardType) {
-        val cardDrawableId : Int = when(cardType){
+        val cardDrawableId: Int = when (cardType) {
             VISA -> R.drawable.selector_logo_visa
             MASTERCARD -> R.drawable.ic__mastercard_logo
             MIR -> R.drawable.ic_mir
             else -> R.drawable.ic_unkwon_card
         }
 
-        edCardNumber.setValid(isValid,cardDrawableId)
+        edCardNumber.setValid(isValid, cardDrawableId)
     }
 
     private fun setUpWatchers() {
@@ -151,11 +151,14 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
                 (presenter as BankCardPresenter).onNumber(edCardNumber.text.toString())
             }
         }
+
+
         var watcher: MaskFormatWatcher
 
         val cardNumberMask = MaskImpl.createTerminated(PredefinedSlots.CARD_NUMBER_STANDARD)
         watcher = MaskFormatWatcher(cardNumberMask)
         watcher.installOn(edCardNumber)
+        edCardNumber.addTextChangedListener(CardNumberTextWatcher(watcher))
 
 
         val dataSlots = UnderscoreDigitSlotsParser().parseSlots("__/__")

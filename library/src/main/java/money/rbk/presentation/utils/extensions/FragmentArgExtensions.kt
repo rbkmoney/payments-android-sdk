@@ -16,7 +16,7 @@
  *
  */
 
-package money.rbk.presentation.utils
+package money.rbk.presentation.utils.extensions
 
 import android.os.Parcelable
 import androidx.fragment.app.Fragment
@@ -29,13 +29,25 @@ inline fun <reified T> Fragment.argNullable(key: String): FragmentArgsNullableDe
     when (T::class) {
         Int::class -> FragmentArgsNullableDelegate { arguments?.getInt(key) as? T }
         String::class -> FragmentArgsNullableDelegate { arguments?.getString(key) as? T }
-        Boolean::class -> FragmentArgsNullableDelegate { arguments?.getBoolean(key) as? T }
+        Boolean::class -> FragmentArgsNullableDelegate {
+            arguments?.getBoolean(
+                key
+            ) as? T
+        }
         Float::class -> FragmentArgsNullableDelegate { arguments?.getFloat(key) as? T }
         Long::class -> FragmentArgsNullableDelegate { arguments?.getLong(key) as? T }
-        CharSequence::class -> FragmentArgsNullableDelegate { arguments?.getCharSequence(key) as? T }
+        CharSequence::class -> FragmentArgsNullableDelegate {
+            arguments?.getCharSequence(
+                key
+            ) as? T
+        }
         else -> {
             if (Parcelable::class.java.isAssignableFrom(T::class.java)) {
-                FragmentArgsNullableDelegate { arguments?.getParcelable<Parcelable>(key) as? T }
+                FragmentArgsNullableDelegate {
+                    arguments?.getParcelable<Parcelable>(
+                        key
+                    ) as? T
+                }
             } else {
                 throw WrongFragmentArgumentException(T::class)
             }

@@ -33,7 +33,7 @@ import money.rbk.presentation.screen.base.BasePresenter
 import money.rbk.presentation.screen.card.BankCardFragment
 import money.rbk.presentation.screen.common.MarginItemDecoration
 import money.rbk.presentation.screen.methods.adapter.PaymentAdapter
-import money.rbk.presentation.utils.replaceFragmentInActivity
+import money.rbk.presentation.utils.extensions.replaceFragmentInActivity
 
 class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethodsView {
 

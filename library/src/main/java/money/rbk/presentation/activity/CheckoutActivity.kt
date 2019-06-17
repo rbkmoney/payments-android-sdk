@@ -29,8 +29,8 @@ import money.rbk.di.Injector
 import money.rbk.presentation.model.InvoiceModel
 import money.rbk.presentation.screen.card.BankCardFragment
 import money.rbk.presentation.screen.methods.PaymentMethodsFragment
-import money.rbk.presentation.utils.extra
-import money.rbk.presentation.utils.replaceFragmentInActivity
+import money.rbk.presentation.utils.extensions.extra
+import money.rbk.presentation.utils.extensions.replaceFragmentInActivity
 
 class CheckoutActivity : AppCompatActivity(), CheckoutView {
 

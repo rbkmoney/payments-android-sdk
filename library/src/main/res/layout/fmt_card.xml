@@ -54,7 +54,6 @@
             android:layout_marginTop="@dimen/spacing_default"
             android:layout_marginEnd="@dimen/spacing_default"
             android:drawableStart="@drawable/selector_card_small"
-            android:drawableEnd="@drawable/selector_logo_visa"
             android:hint="@string/number_on_card"
             android:inputType="phone"
             android:nextFocusDown="@+id/edCardDate"

@@ -16,9 +16,11 @@
  *
  */
 
-package money.rbk.presentation.utils
+package money.rbk.presentation.utils.extensions
 
 import android.util.Patterns
+import ru.tinkoff.decoro.MaskImpl
+import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser
 import java.util.*
 
 fun String.isEmailValid(): Boolean =
@@ -46,3 +48,23 @@ fun String.isDataValid(): Boolean {
         else -> true
     }
 }
+
+fun String.removeSpaces(): String {
+    return this.replace("\\s".toRegex(), "")
+}
+
+fun String.clearLength(): Int {
+    return removeSpaces().length
+}
+
+
+fun String.toMask(isTerminated: Boolean = false): MaskImpl {
+    val slots = UnderscoreDigitSlotsParser().parseSlots(this)
+    return if (isTerminated) {
+        MaskImpl.createTerminated(slots)
+    } else {
+        MaskImpl.createNonTerminated(slots)
+    }
+}
+
+fun emptyString(): String = ""

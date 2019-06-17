@@ -16,7 +16,7 @@
  *
  */
 
-package money.rbk.presentation.utils
+package money.rbk.presentation.utils.extensions
 
 import java.text.NumberFormat
 

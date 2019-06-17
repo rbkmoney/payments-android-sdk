@@ -20,8 +20,8 @@ package money.rbk.presentation.screen.card
 
 import money.rbk.data.CreditCardType
 import money.rbk.presentation.screen.base.BasePresenter
-import money.rbk.presentation.utils.isDataValid
-import money.rbk.presentation.utils.isEmailValid
+import money.rbk.presentation.utils.extensions.isDataValid
+import money.rbk.presentation.utils.extensions.isEmailValid
 
 class BankCardPresenter : BasePresenter<BankCardView>() {
 

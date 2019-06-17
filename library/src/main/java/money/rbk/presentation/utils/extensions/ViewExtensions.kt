@@ -16,7 +16,7 @@
  *
  */
 
-package money.rbk.presentation.utils
+package money.rbk.presentation.utils.extensions
 
 import android.widget.EditText
 import androidx.annotation.DrawableRes
