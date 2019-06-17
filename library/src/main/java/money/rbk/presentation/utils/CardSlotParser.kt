@@ -18,15 +18,21 @@
 
 package money.rbk.presentation.utils
 
-//4-4-4-4
-const val STANDARD_MASK = "____ ____ ____ ____"
-//4-6-5
-const val THREE_PARTS_MASK = "____ ______ _____"
-//4-6-4
-const val THREE_PARTS_MASK_2 = "____ ______ ____"
-//4-4-5
-const val THREE_PARTS_MASK_3 = "____ ____ _____"
-//4-4-4-4-3
-const val FIVE_PARTS_MASK = "____ ____ ____ ____ ___"
-//6-13
-const val TWO_PARTS_MASK = "______ ______________"
+import ru.tinkoff.decoro.parser.SlotsParser
+import ru.tinkoff.decoro.slots.PredefinedSlots
+import ru.tinkoff.decoro.slots.Slot
+
+class CardSlotParser : SlotsParser {
+    override fun parseSlots(rawMask: CharSequence): Array<Slot> {
+        val res = ArrayList<Slot>()
+        rawMask.forEach {
+            if (it == '_') {
+                res.add(PredefinedSlots.digit())
+            }
+            if (it == ' ') {
+                res.add(PredefinedSlots.hardcodedSlot(' ').withTags(Slot.TAG_DECORATION))
+            }
+        }
+        return res.toTypedArray()
+    }
+}

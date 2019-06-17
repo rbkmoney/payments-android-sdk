@@ -157,8 +157,9 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
 
         val cardNumberMask = MaskImpl.createTerminated(PredefinedSlots.CARD_NUMBER_STANDARD)
         watcher = MaskFormatWatcher(cardNumberMask)
+        watcher.setCallback(CardChangeListener())
         watcher.installOn(edCardNumber)
-        edCardNumber.addTextChangedListener(CardNumberTextWatcher(watcher))
+//        edCardNumber.addTextChangedListener(CardNumberTextWatcher(watcher))
 
 
         val dataSlots = UnderscoreDigitSlotsParser().parseSlots("__/__")

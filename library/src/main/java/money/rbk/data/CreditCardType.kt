@@ -27,7 +27,7 @@ enum class CreditCardType(val lenghts: IntArray, val prefixes: Array<String>,val
     VISA(
         lenghts = intArrayOf(13, 16, 19),
         prefixes = arrayOf("4"),
-        formatMasks = arrayOf(STANDART_MASK)
+        formatMasks = arrayOf(STANDARD_MASK)
 
     ),
 
@@ -37,7 +37,7 @@ enum class CreditCardType(val lenghts: IntArray, val prefixes: Array<String>,val
             "50", "56", "57", "58", "59", "60", "61", "62", "63", "64",
             "65", "66", "67", "68", "69"
         ),
-        formatMasks = arrayOf(STANDART_MASK, THREE_PARTS_MASK, THREE_PARTS_MASK_3, FIVE_PARTS_MASK)
+        formatMasks = arrayOf(STANDARD_MASK, THREE_PARTS_MASK, THREE_PARTS_MASK_3, FIVE_PARTS_MASK)
     ),
     MASTERCARD(
         lenghts = intArrayOf(16),
@@ -47,7 +47,7 @@ enum class CreditCardType(val lenghts: IntArray, val prefixes: Array<String>,val
             "23", "24", "25", "26", "271", "2720",
             "51", "52", "53", "54", "55"
         ),
-        formatMasks = arrayOf(STANDART_MASK)
+        formatMasks = arrayOf(STANDARD_MASK)
     ),
     AMERICAN_EXPRESS(
         lenghts = intArrayOf(15),
@@ -64,18 +64,18 @@ enum class CreditCardType(val lenghts: IntArray, val prefixes: Array<String>,val
             "622924", "622925", "644", "645", "646", "647", "648",
             "649", "65"
         ),
-        formatMasks = arrayOf(STANDART_MASK)
+        formatMasks = arrayOf(STANDARD_MASK)
     ),
     JCB(
         lenghts = intArrayOf(15, 16),
         prefixes = arrayOf("1800", "2131", "3528", "3529", "353", "354", "355", "356", "357", "358"),
-        formatMasks = arrayOf(STANDART_MASK)
+        formatMasks = arrayOf(STANDARD_MASK)
     ),
 
     DINERS(
         lenghts = intArrayOf(14, 16),
         prefixes = arrayOf("300", "301", "302", "303", "304", "305", "36", "54", "55"),
-        formatMasks = arrayOf(STANDART_MASK, THREE_PARTS_MASK_2)
+        formatMasks = arrayOf(STANDARD_MASK, THREE_PARTS_MASK_2)
     ),
 
     UNIONPAY(
@@ -86,13 +86,13 @@ enum class CreditCardType(val lenghts: IntArray, val prefixes: Array<String>,val
             "6224", "6225", "6226", "6227", "6228", "62290", "62291",
             "622920", "622921", "622922", "622923", "622924", "622925"
         ),
-        formatMasks = arrayOf(STANDART_MASK, TWO_PARTS_MASK)
+        formatMasks = arrayOf(STANDARD_MASK, TWO_PARTS_MASK)
     ),
 
     MIR(
         lenghts = intArrayOf(13, 16),
         prefixes = arrayOf("2200", "2201", "2202", "2203", "2204"),
-        formatMasks = arrayOf(STANDART_MASK)
+        formatMasks = arrayOf(STANDARD_MASK)
     );
 
     companion object {
