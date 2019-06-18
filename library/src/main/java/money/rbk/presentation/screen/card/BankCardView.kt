@@ -27,5 +27,5 @@ interface BankCardView : BaseView {
     fun showDateValid(isValid : Boolean)
     fun showNameValid(isValid: Boolean)
     fun showCcvValid(isValid: Boolean)
-    fun showNumberValid(isValid: Boolean, cardType: CreditCardType)
+    fun showNumberValid(isValid: Boolean, cardType: CreditCardType?)
 }

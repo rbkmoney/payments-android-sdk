@@ -21,7 +21,7 @@ package money.rbk.domain.interactor
 import money.rbk.di.Injector
 import money.rbk.domain.repository.CheckoutRepository
 import money.rbk.presentation.model.InvoiceModel
-import money.rbk.presentation.utils.extensions.formatPrice
+import money.rbk.presentation.utils.formatPrice
 
 internal class InvoiceUseCase(private val repository: CheckoutRepository = Injector.checkoutRepository) :
     BaseUseCase<InvoiceModel>() {

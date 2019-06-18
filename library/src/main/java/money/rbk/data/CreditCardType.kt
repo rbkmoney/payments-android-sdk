@@ -18,16 +18,16 @@
 
 package money.rbk.data
 
-import money.rbk.presentation.utils.*
+import androidx.annotation.DrawableRes
+import money.rbk.R
 
-enum class CreditCardType(val lenghts: IntArray, val prefixes: Array<String>,val formatMasks: Array<String>) {
+enum class CreditCardType(val lenghts: IntArray, val prefixes: Array<String>) {
 
-    UNKNOWN(intArrayOf(), emptyArray(), emptyArray()),
+    UNKNOWN(intArrayOf(), emptyArray()),
 
     VISA(
         lenghts = intArrayOf(13, 16, 19),
-        prefixes = arrayOf("4"),
-        formatMasks = arrayOf(STANDARD_MASK)
+        prefixes = arrayOf("4")
 
     ),
 
@@ -36,8 +36,7 @@ enum class CreditCardType(val lenghts: IntArray, val prefixes: Array<String>,val
         prefixes = arrayOf(
             "50", "56", "57", "58", "59", "60", "61", "62", "63", "64",
             "65", "66", "67", "68", "69"
-        ),
-        formatMasks = arrayOf(STANDARD_MASK, THREE_PARTS_MASK, THREE_PARTS_MASK_3, FIVE_PARTS_MASK)
+        )
     ),
     MASTERCARD(
         lenghts = intArrayOf(16),
@@ -46,13 +45,11 @@ enum class CreditCardType(val lenghts: IntArray, val prefixes: Array<String>,val
             "223", "224", "225", "226", "227", "228", "229",
             "23", "24", "25", "26", "271", "2720",
             "51", "52", "53", "54", "55"
-        ),
-        formatMasks = arrayOf(STANDARD_MASK)
+        )
     ),
     AMERICAN_EXPRESS(
         lenghts = intArrayOf(15),
-        prefixes = arrayOf("34", "37"),
-        formatMasks = arrayOf(THREE_PARTS_MASK)
+        prefixes = arrayOf("34", "37")
     ),
     DISCOVER(
         lenghts = intArrayOf(16, 19),
@@ -63,19 +60,16 @@ enum class CreditCardType(val lenghts: IntArray, val prefixes: Array<String>,val
             "62290", "62291", "622920", "622921", "622922", "622923",
             "622924", "622925", "644", "645", "646", "647", "648",
             "649", "65"
-        ),
-        formatMasks = arrayOf(STANDARD_MASK)
+        )
     ),
     JCB(
         lenghts = intArrayOf(15, 16),
-        prefixes = arrayOf("1800", "2131", "3528", "3529", "353", "354", "355", "356", "357", "358"),
-        formatMasks = arrayOf(STANDARD_MASK)
+        prefixes = arrayOf("1800", "2131", "3528", "3529", "353", "354", "355", "356", "357", "358")
     ),
 
     DINERS(
         lenghts = intArrayOf(14, 16),
-        prefixes = arrayOf("300", "301", "302", "303", "304", "305", "36", "54", "55"),
-        formatMasks = arrayOf(STANDARD_MASK, THREE_PARTS_MASK_2)
+        prefixes = arrayOf("300", "301", "302", "303", "304", "305", "36", "54", "55")
     ),
 
     UNIONPAY(
@@ -85,14 +79,12 @@ enum class CreditCardType(val lenghts: IntArray, val prefixes: Array<String>,val
             "62215", "62216", "62217", "62218", "62219", "6222", "6223",
             "6224", "6225", "6226", "6227", "6228", "62290", "62291",
             "622920", "622921", "622922", "622923", "622924", "622925"
-        ),
-        formatMasks = arrayOf(STANDARD_MASK, TWO_PARTS_MASK)
+        )
     ),
 
     MIR(
         lenghts = intArrayOf(13, 16),
-        prefixes = arrayOf("2200", "2201", "2202", "2203", "2204"),
-        formatMasks = arrayOf(STANDARD_MASK)
+        prefixes = arrayOf("2200", "2201", "2202", "2203", "2204")
     );
 
     companion object {
@@ -107,12 +99,20 @@ enum class CreditCardType(val lenghts: IntArray, val prefixes: Array<String>,val
                 .firstOrNull() ?: UNKNOWN
 
 
-        fun predetect(creditCardNumber: String): List<CreditCardType> =
+        fun preDetect(creditCardNumber: String): List<CreditCardType> =
             CreditCardType.values()
                 .asList()
                 .filter { creditCardType ->
                     creditCardType.prefixes.any { it.startsWith(creditCardNumber) }
                 }
+
+        @DrawableRes
+        fun getDrawable(cardType :CreditCardType?) : Int? = when (cardType) {
+            VISA -> R.drawable.selector_logo_visa
+            MASTERCARD -> R.drawable.ic__mastercard_logo
+            MIR -> R.drawable.ic_mir
+            else -> null
+        }
     }
 }
 

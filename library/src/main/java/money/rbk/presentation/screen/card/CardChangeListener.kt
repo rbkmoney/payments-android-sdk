@@ -20,51 +20,25 @@ package money.rbk.presentation.screen.card
 
 import android.util.Log
 import money.rbk.data.CreditCardType
-import money.rbk.presentation.utils.extensions.clearLength
-import money.rbk.presentation.utils.extensions.removeSpaces
-import money.rbk.presentation.utils.extensions.toMask
+import money.rbk.presentation.utils.removeSpaces
 import ru.tinkoff.decoro.FormattedTextChangeListener
 import ru.tinkoff.decoro.watchers.FormatWatcher
-import ru.tinkoff.decoro.watchers.MaskFormatWatcher
 
-class CardChangeListener : FormattedTextChangeListener {
+class CardChangeListener(private val edCallBack : (cardType : CreditCardType?) -> Unit) : FormattedTextChangeListener {
 
     private var isDetected = false
-    private var currentMaskList: List<String>? = null
-    private var currentMask: String? = null
 
     override fun onTextFormatted(formatter: FormatWatcher?, newFormattedText: String) {
         Log.i("AAAAAA", "NEW FORMATTED TEXT = $newFormattedText")
 
-        val predictedCardTypes = CreditCardType.predetect(newFormattedText.removeSpaces())
+        val predictedCardTypes = CreditCardType.preDetect(newFormattedText.removeSpaces())
         if ((predictedCardTypes.size == 1) and isDetected.not()) {
             Log.i("AAAAAA", "DETECTED! CARD = ${predictedCardTypes.first().name}")
-            currentMaskList = predictedCardTypes
-                .first()
-                .formatMasks
-                .toList()
-                .sortedBy { it.clearLength() }
-            isDetected = true
+            edCallBack(predictedCardTypes.first())
         }
         if (newFormattedText.isEmpty() or newFormattedText.isBlank()) {
             isDetected = false
-        }
-        setNextMask(formatter, newFormattedText)
-    }
-
-    private fun setNextMask(formatter: FormatWatcher?, newFormattedText: String) {
-        if (currentMaskList != null) {
-            val newMask = currentMaskList!!.find { it.clearLength() >= newFormattedText.clearLength() }
-            if (currentMask == newMask) {
-                return
-            }
-            val isTerminated = currentMaskList!!.last() == newMask
-            val mask = newMask?.toMask(isTerminated)
-
-            Log.i("AAAAAA", "CURRENT MASK = $newMask,  IS TERMINATED = $isTerminated")
-            mask?.insertFront(newFormattedText)
-            (formatter as MaskFormatWatcher).swapMask(mask)
-            currentMask = newMask
+            edCallBack(null)
         }
     }
 

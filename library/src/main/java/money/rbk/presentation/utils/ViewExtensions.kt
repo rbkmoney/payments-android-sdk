@@ -16,7 +16,7 @@
  *
  */
 
-package money.rbk.presentation.utils.extensions
+package money.rbk.presentation.utils
 
 import android.widget.EditText
 import androidx.annotation.DrawableRes
@@ -24,23 +24,37 @@ import money.rbk.R
 
 private fun EditText.setErrorState() {
     setBackgroundResource(R.drawable.background_edit_text_error)
-    val drawables = this.compoundDrawables
-    val cross = context.getDrawable(R.drawable.ic_cross)
-    this.setCompoundDrawablesWithIntrinsicBounds(drawables[0], drawables[1], cross, drawables[3])
+    setRightDrawable(R.drawable.ic_cross)
 }
 
 
-private fun EditText.setOkayState(onOkayDrawable: Int) {
+private fun EditText.setOkayState(@DrawableRes onValidDrawable: Int?) {
     setBackgroundResource(R.drawable.background_edit_text)
-    val drawables = this.compoundDrawables
-    val check = context.getDrawable(onOkayDrawable)
-    this.setCompoundDrawablesWithIntrinsicBounds(drawables[0], drawables[1], check, drawables[3])
+    setRightDrawable(onValidDrawable)
 }
 
 
-fun EditText.setValid(isValid: Boolean, @DrawableRes onOkayDrawable: Int = R.drawable.ic_check) =
+fun EditText.setValid(
+    isValid: Boolean,
+    @DrawableRes onValidDrawable: Int? = R.drawable.ic_check
+) =
     if (isValid) {
-        this.setOkayState(onOkayDrawable)
+        this.setOkayState(onValidDrawable)
     } else {
         this.setErrorState()
     }
+
+fun EditText.setRightDrawable(@DrawableRes drawableId: Int?) {
+    if (drawableId == null) {
+        removeRightDrawable()
+    } else {
+        val drawables = this.compoundDrawables
+        val currentDrawable = context.getDrawable(drawableId!!)
+        this.setCompoundDrawablesWithIntrinsicBounds(drawables[0], drawables[1], currentDrawable, drawables[3])
+    }
+}
+
+fun EditText.removeRightDrawable() {
+    val drawables = this.compoundDrawables
+    this.setCompoundDrawablesWithIntrinsicBounds(drawables[0], drawables[1], null, drawables[3])
+}

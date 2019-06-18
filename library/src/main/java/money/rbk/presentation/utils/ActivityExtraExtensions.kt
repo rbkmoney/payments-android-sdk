@@ -16,7 +16,7 @@
  *
  */
 
-package money.rbk.presentation.utils.extensions
+package money.rbk.presentation.utils
 
 import android.app.Activity
 import android.os.Parcelable

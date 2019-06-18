@@ -16,11 +16,11 @@
  *
  */
 
-package money.rbk.presentation.utils.extensions
+package money.rbk.presentation.utils
 
 import android.util.Patterns
-import money.rbk.presentation.utils.CardSlotParser
 import ru.tinkoff.decoro.MaskImpl
+import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser
 import java.util.*
 
 fun String.isEmailValid(): Boolean =
@@ -59,7 +59,7 @@ fun String.clearLength(): Int {
 
 
 fun String.toMask(isTerminated: Boolean = false): MaskImpl {
-    val slots = CardSlotParser().parseSlots(this)
+    val slots = UnderscoreDigitSlotsParser().parseSlots(this)
     return if (isTerminated) {
         MaskImpl.createTerminated(slots)
     } else {

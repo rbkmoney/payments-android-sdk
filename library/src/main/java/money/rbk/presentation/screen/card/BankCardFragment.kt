@@ -27,11 +27,11 @@ import android.view.WindowManager
 import kotlinx.android.synthetic.main.fmt_card.*
 import money.rbk.R
 import money.rbk.data.CreditCardType
-import money.rbk.data.CreditCardType.*
 import money.rbk.presentation.activity.CheckoutActivity
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.base.BasePresenter
-import money.rbk.presentation.utils.extensions.setValid
+import money.rbk.presentation.utils.setRightDrawable
+import money.rbk.presentation.utils.setValid
 import ru.tinkoff.decoro.MaskImpl
 import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser
 import ru.tinkoff.decoro.slots.PredefinedSlots
@@ -109,16 +109,15 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
         edCardCvv.setValid(isValid)
     }
 
-    override fun showNumberValid(isValid: Boolean, cardType: CreditCardType) {
-        val cardDrawableId: Int = when (cardType) {
-            VISA -> R.drawable.selector_logo_visa
-            MASTERCARD -> R.drawable.ic__mastercard_logo
-            MIR -> R.drawable.ic_mir
-            else -> R.drawable.ic_unkwon_card
-        }
-
-        edCardNumber.setValid(isValid, cardDrawableId)
+    override fun showNumberValid(isValid: Boolean, cardType: CreditCardType?) {
+        edCardNumber.setValid(isValid,CreditCardType.getDrawable(cardType))
     }
+
+    private fun onCardDetected(cardType: CreditCardType?) {
+        val cardDrawableId: Int? = CreditCardType.getDrawable(cardType)
+        edCardNumber.setRightDrawable(cardDrawableId)
+    }
+
 
     private fun setUpWatchers() {
 
@@ -155,11 +154,10 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
 
         var watcher: MaskFormatWatcher
 
-        val cardNumberMask = MaskImpl.createTerminated(PredefinedSlots.CARD_NUMBER_STANDARD)
+        val cardNumberMask = MaskImpl.createNonTerminated(PredefinedSlots.CARD_NUMBER_STANDARD)
         watcher = MaskFormatWatcher(cardNumberMask)
-        watcher.setCallback(CardChangeListener())
+        watcher.setCallback(CardChangeListener(this::onCardDetected))
         watcher.installOn(edCardNumber)
-//        edCardNumber.addTextChangedListener(CardNumberTextWatcher(watcher))
 
 
         val dataSlots = UnderscoreDigitSlotsParser().parseSlots("__/__")
