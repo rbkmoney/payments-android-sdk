@@ -18,12 +18,14 @@
 
 package money.rbk.presentation.screen.card
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import com.whiteelephant.monthpicker.MonthPickerDialog
 import kotlinx.android.synthetic.main.fmt_card.*
 import money.rbk.R
 import money.rbk.data.CreditCardType
@@ -32,13 +34,15 @@ import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.base.BasePresenter
 import money.rbk.presentation.utils.setRightDrawable
 import money.rbk.presentation.utils.setValid
+import money.rbk.presentation.utils.toDozenString
 import ru.tinkoff.decoro.MaskImpl
-import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser
 import ru.tinkoff.decoro.slots.PredefinedSlots
 import ru.tinkoff.decoro.watchers.MaskFormatWatcher
+import java.util.*
+import java.util.Calendar.MONTH
+import java.util.Calendar.YEAR
 
-
-class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
+class BankCardFragment : BaseFragment<BankCardView>(), BankCardView, MonthPickerDialog.OnDateSetListener {
 
 
     companion object {
@@ -70,7 +74,38 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
             )
         }
 
+        edCardDate.setOnClickListener {
+            setUpDateDialog().show()
+        }
         setUpWatchers()
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onDateSet(selectedMonth: Int, selectedYear: Int) {
+        val selectedMonthString = (selectedMonth + 1).toDozenString()
+
+        edCardDate.setText("$selectedMonthString/${selectedYear % 100}")
+        (presenter as BankCardPresenter).onDate(edCardDate.text.toString())
+    }
+
+
+    private fun setUpDateDialog(): MonthPickerDialog {
+
+        val currentDate = Calendar.getInstance()
+        val currentMonth = currentDate.get(MONTH)
+        val currentYear = currentDate.get(YEAR)
+        return MonthPickerDialog.Builder(
+            activity,
+            this,
+            currentYear,
+            currentMonth
+        )
+            .setActivatedMonth(currentMonth)
+            .setActivatedYear(currentYear)
+            .setMaxYear(3000)
+            .setMinYear(currentYear)
+            .build()
 
     }
 
@@ -110,7 +145,7 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
     }
 
     override fun showNumberValid(isValid: Boolean, cardType: CreditCardType?) {
-        edCardNumber.setValid(isValid,CreditCardType.getDrawable(cardType))
+        edCardNumber.setValid(isValid, CreditCardType.getDrawable(cardType))
     }
 
     private fun onCardDetected(cardType: CreditCardType?) {
@@ -133,12 +168,6 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
             }
         }
 
-        edCardDate.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus.not()) {
-                (presenter as BankCardPresenter).onDate(edCardDate.text.toString())
-            }
-        }
-
         edCardCvv.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus.not()) {
                 (presenter as BankCardPresenter).onCcv(edCardCvv.text.toString())
@@ -158,13 +187,6 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
         watcher = MaskFormatWatcher(cardNumberMask)
         watcher.setCallback(CardChangeListener(this::onCardDetected))
         watcher.installOn(edCardNumber)
-
-
-        val dataSlots = UnderscoreDigitSlotsParser().parseSlots("__/__")
-        val cardDataMask = MaskImpl.createTerminated(dataSlots)
-        watcher = MaskFormatWatcher(cardDataMask)
-        watcher.installOn(edCardDate)
-
 
     }
 

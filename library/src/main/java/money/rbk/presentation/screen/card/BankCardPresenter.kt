@@ -39,7 +39,7 @@ class BankCardPresenter : BasePresenter<BankCardView>() {
         view?.showNameValid(name.isNotEmpty())
 
     fun onDate(date: String) =
-        view?.showDateValid(date.isDataValid())
+        view?.showDateValid(date.isDateValid())
 
     fun onCcv(name: String) =
         view?.showCcvValid(name.length == 3)
