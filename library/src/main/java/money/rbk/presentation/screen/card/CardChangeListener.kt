@@ -18,7 +18,6 @@
 
 package money.rbk.presentation.screen.card
 
-import android.util.Log
 import money.rbk.data.CreditCardType
 import money.rbk.presentation.utils.removeSpaces
 import ru.tinkoff.decoro.FormattedTextChangeListener
@@ -29,11 +28,8 @@ class CardChangeListener(private val edCallBack : (cardType : CreditCardType?) -
     private var isDetected = false
 
     override fun onTextFormatted(formatter: FormatWatcher?, newFormattedText: String) {
-        Log.i("AAAAAA", "NEW FORMATTED TEXT = $newFormattedText")
-
         val predictedCardTypes = CreditCardType.preDetect(newFormattedText.removeSpaces())
         if ((predictedCardTypes.size == 1) and isDetected.not()) {
-            Log.i("AAAAAA", "DETECTED! CARD = ${predictedCardTypes.first().name}")
             edCallBack(predictedCardTypes.first())
         }
         if (newFormattedText.isEmpty() or newFormattedText.isBlank()) {

@@ -19,8 +19,6 @@
 package money.rbk.presentation.utils
 
 import android.util.Patterns
-import ru.tinkoff.decoro.MaskImpl
-import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser
 import java.util.*
 
 fun String.isEmailValid(): Boolean =
@@ -57,14 +55,26 @@ fun String.clearLength(): Int {
     return removeSpaces().length
 }
 
+fun String.algorithmLuna(): Boolean {
+    var currentNumber: Int
+    var evenSum = 0
+    val unevenNumList = ArrayList<Int>()
+    var index = 1
+    this.toCharArray().forEach { c ->
 
-fun String.toMask(isTerminated: Boolean = false): MaskImpl {
-    val slots = UnderscoreDigitSlotsParser().parseSlots(this)
-    return if (isTerminated) {
-        MaskImpl.createTerminated(slots)
-    } else {
-        MaskImpl.createNonTerminated(slots)
+        currentNumber = c.toString().toInt()
+        if (index % 2 == 0) {
+            evenSum += currentNumber
+        } else {
+            currentNumber *= 2
+            if (currentNumber / 10 >= 1) {
+                unevenNumList.add(currentNumber / 10)
+                unevenNumList.add(currentNumber % 10)
+            } else {
+                unevenNumList.add(currentNumber)
+            }
+        }
+        index++
     }
+    return (unevenNumList.sum() + evenSum) % 10 == 0
 }
-
-fun emptyString(): String = ""

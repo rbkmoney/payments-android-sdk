@@ -27,47 +27,15 @@ import kotlin.reflect.KProperty
 inline fun <reified T> Activity.extraNullable(key: String): ActivityArgsNullableDelegate<T> =
 
     when (T::class) {
-        Int::class -> ActivityArgsNullableDelegate {
-            intent?.getIntExtra(
-                key,
-                0
-            ) as? T
-        }
-        String::class -> ActivityArgsNullableDelegate {
-            intent?.getStringExtra(
-                key
-            ) as? T
-        }
-        Boolean::class -> ActivityArgsNullableDelegate {
-            intent?.getBooleanExtra(
-                key,
-                false
-            ) as? T
-        }
-        Float::class -> ActivityArgsNullableDelegate {
-            intent?.getFloatExtra(
-                key,
-                0f
-            ) as? T
-        }
-        Long::class -> ActivityArgsNullableDelegate {
-            intent?.getLongExtra(
-                key,
-                0
-            ) as? T
-        }
-        CharSequence::class -> ActivityArgsNullableDelegate {
-            intent?.getCharSequenceExtra(
-                key
-            ) as? T
-        }
+        Int::class -> ActivityArgsNullableDelegate { intent?.getIntExtra(key, 0) as? T }
+        String::class -> ActivityArgsNullableDelegate { intent?.getStringExtra(key) as? T }
+        Boolean::class -> ActivityArgsNullableDelegate { intent?.getBooleanExtra(key, false) as? T }
+        Float::class -> ActivityArgsNullableDelegate { intent?.getFloatExtra(key, 0f) as? T }
+        Long::class -> ActivityArgsNullableDelegate { intent?.getLongExtra(key, 0) as? T }
+        CharSequence::class -> ActivityArgsNullableDelegate { intent?.getCharSequenceExtra(key) as? T }
         else -> {
             if (Parcelable::class.java.isAssignableFrom(T::class.java)) {
-                ActivityArgsNullableDelegate {
-                    intent?.getParcelableExtra<Parcelable>(
-                        key
-                    ) as? T
-                }
+                ActivityArgsNullableDelegate { intent?.getParcelableExtra<Parcelable>(key) as? T }
             } else {
                 throw WrongActivityArgumentException(T::class)
             }
