@@ -25,7 +25,7 @@ fun String.isEmailValid(): Boolean =
     isEmpty() or Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
 
-fun String.isDataValid(): Boolean {
+fun String.isDateValid(): Boolean {
     if (isBlank() or (length == 5).not()) {
         return false
     }
@@ -78,3 +78,10 @@ fun String.algorithmLuna(): Boolean {
     }
     return (unevenNumList.sum() + evenSum) % 10 == 0
 }
+
+fun Int.toDozenString(): String =
+    if (this / 10 == 0) {
+        "0$this"
+    } else {
+        this.toString()
+    }
