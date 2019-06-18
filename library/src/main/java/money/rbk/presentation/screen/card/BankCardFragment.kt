@@ -26,11 +26,20 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.fmt_card.*
 import money.rbk.R
+import money.rbk.data.CreditCardType
 import money.rbk.presentation.activity.CheckoutActivity
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.base.BasePresenter
+import money.rbk.presentation.utils.setRightDrawable
+import money.rbk.presentation.utils.setValid
+import ru.tinkoff.decoro.MaskImpl
+import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser
+import ru.tinkoff.decoro.slots.PredefinedSlots
+import ru.tinkoff.decoro.watchers.MaskFormatWatcher
 
-class BankCardFragment : BaseFragment<BankCardView>() {
+
+class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
+
 
     companion object {
         fun newInstance() = BankCardFragment()
@@ -38,9 +47,11 @@ class BankCardFragment : BaseFragment<BankCardView>() {
 
     override fun buildPresenter(): BasePresenter<BankCardView> = BankCardPresenter()
 
-    override fun onCreateView(inflater: LayoutInflater,
+    override fun onCreateView(
+        inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?): View? =
+        savedInstanceState: Bundle?
+    ): View? =
         inflater.inflate(R.layout.fmt_card, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,6 +59,19 @@ class BankCardFragment : BaseFragment<BankCardView>() {
         btnPay.text =
             getString(R.string.label_pay_f, (activity as? CheckoutActivity)?.getCost().orEmpty())
         (activity as? CheckoutActivity)?.setBackButtonVisibility(true)
+
+        btnPay.setOnClickListener {
+            (presenter as BankCardPresenter).onBuyClick(
+                cardNumber = edCardNumber.text.toString(),
+                cardDate = edCardDate.text.toString(),
+                cardCcv = edCardCvv.text.toString(),
+                cardName = edCardName.text.toString(),
+                cardEmail = edEmail.text.toString()
+            )
+        }
+
+        setUpWatchers()
+
     }
 
     override fun onAttach(context: Context?) {
@@ -67,4 +91,82 @@ class BankCardFragment : BaseFragment<BankCardView>() {
     override fun hideProgress() {
         pbLoading.visibility = View.GONE
     }
+
+    override fun showEmailValid(isValid: Boolean) {
+        edEmail.setValid(isValid)
+    }
+
+
+    override fun showDateValid(isValid: Boolean) {
+        edCardDate.setValid(isValid)
+    }
+
+    override fun showNameValid(isValid: Boolean) {
+        edCardName.setValid(isValid)
+    }
+
+    override fun showCcvValid(isValid: Boolean) {
+        edCardCvv.setValid(isValid)
+    }
+
+    override fun showNumberValid(isValid: Boolean, cardType: CreditCardType?) {
+        edCardNumber.setValid(isValid,CreditCardType.getDrawable(cardType))
+    }
+
+    private fun onCardDetected(cardType: CreditCardType?) {
+        val cardDrawableId: Int? = CreditCardType.getDrawable(cardType)
+        edCardNumber.setRightDrawable(cardDrawableId)
+    }
+
+
+    private fun setUpWatchers() {
+
+        edEmail.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus.not()) {
+                (presenter as BankCardPresenter).onEmail(edEmail.text.toString())
+            }
+        }
+
+        edCardName.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus.not()) {
+                (presenter as BankCardPresenter).onName(edCardName.text.toString())
+            }
+        }
+
+        edCardDate.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus.not()) {
+                (presenter as BankCardPresenter).onDate(edCardDate.text.toString())
+            }
+        }
+
+        edCardCvv.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus.not()) {
+                (presenter as BankCardPresenter).onCcv(edCardCvv.text.toString())
+            }
+        }
+
+        edCardNumber.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus.not()) {
+                (presenter as BankCardPresenter).onNumber(edCardNumber.text.toString())
+            }
+        }
+
+
+        var watcher: MaskFormatWatcher
+
+        val cardNumberMask = MaskImpl.createNonTerminated(PredefinedSlots.CARD_NUMBER_STANDARD)
+        watcher = MaskFormatWatcher(cardNumberMask)
+        watcher.setCallback(CardChangeListener(this::onCardDetected))
+        watcher.installOn(edCardNumber)
+
+
+        val dataSlots = UnderscoreDigitSlotsParser().parseSlots("__/__")
+        val cardDataMask = MaskImpl.createTerminated(dataSlots)
+        watcher = MaskFormatWatcher(cardDataMask)
+        watcher.installOn(edCardDate)
+
+
+    }
+
+
 }

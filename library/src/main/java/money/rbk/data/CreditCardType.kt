@@ -18,6 +18,9 @@
 
 package money.rbk.data
 
+import androidx.annotation.DrawableRes
+import money.rbk.R
+
 enum class CreditCardType(val lenghts: IntArray, val prefixes: Array<String>) {
 
     UNKNOWN(intArrayOf(), emptyArray()),
@@ -25,19 +28,24 @@ enum class CreditCardType(val lenghts: IntArray, val prefixes: Array<String>) {
     VISA(
         lenghts = intArrayOf(13, 16, 19),
         prefixes = arrayOf("4")
+
     ),
 
     MAESTRO(
         lenghts = intArrayOf(12, 13, 14, 15, 16, 17, 18, 19),
-        prefixes = arrayOf("50", "56", "57", "58","59", "60", "61", "62", "63", "64",
-            "65", "66", "67", "68", "69")
+        prefixes = arrayOf(
+            "50", "56", "57", "58", "59", "60", "61", "62", "63", "64",
+            "65", "66", "67", "68", "69"
+        )
     ),
     MASTERCARD(
         lenghts = intArrayOf(16),
-        prefixes = arrayOf("2221", "2222", "2223", "2224", "2225", "2226", "2227", "2228", "2229",
+        prefixes = arrayOf(
+            "2221", "2222", "2223", "2224", "2225", "2226", "2227", "2228", "2229",
             "223", "224", "225", "226", "227", "228", "229",
             "23", "24", "25", "26", "271", "2720",
-            "51", "52", "53", "54", "55")
+            "51", "52", "53", "54", "55"
+        )
     ),
     AMERICAN_EXPRESS(
         lenghts = intArrayOf(15),
@@ -45,16 +53,18 @@ enum class CreditCardType(val lenghts: IntArray, val prefixes: Array<String>) {
     ),
     DISCOVER(
         lenghts = intArrayOf(16, 19),
-        prefixes = arrayOf("6011", "622126", "622127", "622128", "622129", "62213",
+        prefixes = arrayOf(
+            "6011", "622126", "622127", "622128", "622129", "62213",
             "62214", "62215", "62216", "62217", "62218", "62219",
             "6222", "6223", "6224", "6225", "6226", "6227", "6228",
             "62290", "62291", "622920", "622921", "622922", "622923",
             "622924", "622925", "644", "645", "646", "647", "648",
-            "649", "65")
+            "649", "65"
+        )
     ),
     JCB(
         lenghts = intArrayOf(15, 16),
-        prefixes =  arrayOf("1800", "2131", "3528", "3529", "353", "354", "355", "356", "357", "358")
+        prefixes = arrayOf("1800", "2131", "3528", "3529", "353", "354", "355", "356", "357", "358")
     ),
 
     DINERS(
@@ -64,28 +74,45 @@ enum class CreditCardType(val lenghts: IntArray, val prefixes: Array<String>) {
 
     UNIONPAY(
         lenghts = intArrayOf(16, 17, 18, 19),
-        prefixes = arrayOf("622126", "622127", "622128", "622129", "62213", "62214",
+        prefixes = arrayOf(
+            "622126", "622127", "622128", "622129", "62213", "62214",
             "62215", "62216", "62217", "62218", "62219", "6222", "6223",
             "6224", "6225", "6226", "6227", "6228", "62290", "62291",
-            "622920", "622921", "622922", "622923", "622924", "622925")
+            "622920", "622921", "622922", "622923", "622924", "622925"
+        )
     ),
 
     MIR(
         lenghts = intArrayOf(13, 16),
-        prefixes =  arrayOf("2200", "2201", "2202", "2203", "2204")
+        prefixes = arrayOf("2200", "2201", "2202", "2203", "2204")
     );
 
     companion object {
-        fun detect(credirCardNumber: String) : CreditCardType =
+        fun detect(credirCardNumber: String): CreditCardType =
             CreditCardType.values()
                 .asSequence()
-                .filter { creditCardType->
+                .filter { creditCardType ->
                     val creditCardLength = credirCardNumber.length
                     creditCardType.lenghts.contains(creditCardLength) &&
-                        creditCardType.prefixes.any { credirCardNumber.startsWith(it) }
+                            creditCardType.prefixes.any { credirCardNumber.startsWith(it) }
                 }
                 .firstOrNull() ?: UNKNOWN
-    }
 
+
+        fun preDetect(creditCardNumber: String): List<CreditCardType> =
+            CreditCardType.values()
+                .asList()
+                .filter { creditCardType ->
+                    creditCardType.prefixes.any { it.startsWith(creditCardNumber) }
+                }
+
+        @DrawableRes
+        fun getDrawable(cardType :CreditCardType?) : Int? = when (cardType) {
+            VISA -> R.drawable.selector_logo_visa
+            MASTERCARD -> R.drawable.ic__mastercard_logo
+            MIR -> R.drawable.ic_mir
+            else -> null
+        }
+    }
 }
 

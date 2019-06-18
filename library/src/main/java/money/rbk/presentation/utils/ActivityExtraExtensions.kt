@@ -20,11 +20,8 @@ package money.rbk.presentation.utils
 
 import android.app.Activity
 import android.os.Parcelable
-import androidx.fragment.app.Fragment
 import money.rbk.presentation.exception.ActivityExtraNonnullException
-import money.rbk.presentation.exception.FragmentArgumentNonnullException
 import money.rbk.presentation.exception.WrongActivityArgumentException
-import money.rbk.presentation.exception.WrongFragmentArgumentException
 import kotlin.reflect.KProperty
 
 inline fun <reified T> Activity.extraNullable(key: String): ActivityArgsNullableDelegate<T> =
