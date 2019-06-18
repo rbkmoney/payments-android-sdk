@@ -16,16 +16,13 @@
  *
  */
 
-package money.rbk.presentation.screen.card
+package money.rbk.data.extension
 
-import money.rbk.data.CreditCardType
-import money.rbk.presentation.screen.base.BaseView
+import android.content.Context
+import android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE
+import android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK
 
-interface BankCardView : BaseView {
 
-    fun showEmailValid(isValid : Boolean)
-    fun showDateValid(isValid : Boolean)
-    fun showNameValid(isValid: Boolean)
-    fun showCcvValid(isValid: Boolean)
-    fun showNumberValid(isValid: Boolean, cardType: CreditCardType?)
+fun Context.isTablet(): Boolean {
+    return this.resources.configuration.screenLayout and SCREENLAYOUT_SIZE_MASK >= SCREENLAYOUT_SIZE_LARGE
 }

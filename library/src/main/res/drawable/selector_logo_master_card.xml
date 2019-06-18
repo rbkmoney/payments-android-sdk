@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~
   ~ Copyright 2019 RBKmoney
@@ -16,22 +17,8 @@
   ~
   -->
 
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    package="money.rbk"
-    >
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <application>
-
-        <activity
-            android:name="money.rbk.presentation.activity.CheckoutActivity"
-            android:screenOrientation="unspecified"
-            android:theme="@style/Theme.RBKMoney.Dialog"
-            />
-
-    </application>
-
-</manifest>
+    <item android:state_focused="true" android:drawable="@drawable/ic_master_card_logo"/>
+    <item android:state_focused="false" android:drawable="@drawable/ic_master_card_logo"/>
+</selector>

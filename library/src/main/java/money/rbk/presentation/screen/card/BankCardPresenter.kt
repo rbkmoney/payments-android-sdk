@@ -18,8 +18,47 @@
 
 package money.rbk.presentation.screen.card
 
+import money.rbk.data.CreditCardType
+import money.rbk.data.CreditCardType.UNKNOWN
 import money.rbk.presentation.screen.base.BasePresenter
+import money.rbk.presentation.utils.*
 
 class BankCardPresenter : BasePresenter<BankCardView>() {
+
+
+    fun onBuyClick(cardNumber: String, cardDate: String, cardCcv: String, cardName: String, cardEmail: String) {
+        //TODO on buy click
+    }
+
+
+    fun onEmail(email: String) =
+        view?.showEmailValid(email.isEmailValid())
+
+
+    fun onName(name: String) =
+        view?.showNameValid(name.isNotEmpty())
+
+    fun onDate(date: String) =
+        view?.showDateValid(date.isDataValid())
+
+    fun onCcv(name: String) =
+        view?.showCcvValid(name.length == 3)
+
+    fun onNumber(number: String) {
+        val cardType = defineCardType(number)
+        view?.showNumberValid(validateCardNumber(number, cardType), cardType)
+    }
+
+    private fun defineCardType(number: String): CreditCardType =
+        CreditCardType.detect(number.removeSpaces())
+
+    private fun validateCardNumber(number: String, cardType: CreditCardType): Boolean {
+        if (cardType == UNKNOWN || number.isEmpty() || number.isBlank()) {
+            return false
+        }
+        val isValidLength = cardType.lenghts.contains(number.clearLength())
+        return number.removeSpaces().algorithmLuna() && isValidLength
+    }
+
 
 }

@@ -36,5 +36,9 @@
     <color name="light_blue_grey">#ADBFFF</color>
     <color name="light_pink">#FFF8E5</color>
 
+    <color name="yellow">#FFC107</color>
+
     <color name="light_grey">#979797</color>
+
+    <color name="red">#e75542</color>
 </resources>
