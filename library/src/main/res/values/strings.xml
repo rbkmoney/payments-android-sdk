@@ -35,4 +35,10 @@
     <string name="secure_payment_with">Безопасная оплата с</string>
     <string name="label_order_details">Детали заказа</string>
     <string name="label_pay_f">Опталить %1$s</string>
+    <string name="successful_payment">Успешная\nоплата!</string>
+    <string name="unsuccessful_payment">Не оплачено</string>
+    <string name="how_to_solve_problem">Как решить проблему?</string>
+    <string name="try_again">Попробовать еще раз</string>
+    <string name="all_payment_methods">Все способы оплаты</string>
+    <string name="use_another_card">Использовать другую карту</string>
 </resources>
