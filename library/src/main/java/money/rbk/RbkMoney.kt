@@ -20,7 +20,7 @@ package money.rbk
 
 import android.app.Activity
 import android.content.Intent
-import money.rbk.presentation.activity.CheckoutActivity
+import money.rbk.presentation.activity.checkout.CheckoutActivity
 
 object RbkMoney {
 

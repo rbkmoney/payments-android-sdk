@@ -20,22 +20,16 @@ package money.rbk.data.methods
 
 import money.rbk.data.extension.toJsonObject
 import money.rbk.data.methods.base.GetRequest
-import money.rbk.data.network.Constants
 import money.rbk.domain.entity.Invoice
 
-internal data class GetInvoiceByID(
-    private val invoiceAccessToken: String,
-    private val invoiceId: String
+internal class GetInvoiceByID(
+    invoiceAccessToken: String,
+    invoiceId: String
 ) : GetRequest<Invoice> {
 
-    override fun getUrl(): String =
-        Constants.BASE_URL + "/processing/invoices/$invoiceId"
+    override val endpoint = "/processing/invoices/$invoiceId"
 
-    override fun getHeaders(): List<Pair<String, String>> =
-        listOf(
-            "Authorization" to "Bearer $invoiceAccessToken",
-            "Content-Type" to "application/json; charset=utf-8",
-            "X-Request-ID" to System.currentTimeMillis().toString())
+    override val accessToken = invoiceAccessToken
 
     override fun convertJsonToResponse(jsonString: String): Invoice =
         Invoice.fromJson(jsonString.toJsonObject())

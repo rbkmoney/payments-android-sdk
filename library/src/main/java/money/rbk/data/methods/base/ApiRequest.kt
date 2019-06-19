@@ -19,18 +19,19 @@
 package money.rbk.data.methods.base
 
 internal interface ApiRequest<out T> {
-    fun getUrl(): String
-    fun getHeaders(): List<Pair<String, String>>
+
+    val accessToken: String
+
+    val endpoint: String
+
+    val headers: List<Pair<String, String>>
+        get() = emptyList()
+
     fun convertJsonToResponse(jsonString: String): T
 }
 
 internal interface GetRequest<out T> : ApiRequest<T>
 
 internal interface PostRequest<out T> : ApiRequest<T> {
-    fun getPayload(): List<Pair<String, Any>>
-    fun getMimeType(): MimeType
-}
-
-internal enum class MimeType(val type: String) {
-    JSON("application/json"),
+    val payload: List<Pair<String, Any>>
 }
