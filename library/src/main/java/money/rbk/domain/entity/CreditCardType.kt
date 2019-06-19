@@ -16,7 +16,7 @@
  *
  */
 
-package money.rbk.data
+package money.rbk.domain.entity
 
 import androidx.annotation.DrawableRes
 import money.rbk.R

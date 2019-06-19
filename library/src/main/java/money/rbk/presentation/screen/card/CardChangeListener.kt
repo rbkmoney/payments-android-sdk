@@ -18,7 +18,7 @@
 
 package money.rbk.presentation.screen.card
 
-import money.rbk.data.CreditCardType
+import money.rbk.domain.entity.CreditCardType
 import money.rbk.presentation.utils.removeSpaces
 import ru.tinkoff.decoro.FormattedTextChangeListener
 import ru.tinkoff.decoro.watchers.FormatWatcher

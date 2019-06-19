@@ -28,7 +28,7 @@ import android.view.WindowManager
 import com.whiteelephant.monthpicker.MonthPickerDialog
 import kotlinx.android.synthetic.main.fmt_card.*
 import money.rbk.R
-import money.rbk.data.CreditCardType
+import money.rbk.domain.entity.CreditCardType
 import money.rbk.presentation.activity.checkout.CheckoutActivity
 import money.rbk.presentation.activity.web.WebViewActivity
 import money.rbk.presentation.model.BrowserRequestModel

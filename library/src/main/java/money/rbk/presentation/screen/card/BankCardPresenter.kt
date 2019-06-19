@@ -19,7 +19,7 @@
 package money.rbk.presentation.screen.card
 
 import money.rbk.R
-import money.rbk.data.getCardType
+import money.rbk.domain.entity.getCardType
 import money.rbk.domain.exception.UseCaseException
 import money.rbk.domain.interactor.CheckoutStateUseCase
 import money.rbk.domain.interactor.CreatePaymentResourceUseCase
