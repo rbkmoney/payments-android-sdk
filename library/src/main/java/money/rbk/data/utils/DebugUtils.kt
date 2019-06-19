@@ -16,10 +16,17 @@
  *
  */
 
-package money.rbk.presentation.exception
+package money.rbk.data.utils
 
-import androidx.fragment.app.Fragment
+object DebugUtils {
 
-class WrongActivityException(fragment: Fragment, expectedActivityClass: Class<*>) :
-        RuntimeException("Fragment ${fragment.javaClass.name} has to be added " +
-                "to ${expectedActivityClass.name} but it added to " + fragment.activity)
+    fun getStackTrace(deep: Int): String =
+        Thread.currentThread()
+            .stackTrace
+            .asSequence()
+            .drop(4)
+            .take(deep)
+            .map { "{%s.%s[%d]}".format(it.className, it.methodName, it.lineNumber) }
+            .joinToString(separator = "->")
+
+}

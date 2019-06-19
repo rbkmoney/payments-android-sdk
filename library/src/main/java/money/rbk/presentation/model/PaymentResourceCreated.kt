@@ -16,13 +16,6 @@
  *
  */
 
-package money.rbk.data.extension
+package money.rbk.presentation.model
 
-import android.content.Context
-import android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE
-import android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK
-
-
-fun Context.isTablet(): Boolean {
-    return this.resources.configuration.screenLayout and SCREENLAYOUT_SIZE_MASK >= SCREENLAYOUT_SIZE_LARGE
-}
+class PaymentResourceCreated(val pending: Boolean) : BaseIUModel()

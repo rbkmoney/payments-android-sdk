@@ -19,13 +19,13 @@
 package money.rbk.presentation.utils
 
 import android.util.Patterns
-import java.util.*
+import java.util.ArrayList
+import java.util.Calendar
 
 fun String.isEmailValid(): Boolean =
     isEmpty() or Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
-
-fun String.isDataValid(): Boolean {
+fun String.isDateValid(): Boolean {
     if (isBlank() or (length == 5).not()) {
         return false
     }
@@ -55,26 +55,37 @@ fun String.clearLength(): Int {
     return removeSpaces().length
 }
 
-fun String.algorithmLuna(): Boolean {
+fun String.isValidCvv() = length == 3
+
+fun String.isCardValidByLuna(): Boolean {
     var currentNumber: Int
     var evenSum = 0
     val unevenNumList = ArrayList<Int>()
     var index = 1
-    this.toCharArray().forEach { c ->
+    this.toCharArray()
+        .forEach { c ->
 
-        currentNumber = c.toString().toInt()
-        if (index % 2 == 0) {
-            evenSum += currentNumber
-        } else {
-            currentNumber *= 2
-            if (currentNumber / 10 >= 1) {
-                unevenNumList.add(currentNumber / 10)
-                unevenNumList.add(currentNumber % 10)
+            currentNumber = c.toString()
+                .toInt()
+            if (index % 2 == 0) {
+                evenSum += currentNumber
             } else {
-                unevenNumList.add(currentNumber)
+                currentNumber *= 2
+                if (currentNumber / 10 >= 1) {
+                    unevenNumList.add(currentNumber / 10)
+                    unevenNumList.add(currentNumber % 10)
+                } else {
+                    unevenNumList.add(currentNumber)
+                }
             }
+            index++
         }
-        index++
-    }
     return (unevenNumList.sum() + evenSum) % 10 == 0
 }
+
+fun Int.toDozenString(): String =
+    if (this / 10 == 0) {
+        "0$this"
+    } else {
+        this.toString()
+    }

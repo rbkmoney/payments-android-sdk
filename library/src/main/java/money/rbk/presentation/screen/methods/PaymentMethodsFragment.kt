@@ -22,20 +22,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fmt_payment_methods.*
 import money.rbk.R
-import money.rbk.presentation.activity.CheckoutActivity
+import money.rbk.presentation.activity.checkout.CheckoutActivity
 import money.rbk.presentation.model.PaymentMethodModel
 import money.rbk.presentation.screen.base.BaseFragment
-import money.rbk.presentation.screen.base.BasePresenter
-import money.rbk.presentation.screen.card.BankCardFragment
 import money.rbk.presentation.screen.common.MarginItemDecoration
 import money.rbk.presentation.screen.methods.adapter.PaymentAdapter
-import money.rbk.presentation.utils.replaceFragmentInActivity
 
 class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethodsView {
+
+    override val presenter: PaymentMethodsPresenter by lazy { PaymentMethodsPresenter(navigator) }
 
     companion object {
         fun newInstance() = PaymentMethodsFragment()
@@ -52,25 +50,10 @@ class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethod
     }
 
     override fun setPaymentMethods(paymentMethods: List<PaymentMethodModel>) {
-
-        val adapter = PaymentAdapter(::onPaymentClick)
-        adapter.payments = paymentMethods
-        rvPaymentMethods.adapter = adapter
+        rvPaymentMethods.adapter = PaymentAdapter(presenter::onPaymentClick, paymentMethods)
         rvPaymentMethods.layoutManager = LinearLayoutManager(activity)
-        rvPaymentMethods.addItemDecoration(MarginItemDecoration(
-            resources.getDimension(R.dimen.spacing_small).toInt()))
+        rvPaymentMethods.addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.spacing_small).toInt()))
     }
-
-    private fun onPaymentClick(payment: PaymentMethodModel) {
-        if (payment.name == null) {
-            Toast.makeText(context, "Данный функционал находится в разработке", Toast.LENGTH_LONG)
-                .show()
-        } else {
-            activity?.replaceFragmentInActivity(BankCardFragment.newInstance(), R.id.container)
-        }
-    }
-
-    override fun buildPresenter(): BasePresenter<PaymentMethodsView> = PaymentMethodsPresenter()
 
     override fun showProgress() {
         pbLoading.visibility = View.VISIBLE

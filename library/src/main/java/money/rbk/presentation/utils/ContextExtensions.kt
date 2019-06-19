@@ -16,6 +16,10 @@
  *
  */
 
-package money.rbk.data.exception
+package money.rbk.presentation.utils
 
-data class SelectedOptionNotFoundException(val optionId: Int) : SdkException()
+import android.content.Context
+import money.rbk.R
+
+internal val Context.isTablet
+    get() = resources.getBoolean(R.bool.rbc_isTablet)

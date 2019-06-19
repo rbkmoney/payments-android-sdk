@@ -16,13 +16,22 @@
  *
  */
 
-package money.rbk.presentation.activity
+package money.rbk.presentation.model
 
-import money.rbk.presentation.model.InvoiceModel
-import money.rbk.presentation.screen.base.BaseView
+import androidx.annotation.StringRes
 
-interface CheckoutView : BaseView {
+sealed class PaymentStateModel {
 
-    fun showInvoice(invoiceModel: InvoiceModel)
+    object Unknown : PaymentStateModel()
+
+    object Cancelled : PaymentStateModel()
+
+    object Success : PaymentStateModel()
+
+    object Pending : PaymentStateModel()
+
+    data class BrowserRedirectInteraction(val request: BrowserRequestModel) : PaymentStateModel()
+
+    data class Failed(@StringRes val messageRes: Int) : PaymentStateModel()
 
 }
