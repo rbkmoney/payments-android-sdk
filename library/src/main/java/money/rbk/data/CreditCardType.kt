@@ -29,7 +29,7 @@ enum class CreditCardType(val lenghts: IntArray, val prefixes: Array<String>) {
 
     MAESTRO(
         lenghts = intArrayOf(12, 13, 14, 15, 16, 17, 18, 19),
-        prefixes = arrayOf("50", "56", "57", "58","59", "60", "61", "62", "63", "64",
+        prefixes = arrayOf("50", "56", "57", "58", "59", "60", "61", "62", "63", "64",
             "65", "66", "67", "68", "69")
     ),
     MASTERCARD(
@@ -54,7 +54,7 @@ enum class CreditCardType(val lenghts: IntArray, val prefixes: Array<String>) {
     ),
     JCB(
         lenghts = intArrayOf(15, 16),
-        prefixes =  arrayOf("1800", "2131", "3528", "3529", "353", "354", "355", "356", "357", "358")
+        prefixes = arrayOf("1800", "2131", "3528", "3529", "353", "354", "355", "356", "357", "358")
     ),
 
     DINERS(
@@ -72,14 +72,14 @@ enum class CreditCardType(val lenghts: IntArray, val prefixes: Array<String>) {
 
     MIR(
         lenghts = intArrayOf(13, 16),
-        prefixes =  arrayOf("2200", "2201", "2202", "2203", "2204")
+        prefixes = arrayOf("2200", "2201", "2202", "2203", "2204")
     );
 
     companion object {
-        fun detect(credirCardNumber: String) : CreditCardType =
+        fun detect(credirCardNumber: String): CreditCardType =
             CreditCardType.values()
                 .asSequence()
-                .filter { creditCardType->
+                .filter { creditCardType ->
                     val creditCardLength = credirCardNumber.length
                     creditCardType.lenghts.contains(creditCardLength) &&
                         creditCardType.prefixes.any { credirCardNumber.startsWith(it) }
