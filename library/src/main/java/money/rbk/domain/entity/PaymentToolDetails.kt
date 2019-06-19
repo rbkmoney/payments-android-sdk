@@ -18,13 +18,13 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.exception.UnsupportedPaymentToolDetails
+import money.rbk.data.exception.ParseException
 import org.json.JSONObject
 import money.rbk.data.extension.getNullable
 import money.rbk.data.extension.parseNullableString
 import money.rbk.data.serialization.Deserializer
 
-const val PaymentToolDetailsBankCardType = "BankCard"
+const val PaymentToolDetailsBankCardType = "PaymentToolDetailsBankCard"
 
 sealed class PaymentToolDetails(val detailsType: String) {
 
@@ -56,7 +56,7 @@ sealed class PaymentToolDetails(val detailsType: String) {
             val detailsType = json.getString("detailsType")
             return when (detailsType) {
                 PaymentToolDetailsBankCardType -> BankCard.fromJson(json)
-                else -> throw UnsupportedPaymentToolDetails(detailsType)
+                else -> throw ParseException.UnsupportedPaymentToolDetails(detailsType)
 
             }
         }

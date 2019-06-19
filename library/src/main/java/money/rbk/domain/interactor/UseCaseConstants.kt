@@ -18,25 +18,7 @@
 
 package money.rbk.domain.interactor
 
-import money.rbk.di.Injector
-import money.rbk.domain.entity.ContactInfo
-import money.rbk.domain.entity.PaymentTool
-import money.rbk.domain.repository.CheckoutRepository
-
-internal class PaymentPrepareUseCase(private val checkoutRepository: CheckoutRepository = Injector.checkoutRepository) {
-
-    operator fun invoke(
-        cardNumber: String,
-        cardExpired: String,
-        ccv: String,
-        cardHolder: String,
-        email: String) {
-
-        checkoutRepository.preparePayment(PaymentTool.CardData(cardNumber,
-            cardExpired,
-            ccv,
-            cardHolder),
-            ContactInfo(email, null))
-    }
-
+object UseCaseConstants {
+    const val POLLING_DELAY = 1000L
+    const val MAX_POLLING_TIME = 120000L
 }

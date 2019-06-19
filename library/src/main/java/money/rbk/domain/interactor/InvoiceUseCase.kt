@@ -19,28 +19,45 @@
 package money.rbk.domain.interactor
 
 import money.rbk.di.Injector
+import money.rbk.domain.converter.EntityConverter
+import money.rbk.domain.converter.InvoiceChangesConverter
+import money.rbk.domain.entity.InvoiceEvent
+import money.rbk.domain.entity.InvoiceStatus
+import money.rbk.domain.interactor.base.UseCase
+import money.rbk.domain.interactor.input.InvoiceInitializeInputModel
 import money.rbk.domain.repository.CheckoutRepository
+import money.rbk.presentation.model.CheckoutState
 import money.rbk.presentation.model.InvoiceModel
+import money.rbk.presentation.model.InvoiceStateModel
 import money.rbk.presentation.utils.formatPrice
 
-internal class InvoiceUseCase(private val repository: CheckoutRepository = Injector.checkoutRepository) :
-    BaseUseCase<InvoiceModel>() {
+internal class InvoiceUseCase(
+    private val repository: CheckoutRepository = Injector.checkoutRepository,
+    private val invoiceChangesConverter: EntityConverter<List<InvoiceEvent>, CheckoutState> = InvoiceChangesConverter()) :
+    UseCase<InvoiceInitializeInputModel, InvoiceModel>() {
 
     override fun invoke(
+        inputModel: InvoiceInitializeInputModel,
         onResultCallback: (InvoiceModel) -> Unit,
         onErrorCallback: (Throwable) -> Unit) {
 
         bgExecutor(onErrorCallback) {
+
             val invoice = repository.loadInvoice()
             repository.loadPaymentMethods()
 
-            //TODO Process Errors
+            val checkoutState =
+                when (invoice.status) {
+                    InvoiceStatus.unpaid -> CheckoutState(InvoiceStateModel.Pending)
+                    else -> invoiceChangesConverter(repository.loadInvoiceEvents())
+                }
 
             val invoiceModel = InvoiceModel(
                 invoice.id,
                 repository.shopName,
                 "${invoice.amount.formatPrice()} ${invoice.currency.symbol}",
-                invoice.product + invoice.description?.let { ". $it" }.orEmpty() // TODO: For testing purposes
+                invoice.product + invoice.description?.let { ". $it" }.orEmpty(),
+                checkoutState
             )
 
             uiExecutor {

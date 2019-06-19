@@ -16,25 +16,12 @@
  *
  */
 
-package money.rbk.domain.entity
+package money.rbk.domain.interactor.input
 
-import money.rbk.data.extension.getNullable
-import money.rbk.data.serialization.Deserializer
-import money.rbk.data.serialization.Serializable
-import org.json.JSONObject
-
-data class ContactInfo(
+class CardPaymentInputModel(
+    val cardNumber: String,
+    val expDate: String,
+    val cvv: String,
+    val cardHolder: String,
     val email: String?
-) : Serializable {
-
-    companion object : Deserializer<JSONObject, ContactInfo> {
-        override fun fromJson(json: JSONObject): ContactInfo = ContactInfo(
-            email = json.getNullable("email")
-        )
-    }
-
-    override fun toJson(): JSONObject = JSONObject().apply {
-        email?.let { put("email", it) }
-    }
-
-}
+) : BaseInputModel()

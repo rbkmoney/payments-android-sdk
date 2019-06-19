@@ -26,8 +26,7 @@ import money.rbk.data.extension.parseString
 import money.rbk.data.serialization.Deserializer
 import org.json.JSONObject
 
-
-internal sealed class InvoiceChange(private val changeType: InvoiceChangeType) {
+internal sealed class InvoiceChange(val eventType: EventType) {
 
     companion object : Deserializer<JSONObject, InvoiceChange> {
         override fun fromJson(json: JSONObject): InvoiceChange {
@@ -58,24 +57,24 @@ internal sealed class InvoiceChange(private val changeType: InvoiceChangeType) {
     }
 
     data class InvoiceCreated(val invoice: Invoice) :
-        InvoiceChange(InvoiceChangeType.InvoiceCreated)
+        InvoiceChange(EventType.Invoice)
 
     data class InvoiceStatusChanged(
         val status: InvoiceStatus,
-        val reason: String?) : InvoiceChange(InvoiceChangeType.InvoiceStatusChanged)
+        val reason: String?) : InvoiceChange(EventType.Invoice)
 
     data class PaymentStarted(val payment: Payment) :
-        InvoiceChange(InvoiceChangeType.PaymentStarted)
+        InvoiceChange(EventType.Payment)
 
     data class PaymentStatusChanged(
         val status: PaymentStatus,
         val paymentID: String,
-        val error: PaymentError?) : InvoiceChange(InvoiceChangeType.PaymentStatusChanged)
+        val error: PaymentError?) : InvoiceChange(EventType.Payment)
 
     data class PaymentInteractionRequested(
         val paymentID: String,
         val userInteraction: UserInteraction
-    ) : InvoiceChange(InvoiceChangeType.PaymentInteractionRequested)
+    ) : InvoiceChange(EventType.Payment)
 
     private enum class InvoiceChangeType {
         InvoiceCreated,
@@ -84,6 +83,12 @@ internal sealed class InvoiceChange(private val changeType: InvoiceChangeType) {
         PaymentStatusChanged,
         PaymentInteractionRequested
     }
+
+    enum class EventType {
+        Invoice,
+        Payment
+    }
+
 }
 
 class UnknownInvoiceChangeTypeException(type: String) :
