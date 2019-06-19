@@ -18,39 +18,13 @@
 
 package money.rbk.presentation.utils
 
-import androidx.annotation.IdRes
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import android.app.Activity
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 
-/**
- * The `fragment` is added to the container view with id `frameId`. The operation is
- * performed by the `fragmentManager`.
- */
-fun FragmentActivity.replaceFragmentInActivity(fragment: Fragment, @IdRes frameId: Int) {
-    supportFragmentManager.transact {
-        replace(frameId, fragment)
-    }
-}
-
-/**
- * The `fragment` is added to the container view with tag. The operation is
- * performed by the `fragmentManager`.
- */
-fun AppCompatActivity.addFragmentToActivity(fragment: Fragment, tag: String) {
-    supportFragmentManager.transact {
-        add(fragment, tag)
-    }
-}
-
-/**
- * Runs a FragmentTransaction, then calls commit().
- */
-private inline fun FragmentManager.transact(action: FragmentTransaction.() -> Unit) {
-    beginTransaction().apply {
-        action()
-    }
-        .commit()
+fun FragmentActivity.hideKeyboard() {
+    val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    val view = currentFocus ?: View(this)
+    imm.hideSoftInputFromWindow(view.windowToken, 0)
 }

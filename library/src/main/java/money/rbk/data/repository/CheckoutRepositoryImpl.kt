@@ -19,18 +19,31 @@
 package money.rbk.data.repository
 
 import money.rbk.data.extension.execute
+import money.rbk.data.methods.CreatePayment
+import money.rbk.data.methods.CreatePaymentResource
 import money.rbk.data.methods.GetInvoiceByID
+import money.rbk.data.methods.GetInvoiceEvents
 import money.rbk.data.methods.GetInvoicePaymentMethods
+import money.rbk.data.response.CreatePaymentResourceResponse
+import money.rbk.data.response.CreatePaymentResponse
+import money.rbk.domain.entity.ContactInfo
+import money.rbk.domain.entity.Flow
 import money.rbk.domain.entity.Invoice
+import money.rbk.domain.entity.InvoiceEvent
+import money.rbk.domain.entity.Payer
 import money.rbk.domain.entity.PaymentMethod
+import money.rbk.domain.entity.PaymentTool
 import money.rbk.domain.repository.CheckoutRepository
 import okhttp3.OkHttpClient
 
 internal class CheckoutRepositoryImpl(
-    override var invoiceId: String,
-    override var invoiceAccessToken: String,
-    override var shopName: String,
-    private val okHttpClient: OkHttpClient) : CheckoutRepository {
+    private val okHttpClient: OkHttpClient,
+    private val invoiceId: String,
+    private val invoiceAccessToken: String,
+    override val shopName: String
+) : CheckoutRepository {
+
+    private var invoiceEvents: MutableList<InvoiceEvent> = mutableListOf()
 
     private val invoice: Invoice by lazy {
         okHttpClient.execute(GetInvoiceByID(invoiceAccessToken, invoiceId))
@@ -40,8 +53,39 @@ internal class CheckoutRepositoryImpl(
         okHttpClient.execute(GetInvoicePaymentMethods(invoiceAccessToken, invoiceId))
     }
 
+    private val payment by lazy {
+        okHttpClient.execute(CreatePayment(invoiceId,
+            invoiceAccessToken,
+            Payer.PaymentResourcePayer(createPaymentResource.paymentToolToken,
+                createPaymentResource.paymentSession,
+                contactInfo ?: TODO("Create new Exception")), Flow.PaymentFlowInstant))
+    }
+
+    private val createPaymentResource: CreatePaymentResourceResponse
+        get() = okHttpClient.execute(CreatePaymentResource(
+            invoiceAccessToken, paymentTool ?: TODO("Create new Exception")))
+
+    private var paymentTool: PaymentTool? = null
+    private var contactInfo: ContactInfo? = null
+
     override fun loadInvoice(): Invoice = invoice
 
     override fun loadPaymentMethods(): List<PaymentMethod> = paymentMethods
+
+    override fun createPayment(paymentTool: PaymentTool,
+        contactInfo: ContactInfo): CreatePaymentResponse {
+        this.paymentTool = paymentTool
+        this.contactInfo = contactInfo
+        return payment
+    }
+
+    override fun loadInvoiceEvents(): List<InvoiceEvent> =
+        okHttpClient.execute(GetInvoiceEvents(invoiceAccessToken,
+            invoiceId,
+            invoiceEvents.lastOrNull()?.id))
+            .let {
+                invoiceEvents.addAll(it)
+                invoiceEvents
+            }
 
 }

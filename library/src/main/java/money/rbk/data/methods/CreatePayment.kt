@@ -19,45 +19,27 @@
 package money.rbk.data.methods
 
 import money.rbk.data.extension.toJsonObject
-import money.rbk.data.methods.base.MimeType
 import money.rbk.data.methods.base.PostRequest
-import money.rbk.data.network.Constants
 import money.rbk.data.response.CreatePaymentResponse
-import money.rbk.domain.entity.ClientInfo
 import money.rbk.domain.entity.Flow
 import money.rbk.domain.entity.Payer
-import java.util.UUID
 
 internal class CreatePayment(
-    private val invoiceID: String,
-    private val invoiceAccessToken: String,
-    private val payer: Payer,
-    private val flow: Flow
+    invoiceID: String,
+    invoiceAccessToken: String,
+    payer: Payer,
+    flow: Flow
 ) : PostRequest<CreatePaymentResponse> {
 
-    private val externalID = UUID.randomUUID()
-        .toString()
+    override val endpoint: String = "/processing/invoices/$invoiceID/payments"
 
-    private val clientInfo: ClientInfo =
-        ClientInfo(fingerprint = "123", ip = null) // TODO: Generate Fingerprint
-
-    override fun getUrl(): String =
-        Constants.BASE_URL + "/processing/invoices/$invoiceID/payments"
-
-    override fun getHeaders(): List<Pair<String, String>> =
-        listOf(
-            "Authorization" to "Bearer $invoiceAccessToken",
-            "Content-Type" to "application/json; charset=utf-8",
-            "X-Request-ID" to System.currentTimeMillis().toString())
+    override val accessToken = invoiceAccessToken
 
     override fun convertJsonToResponse(jsonString: String): CreatePaymentResponse =
         CreatePaymentResponse.fromJson(jsonString.toJsonObject())
 
-    override fun getPayload(): List<Pair<String, Any>> = listOf(
-        "externalID" to externalID,
+    override val payload: List<Pair<String, Any>> = listOf(
         "payer" to payer,
         "flow" to flow)
-
-    override fun getMimeType(): MimeType = MimeType.JSON
 
 }

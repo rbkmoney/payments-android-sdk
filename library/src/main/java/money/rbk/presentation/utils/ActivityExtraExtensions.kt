@@ -33,6 +33,7 @@ inline fun <reified T> Activity.extraNullable(key: String): ActivityArgsNullable
         Float::class -> ActivityArgsNullableDelegate { intent?.getFloatExtra(key, 0f) as? T }
         Long::class -> ActivityArgsNullableDelegate { intent?.getLongExtra(key, 0) as? T }
         CharSequence::class -> ActivityArgsNullableDelegate { intent?.getCharSequenceExtra(key) as? T }
+        ByteArray::class -> ActivityArgsNullableDelegate { intent?.getByteArrayExtra(key) as? T }
         else -> {
             if (Parcelable::class.java.isAssignableFrom(T::class.java)) {
                 ActivityArgsNullableDelegate { intent?.getParcelableExtra<Parcelable>(key) as? T }

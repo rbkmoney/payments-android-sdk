@@ -144,16 +144,34 @@
             app:layout_constraintTop_toBottomOf="@+id/edEmail"
             tools:text="Оплатить 6500. 50 Р" />
 
-        <ProgressBar
+        <FrameLayout
             android:id="@+id/pbLoading"
-            app:layout_constraintBottom_toBottomOf="@+id/btnPay"
-            app:layout_constraintEnd_toEndOf="@+id/btnPay"
-            app:layout_constraintStart_toStartOf="@+id/btnPay"
-            app:layout_constraintTop_toTopOf="@+id/btnPay"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/white_overlay"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="@dimen/spacing_medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="invisible"
+            >
+
+            <ProgressBar
+
+                app:layout_constraintBottom_toBottomOf="@+id/btnPay"
+                app:layout_constraintEnd_toEndOf="@+id/btnPay"
+                app:layout_constraintStart_toStartOf="@+id/btnPay"
+                app:layout_constraintTop_toTopOf="@+id/btnPay"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+        </FrameLayout>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

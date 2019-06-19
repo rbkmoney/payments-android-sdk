@@ -16,7 +16,22 @@
  *
  */
 
-package money.rbk.data.exception
+package money.rbk.presentation.model
 
-class UnsupportedPaymentToolDetails(private val detailsType: String) :
-    Exception("Unsupported payment tool details:$detailsType")
+import androidx.annotation.StringRes
+
+sealed class PaymentStateModel {
+
+    object Unknown : PaymentStateModel()
+
+    object Cancelled : PaymentStateModel()
+
+    object Success : PaymentStateModel()
+
+    object Pending : PaymentStateModel()
+
+    data class BrowserRedirectInteraction(val request: BrowserRequestModel) : PaymentStateModel()
+
+    data class Failed(@StringRes val messageRes: Int) : PaymentStateModel()
+
+}

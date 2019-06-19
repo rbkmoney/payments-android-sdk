@@ -18,18 +18,25 @@
 
 package money.rbk.domain.repository
 
+import money.rbk.data.response.CreatePaymentResponse
+import money.rbk.domain.entity.ContactInfo
 import money.rbk.domain.entity.Invoice
+import money.rbk.domain.entity.InvoiceEvent
 import money.rbk.domain.entity.PaymentMethod
+import money.rbk.domain.entity.PaymentTool
 
 internal interface CheckoutRepository {
 
-    var invoiceId: String
-
-    var invoiceAccessToken: String
-
-    var shopName: String
+    val shopName: String
 
     fun loadInvoice(): Invoice
 
     fun loadPaymentMethods(): List<PaymentMethod>
+
+    fun createPayment(
+        paymentTool: PaymentTool,
+        contactInfo: ContactInfo): CreatePaymentResponse
+
+    fun loadInvoiceEvents(): List<InvoiceEvent>
+
 }

@@ -27,12 +27,10 @@ import kotlinx.android.synthetic.main.item_payment_methods.view.*
 import money.rbk.R
 import money.rbk.presentation.model.PaymentMethodModel
 import money.rbk.presentation.screen.methods.adapter.PaymentAdapter.PaymentHolder
-import java.util.Collections
 
-class PaymentAdapter(private val onItemClickListener: (PaymentMethodModel) -> Unit) :
-    RecyclerView.Adapter<PaymentHolder>() {
-
-    var payments: List<PaymentMethodModel> = Collections.emptyList()
+class PaymentAdapter(
+    private val onItemClickListener: (PaymentMethodModel) -> Unit,
+    private var payments: List<PaymentMethodModel>) : RecyclerView.Adapter<PaymentHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PaymentHolder =
         PaymentHolder(
