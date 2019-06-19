@@ -23,18 +23,14 @@ import money.rbk.presentation.utils.removeSpaces
 import ru.tinkoff.decoro.FormattedTextChangeListener
 import ru.tinkoff.decoro.watchers.FormatWatcher
 
-class CardChangeListener(private val edCallBack : (cardType : CreditCardType?) -> Unit) : FormattedTextChangeListener {
-
-    private var isDetected = false
+class CardChangeListener(private val edCallBack: (cardType: CreditCardType?) -> Unit) :
+    FormattedTextChangeListener {
 
     override fun onTextFormatted(formatter: FormatWatcher?, newFormattedText: String) {
-        val predictedCardTypes = CreditCardType.preDetect(newFormattedText.removeSpaces())
-        if ((predictedCardTypes.size == 1) and isDetected.not()) {
-            edCallBack(predictedCardTypes.first())
-        }
-        if (newFormattedText.isEmpty() or newFormattedText.isBlank()) {
-            isDetected = false
-            edCallBack(null)
+        val predictedCardType = CreditCardType.suggestCardType(newFormattedText.removeSpaces())
+
+        if (predictedCardType != null) {
+            edCallBack(predictedCardType)
         }
     }
 

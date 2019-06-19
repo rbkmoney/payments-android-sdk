@@ -33,6 +33,10 @@ private fun EditText.setOkayState(@DrawableRes onValidDrawable: Int?) {
     setRightDrawable(onValidDrawable)
 }
 
+fun EditText.clearState() {
+    setBackgroundResource(R.drawable.background_edit_text)
+    removeRightDrawable()
+}
 
 fun EditText.setValid(
     isValid: Boolean,

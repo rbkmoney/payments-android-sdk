@@ -20,99 +20,81 @@ package money.rbk.data
 
 import androidx.annotation.DrawableRes
 import money.rbk.R
+import money.rbk.presentation.utils.isCardValidByLuna
+import money.rbk.presentation.utils.removeSpaces
 
-enum class CreditCardType(val lenghts: IntArray, val prefixes: Array<String>) {
+enum class CreditCardType(
+    val lengths: IntArray,
+    val prefixes: Array<String>,
+    val cardName: String,
+    @DrawableRes
+    val iconRes: Int) {
 
-    UNKNOWN(intArrayOf(), emptyArray()),
+    VISA_ELECTRON(
+        lengths = intArrayOf(16),
+        prefixes = arrayOf("4026", "417500", "4405", "4508", "4844", "4913", "4917"),
+        cardName = "Visa Electron",
+        iconRes = R.drawable.selector_logo_visa_electron
+    ),
 
     VISA(
-        lenghts = intArrayOf(13, 16, 19),
-        prefixes = arrayOf("4")
-
+        lengths = intArrayOf(13, 16, 19),
+        prefixes = arrayOf("4"),
+        cardName = "Visa",
+        iconRes = R.drawable.selector_logo_visa
     ),
 
     MAESTRO(
-        lenghts = intArrayOf(12, 13, 14, 15, 16, 17, 18, 19),
+        lengths = intArrayOf(12, 13, 14, 15, 16, 17, 18, 19),
         prefixes = arrayOf(
             "50", "56", "57", "58", "59", "60", "61", "62", "63", "64",
             "65", "66", "67", "68", "69"
-        )
+        ),
+        cardName = "Maestro",
+        iconRes = R.drawable.ic_maestro_logo
     ),
+
     MASTERCARD(
-        lenghts = intArrayOf(16),
+        lengths = intArrayOf(16),
         prefixes = arrayOf(
             "2221", "2222", "2223", "2224", "2225", "2226", "2227", "2228", "2229",
             "223", "224", "225", "226", "227", "228", "229",
             "23", "24", "25", "26", "271", "2720",
             "51", "52", "53", "54", "55"
-        )
-    ),
-    AMERICAN_EXPRESS(
-        lenghts = intArrayOf(15),
-        prefixes = arrayOf("34", "37")
-    ),
-    DISCOVER(
-        lenghts = intArrayOf(16, 19),
-        prefixes = arrayOf(
-            "6011", "622126", "622127", "622128", "622129", "62213",
-            "62214", "62215", "62216", "62217", "62218", "62219",
-            "6222", "6223", "6224", "6225", "6226", "6227", "6228",
-            "62290", "62291", "622920", "622921", "622922", "622923",
-            "622924", "622925", "644", "645", "646", "647", "648",
-            "649", "65"
-        )
-    ),
-    JCB(
-        lenghts = intArrayOf(15, 16),
-        prefixes = arrayOf("1800", "2131", "3528", "3529", "353", "354", "355", "356", "357", "358")
-    ),
-
-    DINERS(
-        lenghts = intArrayOf(14, 16),
-        prefixes = arrayOf("300", "301", "302", "303", "304", "305", "36", "54", "55")
-    ),
-
-    UNIONPAY(
-        lenghts = intArrayOf(16, 17, 18, 19),
-        prefixes = arrayOf(
-            "622126", "622127", "622128", "622129", "62213", "62214",
-            "62215", "62216", "62217", "62218", "62219", "6222", "6223",
-            "6224", "6225", "6226", "6227", "6228", "62290", "62291",
-            "622920", "622921", "622922", "622923", "622924", "622925"
-        )
+        ),
+        cardName = "MasterCard",
+        iconRes = R.drawable.selector_logo_master_card
     ),
 
     MIR(
-        lenghts = intArrayOf(13, 16),
-        prefixes = arrayOf("2200", "2201", "2202", "2203", "2204")
+        lengths = intArrayOf(13, 16),
+        prefixes = arrayOf("2200", "2201", "2202", "2203", "2204"),
+        cardName = "Мир",
+        iconRes = R.drawable.selector_logo_mir
     );
 
     companion object {
-        fun detect(credirCardNumber: String): CreditCardType =
-            CreditCardType.values()
+
+        fun detectCardType(cardNumber: String): CreditCardType? =
+            values()
                 .asSequence()
-                .filter { creditCardType ->
-                    val creditCardLength = credirCardNumber.length
-                    creditCardType.lenghts.contains(creditCardLength) &&
-                            creditCardType.prefixes.any { credirCardNumber.startsWith(it) }
-                }
-                .firstOrNull() ?: UNKNOWN
-
-
-        fun preDetect(creditCardNumber: String): List<CreditCardType> =
-            CreditCardType.values()
-                .asList()
-                .filter { creditCardType ->
-                    creditCardType.prefixes.any { it.startsWith(creditCardNumber) }
+                .find { cardType ->
+                    cardType.lengths.contains(cardNumber.length) &&
+                        (cardType.prefixes.any { cardNumber.startsWith(it) })
                 }
 
-        @DrawableRes
-        fun getDrawable(cardType :CreditCardType?) : Int? = when (cardType) {
-            VISA -> R.drawable.selector_logo_visa
-            MASTERCARD -> R.drawable.ic__mastercard_logo
-            MIR -> R.drawable.ic_mir
-            else -> null
-        }
+        fun suggestCardType(creditCardNumber: String): CreditCardType? =
+            values()
+                .asSequence()
+                .firstOrNull { creditCardType ->
+                    creditCardType.prefixes.any { creditCardNumber.startsWith(it) }
+                }
+
     }
 }
 
+fun String.getCardType(): CreditCardType? {
+    val rawNumberString = removeSpaces()
+    return CreditCardType.detectCardType(rawNumberString)
+        .takeIf { rawNumberString.isCardValidByLuna() }
+}

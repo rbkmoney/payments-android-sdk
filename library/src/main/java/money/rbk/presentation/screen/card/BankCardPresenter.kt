@@ -18,9 +18,8 @@
 
 package money.rbk.presentation.screen.card
 
-import money.rbk.data.CreditCardType
-import money.rbk.data.CreditCardType.UNKNOWN
 import money.rbk.R
+import money.rbk.data.getCardType
 import money.rbk.domain.exception.UseCaseException
 import money.rbk.domain.interactor.CheckoutStateUseCase
 import money.rbk.domain.interactor.CreatePaymentResourceUseCase
@@ -34,7 +33,9 @@ import money.rbk.presentation.model.PaymentResourceCreated
 import money.rbk.presentation.model.PaymentStateModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePresenter
-import money.rbk.presentation.utils.*
+import money.rbk.presentation.utils.isDateValid
+import money.rbk.presentation.utils.isEmailValid
+import money.rbk.presentation.utils.isValidCvv
 
 class BankCardPresenter(
     navigator: Navigator,
@@ -77,13 +78,45 @@ class BankCardPresenter(
         cvv: String,
         cardHolder: String,
         email: String?) {
-        cardPaymentInputModel = CardPaymentInputModel(cardNumber, expDate, cvv, cardHolder, email)
-        performPayment()
+        if (validateNumber(cardNumber) and validateDate(expDate) and validateCcv(cvv) and validateCardholder(
+                cardHolder) and validateEmail(email)) {
+            cardPaymentInputModel =
+                CardPaymentInputModel(cardNumber, expDate, cvv, cardHolder, email)
+            performPayment()
+        }
     }
 
     fun on3DsPerformed() {
         updateCheckout()
     }
+
+    fun validateEmail(email: String?): Boolean =
+        if (!email.isNullOrBlank()) {
+            email.isEmailValid()
+                .also { view?.showEmailValid(it) }
+        } else {
+            true
+        }
+
+    fun validateCardholder(name: String): Boolean =
+        name.isNotEmpty().also {
+            view?.showNameValid(it)
+        }
+
+    fun validateDate(date: String) =
+        date.isDateValid().also {
+            view?.showDateValid(it)
+        }
+
+    fun validateCcv(cvv: String) =
+        cvv.isValidCvv().also {
+            view?.showCcvValid(it)
+        }
+
+    fun validateNumber(number: String) =
+        number.getCardType().also {
+            view?.showNumberValid(it)
+        } != null
 
     /* Actions */
 
@@ -164,7 +197,7 @@ class BankCardPresenter(
 
         PaymentStateModel.Success ->
             navigator.openSuccessFragment(R.string.label_payed_by_card_f,
-                "Visa", // TODO: Add Visa
+                cardTypeName(),
                 paymentMask())
 
         PaymentStateModel.Pending ->
@@ -178,7 +211,7 @@ class BankCardPresenter(
 
         is InvoiceStateModel.Success ->
             navigator.openSuccessFragment(R.string.label_payed_by_card_f,
-                "Visa", // TODO: Add Visa
+                cardTypeName(),
                 paymentMask())
 
         is InvoiceStateModel.Cancelled ->
@@ -194,6 +227,12 @@ class BankCardPresenter(
 
     } != null
 
+    private fun cardTypeName() =
+        cardPaymentInputModel
+            ?.cardNumber
+            ?.getCardType()
+            ?.cardName ?: ""
+
     private fun paymentMask() =
         cardPaymentInputModel
             ?.cardNumber
@@ -206,35 +245,5 @@ class BankCardPresenter(
         cardPaymentInputModel = null
         view?.clear()
     }
-
-    fun onEmail(email: String) =
-        view?.showEmailValid(email.isEmailValid())
-
-
-    fun onName(name: String) =
-        view?.showNameValid(name.isNotEmpty())
-
-    fun onDate(date: String) =
-        view?.showDateValid(date.isDateValid())
-
-    fun onCcv(name: String) =
-        view?.showCcvValid(name.length == 3)
-
-    fun onNumber(number: String) {
-        val cardType = defineCardType(number)
-        view?.showNumberValid(validateCardNumber(number, cardType), cardType)
-    }
-
-    private fun defineCardType(number: String): CreditCardType =
-        CreditCardType.detect(number.removeSpaces())
-
-    private fun validateCardNumber(number: String, cardType: CreditCardType): Boolean {
-        if (cardType == UNKNOWN || number.isEmpty() || number.isBlank()) {
-            return false
-        }
-        val isValidLength = cardType.lenghts.contains(number.clearLength())
-        return number.removeSpaces().algorithmLuna() && isValidLength
-    }
-
 
 }
