@@ -16,15 +16,22 @@
  *
  */
 
-package money.rbk.presentation.utils
+package money.rbk.presentation.model
 
-import android.app.Activity
-import android.view.View
-import android.view.inputmethod.InputMethodManager
-import androidx.fragment.app.FragmentActivity
+import androidx.annotation.StringRes
 
-fun FragmentActivity.hideKeyboard() {
-    val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-    val view = currentFocus ?: View(this)
-    imm.hideSoftInputFromWindow(view.windowToken, 0)
+sealed class PaymentStateModel {
+
+    object Unknown : PaymentStateModel()
+
+    object Cancelled : PaymentStateModel()
+
+    object Success : PaymentStateModel()
+
+    object Pending : PaymentStateModel()
+
+    data class BrowserRedirectInteraction(val request: BrowserRequestModel) : PaymentStateModel()
+
+    data class Failed(@StringRes val messageRes: Int) : PaymentStateModel()
+
 }

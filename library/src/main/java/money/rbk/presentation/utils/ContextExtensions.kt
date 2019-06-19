@@ -16,10 +16,10 @@
  *
  */
 
-package money.rbk.presentation.exception
+package money.rbk.presentation.utils
 
-import androidx.fragment.app.Fragment
+import android.content.Context
+import money.rbk.R
 
-class WrongActivityException(fragment: Fragment, expectedActivityClass: Class<*>) :
-        RuntimeException("Fragment ${fragment.javaClass.name} has to be added " +
-                "to ${expectedActivityClass.name} but it added to " + fragment.activity)
+internal val Context.isTablet
+    get() = resources.getBoolean(R.bool.rbc_isTablet)

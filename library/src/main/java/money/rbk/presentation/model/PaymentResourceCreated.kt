@@ -16,13 +16,6 @@
  *
  */
 
-package money.rbk.presentation.activity
+package money.rbk.presentation.model
 
-import money.rbk.presentation.model.InvoiceModel
-import money.rbk.presentation.screen.base.BaseView
-
-interface CheckoutView : BaseView {
-
-    fun showInvoice(invoiceModel: InvoiceModel)
-
-}
+class PaymentResourceCreated(val pending: Boolean) : BaseIUModel()

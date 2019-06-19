@@ -18,8 +18,13 @@
 
 package money.rbk.presentation.screen.card
 
+import money.rbk.presentation.model.BrowserRequestModel
 import money.rbk.presentation.screen.base.BaseView
 
 interface BankCardView : BaseView {
+
+    fun showRedirect(request: BrowserRequestModel)
+
+    fun clear()
 
 }

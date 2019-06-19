@@ -16,21 +16,22 @@
  *
  */
 
-package money.rbk.presentation.activity
+package money.rbk.presentation.activity.checkout
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.ac_checkout.*
 import money.rbk.R
 import money.rbk.di.Injector
 import money.rbk.presentation.model.InvoiceModel
+import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.card.BankCardFragment
 import money.rbk.presentation.screen.methods.PaymentMethodsFragment
 import money.rbk.presentation.utils.extra
-import money.rbk.presentation.utils.replaceFragmentInActivity
 
 class CheckoutActivity : AppCompatActivity(), CheckoutView {
 
@@ -50,19 +51,24 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
             }
     }
 
+    val navigator by lazy { Navigator(this, R.id.container) }
+
     private lateinit var cost: String
     private val invoiceId by extra<String>(KEY_INVOICE_ID)
     private val invoiceAccessToken by extra<String>(KEY_INVOICE_ACCESS_TOKEN)
     private val shopName by extra<String>(KEY_SHOP_NAME)
-    private val presenter by lazy { CheckoutPresenter() }
+
+    private val presenter by lazy { CheckoutPresenter(navigator) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ac_checkout)
-        Injector.init(applicationContext, invoiceId, invoiceAccessToken, shopName)
+
+        if (savedInstanceState == null) {
+            Injector.init(applicationContext, invoiceId, invoiceAccessToken, shopName)
+        }
+
         presenter.attachView(this)
-        // TODO: Make Proper Navigation
-        replaceFragmentInActivity(PaymentMethodsFragment.newInstance(), R.id.container)
 
         initViews()
     }
@@ -81,18 +87,9 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
 
     private fun initViews() {
         ibtnBack.setOnClickListener {
-            back()
+            navigator.back()
         }
         ibtnClose.setOnClickListener {
-            finish()
-        }
-    }
-
-    // TODO: Make Proper Navigation
-    private fun back() {
-        if (supportFragmentManager.findFragmentById(R.id.container) is BankCardFragment) {
-            replaceFragmentInActivity(PaymentMethodsFragment.newInstance(), R.id.container)
-        } else {
             finish()
         }
     }

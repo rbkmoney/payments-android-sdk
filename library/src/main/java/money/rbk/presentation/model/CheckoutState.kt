@@ -16,15 +16,9 @@
  *
  */
 
-package money.rbk.presentation.utils
+package money.rbk.presentation.model
 
-import android.app.Activity
-import android.view.View
-import android.view.inputmethod.InputMethodManager
-import androidx.fragment.app.FragmentActivity
-
-fun FragmentActivity.hideKeyboard() {
-    val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-    val view = currentFocus ?: View(this)
-    imm.hideSoftInputFromWindow(view.windowToken, 0)
-}
+data class CheckoutState(
+    val invoiceStateModel: InvoiceStateModel? = null,
+    val paymentStateModel: PaymentStateModel? = null
+) : BaseIUModel()
