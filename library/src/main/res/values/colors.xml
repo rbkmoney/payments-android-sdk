@@ -30,6 +30,7 @@
     <color name="transparent">#00FFFFFF</color>
 
     <color name="white">#FFFFFF</color>
+    <color name="white_overlay">#88FFFFFF</color>
     <color name="green">#38CD8F</color>
     <color name="grey">#BABABA</color>
 
@@ -37,4 +38,5 @@
     <color name="light_pink">#FFF8E5</color>
 
     <color name="light_grey">#979797</color>
+    <color name="yellow">#FFFF00</color>
 </resources>
