@@ -30,21 +30,21 @@ enum class CreditCardType(
     @DrawableRes
     val iconRes: Int) {
 
-    VISA_ELECTRON(
+    visaelectron(
         lengths = intArrayOf(16),
         prefixes = arrayOf("4026", "417500", "4405", "4508", "4844", "4913", "4917"),
         cardName = "Visa Electron",
         iconRes = R.drawable.selector_logo_visa_electron
     ),
 
-    VISA(
+    visa(
         lengths = intArrayOf(13, 16, 19),
         prefixes = arrayOf("4"),
         cardName = "Visa",
         iconRes = R.drawable.selector_logo_visa
     ),
 
-    MAESTRO(
+    maestro(
         lengths = intArrayOf(12, 13, 14, 15, 16, 17, 18, 19),
         prefixes = arrayOf(
             "50", "56", "57", "58", "59", "60", "61", "62", "63", "64",
@@ -54,7 +54,7 @@ enum class CreditCardType(
         iconRes = R.drawable.ic_maestro_logo
     ),
 
-    MASTERCARD(
+    mastercard(
         lengths = intArrayOf(16),
         prefixes = arrayOf(
             "2221", "2222", "2223", "2224", "2225", "2226", "2227", "2228", "2229",
@@ -66,12 +66,14 @@ enum class CreditCardType(
         iconRes = R.drawable.selector_logo_master_card
     ),
 
-    MIR(
+    nspkmir(
         lengths = intArrayOf(13, 16),
         prefixes = arrayOf("2200", "2201", "2202", "2203", "2204"),
         cardName = "Мир",
         iconRes = R.drawable.selector_logo_mir
     );
+
+    // TODO: "forbrugsforeningen" "dankort" "amex" "dinersclub" "discover" "unionpay" "jcb"
 
     companion object {
 

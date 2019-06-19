@@ -25,16 +25,19 @@ sealed class ParseException(message: String, cause: Throwable? = null) : Excepti
     internal data class ResponseParsingException(val stringBody: String, val e: JSONException) :
         ParseException(stringBody, e)
 
-    internal class UnknownFlowTypeException(private val flowType: String) :
+    internal class UnknownFlowTypeException(val flowType: String) :
         ParseException("Unsupported flow type:$flowType")
 
-    internal class UnknownPayerTypeException(private val payerType: String) :
+    internal class UnknownPayerTypeException(val payerType: String) :
         ParseException("Unsupported payer type:$payerType")
 
-    internal class UnsupportedPaymentToolDetails(private val detailsType: String) :
+    internal class UnsupportedPaymentToolDetails(val detailsType: String) :
         ParseException("Unsupported payment tool details:$detailsType")
 
-    internal class UnsupportedUserInteractionTypeException(private val interactionType: String) :
+    internal class UnsupportedUserInteractionTypeException(val interactionType: String) :
         ParseException("Unsupported user interaction type:$interactionType")
+
+    internal class UnsupportedPaymentMethodException(val method: String) :
+        ParseException("Unsupported payment method:$method")
 
 }

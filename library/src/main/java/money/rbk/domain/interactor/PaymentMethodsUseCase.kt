@@ -36,23 +36,37 @@ internal class PaymentMethodsUseCase(
         inputModel: EmptyInputModel,
         onResultCallback: (PaymentMethodsModel) -> Unit,
         onErrorCallback: (Throwable) -> Unit) {
+
+        try {
+            val paymentMethods = repository.getPaymentMethodsSync()
+            if (paymentMethods != null) {
+                onResultCallback(PaymentMethodsModel(paymentMethods.mapPaymentMethods()))
+                return
+            }
+        } catch (error: Throwable) {
+            onErrorCallback(error)
+        }
+
         bgExecutor(onErrorCallback) {
 
             val paymentMethods = repository.loadPaymentMethods()
-                .mapNotNull { paymentMethod ->
-                    (paymentMethod as? PaymentMethod.PaymentMethodBankCard)?.let { paymentMethodBankCard ->
-                        when {
-                            paymentMethodBankCard.tokenProviders.isNullOrEmpty() -> PaymentMethodModel.BankCard
-                            paymentMethodBankCard.tokenProviders.contains(TokenProvider.googlepay) -> PaymentMethodModel.GooglePay
-                            else -> null
-                        }
-                    }
-                }
-                .distinct()
+                .mapPaymentMethods()
 
             uiExecutor {
                 onResultCallback(PaymentMethodsModel(paymentMethods))
             }
         }
     }
+
+    private fun List<PaymentMethod>.mapPaymentMethods() =
+        mapNotNull { paymentMethod ->
+            (paymentMethod as? PaymentMethod.PaymentMethodBankCard)?.let { paymentMethodBankCard ->
+                when {
+                    paymentMethodBankCard.tokenProviders.isNullOrEmpty() -> PaymentMethodModel.BankCard
+                    paymentMethodBankCard.tokenProviders.contains(TokenProvider.googlepay) -> PaymentMethodModel.GooglePay
+                    else -> null
+                }
+            }
+        }
+            .distinct()
 }

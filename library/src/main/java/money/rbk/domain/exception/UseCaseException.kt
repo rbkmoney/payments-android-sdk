@@ -18,9 +18,14 @@
 
 package money.rbk.domain.exception
 
+import money.rbk.domain.entity.CreditCardType
+
 sealed class UseCaseException(message: String) : Exception(message) {
 
     class PollingTimeExceededException(maxTime: Long) :
         UseCaseException("Maximum application poll time ($maxTime ms) exceeded")
+
+    class UnsupportedCardTypeForInvoiceException(creditCardType: CreditCardType) :
+        UseCaseException("Unsupported card type ${creditCardType.cardName} for invoice")
 
 }

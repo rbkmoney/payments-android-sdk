@@ -49,8 +49,10 @@ internal class CheckoutRepositoryImpl(
         okHttpClient.execute(GetInvoiceByID(invoiceAccessToken, invoiceId))
     }
 
+    private var paymentMethodsInitialized = false
     private val paymentMethods: List<PaymentMethod> by lazy {
         okHttpClient.execute(GetInvoicePaymentMethods(invoiceAccessToken, invoiceId))
+            .also { paymentMethodsInitialized = true }
     }
 
     private val payment by lazy {
@@ -71,6 +73,9 @@ internal class CheckoutRepositoryImpl(
     override fun loadInvoice(): Invoice = invoice
 
     override fun loadPaymentMethods(): List<PaymentMethod> = paymentMethods
+
+    override fun getPaymentMethodsSync(): List<PaymentMethod>? =
+        if (paymentMethodsInitialized) paymentMethods else null
 
     override fun createPayment(paymentTool: PaymentTool,
         contactInfo: ContactInfo): CreatePaymentResponse {

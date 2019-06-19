@@ -78,11 +78,19 @@ class BankCardPresenter(
         cvv: String,
         cardHolder: String,
         email: String?) {
-        if (validateNumber(cardNumber) and validateDate(expDate) and validateCcv(cvv) and validateCardholder(
+        if (validateDate(expDate) and validateCcv(cvv) and validateCardholder(
                 cardHolder) and validateEmail(email)) {
-            cardPaymentInputModel =
-                CardPaymentInputModel(cardNumber, expDate, cvv, cardHolder, email)
-            performPayment()
+            val cardType = validateNumber(cardNumber)
+            if (cardType != null) {
+                cardPaymentInputModel =
+                    CardPaymentInputModel(cardNumber,
+                        expDate,
+                        cvv,
+                        cardHolder,
+                        cardType,
+                        email?.takeIf { it.isNotBlank() })
+                performPayment()
+            }
         }
     }
 
@@ -116,7 +124,7 @@ class BankCardPresenter(
     fun validateNumber(number: String) =
         number.getCardType().also {
             view?.showNumberValid(it)
-        } != null
+        }
 
     /* Actions */
 
@@ -139,7 +147,13 @@ class BankCardPresenter(
     }
 
     private fun onPaymentError(error: Throwable) {
-        onError(error, retryPaymentButton)
+        if (error is UseCaseException.UnsupportedCardTypeForInvoiceException) {
+            navigator.openErrorFragment(
+                messageRes = R.string.error_unsupported_card_type_for_invoice,
+                negativeButtonPair = useAnotherCardButton)
+        } else {
+            onError(error, retryPaymentButton)
+        }
     }
 
     private fun onCheckoutUpdated(checkoutState: CheckoutState) {
@@ -229,8 +243,7 @@ class BankCardPresenter(
 
     private fun cardTypeName() =
         cardPaymentInputModel
-            ?.cardNumber
-            ?.getCardType()
+            ?.cardType
             ?.cardName ?: ""
 
     private fun paymentMask() =

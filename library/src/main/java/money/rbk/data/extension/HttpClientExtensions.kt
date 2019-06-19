@@ -83,6 +83,7 @@ internal fun <T> OkHttpClient.execute(
 
     when (val code = response.code()) {
         in 500..599 -> throw InternalServerException(code)
+        //TODO: Parse another type of errors
         in 400..499 -> throw ApiException(code, ApiError.fromJson(stringBody.toJsonObject()))
     }
 

@@ -111,6 +111,11 @@ abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator
                 navigator.openErrorFragment(R.string.error,
                     R.string.error_unknown_error,
                     retryButton)
+
+            is ParseException.UnsupportedPaymentMethodException ->
+                navigator.openErrorFragment(R.string.error,
+                    R.string.error_unknown_error,
+                    retryButton)
         }
 
     @StringRes

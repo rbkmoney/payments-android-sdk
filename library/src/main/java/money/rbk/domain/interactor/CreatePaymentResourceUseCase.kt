@@ -20,8 +20,11 @@ package money.rbk.domain.interactor
 
 import money.rbk.di.Injector
 import money.rbk.domain.entity.ContactInfo
+import money.rbk.domain.entity.PaymentMethod
 import money.rbk.domain.entity.PaymentStatus
 import money.rbk.domain.entity.PaymentTool
+import money.rbk.domain.entity.getCardType
+import money.rbk.domain.exception.UseCaseException
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.CardPaymentInputModel
 import money.rbk.domain.repository.CheckoutRepository
@@ -37,6 +40,15 @@ internal class CreatePaymentResourceUseCase(
         onErrorCallback: (Throwable) -> Unit) {
 
         bgExecutor(onErrorCallback) {
+
+            val supportedPaymentSystems = checkoutRepository.loadPaymentMethods()
+                .mapNotNull { it as? PaymentMethod.PaymentMethodBankCard }
+                .filter { it.tokenProviders.isNullOrEmpty() }
+                .flatMap { it.paymentSystems }
+
+            if (!supportedPaymentSystems.contains(inputModel.cardType)) {
+                throw UseCaseException.UnsupportedCardTypeForInvoiceException(inputModel.cardType)
+            }
 
             val payment = checkoutRepository.createPayment(
                 paymentTool = PaymentTool.CardData(
