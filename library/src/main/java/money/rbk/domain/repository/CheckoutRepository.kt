@@ -33,6 +33,8 @@ internal interface CheckoutRepository {
 
     fun loadPaymentMethods(): List<PaymentMethod>
 
+    fun getPaymentMethodsSync(): List<PaymentMethod>?
+
     fun createPayment(
         paymentTool: PaymentTool,
         contactInfo: ContactInfo): CreatePaymentResponse

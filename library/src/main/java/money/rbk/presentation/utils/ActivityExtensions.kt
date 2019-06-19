@@ -20,6 +20,7 @@ package money.rbk.presentation.utils
 
 import android.app.Activity
 import android.view.View
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.FragmentActivity
 
@@ -27,4 +28,14 @@ fun FragmentActivity.hideKeyboard() {
     val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     val view = currentFocus ?: View(this)
     imm.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
+fun Activity.adjustSize() {
+    if (isTablet) {
+        val lp = WindowManager.LayoutParams()
+        lp.copyFrom(window.attributes)
+        lp.width = WindowManager.LayoutParams.WRAP_CONTENT
+        lp.height = WindowManager.LayoutParams.MATCH_PARENT
+        window.attributes = lp
+    }
 }

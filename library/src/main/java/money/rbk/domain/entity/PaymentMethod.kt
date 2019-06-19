@@ -18,31 +18,36 @@
 
 package money.rbk.domain.entity
 
-import org.json.JSONObject
+import money.rbk.data.exception.ParseException
+import money.rbk.data.extension.findEnumOrNull
 import money.rbk.data.extension.parseNullableList
 import money.rbk.data.extension.parseStringList
 import money.rbk.data.serialization.Deserializer
+import org.json.JSONObject
 
-const val METHOD_BANK_CARD = "BankCard"
-
-sealed class PaymentMethod(open val method: String) {
+sealed class PaymentMethod {
 
     data class PaymentMethodBankCard(
-        val paymentSystems: List<String>,
+        val paymentSystems: List<CreditCardType>,
         val tokenProviders: List<TokenProvider>?
-    ) : PaymentMethod(METHOD_BANK_CARD)
-
-    object PaymentMethodUnknown : PaymentMethod("")
+    ) : PaymentMethod()
 
     companion object :
         Deserializer<JSONObject, PaymentMethod> {
-        override fun fromJson(json: JSONObject): PaymentMethod =
-            when (json.getString("method")) {
-                METHOD_BANK_CARD -> PaymentMethodBankCard(
-                    json.parseStringList("paymentSystems"),
+        override fun fromJson(json: JSONObject): PaymentMethod {
+            val method = json.getString("method")
+            return when (findEnumOrNull<Method>(method)) {
+                Method.BankCard -> PaymentMethodBankCard(
+                    json.parseStringList("paymentSystems")
+                        .mapNotNull { findEnumOrNull<CreditCardType>(it) },
                     json.parseNullableList("tokenProviders", TokenProvider)
                 )
-                else -> PaymentMethodUnknown
+                null -> throw ParseException.UnsupportedPaymentMethodException(method)
             }
+        }
+    }
+
+    private enum class Method {
+        BankCard
     }
 }

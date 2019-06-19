@@ -18,10 +18,13 @@
 
 package money.rbk.domain.interactor.input
 
+import money.rbk.domain.entity.CreditCardType
+
 class CardPaymentInputModel(
     val cardNumber: String,
     val expDate: String,
     val cvv: String,
     val cardHolder: String,
+    val cardType: CreditCardType,
     val email: String?
 ) : BaseInputModel()

@@ -20,13 +20,17 @@ package money.rbk.presentation.activity.web
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import money.rbk.R
 import money.rbk.domain.converter.TERMINATION_URI
 import money.rbk.presentation.model.BrowserRequestModel
+import money.rbk.presentation.utils.adjustSize
 import money.rbk.presentation.utils.extra
 import money.rbk.presentation.utils.extraNullable
+import money.rbk.presentation.utils.isTablet
 
 class WebViewActivity : Activity() {
 
@@ -51,6 +55,10 @@ class WebViewActivity : Activity() {
     private val body: ByteArray? by extraNullable(EXTRA_KEY_BODY)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (!isTablet) {
+            setTheme(R.style.Theme_RBKMoney)
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
         super.onCreate(savedInstanceState)
         WebView(this).apply {
             webViewClient = object : WebViewClient() {
@@ -72,7 +80,7 @@ class WebViewActivity : Activity() {
 
             setContentView(this)
         }
-
+        adjustSize()
     }
 
 }

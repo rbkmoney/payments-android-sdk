@@ -18,7 +18,7 @@
 
 package money.rbk.presentation.screen.card
 
-import money.rbk.data.CreditCardType
+import money.rbk.domain.entity.CreditCardType
 import money.rbk.presentation.model.BrowserRequestModel
 import money.rbk.presentation.screen.base.BaseView
 
@@ -28,7 +28,7 @@ interface BankCardView : BaseView {
     fun showDateValid(isValid: Boolean)
     fun showNameValid(isValid: Boolean)
     fun showCcvValid(isValid: Boolean)
-    fun showNumberValid(isValid: Boolean, cardType: CreditCardType?)
+    fun showNumberValid(cardType: CreditCardType?)
     fun showRedirect(request: BrowserRequestModel)
     fun clear()
 }

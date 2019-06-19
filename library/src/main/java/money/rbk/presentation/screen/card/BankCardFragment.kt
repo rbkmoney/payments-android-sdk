@@ -18,7 +18,6 @@
 
 package money.rbk.presentation.screen.card
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -29,11 +28,12 @@ import android.view.WindowManager
 import com.whiteelephant.monthpicker.MonthPickerDialog
 import kotlinx.android.synthetic.main.fmt_card.*
 import money.rbk.R
-import money.rbk.data.CreditCardType
+import money.rbk.domain.entity.CreditCardType
 import money.rbk.presentation.activity.checkout.CheckoutActivity
 import money.rbk.presentation.activity.web.WebViewActivity
 import money.rbk.presentation.model.BrowserRequestModel
 import money.rbk.presentation.screen.base.BaseFragment
+import money.rbk.presentation.utils.clearState
 import money.rbk.presentation.utils.hideKeyboard
 import money.rbk.presentation.utils.setRightDrawable
 import money.rbk.presentation.utils.setValid
@@ -69,7 +69,7 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
         btnPay.setOnClickListener {
             activity?.hideKeyboard()
             presenter.onPerformPayment(
-                cardNumber = edCardNumber.text.toString(),
+                cardNumber = edCardNumber.text.toString().replace(" ", ""),
                 expDate = edCardDate.text.toString(),
                 cvv = edCardCvv.text.toString(),
                 cardHolder = edCardName.text.toString(),
@@ -81,15 +81,12 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
             setUpDateDialog().show()
         }
         setUpWatchers()
-
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onDateSet(selectedMonth: Int, selectedYear: Int) {
         val selectedMonthString = (selectedMonth + 1).toDozenString()
-
         edCardDate.setText("$selectedMonthString/${selectedYear % 100}")
-        presenter.onDate(edCardDate.text.toString())
+        presenter.validateDate(edCardDate.text.toString())
     }
 
     private fun setUpDateDialog(): MonthPickerDialog {
@@ -163,42 +160,47 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
         edCardCvv.setValid(isValid)
     }
 
-    override fun showNumberValid(isValid: Boolean, cardType: CreditCardType?) {
-        edCardNumber.setValid(isValid, CreditCardType.getDrawable(cardType))
+    override fun showNumberValid(cardType: CreditCardType?) {
+        edCardNumber.setValid(cardType != null, cardType?.iconRes)
     }
 
     private fun onCardDetected(cardType: CreditCardType?) {
-        val cardDrawableId: Int? = CreditCardType.getDrawable(cardType)
-        edCardNumber.setRightDrawable(cardDrawableId)
+        edCardNumber.setRightDrawable(cardType?.iconRes)
     }
 
     private fun setUpWatchers() {
 
         edEmail.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus.not()) {
-                presenter.onEmail(edEmail.text.toString())
+                presenter.validateEmail(edEmail.text.toString())
+            } else {
+                edEmail.clearState()
             }
         }
 
-        edCardName.setOnFocusChangeListener { v, hasFocus ->
+        edCardName.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus.not()) {
-                presenter.onName(edCardName.text.toString())
+                presenter.validateCardholder(edCardName.text.toString())
+            } else {
+                edCardName.clearState()
             }
         }
 
-        edCardCvv.setOnFocusChangeListener { v, hasFocus ->
+        edCardCvv.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus.not()) {
-                presenter.onCcv(edCardCvv.text.toString())
+                presenter.validateCcv(edCardCvv.text.toString())
+            } else {
+                edCardCvv.clearState()
             }
         }
 
-        edCardNumber.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus.not()) {
-                presenter.onNumber(edCardNumber.text.toString())
+        edCardNumber.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                presenter.validateNumber(edCardNumber.text.toString())
+            } else {
+                edCardNumber.clearState()
             }
         }
-
-        // var watcher: MaskFormatWatcher
 
         val cardNumberMask = MaskImpl.createNonTerminated(PredefinedSlots.CARD_NUMBER_STANDARD)
         MaskFormatWatcher(cardNumberMask)

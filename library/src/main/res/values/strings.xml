@@ -88,4 +88,5 @@
     <string name="error_limit_exceeded">Превышен разумный лимит выборки.</string>
     <string name="error_invalid_deadline">Неверный формат времени.</string>
     <string name="error_invalid_request">Неверный запрос</string>
+    <string name="error_unsupported_card_type_for_invoice">Карта не поддерживается для данного инвойса</string>
 </resources>

@@ -22,8 +22,13 @@ import money.rbk.data.extension.findEnumOrNull
 import money.rbk.data.extension.getNullable
 import money.rbk.data.serialization.Deserializer
 import org.json.JSONObject
+//{
+//    "description":"No match to pattern. Path to item: paymentTool.cardNumber",
+//    "errorType":"schema_violated",
+//    "name":"PaymentResourceParams"
+//}
 
-class ApiError(
+data class ApiError(
     val code: Code?,
     val message: String?,
     val subError: ApiError?
