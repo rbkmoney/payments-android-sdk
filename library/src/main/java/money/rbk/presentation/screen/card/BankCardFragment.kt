@@ -64,8 +64,7 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btnPay.text =
-            getString(R.string.label_pay_f, (activity as? CheckoutActivity)?.getCost().orEmpty())
+
         (activity as? CheckoutActivity)?.setBackButtonVisibility(true)
 
         btnPay.setOnClickListener {
@@ -116,6 +115,10 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
     override fun onDetach() {
         activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         super.onDetach()
+    }
+
+    override fun setCost(cost: String) {
+        btnPay.text = getString(R.string.label_pay_f, cost)
     }
 
     override fun showRedirect(request: BrowserRequestModel) {

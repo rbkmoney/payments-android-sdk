@@ -23,28 +23,30 @@ import money.rbk.domain.converter.EntityConverter
 import money.rbk.domain.converter.InvoiceChangesConverter
 import money.rbk.domain.entity.InvoiceEvent
 import money.rbk.domain.exception.UseCaseException
+import money.rbk.domain.extension.cost
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.domain.repository.CheckoutRepository
+import money.rbk.presentation.model.CheckoutInfoModel
 import money.rbk.presentation.model.CheckoutState
 import money.rbk.presentation.model.PaymentStateModel
 
 internal class CheckoutStateUseCase(
     private val checkoutRepository: CheckoutRepository = Injector.checkoutRepository,
     private val invoiceChangesConverter: EntityConverter<List<InvoiceEvent>, CheckoutState> = InvoiceChangesConverter()
-) : UseCase<EmptyInputModel, CheckoutState>() {
+) : UseCase<EmptyInputModel, CheckoutInfoModel>() {
 
     private var startTime: Long = 0
 
     override fun invoke(inputModel: EmptyInputModel,
-        onResultCallback: (CheckoutState) -> Unit,
+        onResultCallback: (CheckoutInfoModel) -> Unit,
         onErrorCallback: (Throwable) -> Unit) {
         startTime = System.currentTimeMillis()
         requestCheckoutState(onResultCallback, onErrorCallback)
     }
 
     private fun requestCheckoutState(
-        onResultCallback: (CheckoutState) -> Unit,
+        onResultCallback: (CheckoutInfoModel) -> Unit,
         onErrorCallback: (Throwable) -> Unit) {
 
         bgExecutor(onErrorCallback) {
@@ -60,8 +62,13 @@ internal class CheckoutStateUseCase(
                     requestCheckoutState(onResultCallback, onErrorCallback)
                 }
             } else {
+                val invoice = checkoutRepository.loadInvoice()
+                val checkoutInfo = CheckoutInfoModel(
+                    cost = invoice.cost,
+                    checkoutState = checkoutState
+                )
                 uiExecutor {
-                    onResultCallback(checkoutState)
+                    onResultCallback(checkoutInfo)
                 }
             }
         }
