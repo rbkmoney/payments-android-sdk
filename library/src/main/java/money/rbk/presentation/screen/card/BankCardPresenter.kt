@@ -19,6 +19,7 @@
 package money.rbk.presentation.screen.card
 
 import money.rbk.R
+import money.rbk.domain.entity.CreditCardType
 import money.rbk.domain.entity.getCardType
 import money.rbk.domain.exception.UseCaseException
 import money.rbk.domain.interactor.CheckoutStateUseCase
@@ -33,6 +34,7 @@ import money.rbk.presentation.model.PaymentResourceCreated
 import money.rbk.presentation.model.PaymentStateModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePresenter
+import money.rbk.presentation.utils.cardMask
 import money.rbk.presentation.utils.isDateValid
 import money.rbk.presentation.utils.isEmailValid
 import money.rbk.presentation.utils.isValidCvv
@@ -77,20 +79,18 @@ class BankCardPresenter(
         expDate: String,
         cvv: String,
         cardHolder: String,
-        email: String?) {
+        email: String) {
+        val cardType: CreditCardType? = validateNumber(cardNumber)
         if (validateDate(expDate) and validateCcv(cvv) and validateCardholder(
-                cardHolder) and validateEmail(email)) {
-            val cardType = validateNumber(cardNumber)
-            if (cardType != null) {
-                cardPaymentInputModel =
-                    CardPaymentInputModel(cardNumber,
-                        expDate,
-                        cvv,
-                        cardHolder,
-                        cardType,
-                        email?.takeIf { it.isNotBlank() })
-                performPayment()
-            }
+                cardHolder) and validateEmail(email) and (cardType != null) && (cardType != null)) { // Double cardType for smart cast
+            cardPaymentInputModel =
+                CardPaymentInputModel(cardNumber,
+                    expDate,
+                    cvv,
+                    cardHolder,
+                    cardType,
+                    email)
+            performPayment()
         }
     }
 
@@ -98,13 +98,9 @@ class BankCardPresenter(
         updateCheckout()
     }
 
-    fun validateEmail(email: String?): Boolean =
-        if (!email.isNullOrBlank()) {
-            email.isEmailValid()
-                .also { view?.showEmailValid(it) }
-        } else {
-            true
-        }
+    fun validateEmail(email: String): Boolean =
+        email.isEmailValid()
+            .also { view?.showEmailValid(it) }
 
     fun validateCardholder(name: String): Boolean =
         name.isNotEmpty().also {
@@ -222,7 +218,6 @@ class BankCardPresenter(
     private fun InvoiceStateModel.handle(): Boolean = when (this) {
 
         is InvoiceStateModel.Success -> {
-
             navigator.openSuccessFragment(R.string.label_payed_by_card_f, cardName())
         }
 
@@ -241,12 +236,7 @@ class BankCardPresenter(
 
     private fun cardName() =
         cardPaymentInputModel?.let {
-            val mask = it.cardNumber
-                .run {
-                    "*${substring(Math.max(count() - 4, 0), count())}"
-                }
-
-            "${it.cardType.cardName} $mask"
+            "${it.cardType.cardName} ${it.cardNumber.cardMask}"
         }.orEmpty()
 
     private fun clearPayment() {
