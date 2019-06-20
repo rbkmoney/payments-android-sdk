@@ -52,6 +52,8 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
 
     companion object {
         fun newInstance() = BankCardFragment()
+
+        private const val MAX_YEARS_CARD_VALIDITY = 30
     }
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -90,7 +92,6 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
     }
 
     private fun setUpDateDialog(): MonthPickerDialog {
-
         val currentDate = Calendar.getInstance()
         val currentMonth = currentDate.get(MONTH)
         val currentYear = currentDate.get(YEAR)
@@ -102,7 +103,7 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
         )
             .setActivatedMonth(currentMonth)
             .setActivatedYear(currentYear)
-            .setMaxYear(3000)
+            .setMaxYear(currentYear + MAX_YEARS_CARD_VALIDITY)
             .setMinYear(currentYear)
             .build()
     }

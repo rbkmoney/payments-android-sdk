@@ -23,7 +23,7 @@ import java.util.ArrayList
 import java.util.Calendar
 
 fun String.isEmailValid(): Boolean =
-    isEmpty() or Patterns.EMAIL_ADDRESS.matcher(this).matches()
+    isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
 fun String.isDateValid(): Boolean {
     if (isBlank() or (length == 5).not()) {
@@ -82,6 +82,9 @@ fun String.isCardValidByLuna(): Boolean {
         }
     return (unevenNumList.sum() + evenSum) % 10 == 0
 }
+
+val String.cardMask
+    get() = "*${substring(Math.max(count() - 4, 0), count())}"
 
 fun Int.toDozenString(): String =
     if (this / 10 == 0) {
