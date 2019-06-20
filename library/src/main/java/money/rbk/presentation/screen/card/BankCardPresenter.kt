@@ -210,9 +210,7 @@ class BankCardPresenter(
                 negativeButtonPair = useAnotherCardButton)
 
         PaymentStateModel.Success ->
-            navigator.openSuccessFragment(R.string.label_payed_by_card_f,
-                cardTypeName(),
-                paymentMask())
+            navigator.openSuccessFragment(R.string.label_payed_by_card_f, cardName())
 
         PaymentStateModel.Pending ->
             navigator.openErrorFragment(
@@ -223,10 +221,10 @@ class BankCardPresenter(
 
     private fun InvoiceStateModel.handle(): Boolean = when (this) {
 
-        is InvoiceStateModel.Success ->
-            navigator.openSuccessFragment(R.string.label_payed_by_card_f,
-                cardTypeName(),
-                paymentMask())
+        is InvoiceStateModel.Success -> {
+
+            navigator.openSuccessFragment(R.string.label_payed_by_card_f, cardName())
+        }
 
         is InvoiceStateModel.Cancelled ->
             navigator.openErrorFragment(messageRes = R.string.error_invoice_cancelled)
@@ -241,18 +239,15 @@ class BankCardPresenter(
 
     } != null
 
-    private fun cardTypeName() =
-        cardPaymentInputModel
-            ?.cardType
-            ?.cardName ?: ""
+    private fun cardName() =
+        cardPaymentInputModel?.let {
+            val mask = it.cardNumber
+                .run {
+                    "*${substring(Math.max(count() - 4, 0), count())}"
+                }
 
-    private fun paymentMask() =
-        cardPaymentInputModel
-            ?.cardNumber
-            ?.run {
-                "*${substring(Math.max(count() - 4, 0), count())}"
-            }
-            .orEmpty()
+            "${it.cardType.cardName} $mask"
+        }.orEmpty()
 
     private fun clearPayment() {
         cardPaymentInputModel = null
