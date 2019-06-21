@@ -112,4 +112,8 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
         lLoader.visibility = View.INVISIBLE
     }
 
+    override fun onBackPressed() {
+        navigator.back()
+    }
+
 }
