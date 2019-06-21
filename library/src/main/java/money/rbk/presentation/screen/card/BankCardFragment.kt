@@ -133,7 +133,10 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
 
     override fun clear() =
         sequenceOf(edCardNumber, edCardDate, edCardCvv, edCardName, edEmail)
-            .forEach { it.setText(R.string.empty) }
+            .forEach {
+                it.setText(R.string.empty)
+                it.clearState()
+            }
 
     override fun showProgress() {
         btnPay.isEnabled = false
