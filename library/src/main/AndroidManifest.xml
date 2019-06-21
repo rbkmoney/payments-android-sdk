@@ -28,7 +28,9 @@
 
         <activity
             android:name="money.rbk.presentation.activity.checkout.CheckoutActivity"
-            android:theme="@style/Theme.RBKMoney.Dialog"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/Theme.RBKMoney"
+            android:windowSoftInputMode="stateUnchanged|adjustPan"
             />
 
         <activity

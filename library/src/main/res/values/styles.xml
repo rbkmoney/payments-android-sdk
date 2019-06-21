@@ -18,28 +18,17 @@
 
 <resources>
 
-
     <style name="Theme.RBKMoney" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/blue_light</item>
         <item name="colorPrimaryDark">@color/purple_light</item>
         <item name="colorAccent">@color/green</item>
         <item name="android:textAppearance">@style/TextAppearance.RBKMoney.Normal</item>
+        <item name="android:screenOrientation">portrait</item>
     </style>
 
-    <style name="Theme.RBKMoney.Dialog" parent="Theme.AppCompat.Light.DialogWhenLarge">
-        <item name="colorPrimary">@color/blue_light</item>
-        <item name="colorPrimaryDark">@color/purple_light</item>
-        <item name="colorAccent">@color/green</item>
-        <item name="android:textAppearance">@style/TextAppearance.RBKMoney.Normal</item>
+    <style name="RBKMoney" />
 
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="RBKMoney"/>
-
-    <style name="Button" parent="RBKMoney"/>
+    <style name="Button" parent="RBKMoney" />
 
 
     <style name="Button.Flat" parent="Button">
@@ -65,7 +54,7 @@
 
     <!-- TextAppearances -->
 
-    <style name="TextAppearance.RBKMoney" parent="TextAppearance.AppCompat"/>
+    <style name="TextAppearance.RBKMoney" parent="TextAppearance.AppCompat" />
 
     <style name="TextAppearance.RBKMoney.Normal" parent="TextAppearance.RBKMoney">
         <item name="android:textColor">@color/black</item>
