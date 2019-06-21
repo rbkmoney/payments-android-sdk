@@ -155,12 +155,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_small"
-                android:layout_marginTop="@dimen/spacing_default"
+                android:layout_marginTop="@dimen/spacing_huge"
                 android:text="@string/secure_payment_with"
                 android:textAppearance="@style/TextAppearance.RBKMoney.Headline.White"
                 app:layout_constraintStart_toEndOf="@+id/ivFooterLock"
-                app:layout_constraintTop_toBottomOf="@+id/container"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/container" />
 
             <ImageView
                 android:id="@+id/ivFooterLogo"
@@ -191,11 +190,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_default"
                 android:layout_marginTop="@dimen/spacing_medium"
+                android:layout_marginBottom="@dimen/spacing_huge"
                 android:text="@string/footer"
                 android:textAppearance="@style/TextAppearance.RBKMoney.Footer"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivFooterLogos"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/ivFooterLogos" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

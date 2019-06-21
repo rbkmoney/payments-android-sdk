@@ -34,7 +34,7 @@
     <string name="number_on_card">Номер на карте</string>
     <string name="secure_payment_with">Безопасная оплата с</string>
     <string name="label_order_details">Детали заказа</string>
-    <string name="label_pay_f">Опталить %1$s</string>
+    <string name="label_pay_f">Оплатить %1$s</string>
     <string name="label_try_again">Повторить снова</string>
     <string name="label_use_another_card">Использовать другую карту</string>
 
