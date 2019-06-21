@@ -23,6 +23,7 @@ import money.rbk.domain.converter.EntityConverter
 import money.rbk.domain.converter.InvoiceChangesConverter
 import money.rbk.domain.entity.InvoiceEvent
 import money.rbk.domain.entity.InvoiceStatus
+import money.rbk.domain.extension.cost
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.InvoiceInitializeInputModel
 import money.rbk.domain.repository.CheckoutRepository
@@ -55,7 +56,7 @@ internal class InvoiceUseCase(
             val invoiceModel = InvoiceModel(
                 invoice.id,
                 repository.shopName,
-                "${invoice.amount.formatPrice()} ${invoice.currency.symbol}",
+                invoice.cost,
                 invoice.product + invoice.description?.let { ". $it" }.orEmpty(),
                 checkoutState
             )

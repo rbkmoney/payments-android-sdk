@@ -28,7 +28,7 @@ import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.CardPaymentInputModel
 import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.presentation.dialog.AlertButton
-import money.rbk.presentation.model.CheckoutState
+import money.rbk.presentation.model.CheckoutInfoModel
 import money.rbk.presentation.model.InvoiceStateModel
 import money.rbk.presentation.model.PaymentResourceCreated
 import money.rbk.presentation.model.PaymentStateModel
@@ -42,7 +42,7 @@ import money.rbk.presentation.utils.isValidCvv
 class BankCardPresenter(
     navigator: Navigator,
     private val paymentUseCase: UseCase<CardPaymentInputModel, PaymentResourceCreated> = CreatePaymentResourceUseCase(),
-    private val invoiceEventsUseCase: UseCase<EmptyInputModel, CheckoutState> = CheckoutStateUseCase()
+    private val invoiceEventsUseCase: UseCase<EmptyInputModel, CheckoutInfoModel> = CheckoutStateUseCase()
 ) : BasePresenter<BankCardView>(navigator) {
 
     private var cardPaymentInputModel: CardPaymentInputModel? = null
@@ -152,9 +152,10 @@ class BankCardPresenter(
         }
     }
 
-    private fun onCheckoutUpdated(checkoutState: CheckoutState) {
+    private fun onCheckoutUpdated(checkoutInfo: CheckoutInfoModel) {
         val view = view ?: return
         view.hideProgress()
+        val checkoutState = checkoutInfo.checkoutState
 
         checkoutState.invoiceStateModel
             ?: return navigator.openErrorFragment(messageRes = R.string.error_unknown_payment)
@@ -163,6 +164,7 @@ class BankCardPresenter(
         if (!checkoutState.invoiceStateModel.handle()) {
             checkoutState.paymentStateModel?.handle()
         }
+        view.setCost(checkoutInfo.cost)
     }
 
     private fun onCheckoutUpdateError(error: Throwable) {

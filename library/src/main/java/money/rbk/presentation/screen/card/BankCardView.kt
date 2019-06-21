@@ -30,5 +30,6 @@ interface BankCardView : BaseView {
     fun showCcvValid(isValid: Boolean)
     fun showNumberValid(cardType: CreditCardType?)
     fun showRedirect(request: BrowserRequestModel)
+    fun setCost(cost: String)
     fun clear()
 }

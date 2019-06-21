@@ -55,7 +55,6 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
 
     val navigator by lazy { Navigator(this, R.id.container) }
 
-    private lateinit var cost: String
     private val invoiceId by extra<String>(KEY_INVOICE_ID)
     private val invoiceAccessToken by extra<String>(KEY_INVOICE_ACCESS_TOKEN)
     private val shopName by extra<String>(KEY_SHOP_NAME)
@@ -81,7 +80,6 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
     }
 
     override fun showInvoice(invoiceModel: InvoiceModel) {
-        cost = invoiceModel.cost
         tvShopName.text = invoiceModel.shopName
         tvPrice.text = invoiceModel.cost
         tvOrderDetails.text = invoiceModel.orderDetails
@@ -113,8 +111,5 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
     override fun hideProgress() {
         lLoader.visibility = View.INVISIBLE
     }
-
-    //TODO: Temporary Workaround
-    fun getCost(): String? = cost
 
 }

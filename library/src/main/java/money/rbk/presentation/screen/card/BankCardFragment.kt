@@ -48,12 +48,16 @@ import java.util.Calendar.YEAR
 class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
     MonthPickerDialog.OnDateSetListener {
 
-    override val presenter: BankCardPresenter by lazy { BankCardPresenter(navigator) }
-
     companion object {
         fun newInstance() = BankCardFragment()
 
         private const val MAX_YEARS_CARD_VALIDITY = 30
+    }
+
+    override val presenter: BankCardPresenter by lazy { BankCardPresenter(navigator) }
+
+    private val fieldsSequence by lazy {
+        sequenceOf(btnPay, edCardNumber, edCardDate, edCardCvv, edCardName, edEmail)
     }
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -64,10 +68,9 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btnPay.text =
-            getString(R.string.label_pay_f, (activity as? CheckoutActivity)?.getCost().orEmpty())
-        (activity as? CheckoutActivity)?.setBackButtonVisibility(true)
 
+        (activity as? CheckoutActivity)?.setBackButtonVisibility(true)
+        view.requestFocus()
         btnPay.setOnClickListener {
             activity?.hideKeyboard()
             presenter.onPerformPayment(
@@ -118,6 +121,10 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
         super.onDetach()
     }
 
+    override fun setCost(cost: String) {
+        btnPay.text = getString(R.string.label_pay_f, cost)
+    }
+
     override fun showRedirect(request: BrowserRequestModel) {
         startActivityForResult(WebViewActivity.buildIntent(activity!!, request),
             WebViewActivity.REQUEST_CODE)
@@ -136,12 +143,12 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
             .forEach { it.setText(R.string.empty) }
 
     override fun showProgress() {
-        btnPay.isEnabled = false
+        fieldsSequence.forEach { it.isEnabled = false }
         pbLoading.visibility = View.VISIBLE
     }
 
     override fun hideProgress() {
-        btnPay.isEnabled = true
+        fieldsSequence.forEach { it.isEnabled = true }
         pbLoading.visibility = View.GONE
     }
 
