@@ -19,6 +19,7 @@
 package money.rbk.presentation.utils
 
 import android.app.Activity
+import android.graphics.Point
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -35,7 +36,13 @@ fun Activity.adjustSize() {
         val lp = WindowManager.LayoutParams()
         lp.copyFrom(window.attributes)
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT
-        lp.height = WindowManager.LayoutParams.MATCH_PARENT
+        lp.height = screenHeight
         window.attributes = lp
     }
 }
+
+val Activity.screenHeight: Int
+    get() = windowManager.defaultDisplay
+        .run {
+            Point().also(::getSize).y
+        }
