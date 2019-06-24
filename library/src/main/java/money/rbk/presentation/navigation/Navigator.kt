@@ -19,7 +19,6 @@
 package money.rbk.presentation.navigation
 
 import android.app.Activity
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
@@ -29,15 +28,16 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import money.rbk.R
 import money.rbk.presentation.dialog.AlertButton
-import money.rbk.presentation.dialog.showAlert
 import money.rbk.presentation.screen.card.BankCardFragment
 import money.rbk.presentation.screen.methods.PaymentMethodsFragment
+import money.rbk.presentation.screen.result.ResultFragment
+import money.rbk.presentation.screen.result.ResultType
 
 // TODO: Activity Scope
 class Navigator(
-    private val activity: FragmentActivity,
-    @IdRes
-    private val containerId: Int) {
+        private val activity: FragmentActivity,
+        @IdRes
+        private val containerId: Int) {
 
     fun openPaymentMethods() {
         replaceFragmentInActivity(PaymentMethodsFragment.newInstance())
@@ -47,8 +47,8 @@ class Navigator(
 
     private fun inProgress() {
         Toast.makeText(activity, "Данный функционал находится в стадии разработки",
-            Toast.LENGTH_LONG)
-            .show()
+                Toast.LENGTH_LONG)
+                .show()
     }
 
     fun openBankCard() {
@@ -65,10 +65,12 @@ class Navigator(
             activity.finish()
         }
 
-        activity.showAlert(
-            activity.getString(R.string.label_successful_payment),
-            activity.getString(messageRes, *formatArgs),
-            positiveButtonPair = R.string.label_ok to finish)
+        replaceFragmentInActivity(ResultFragment.newInstance(ResultType.SUCCESS, activity.getString(messageRes, formatArgs)))
+
+//        activity.showAlert(
+//                activity.getString(R.string.label_successful_payment),
+//                activity.getString(messageRes, *formatArgs),
+//                positiveButtonPair = R.string.label_ok to finish)
     }
 
     //TODO: Make proper back stack
@@ -81,26 +83,29 @@ class Navigator(
     }
 
     fun openErrorFragment(
-        @StringRes titleRes: Int = R.string.error_unpaid,
-        @StringRes messageRes: Int,
-        positiveButtonPair: AlertButton? = null,
-        negativeButtonPair: AlertButton? = null) =
-        openErrorFragment(
-            titleRes,
-            activity.getString(messageRes),
-            positiveButtonPair,
-            negativeButtonPair)
+            @StringRes titleRes: Int = R.string.error_unpaid,
+            @StringRes messageRes: Int,
+            positiveButtonPair: AlertButton? = null,
+            negativeButtonPair: AlertButton? = null) =
+            openErrorFragment(titleRes, activity.getString(messageRes), positiveButtonPair, negativeButtonPair)
+    //        openErrorFragment(
+//            titleRes,
+//            activity.getString(messageRes),
+//            positiveButtonPair,
+//            negativeButtonPair)
 
     fun openErrorFragment(
-        @StringRes titleRes: Int = R.string.error_unpaid,
-        message: CharSequence,
-        positiveButtonPair: AlertButton? = null,
-        negativeButtonPair: AlertButton? = null) {
-        activity.showAlert(
-            activity.getString(titleRes),
-            message,
-            positiveButtonPair = positiveButtonPair,
-            negativeButtonPair = negativeButtonPair)
+            @StringRes titleRes: Int = R.string.error_unpaid,
+            message: CharSequence,
+            positiveButtonPair: AlertButton? = null,
+            negativeButtonPair: AlertButton? = null) {
+        replaceFragmentInActivity(ResultFragment.newInstance(ResultType.ERROR, message.toString()))
+
+//        activity.showAlert(
+//                activity.getString(titleRes),
+//                message,
+//                positiveButtonPair = positiveButtonPair,
+//                negativeButtonPair = negativeButtonPair)
     }
 
     private fun replaceFragmentInActivity(fragment: Fragment) {
@@ -119,7 +124,7 @@ class Navigator(
         beginTransaction().apply {
             action()
         }
-            .commit()
+                .commit()
     }
 
 }
