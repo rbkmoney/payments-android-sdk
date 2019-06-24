@@ -28,9 +28,11 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import money.rbk.R
 import money.rbk.presentation.dialog.AlertButton
+import money.rbk.presentation.dialog.showAlert
 import money.rbk.presentation.screen.card.BankCardFragment
 import money.rbk.presentation.screen.methods.PaymentMethodsFragment
 import money.rbk.presentation.screen.result.ResultFragment
+import money.rbk.presentation.screen.result.ResultFragment.Companion.REQUEST_ERROR
 import money.rbk.presentation.screen.result.ResultType
 
 // TODO: Activity Scope
@@ -65,12 +67,10 @@ class Navigator(
             activity.finish()
         }
 
-        replaceFragmentInActivity(ResultFragment.newInstance(ResultType.SUCCESS, activity.getString(messageRes, formatArgs)))
-
-//        activity.showAlert(
-//                activity.getString(R.string.label_successful_payment),
-//                activity.getString(messageRes, *formatArgs),
-//                positiveButtonPair = R.string.label_ok to finish)
+        activity.showAlert(
+                activity.getString(R.string.label_successful_payment),
+                activity.getString(messageRes, *formatArgs),
+                positiveButtonPair = R.string.label_ok to finish)
     }
 
     //TODO: Make proper back stack
@@ -87,25 +87,31 @@ class Navigator(
             @StringRes messageRes: Int,
             positiveButtonPair: AlertButton? = null,
             negativeButtonPair: AlertButton? = null) =
-            openErrorFragment(titleRes, activity.getString(messageRes), positiveButtonPair, negativeButtonPair)
-    //        openErrorFragment(
-//            titleRes,
-//            activity.getString(messageRes),
-//            positiveButtonPair,
-//            negativeButtonPair)
+            openErrorFragment(
+                    titleRes,
+                    activity.getString(messageRes),
+                    positiveButtonPair,
+                    negativeButtonPair)
 
     fun openErrorFragment(
             @StringRes titleRes: Int = R.string.error_unpaid,
             message: CharSequence,
             positiveButtonPair: AlertButton? = null,
             negativeButtonPair: AlertButton? = null) {
-        replaceFragmentInActivity(ResultFragment.newInstance(ResultType.ERROR, message.toString()))
+        activity.showAlert(
+                activity.getString(titleRes),
+                message,
+                positiveButtonPair = positiveButtonPair,
+                negativeButtonPair = negativeButtonPair)
+    }
 
-//        activity.showAlert(
-//                activity.getString(titleRes),
-//                message,
-//                positiveButtonPair = positiveButtonPair,
-//                negativeButtonPair = negativeButtonPair)
+
+    fun openErrorFragmentWithTarget(parent: Fragment, @StringRes messageRes: Int) = with(parent) {
+        val fragment = ResultFragment.newInstance(ResultType.ERROR, activity?.getString(messageRes))
+                .apply {
+                    setTargetFragment(this, REQUEST_ERROR)
+                }
+        addFragmentToActivity(fragment,fragment::class.java.name)
     }
 
     private fun replaceFragmentInActivity(fragment: Fragment) {

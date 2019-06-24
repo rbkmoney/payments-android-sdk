@@ -259,4 +259,13 @@ class BankCardPresenter(
         view?.clear()
     }
 
+    fun onErrorTest() {
+        val breakpoint = 0
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun onSuccessTest() {
+        val breakpoint = 0
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }

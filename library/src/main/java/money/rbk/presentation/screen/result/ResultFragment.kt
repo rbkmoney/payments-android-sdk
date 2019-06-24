@@ -35,8 +35,11 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
 
         private const val KEY_RESULT_TYPE = "key_result_type"
         private const val KEY_MESSAGE = "key_message"
+        const val REQUEST_ERROR = 0
+        const val REQUEST_SUCCESS = 1
 
-        fun newInstance(resultType: ResultType,  message: String): ResultFragment {
+
+        fun newInstance(resultType: ResultType, message: String?): ResultFragment {
             val fragment = ResultFragment()
             fragment.arguments = Bundle().apply {
                 putSerializable(KEY_RESULT_TYPE, resultType)
@@ -63,7 +66,6 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
             ResultType.ERROR -> showError()
         }
 
-
     }
 
     override fun showProgress() {
@@ -75,11 +77,17 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
     override fun showSuccess() {
         clSuccessful.makeVisible()
         clUnsuccessful.makeGone()
+        tvPaidWith.text = arguments?.getString(KEY_MESSAGE)
     }
 
     override fun showError() {
         clSuccessful.makeGone()
         clUnsuccessful.makeVisible()
+        tvCause.text = arguments?.getString(KEY_MESSAGE)
+
+        btnTryAgain.setOnClickListener {
+
+        }
     }
 
 }
