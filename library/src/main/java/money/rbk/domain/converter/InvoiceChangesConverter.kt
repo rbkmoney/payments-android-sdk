@@ -47,5 +47,3 @@ internal class InvoiceChangesConverter(
     }
 
 }
-
-

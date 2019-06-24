@@ -219,7 +219,5 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
                 setCallback(CardChangeListener(::onCardDetected))
                 installOn(edCardNumber)
             }
-
     }
-
 }

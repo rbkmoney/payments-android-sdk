@@ -24,4 +24,4 @@ inline fun <reified T : Enum<T>> findEnum(name: String, defaultValue: T) =
 
 inline fun <reified T : Enum<T>> findEnumOrNull(name: String) =
     enumValues<T>()
-        .find { it.name == name } 
+        .find { it.name == name }

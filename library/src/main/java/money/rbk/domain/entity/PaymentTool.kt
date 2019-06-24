@@ -55,4 +55,3 @@ sealed class PaymentTool(open val paymentToolType: String) : Serializable {
     }
 
 }
-
