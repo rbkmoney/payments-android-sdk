@@ -61,7 +61,7 @@
     <string name="error_unknown_error">Что-то пошло не так</string>
     <string name="error_polling_time_exceeded">Превышено время опроса сервера</string>
     <string name="error_server">Внутренняя ошибка сервера</string>
-    <string name="error_internal_server">В процессе обработки платформой запроса возникла непредвиденная ситуация.</string>
+    <string name="error_internal_server">В процессе проведения платежа возникла непредвиденная ошибка. Пожалуйста, повторите попытку платежа. В случае сохранения ошибки обратитесь в службу поддежки</string>
     <string name="error_temporary_unavailable">Платформа временно недоступна и не готова обслуживать данный запрос.</string>
     <string name="error_request_time_exceeded">Платформа превысила допустимое время обработки запроса, результат запроса не определён.</string>
     <string name="error_operation_not_permitted">Недоступная в рамках действующего договора операция.</string>
@@ -89,4 +89,6 @@
     <string name="error_invalid_deadline">Неверный формат времени.</string>
     <string name="error_invalid_request">Неверный запрос</string>
     <string name="error_unsupported_card_type_for_invoice">Карта не поддерживается для данного инвойса</string>
+    <string name="error_busines_logic">В процессе проведения платежа возникла непредвиденная ошибка. Пожалуйста, повторите попытку платежа. В случае сохранения ошибки обратитесь в службу поддежки</string>
+
 </resources>
