@@ -53,7 +53,11 @@ dependencies {
     implementation "androidx.cardview:cardview:$androidx.cardview"
     implementation "androidx.recyclerview:recyclerview:$androidx.recyclerview"
 
+    implementation "ru.tinkoff.decoro:decoro:$decoroVersion"
+
     /* OkHttp */
     implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+
+    implementation "com.whiteelephant:monthandyearpicker:$datepickerVersion"
 }

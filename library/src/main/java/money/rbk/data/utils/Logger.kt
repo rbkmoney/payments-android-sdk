@@ -16,10 +16,12 @@
  *
  */
 
-package money.rbk.presentation.exception
+package money.rbk.data.utils
 
-import androidx.fragment.app.Fragment
+import android.util.Log
+import money.rbk.BuildConfig
 
-class WrongActivityException(fragment: Fragment, expectedActivityClass: Class<*>) :
-        RuntimeException("Fragment ${fragment.javaClass.name} has to be added " +
-                "to ${expectedActivityClass.name} but it added to " + fragment.activity)
+@Suppress("NOTHING_TO_INLINE")
+inline fun log(tag: String, method: String, text: String) {
+    if (BuildConfig.DEBUG) Log.d(tag, "-> $method ->$text")
+}

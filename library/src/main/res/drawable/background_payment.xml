@@ -17,11 +17,15 @@
   ~
   -->
 
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <corners android:radius="@dimen/background_corner_radius" />
-    <solid android:color="@color/white" />
-    <stroke
-        android:width="@dimen/divider_height"
-        android:color="@color/light_grey" />
-</shape>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="@color/grey"
+        android:shape="rectangle">
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="@dimen/background_corner_radius"/>
+            <solid android:color="@color/white"/>
+            <stroke
+                    android:width="@dimen/divider_height"
+                    android:color="@color/light_grey"/>
+        </shape>
+    </item>
+</ripple>

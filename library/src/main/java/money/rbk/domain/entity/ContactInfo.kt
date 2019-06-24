@@ -18,26 +18,23 @@
 
 package money.rbk.domain.entity
 
-import org.json.JSONObject
 import money.rbk.data.extension.getNullable
 import money.rbk.data.serialization.Deserializer
 import money.rbk.data.serialization.Serializable
+import org.json.JSONObject
 
 data class ContactInfo(
-    val email: String?,
-    val phoneNumber: String?
+    val email: String?
 ) : Serializable {
 
     companion object : Deserializer<JSONObject, ContactInfo> {
         override fun fromJson(json: JSONObject): ContactInfo = ContactInfo(
-            email = json.getNullable("email"),
-            phoneNumber = json.getNullable("phoneNumber")
+            email = json.getNullable("email")
         )
     }
 
     override fun toJson(): JSONObject = JSONObject().apply {
         email?.let { put("email", it) }
-        phoneNumber?.let { put("phoneNumber", it) }
     }
 
 }

@@ -27,8 +27,14 @@
     <application>
 
         <activity
-            android:name="money.rbk.presentation.activity.CheckoutActivity"
-            android:screenOrientation="portrait"
+            android:name="money.rbk.presentation.activity.checkout.CheckoutActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/Theme.RBKMoney"
+            android:windowSoftInputMode="stateUnchanged|adjustPan"
+            />
+
+        <activity
+            android:name="money.rbk.presentation.activity.web.WebViewActivity"
             android:theme="@style/Theme.RBKMoney"
             />
 

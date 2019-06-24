@@ -1,0 +1,54 @@
+<!--
+  ~
+  ~ Copyright 2019 RBKmoney
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="31dp"
+    android:height="19dp"
+    android:viewportWidth="31"
+    android:viewportHeight="19">
+    <path
+        android:fillColor="#EDEBEB"
+        android:fillType="evenOdd"
+        android:pathData="M2,0L29,0A2,2 0,0 1,31 2L31,17A2,2 0,0 1,29 19L2,19A2,2 0,0 1,0 17L0,2A2,2 0,0 1,2 0z"
+        android:strokeWidth="1"
+        android:strokeColor="#00000000" />
+    <path
+        android:fillColor="#4DB45E"
+        android:fillType="evenOdd"
+        android:pathData="M10.375,6C9.8352,6.0059 9.3621,6.3763 9.2077,6.9171C8.9775,7.7624 8.3414,10.0945 8.3244,10.1553L8.1501,10.1553C8.1501,10.1553 7.4999,7.7765 7.2732,6.9171C7.1181,6.3852 6.6563,6.0148 6.125,6L4,6L4,13L6.125,13L6.125,8.8447L6.2992,8.8447L7.5055,13L8.9668,13L10.1951,8.8447L10.375,8.8447L10.375,13L12.5,13L12.5,6L10.375,6Z"
+        android:strokeWidth="1"
+        android:strokeColor="#00000000" />
+    <path
+        android:fillColor="#4DB45E"
+        android:fillType="evenOdd"
+        android:pathData="M17.5443,6C17.1534,6.0637 16.8196,6.3415 16.6658,6.7319L15.2384,10.1553L15.0687,10.1553L15.0687,6L13,6L13,13L14.9288,13C15.3273,12.9393 15.6721,12.6644 15.839,12.2681L17.2616,8.8447L17.4313,8.8447L17.4313,13L19.5,13L19.5,6L17.5443,6Z"
+        android:strokeWidth="1"
+        android:strokeColor="#00000000" />
+    <path
+        android:fillColor="#4DB45E"
+        android:fillType="evenOdd"
+        android:pathData="M20,9L20,13L22.2779,13L22.2779,10.6744L24.7221,10.6744C25.7479,10.6659 26.656,9.9992 27,9.0124L20,9Z"
+        android:strokeWidth="1"
+        android:strokeColor="#00000000" />
+    <path
+        android:fillColor="#00A7DD"
+        android:fillType="evenOdd"
+        android:pathData="M24.6896,6.0001L20,6.0001C20.2303,7.1574 21.1829,8.0906 22.4461,8.3953C22.7347,8.4649 23.0318,8.5 23.3318,8.5L26.9501,8.5C26.9835,8.3627 26.9999,8.2209 26.9999,8.0785C27.0141,6.9281 25.9727,5.9899 24.6896,6.0001Z"
+        android:strokeWidth="1"
+        android:strokeColor="#00000000" />
+</vector>

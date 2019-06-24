@@ -18,28 +18,31 @@
 
 package money.rbk.domain.entity
 
-import org.json.JSONObject
+import money.rbk.data.exception.ParseException
+import money.rbk.data.extension.findEnumOrNull
 import money.rbk.data.serialization.Deserializer
 import money.rbk.data.serialization.Serializable
+import org.json.JSONObject
 
-private const val PAYMENT_FLOW_INSTANT = "PaymentFlowInstant"
-
-sealed class Flow(val type: String) : Serializable {
+sealed class Flow : Serializable {
 
     companion object : Deserializer<JSONObject, Flow> {
-        override fun fromJson(json: JSONObject): Flow = when (json.getString("type")) {
-            PAYMENT_FLOW_INSTANT -> PaymentFlowInstant
-            else -> UnknownFlow
+        override fun fromJson(json: JSONObject): Flow {
+            val type = json.getString("type")
+            return when (findEnumOrNull<FlowType>(type)) {
+                FlowType.PaymentFlowInstant -> PaymentFlowInstant
+                null -> throw ParseException.UnknownFlowTypeException(type)
+            }
         }
     }
 
-    object PaymentFlowInstant : Flow(PAYMENT_FLOW_INSTANT) {
+    object PaymentFlowInstant : Flow() {
         override fun toJson(): JSONObject = JSONObject().apply {
-            put("type", type)
+            put("type", FlowType.PaymentFlowInstant.name)
         }
     }
 
-    object UnknownFlow : Flow("") {
-        override fun toJson() = JSONObject()
+    protected enum class FlowType {
+        PaymentFlowInstant
     }
 }

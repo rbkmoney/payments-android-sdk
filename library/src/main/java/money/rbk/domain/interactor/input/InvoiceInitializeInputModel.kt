@@ -16,7 +16,6 @@
  *
  */
 
-package money.rbk.data.exception
+package money.rbk.domain.interactor.input
 
-class UnsupportedPaymentToolDetails(private val detailsType: String) :
-    Exception("Unsupported payment tool details:$detailsType")
+object InvoiceInitializeInputModel : BaseInputModel()

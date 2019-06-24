@@ -18,35 +18,46 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.exception.UnsupportedPaymentToolDetails
-import org.json.JSONObject
+import money.rbk.data.exception.ParseException
 import money.rbk.data.extension.getNullable
 import money.rbk.data.extension.parseNullableString
 import money.rbk.data.serialization.Deserializer
+import org.json.JSONObject
 
 const val PaymentToolDetailsBankCardType = "PaymentToolDetailsBankCard"
 
 sealed class PaymentToolDetails(val detailsType: String) {
 
-    data class PaymentToolDetailsBankCard(
+    data class BankCard(
         val cardNumberMask: String,
-        val bin: String?,
-        val lastDigits: String?,
+
+        val first6: String?,
+
+        val last4: String?,
+
         val paymentSystem: String,
         val tokenProvider: TokenProvider?
     ) : PaymentToolDetails(PaymentToolDetailsBankCardType) {
 
-        companion object : Deserializer<JSONObject, PaymentToolDetailsBankCard> {
+        companion object : Deserializer<JSONObject, BankCard> {
 
-            override fun fromJson(json: JSONObject): PaymentToolDetailsBankCard =
-                PaymentToolDetailsBankCard(
+            override fun fromJson(json: JSONObject): BankCard =
+                BankCard(
                     cardNumberMask = json.getString("cardNumberMask"),
-                    bin = json.getNullable("bin"),
-                    lastDigits = json.getNullable("lastDigits"),
+                    first6 = json.getNullable("first6") ?: json.getFirst6Legacy(),
+                    last4 = json.getNullable("last4") ?: json.getLast4Legacy(),
                     paymentSystem = json.getString("paymentSystem"),
                     tokenProvider = json.parseNullableString("tokenProvider",
                         TokenProvider)
                 )
+
+            @Deprecated(message = "Should be removed after API update",
+                replaceWith = ReplaceWith(""))
+            private fun JSONObject.getFirst6Legacy() = getNullable<String>("bin")
+
+            @Deprecated(message = "Should be removed after API update",
+                replaceWith = ReplaceWith(""))
+            private fun JSONObject.getLast4Legacy() = getNullable<String>("lastDigits")
         }
     }
 
@@ -55,8 +66,8 @@ sealed class PaymentToolDetails(val detailsType: String) {
         override fun fromJson(json: JSONObject): PaymentToolDetails {
             val detailsType = json.getString("detailsType")
             return when (detailsType) {
-                PaymentToolDetailsBankCardType -> PaymentToolDetailsBankCard.fromJson(json)
-                else -> throw UnsupportedPaymentToolDetails(detailsType)
+                PaymentToolDetailsBankCardType -> BankCard.fromJson(json)
+                else -> throw ParseException.UnsupportedPaymentToolDetails(detailsType)
 
             }
         }

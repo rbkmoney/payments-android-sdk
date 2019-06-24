@@ -16,13 +16,8 @@
  *
  */
 
-package money.rbk.presentation.activity
+package money.rbk.domain.converter
 
-import money.rbk.presentation.model.InvoiceModel
-import money.rbk.presentation.screen.base.BaseView
-
-interface CheckoutView : BaseView {
-
-    fun showInvoice(invoiceModel: InvoiceModel)
-
+interface EntityConverter<Entity, Model> {
+    operator fun invoke(entity: Entity): Model
 }

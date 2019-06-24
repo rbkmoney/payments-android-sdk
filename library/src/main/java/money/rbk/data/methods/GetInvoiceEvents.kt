@@ -20,27 +20,21 @@ package money.rbk.data.methods
 
 import money.rbk.data.extension.toJsonArray
 import money.rbk.data.methods.base.GetRequest
-import money.rbk.data.network.Constants
 import money.rbk.domain.entity.InvoiceEvent
 
 private const val LIMIT = 100
 
-internal data class GetInvoiceEvents(
-    private val invoiceAccessToken: String,
-    private val invoiceId: String,
-    private val eventID: Int?
+internal class GetInvoiceEvents(
+    invoiceAccessToken: String,
+    invoiceId: String,
+    eventID: Int?
 ) : GetRequest<List<InvoiceEvent>> {
 
-    override fun getUrl(): String =
-        Constants.BASE_URL + "/processing/invoices/$invoiceId/events?" +
-            "limit=$LIMIT" +
-            (eventID?.let { "&eventID=$it" } ?: "")
+    override val endpoint = "/processing/invoices/$invoiceId/events?" +
+        "limit=$LIMIT" +
+        (eventID?.let { "&eventID=$it" } ?: "")
 
-    override fun getHeaders(): List<Pair<String, String>> =
-        listOf(
-            "Authorization" to "Bearer $invoiceAccessToken",
-            "Content-Type" to "application/json; charset=utf-8",
-            "X-Request-ID" to System.currentTimeMillis().toString())
+    override val invoiceAccessToken = invoiceAccessToken
 
     override fun convertJsonToResponse(jsonString: String): List<InvoiceEvent> =
         InvoiceEvent.fromJsonArray(jsonString.toJsonArray())

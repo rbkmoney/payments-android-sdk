@@ -1,4 +1,3 @@
-
 /*
  *
  * Copyright 2019 RBKmoney
@@ -17,10 +16,6 @@
  *
  */
 
-package money.rbk.data.exception
+package money.rbk.presentation.model
 
-open class SdkException : Exception {
-    constructor() : super()
-    constructor(message: String?) : super(message)
-    constructor(cause: Throwable?) : super(cause)
-}
+class PaymentModel(val isSuccess: Boolean) : BaseIUModel()

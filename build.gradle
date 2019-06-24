@@ -41,11 +41,15 @@ buildscript {
                 recyclerview    : '1.0.0'
         ]
 
+        decoroVersion = '1.3.5'
+
         kotlinVersion = '1.3.31'
         okhttpVersion = '3.14.2'
 
         leakcanaryVersion = '1.6.3'
         crashliticsVersion = '2.10.1'
+
+        datepickerVersion = '1.3.0'
     }
 
     repositories {

@@ -19,9 +19,9 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:elevation="@dimen/elevation"
     android:orientation="vertical"
     app:cardCornerRadius="@dimen/corner_radius"
@@ -29,20 +29,22 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <TextView
             android:id="@+id/tvChoosePaymentMethod"
-            android:textAppearance="@style/TextAppearance.RBKMoney.Normal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_default"
-            android:layout_marginTop="@dimen/spacing_default"
+            android:layout_marginTop="@dimen/spacing_huge"
             android:layout_marginEnd="@dimen/spacing_default"
             android:text="@string/payment_by_card"
+            android:textAppearance="@style/TextAppearance.RBKMoney.Normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
 
         <EditText
@@ -54,13 +56,13 @@
             android:layout_marginTop="@dimen/spacing_default"
             android:layout_marginEnd="@dimen/spacing_default"
             android:drawableStart="@drawable/selector_card_small"
-            android:drawableEnd="@drawable/selector_logo_visa"
             android:hint="@string/number_on_card"
-            android:inputType="number"
+            android:inputType="phone"
             android:nextFocusDown="@+id/edCardDate"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvChoosePaymentMethod" />
+            app:layout_constraintTop_toBottomOf="@+id/tvChoosePaymentMethod"
+            />
 
         <EditText
             android:id="@+id/edCardDate"
@@ -69,14 +71,19 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_default"
             android:layout_marginTop="@dimen/spacing_small"
+            android:clickable="true"
             android:drawableStart="@drawable/selector_date"
+            android:editable="false"
+            android:focusable="false"
             android:hint="@string/date_card"
-            android:inputType="date"
+            android:inputType="none"
+            android:longClickable="false"
             android:nextFocusDown="@+id/edCardCvv"
             app:layout_constraintEnd_toStartOf="@+id/edCardCvv"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edCardNumber" />
+            app:layout_constraintTop_toBottomOf="@+id/edCardNumber"
+            />
 
         <EditText
             android:id="@+id/edCardCvv"
@@ -93,7 +100,8 @@
             android:nextFocusDown="@+id/edCardName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/edCardDate"
-            app:layout_constraintTop_toBottomOf="@+id/edCardNumber" />
+            app:layout_constraintTop_toBottomOf="@+id/edCardNumber"
+            />
 
         <EditText
             android:id="@+id/edCardName"
@@ -105,27 +113,32 @@
             android:layout_marginEnd="@dimen/spacing_default"
             android:drawableStart="@drawable/selector_person"
             android:hint="@string/name_on_the_card"
-            android:inputType="textPersonName"
+            android:inputType="textPersonName|textCapCharacters"
+            android:maxLength="100"
+            android:nextFocusDown="@+id/edEmail"
+            android:textAllCaps="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:nextFocusDown="@+id/edEmail"
-            app:layout_constraintTop_toBottomOf="@+id/edCardDate" />
+            app:layout_constraintTop_toBottomOf="@+id/edCardDate"
+            />
 
         <EditText
             android:id="@+id/edEmail"
             style="@style/EditText"
             android:layout_width="0dp"
-            android:imeOptions="actionDone"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_default"
             android:layout_marginTop="@dimen/spacing_small"
             android:layout_marginEnd="@dimen/spacing_default"
             android:drawableStart="@drawable/selector_email"
             android:hint="@string/email_for_check"
+            android:imeOptions="actionDone"
             android:inputType="textEmailAddress"
+            android:maxLength="100"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edCardName" />
+            app:layout_constraintTop_toBottomOf="@+id/edCardName"
+            />
 
         <Button
             android:id="@+id/btnPay"
@@ -135,23 +148,41 @@
             android:layout_marginStart="@dimen/spacing_default"
             android:layout_marginTop="@dimen/spacing_default"
             android:layout_marginEnd="@dimen/spacing_default"
-            android:layout_marginBottom="@dimen/spacing_default"
+            android:layout_marginBottom="@dimen/spacing_huge"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edEmail"
-            tools:text="Оплатить 6500. 50 Р" />
-
-        <ProgressBar
-            android:id="@+id/pbLoading"
-            app:layout_constraintBottom_toBottomOf="@+id/btnPay"
-            app:layout_constraintEnd_toEndOf="@+id/btnPay"
-            app:layout_constraintStart_toStartOf="@+id/btnPay"
-            app:layout_constraintTop_toTopOf="@+id/btnPay"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            tools:text="Оплатить 6500. 50 Р"
             />
+
+        <FrameLayout
+            android:id="@+id/pbLoading"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/spacing_medium"
+            android:background="@color/white_overlay"
+            android:clickable="true"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/btnPay"
+                app:layout_constraintEnd_toEndOf="@+id/btnPay"
+                app:layout_constraintStart_toStartOf="@+id/btnPay"
+                app:layout_constraintTop_toTopOf="@+id/btnPay"
+                />
+
+        </FrameLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

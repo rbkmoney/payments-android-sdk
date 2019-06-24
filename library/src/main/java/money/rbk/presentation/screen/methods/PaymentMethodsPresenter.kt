@@ -18,19 +18,29 @@
 
 package money.rbk.presentation.screen.methods
 
-import money.rbk.di.Injector
-import money.rbk.domain.interactor.BaseUseCase
+import money.rbk.domain.interactor.PaymentMethodsUseCase
+import money.rbk.domain.interactor.base.UseCase
+import money.rbk.domain.interactor.input.EmptyInputModel
+import money.rbk.presentation.model.PaymentMethodModel
 import money.rbk.presentation.model.PaymentMethodsModel
+import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePresenter
 
 class PaymentMethodsPresenter(
-    private val paymentMethodsUseCase: BaseUseCase<PaymentMethodsModel> = Injector.resolveUseCase()
-) : BasePresenter<PaymentMethodsView>() {
+    navigator: Navigator,
+    private val paymentMethodsUseCase: UseCase<EmptyInputModel, PaymentMethodsModel> = PaymentMethodsUseCase()
+) : BasePresenter<PaymentMethodsView>(navigator) {
 
     override fun onViewAttached(view: PaymentMethodsView) {
         view.showProgress()
-        paymentMethodsUseCase(::onPaymentMethodsLoaded, ::onPaymentMethodsError)
+        paymentMethodsUseCase(EmptyInputModel, ::onPaymentMethodsLoaded, ::onPaymentMethodsError)
     }
+
+    fun onPaymentClick(payment: PaymentMethodModel) =
+        when (payment) {
+            PaymentMethodModel.BankCard -> navigator.openBankCard()
+            PaymentMethodModel.GooglePay -> navigator.openGooglePay()
+        }
 
     private fun onPaymentMethodsLoaded(paymentMethods: PaymentMethodsModel) {
         view?.apply {

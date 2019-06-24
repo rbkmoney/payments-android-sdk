@@ -18,19 +18,31 @@
 
 package money.rbk.domain.entity
 
-import org.json.JSONObject
+import money.rbk.data.extension.findEnum
 import money.rbk.data.extension.parseNullable
 import money.rbk.data.serialization.Deserializer
+import org.json.JSONObject
 
 data class PaymentError(
-    val code: String,
+    val code: Code,
     val subError: PaymentError?
 ) {
     companion object : Deserializer<JSONObject, PaymentError> {
         override fun fromJson(json: JSONObject): PaymentError =
             PaymentError(
-                code = json.getString("code"),
+                code = findEnum(json.getString("code"), Code.Unknown),
                 subError = json.parseNullable("subError", this)
             )
     }
+
+    enum class Code {
+        InvalidPaymentTool,     //	Неверный платежный инструмент (введен номер несуществующей карты, отсутствующего аккаунта и т.п.)
+        AccountLimitsExceeded,  //	Превышены лимиты (например, в личном кабинете плательщика установлено ограничение по сумме платежа, стране списания)
+        InsufficientFunds,      //  Недостаточно средств на счете
+        PreauthorizationFailed, //  Предварительная авторизация отклонена (введен неверный код 3D-Secure, на форме 3D-Secure нажата ссылка отмены)
+        RejectedByIssuer,       //  Платёж отклонён эмитентом (установлены запреты по стране списания, запрет на покупки в интернете, платеж отклонен антифродом эмитента и т.п.)
+        PaymentRejected,        //  Платёж отклонён по иным причинам
+        Unknown                 //  Неизвестная ошибка
+    }
+
 }
