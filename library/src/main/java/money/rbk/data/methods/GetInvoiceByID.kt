@@ -29,7 +29,7 @@ internal class GetInvoiceByID(
 
     override val endpoint = "/processing/invoices/$invoiceId"
 
-    override val accessToken = invoiceAccessToken
+    override val invoiceAccessToken = invoiceAccessToken
 
     override fun convertJsonToResponse(jsonString: String): Invoice =
         Invoice.fromJson(jsonString.toJsonObject())

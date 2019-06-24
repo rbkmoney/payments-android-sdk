@@ -34,7 +34,7 @@ internal class CreatePaymentResource(
 
     override val endpoint = "/processing/payment-resources"
 
-    override val accessToken = invoiceAccessToken
+    override val invoiceAccessToken = invoiceAccessToken
 
     override fun convertJsonToResponse(jsonString: String): CreatePaymentResourceResponse =
         CreatePaymentResourceResponse.fromJson(jsonString.toJsonObject())

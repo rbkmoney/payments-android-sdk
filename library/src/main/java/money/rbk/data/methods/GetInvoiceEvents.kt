@@ -34,7 +34,7 @@ internal class GetInvoiceEvents(
         "limit=$LIMIT" +
         (eventID?.let { "&eventID=$it" } ?: "")
 
-    override val accessToken = invoiceAccessToken
+    override val invoiceAccessToken = invoiceAccessToken
 
     override fun convertJsonToResponse(jsonString: String): List<InvoiceEvent> =
         InvoiceEvent.fromJsonArray(jsonString.toJsonArray())
