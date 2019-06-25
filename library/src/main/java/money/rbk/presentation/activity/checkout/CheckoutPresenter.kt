@@ -22,20 +22,16 @@ import money.rbk.R
 import money.rbk.domain.interactor.InvoiceUseCase
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.InvoiceInitializeInputModel
-import money.rbk.presentation.dialog.AlertButton
 import money.rbk.presentation.model.InvoiceModel
 import money.rbk.presentation.model.InvoiceStateModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePresenter
+import money.rbk.presentation.screen.card.BankCardPresenter.Companion.ACTION_INITIALIZE
 
 class CheckoutPresenter(
-    navigator: Navigator,
-    private val invoiceUseCase: UseCase<InvoiceInitializeInputModel, InvoiceModel> = InvoiceUseCase()
+        navigator: Navigator,
+        private val invoiceUseCase: UseCase<InvoiceInitializeInputModel, InvoiceModel> = InvoiceUseCase()
 ) : BasePresenter<CheckoutView>(navigator) {
-
-    private val retryInitializeButton: AlertButton? by lazy {
-        R.string.label_try_again to { initializeInvoice() }
-    }
 
     override fun onViewAttached(view: CheckoutView) {
         super.onViewAttached(view)
@@ -45,12 +41,12 @@ class CheckoutPresenter(
 
     private fun initializeInvoice() {
         invoiceUseCase(InvoiceInitializeInputModel,
-            ::onInvoiceLoaded,
-            ::onInvoiceLoadError)
+                ::onInvoiceLoaded,
+                ::onInvoiceLoadError)
     }
 
     private fun onInvoiceLoadError(throwable: Throwable) {
-        onError(throwable, retryInitializeButton)
+        onError(throwable, ACTION_INITIALIZE)
     }
 
     private fun onInvoiceLoaded(invoice: InvoiceModel) {
@@ -68,4 +64,7 @@ class CheckoutPresenter(
             }
         }
     }
+
+    fun onInitialize() = initializeInvoice()
+
 }

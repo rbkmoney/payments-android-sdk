@@ -31,7 +31,10 @@ import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.utils.adjustSize
 import money.rbk.presentation.utils.extra
 
-class CheckoutActivity : AppCompatActivity(), CheckoutView {
+class CheckoutActivity : AppCompatActivity(), CheckoutView, InitializeListener {
+    override fun initialize() {
+        presenter.onInitialize()
+    }
 
     companion object {
         private const val KEY_INVOICE_ID = "invoice_id"

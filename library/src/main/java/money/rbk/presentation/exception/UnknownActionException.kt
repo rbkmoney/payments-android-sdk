@@ -16,16 +16,6 @@
  *
  */
 
-package money.rbk.presentation.screen.result
+package money.rbk.presentation.exception
 
-import money.rbk.presentation.navigation.Navigator
-import money.rbk.presentation.screen.base.BasePresenter
-
-class ResultPresenter(navigator: Navigator) : BasePresenter<ResultView>(navigator) {
-    fun onTryAgain(actionPositive: Int?) {
-        actionPositive?.let {
-            view?.sendResult(it)
-            navigator.back()
-        }
-    }
-}
+class UnknownActionException(message: String) : Exception(message)

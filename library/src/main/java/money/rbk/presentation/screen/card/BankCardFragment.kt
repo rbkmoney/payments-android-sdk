@@ -130,8 +130,7 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             WebViewActivity.REQUEST_CODE -> presenter.on3DsPerformed()
-            ResultFragment.REQUEST_ERROR -> presenter.onErrorTest()
-            ResultFragment.REQUEST_SUCCESS -> presenter.onSuccessTest()
+            ResultFragment.REQUEST_ERROR -> presenter.onErrorTest(data)
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }

@@ -25,4 +25,5 @@ interface ResultView : BaseView{
     fun showSuccess()
 
     fun showError()
+    fun sendResult(action: Int)
 }

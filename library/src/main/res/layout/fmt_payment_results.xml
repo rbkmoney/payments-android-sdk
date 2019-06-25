@@ -18,6 +18,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:elevation="@dimen/elevation"
@@ -28,7 +29,7 @@
         android:id="@+id/clSuccessful"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/tvSuccessful"
@@ -57,15 +58,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_huge"
-            android:layout_marginBottom="@dimen/spacing_huge"
             android:gravity="center_horizontal"
             android:textAppearance="@style/TextAppearance.RBKMoney.Normal"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivSuccessful"
             tools:text="Оплачено с помощью карты Visa *4242 \nЧек выслан а email." />
 
+        <Button
+            android:id="@+id/btnOk"
+            style="@style/Button.Accent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_default"
+            android:layout_marginTop="@dimen/spacing_default"
+            android:layout_marginEnd="@dimen/spacing_default"
+            android:layout_marginBottom="@dimen/spacing_huge"
+            android:text="@string/label_ok"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvPaidWith" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -73,7 +86,7 @@
         android:id="@+id/clUnsuccessful"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tvUnsuccessful"

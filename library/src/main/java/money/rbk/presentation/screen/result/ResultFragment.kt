@@ -18,6 +18,8 @@
 
 package money.rbk.presentation.screen.result
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,24 +28,39 @@ import kotlinx.android.synthetic.main.fmt_payment_results.*
 import money.rbk.R
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.base.BasePresenter
+import money.rbk.presentation.screen.card.BankCardPresenter.Companion.ACTION_INITIALIZE
 import money.rbk.presentation.utils.makeGone
 import money.rbk.presentation.utils.makeVisible
 
 class ResultFragment : BaseFragment<ResultView>(), ResultView {
 
     companion object {
+        const val KEY_ACTION_RESULT = "key_action_result"
 
         private const val KEY_RESULT_TYPE = "key_result_type"
         private const val KEY_MESSAGE = "key_message"
-        const val REQUEST_ERROR = 0
-        const val REQUEST_SUCCESS = 1
+        private const val KEY_ACTION_POSITIVE = "key_action_positive"
+        private const val KEY_ACTION_NEGATIVE = "key_action_negative"
+        const val REQUEST_ERROR = 0x0987
 
 
-        fun newInstance(resultType: ResultType, message: String?): ResultFragment {
+        fun newInstance(
+                resultType: ResultType,
+                message: String?,
+                positiveAction: Int? = null,
+                negativeAction: Int? = null
+        ): ResultFragment {
             val fragment = ResultFragment()
             fragment.arguments = Bundle().apply {
                 putSerializable(KEY_RESULT_TYPE, resultType)
                 putString(KEY_MESSAGE, message)
+                positiveAction?.let {
+                    putInt(KEY_ACTION_POSITIVE, it)
+                }
+                negativeAction?.let {
+                    putInt(KEY_ACTION_POSITIVE, it)
+                }
+
             }
             return fragment
         }
@@ -78,6 +95,10 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
         clSuccessful.makeVisible()
         clUnsuccessful.makeGone()
         tvPaidWith.text = arguments?.getString(KEY_MESSAGE)
+
+        btnOk.setOnClickListener {
+            finish()
+        }
     }
 
     override fun showError() {
@@ -85,9 +106,45 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
         clUnsuccessful.makeVisible()
         tvCause.text = arguments?.getString(KEY_MESSAGE)
 
-        btnTryAgain.setOnClickListener {
+        val actionPositive = arguments?.getInt(KEY_ACTION_POSITIVE)
+        val actionNegative = arguments?.getInt(KEY_ACTION_NEGATIVE)
 
+        if (actionNegative != null) {
+            btnUseAnotherCard.makeVisible()
+        } else {
+            btnUseAnotherCard.makeGone()
         }
+
+        if (actionPositive != null) {
+            btnTryAgain.makeVisible()
+        } else {
+            btnTryAgain.makeGone()
+        }
+
+        btnTryAgain.setOnClickListener {
+            (presenter as ResultPresenter).onTryAgain(actionPositive)
+        }
+
+        btnUseAnotherCard.setOnClickListener {
+            sendResult(actionNegative!!)
+        }
+    }
+
+    override fun sendResult(action: Int) {
+        if (action == ACTION_INITIALIZE) {
+
+        } else {
+
+            val intent = Intent()
+            targetFragment?.onActivityResult(REQUEST_ERROR, Activity.RESULT_OK, intent.apply {
+                putExtra(KEY_ACTION_RESULT, action)
+            })
+        }
+    }
+
+    private fun finish() {
+        activity?.setResult(Activity.RESULT_OK)
+        activity?.finish()
     }
 
 }

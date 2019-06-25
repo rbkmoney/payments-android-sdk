@@ -16,16 +16,9 @@
  *
  */
 
-package money.rbk.presentation.screen.result
+package money.rbk.presentation.activity.checkout
 
-import money.rbk.presentation.navigation.Navigator
-import money.rbk.presentation.screen.base.BasePresenter
+interface InitializeListener {
 
-class ResultPresenter(navigator: Navigator) : BasePresenter<ResultView>(navigator) {
-    fun onTryAgain(actionPositive: Int?) {
-        actionPositive?.let {
-            view?.sendResult(it)
-            navigator.back()
-        }
-    }
+    fun initialize()
 }
