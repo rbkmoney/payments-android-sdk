@@ -19,6 +19,7 @@
 package money.rbk.presentation.screen.card
 
 import money.rbk.R
+import money.rbk.domain.entity.CreditCardType
 import money.rbk.domain.entity.getCardType
 import money.rbk.domain.exception.UseCaseException
 import money.rbk.domain.interactor.CheckoutStateUseCase
@@ -27,12 +28,13 @@ import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.CardPaymentInputModel
 import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.presentation.dialog.AlertButton
-import money.rbk.presentation.model.CheckoutState
+import money.rbk.presentation.model.CheckoutInfoModel
 import money.rbk.presentation.model.InvoiceStateModel
 import money.rbk.presentation.model.PaymentResourceCreated
 import money.rbk.presentation.model.PaymentStateModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePresenter
+import money.rbk.presentation.utils.cardMask
 import money.rbk.presentation.utils.isDateValid
 import money.rbk.presentation.utils.isEmailValid
 import money.rbk.presentation.utils.isValidCvv
@@ -40,7 +42,7 @@ import money.rbk.presentation.utils.isValidCvv
 class BankCardPresenter(
     navigator: Navigator,
     private val paymentUseCase: UseCase<CardPaymentInputModel, PaymentResourceCreated> = CreatePaymentResourceUseCase(),
-    private val invoiceEventsUseCase: UseCase<EmptyInputModel, CheckoutState> = CheckoutStateUseCase()
+    private val invoiceEventsUseCase: UseCase<EmptyInputModel, CheckoutInfoModel> = CheckoutStateUseCase()
 ) : BasePresenter<BankCardView>(navigator) {
 
     private var cardPaymentInputModel: CardPaymentInputModel? = null
@@ -77,20 +79,18 @@ class BankCardPresenter(
         expDate: String,
         cvv: String,
         cardHolder: String,
-        email: String?) {
+        email: String) {
+        val cardType: CreditCardType? = validateNumber(cardNumber)
         if (validateDate(expDate) and validateCcv(cvv) and validateCardholder(
-                cardHolder) and validateEmail(email)) {
-            val cardType = validateNumber(cardNumber)
-            if (cardType != null) {
-                cardPaymentInputModel =
-                    CardPaymentInputModel(cardNumber,
-                        expDate,
-                        cvv,
-                        cardHolder,
-                        cardType,
-                        email?.takeIf { it.isNotBlank() })
-                performPayment()
-            }
+                cardHolder) and validateEmail(email) and (cardType != null) && (cardType != null)) { // Double cardType for smart cast
+            cardPaymentInputModel =
+                CardPaymentInputModel(cardNumber,
+                    expDate,
+                    cvv,
+                    cardHolder,
+                    cardType,
+                    email)
+            performPayment()
         }
     }
 
@@ -98,13 +98,9 @@ class BankCardPresenter(
         updateCheckout()
     }
 
-    fun validateEmail(email: String?): Boolean =
-        if (!email.isNullOrBlank()) {
-            email.isEmailValid()
-                .also { view?.showEmailValid(it) }
-        } else {
-            true
-        }
+    fun validateEmail(email: String): Boolean =
+        email.isEmailValid()
+            .also { view?.showEmailValid(it) }
 
     fun validateCardholder(name: String): Boolean =
         name.isNotEmpty().also {
@@ -156,9 +152,10 @@ class BankCardPresenter(
         }
     }
 
-    private fun onCheckoutUpdated(checkoutState: CheckoutState) {
+    private fun onCheckoutUpdated(checkoutInfo: CheckoutInfoModel) {
         val view = view ?: return
         view.hideProgress()
+        val checkoutState = checkoutInfo.checkoutState
 
         checkoutState.invoiceStateModel
             ?: return navigator.openErrorFragment(messageRes = R.string.error_unknown_payment)
@@ -167,6 +164,7 @@ class BankCardPresenter(
         if (!checkoutState.invoiceStateModel.handle()) {
             checkoutState.paymentStateModel?.handle()
         }
+        view.setCost(checkoutInfo.cost)
     }
 
     private fun onCheckoutUpdateError(error: Throwable) {
@@ -210,9 +208,7 @@ class BankCardPresenter(
                 negativeButtonPair = useAnotherCardButton)
 
         PaymentStateModel.Success ->
-            navigator.openSuccessFragment(R.string.label_payed_by_card_f,
-                cardTypeName(),
-                paymentMask())
+            navigator.openSuccessFragment(R.string.label_payed_by_card_f, cardName())
 
         PaymentStateModel.Pending ->
             navigator.openErrorFragment(
@@ -223,10 +219,9 @@ class BankCardPresenter(
 
     private fun InvoiceStateModel.handle(): Boolean = when (this) {
 
-        is InvoiceStateModel.Success ->
-            navigator.openSuccessFragment(R.string.label_payed_by_card_f,
-                cardTypeName(),
-                paymentMask())
+        is InvoiceStateModel.Success -> {
+            navigator.openSuccessFragment(R.string.label_payed_by_card_f, cardName())
+        }
 
         is InvoiceStateModel.Cancelled ->
             navigator.openErrorFragment(messageRes = R.string.error_invoice_cancelled)
@@ -241,18 +236,10 @@ class BankCardPresenter(
 
     } != null
 
-    private fun cardTypeName() =
-        cardPaymentInputModel
-            ?.cardType
-            ?.cardName ?: ""
-
-    private fun paymentMask() =
-        cardPaymentInputModel
-            ?.cardNumber
-            ?.run {
-                "*${substring(Math.max(count() - 4, 0), count())}"
-            }
-            .orEmpty()
+    private fun cardName() =
+        cardPaymentInputModel?.let {
+            "${it.cardType.cardName} ${it.cardNumber.cardMask}"
+        }.orEmpty()
 
     private fun clearPayment() {
         cardPaymentInputModel = null

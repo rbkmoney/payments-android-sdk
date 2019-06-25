@@ -48,27 +48,11 @@ internal class CheckoutRepositoryImpl(
     private val invoice: Invoice by lazy {
         okHttpClient.execute(GetInvoiceByID(invoiceAccessToken, invoiceId))
     }
-
     private var paymentMethodsInitialized = false
     private val paymentMethods: List<PaymentMethod> by lazy {
         okHttpClient.execute(GetInvoicePaymentMethods(invoiceAccessToken, invoiceId))
             .also { paymentMethodsInitialized = true }
     }
-
-    private val payment by lazy {
-        okHttpClient.execute(CreatePayment(invoiceId,
-            invoiceAccessToken,
-            Payer.PaymentResourcePayer(createPaymentResource.paymentToolToken,
-                createPaymentResource.paymentSession,
-                contactInfo ?: TODO("Create new Exception")), Flow.PaymentFlowInstant))
-    }
-
-    private val createPaymentResource: CreatePaymentResourceResponse
-        get() = okHttpClient.execute(CreatePaymentResource(
-            invoiceAccessToken, paymentTool ?: TODO("Create new Exception")))
-
-    private var paymentTool: PaymentTool? = null
-    private var contactInfo: ContactInfo? = null
 
     override fun loadInvoice(): Invoice = invoice
 
@@ -79,9 +63,15 @@ internal class CheckoutRepositoryImpl(
 
     override fun createPayment(paymentTool: PaymentTool,
         contactInfo: ContactInfo): CreatePaymentResponse {
-        this.paymentTool = paymentTool
-        this.contactInfo = contactInfo
-        return payment
+
+        val createPaymentResource: CreatePaymentResourceResponse =
+            okHttpClient.execute(CreatePaymentResource(invoiceAccessToken, paymentTool))
+
+        return okHttpClient.execute(CreatePayment(invoiceId, invoiceAccessToken,
+            Payer.PaymentResourcePayer(
+                createPaymentResource.paymentToolToken,
+                createPaymentResource.paymentSession,
+                contactInfo), Flow.PaymentFlowInstant))
     }
 
     override fun loadInvoiceEvents(): List<InvoiceEvent> =

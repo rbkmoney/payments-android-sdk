@@ -33,7 +33,7 @@ internal class CreatePayment(
 
     override val endpoint: String = "/processing/invoices/$invoiceID/payments"
 
-    override val accessToken = invoiceAccessToken
+    override val invoiceAccessToken = invoiceAccessToken
 
     override fun convertJsonToResponse(jsonString: String): CreatePaymentResponse =
         CreatePaymentResponse.fromJson(jsonString.toJsonObject())

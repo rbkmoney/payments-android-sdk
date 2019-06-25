@@ -20,7 +20,7 @@ package money.rbk.data.methods.base
 
 internal interface ApiRequest<out T> {
 
-    val accessToken: String
+    val invoiceAccessToken: String
 
     val endpoint: String
 

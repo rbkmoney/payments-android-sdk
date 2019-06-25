@@ -42,7 +42,9 @@ class Navigator(
         private val containerId: Int) {
 
     fun openPaymentMethods() {
-        replaceFragmentInActivity(PaymentMethodsFragment.newInstance())
+        if (activity.supportFragmentManager.findFragmentById(R.id.container) == null) {
+            replaceFragmentInActivity(PaymentMethodsFragment.newInstance())
+        }
     }
 
     fun openGooglePay() = inProgress()

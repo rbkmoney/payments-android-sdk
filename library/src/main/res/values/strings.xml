@@ -34,7 +34,7 @@
     <string name="number_on_card">Номер на карте</string>
     <string name="secure_payment_with">Безопасная оплата с</string>
     <string name="label_order_details">Детали заказа</string>
-    <string name="label_pay_f">Опталить %1$s</string>
+    <string name="label_pay_f">Оплатить %1$s</string>
     <string name="successful_payment">Успешная\nоплата!</string>
     <string name="unsuccessful_payment">Не оплачено</string>
     <string name="how_to_solve_problem">Как решить проблему?</string>
@@ -44,7 +44,7 @@
     <string name="label_try_again">Повторить снова</string>
     <string name="label_use_another_card">Использовать другую карту</string>
 
-    <string name="label_payed_by_card_f">Оплачено картой $s%1 $s%2</string>
+    <string name="label_payed_by_card_f">Оплачено картой %1$s</string>
 
     <string name="error_unpaid">Не оплачено</string>
     <string name="error_invoice_cancelled">Инвойс отменён</string>
@@ -67,7 +67,7 @@
     <string name="error_unknown_error">Что-то пошло не так</string>
     <string name="error_polling_time_exceeded">Превышено время опроса сервера</string>
     <string name="error_server">Внутренняя ошибка сервера</string>
-    <string name="error_internal_server">В процессе обработки платформой запроса возникла непредвиденная ситуация.</string>
+    <string name="error_internal_server">В процессе проведения платежа возникла непредвиденная ошибка. Пожалуйста, повторите попытку платежа. В случае сохранения ошибки обратитесь в службу поддежки</string>
     <string name="error_temporary_unavailable">Платформа временно недоступна и не готова обслуживать данный запрос.</string>
     <string name="error_request_time_exceeded">Платформа превысила допустимое время обработки запроса, результат запроса не определён.</string>
     <string name="error_operation_not_permitted">Недоступная в рамках действующего договора операция.</string>
@@ -95,4 +95,6 @@
     <string name="error_invalid_deadline">Неверный формат времени.</string>
     <string name="error_invalid_request">Неверный запрос</string>
     <string name="error_unsupported_card_type_for_invoice">Карта не поддерживается для данного инвойса</string>
+    <string name="error_busines_logic">В процессе проведения платежа возникла непредвиденная ошибка. Пожалуйста, повторите попытку платежа. В случае сохранения ошибки обратитесь в службу поддежки</string>
+
 </resources>

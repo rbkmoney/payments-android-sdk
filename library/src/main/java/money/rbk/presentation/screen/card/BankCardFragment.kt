@@ -45,10 +45,16 @@ import java.util.Calendar.YEAR
 class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
         MonthPickerDialog.OnDateSetListener {
 
-    override val presenter: BankCardPresenter by lazy { BankCardPresenter(navigator) }
-
     companion object {
         fun newInstance() = BankCardFragment()
+
+        private const val MAX_YEARS_CARD_VALIDITY = 30
+    }
+
+    override val presenter: BankCardPresenter by lazy { BankCardPresenter(navigator) }
+
+    private val fieldsSequence by lazy {
+        sequenceOf(btnPay, edCardNumber, edCardDate, edCardCvv, edCardName, edEmail)
     }
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -59,10 +65,9 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btnPay.text =
-                getString(R.string.label_pay_f, (activity as? CheckoutActivity)?.getCost().orEmpty())
-        (activity as? CheckoutActivity)?.setBackButtonVisibility(true)
 
+        (activity as? CheckoutActivity)?.setBackButtonVisibility(true)
+        view.requestFocus()
         btnPay.setOnClickListener {
             activity?.hideKeyboard()
             presenter.onPerformPayment(
@@ -87,7 +92,6 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
     }
 
     private fun setUpDateDialog(): MonthPickerDialog {
-
         val currentDate = Calendar.getInstance()
         val currentMonth = currentDate.get(MONTH)
         val currentYear = currentDate.get(YEAR)
@@ -97,11 +101,11 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
                 currentYear,
                 currentMonth
         )
-                .setActivatedMonth(currentMonth)
-                .setActivatedYear(currentYear)
-                .setMaxYear(3000)
-                .setMinYear(currentYear)
-                .build()
+            .setActivatedMonth(currentMonth)
+            .setActivatedYear(currentYear)
+            .setMaxYear(currentYear + MAX_YEARS_CARD_VALIDITY)
+            .setMinYear(currentYear)
+            .build()
     }
 
     override fun onAttach(context: Context?) {
@@ -112,6 +116,10 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
     override fun onDetach() {
         activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         super.onDetach()
+    }
+
+    override fun setCost(cost: String) {
+        btnPay.text = getString(R.string.label_pay_f, cost)
     }
 
     override fun showRedirect(request: BrowserRequestModel) {
@@ -129,16 +137,19 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
     }
 
     override fun clear() =
-            sequenceOf(edCardNumber, edCardDate, edCardCvv, edCardName, edEmail)
-                    .forEach { it.setText(R.string.empty) }
+        sequenceOf(edCardNumber, edCardDate, edCardCvv, edCardName, edEmail)
+            .forEach {
+                it.setText(R.string.empty)
+                it.clearState()
+            }
 
     override fun showProgress() {
-        btnPay.isEnabled = false
+        fieldsSequence.forEach { it.isEnabled = false }
         pbLoading.visibility = View.VISIBLE
     }
 
     override fun hideProgress() {
-        btnPay.isEnabled = true
+        fieldsSequence.forEach { it.isEnabled = true }
         pbLoading.visibility = View.GONE
     }
 
@@ -202,11 +213,9 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
 
         val cardNumberMask = MaskImpl.createNonTerminated(PredefinedSlots.CARD_NUMBER_STANDARD)
         MaskFormatWatcher(cardNumberMask)
-                .apply {
-                    setCallback(CardChangeListener(::onCardDetected))
-                    installOn(edCardNumber)
-                }
-
+            .apply {
+                setCallback(CardChangeListener(::onCardDetected))
+                installOn(edCardNumber)
+            }
     }
-
 }

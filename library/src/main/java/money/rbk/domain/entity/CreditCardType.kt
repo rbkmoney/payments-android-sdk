@@ -69,7 +69,7 @@ enum class CreditCardType(
     nspkmir(
         lengths = intArrayOf(13, 16),
         prefixes = arrayOf("2200", "2201", "2202", "2203", "2204"),
-        cardName = "Мир",
+        cardName = "MIR",
         iconRes = R.drawable.selector_logo_mir
     );
 
