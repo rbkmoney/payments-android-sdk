@@ -19,59 +19,89 @@
 package money.rbk.presentation.screen.card
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import com.whiteelephant.monthpicker.MonthPickerDialog
 import kotlinx.android.synthetic.main.fmt_card.*
 import money.rbk.R
-import money.rbk.data.CreditCardType
-import money.rbk.presentation.activity.CheckoutActivity
+import money.rbk.domain.entity.CreditCardType
+import money.rbk.presentation.activity.checkout.CheckoutActivity
+import money.rbk.presentation.activity.web.WebViewActivity
+import money.rbk.presentation.model.BrowserRequestModel
 import money.rbk.presentation.screen.base.BaseFragment
-import money.rbk.presentation.screen.base.BasePresenter
-import money.rbk.presentation.utils.setRightDrawable
-import money.rbk.presentation.utils.setValid
+import money.rbk.presentation.screen.result.ResultFragment
+import money.rbk.presentation.utils.*
 import ru.tinkoff.decoro.MaskImpl
-import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser
 import ru.tinkoff.decoro.slots.PredefinedSlots
 import ru.tinkoff.decoro.watchers.MaskFormatWatcher
+import java.util.*
+import java.util.Calendar.MONTH
+import java.util.Calendar.YEAR
 
+class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
+        MonthPickerDialog.OnDateSetListener {
 
-class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
-
+    override val presenter: BankCardPresenter by lazy { BankCardPresenter(navigator) }
 
     companion object {
         fun newInstance() = BankCardFragment()
     }
 
-    override fun buildPresenter(): BasePresenter<BankCardView> = BankCardPresenter()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?
     ): View? =
-        inflater.inflate(R.layout.fmt_card, container, false)
+            inflater.inflate(R.layout.fmt_card, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         btnPay.text =
-            getString(R.string.label_pay_f, (activity as? CheckoutActivity)?.getCost().orEmpty())
+                getString(R.string.label_pay_f, (activity as? CheckoutActivity)?.getCost().orEmpty())
         (activity as? CheckoutActivity)?.setBackButtonVisibility(true)
 
         btnPay.setOnClickListener {
-            (presenter as BankCardPresenter).onBuyClick(
-                cardNumber = edCardNumber.text.toString(),
-                cardDate = edCardDate.text.toString(),
-                cardCcv = edCardCvv.text.toString(),
-                cardName = edCardName.text.toString(),
-                cardEmail = edEmail.text.toString()
+            activity?.hideKeyboard()
+            presenter.onPerformPayment(
+                    cardNumber = edCardNumber.text.toString().replace(" ", ""),
+                    expDate = edCardDate.text.toString(),
+                    cvv = edCardCvv.text.toString(),
+                    cardHolder = edCardName.text.toString(),
+                    email = edEmail.text.toString()
             )
         }
 
+        edCardDate.setOnClickListener {
+            setUpDateDialog().show()
+        }
         setUpWatchers()
+    }
 
+    override fun onDateSet(selectedMonth: Int, selectedYear: Int) {
+        val selectedMonthString = (selectedMonth + 1).toDozenString()
+        edCardDate.setText("$selectedMonthString/${selectedYear % 100}")
+        presenter.validateDate(edCardDate.text.toString())
+    }
+
+    private fun setUpDateDialog(): MonthPickerDialog {
+
+        val currentDate = Calendar.getInstance()
+        val currentMonth = currentDate.get(MONTH)
+        val currentYear = currentDate.get(YEAR)
+        return MonthPickerDialog.Builder(
+                activity,
+                this,
+                currentYear,
+                currentMonth
+        )
+                .setActivatedMonth(currentMonth)
+                .setActivatedYear(currentYear)
+                .setMaxYear(3000)
+                .setMinYear(currentYear)
+                .build()
     }
 
     override fun onAttach(context: Context?) {
@@ -84,18 +114,37 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
         super.onDetach()
     }
 
+    override fun showRedirect(request: BrowserRequestModel) {
+        startActivityForResult(WebViewActivity.buildIntent(activity!!, request),
+                WebViewActivity.REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            WebViewActivity.REQUEST_CODE -> presenter.on3DsPerformed()
+            ResultFragment.REQUEST_ERROR -> presenter.onErrorTest()
+            ResultFragment.REQUEST_SUCCESS -> presenter.onSuccessTest()
+            else -> super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    override fun clear() =
+            sequenceOf(edCardNumber, edCardDate, edCardCvv, edCardName, edEmail)
+                    .forEach { it.setText(R.string.empty) }
+
     override fun showProgress() {
+        btnPay.isEnabled = false
         pbLoading.visibility = View.VISIBLE
     }
 
     override fun hideProgress() {
+        btnPay.isEnabled = true
         pbLoading.visibility = View.GONE
     }
 
     override fun showEmailValid(isValid: Boolean) {
         edEmail.setValid(isValid)
     }
-
 
     override fun showDateValid(isValid: Boolean) {
         edCardDate.setValid(isValid)
@@ -109,64 +158,55 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
         edCardCvv.setValid(isValid)
     }
 
-    override fun showNumberValid(isValid: Boolean, cardType: CreditCardType?) {
-        edCardNumber.setValid(isValid,CreditCardType.getDrawable(cardType))
+    override fun showNumberValid(cardType: CreditCardType?) {
+        edCardNumber.setValid(cardType != null, cardType?.iconRes)
     }
 
     private fun onCardDetected(cardType: CreditCardType?) {
-        val cardDrawableId: Int? = CreditCardType.getDrawable(cardType)
-        edCardNumber.setRightDrawable(cardDrawableId)
+        edCardNumber.setRightDrawable(cardType?.iconRes)
     }
-
 
     private fun setUpWatchers() {
 
         edEmail.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus.not()) {
-                (presenter as BankCardPresenter).onEmail(edEmail.text.toString())
+                presenter.validateEmail(edEmail.text.toString())
+            } else {
+                edEmail.clearState()
             }
         }
 
-        edCardName.setOnFocusChangeListener { v, hasFocus ->
+        edCardName.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus.not()) {
-                (presenter as BankCardPresenter).onName(edCardName.text.toString())
+                presenter.validateCardholder(edCardName.text.toString())
+            } else {
+                edCardName.clearState()
             }
         }
 
-        edCardDate.setOnFocusChangeListener { v, hasFocus ->
+        edCardCvv.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus.not()) {
-                (presenter as BankCardPresenter).onDate(edCardDate.text.toString())
+                presenter.validateCcv(edCardCvv.text.toString())
+            } else {
+                edCardCvv.clearState()
             }
         }
 
-        edCardCvv.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus.not()) {
-                (presenter as BankCardPresenter).onCcv(edCardCvv.text.toString())
+        edCardNumber.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                presenter.validateNumber(edCardNumber.text.toString())
+            } else {
+                edCardNumber.clearState()
             }
         }
-
-        edCardNumber.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus.not()) {
-                (presenter as BankCardPresenter).onNumber(edCardNumber.text.toString())
-            }
-        }
-
-
-        var watcher: MaskFormatWatcher
 
         val cardNumberMask = MaskImpl.createNonTerminated(PredefinedSlots.CARD_NUMBER_STANDARD)
-        watcher = MaskFormatWatcher(cardNumberMask)
-        watcher.setCallback(CardChangeListener(this::onCardDetected))
-        watcher.installOn(edCardNumber)
-
-
-        val dataSlots = UnderscoreDigitSlotsParser().parseSlots("__/__")
-        val cardDataMask = MaskImpl.createTerminated(dataSlots)
-        watcher = MaskFormatWatcher(cardDataMask)
-        watcher.installOn(edCardDate)
-
+        MaskFormatWatcher(cardNumberMask)
+                .apply {
+                    setCallback(CardChangeListener(::onCardDetected))
+                    installOn(edCardNumber)
+                }
 
     }
-
 
 }

@@ -24,7 +24,7 @@ import money.rbk.data.serialization.Serializable
 
 data class ClientInfo(
     val fingerprint: String,
-    val ip: String?
+    val ip: String? = null
 ) : Serializable {
 
     companion object :

@@ -1,4 +1,3 @@
-
 /*
  *
  * Copyright 2019 RBKmoney
@@ -17,10 +16,12 @@
  *
  */
 
-package money.rbk.data.exception
+package money.rbk.data.utils
 
-open class SdkException : Exception {
-    constructor() : super()
-    constructor(message: String?) : super(message)
-    constructor(cause: Throwable?) : super(cause)
+import android.util.Log
+import money.rbk.BuildConfig
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun log(tag: String, method: String, text: String) {
+    if (BuildConfig.DEBUG) Log.d(tag, "-> $method ->$text")
 }

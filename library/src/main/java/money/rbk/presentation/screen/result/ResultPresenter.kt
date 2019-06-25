@@ -18,8 +18,8 @@
 
 package money.rbk.presentation.screen.result
 
+import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePresenter
 
-class ResultPresenter : BasePresenter<ResultView>(){
-
+class ResultPresenter(navigator: Navigator) : BasePresenter<ResultView>(navigator) {
 }

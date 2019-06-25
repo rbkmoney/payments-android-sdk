@@ -18,6 +18,9 @@
 
 package money.rbk.presentation.utils
 
+import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.EditText
 import androidx.annotation.DrawableRes
 import money.rbk.R
@@ -33,6 +36,10 @@ private fun EditText.setOkayState(@DrawableRes onValidDrawable: Int?) {
     setRightDrawable(onValidDrawable)
 }
 
+fun EditText.clearState() {
+    setBackgroundResource(R.drawable.background_edit_text)
+    removeRightDrawable()
+}
 
 fun EditText.setValid(
     isValid: Boolean,
@@ -57,4 +64,13 @@ fun EditText.setRightDrawable(@DrawableRes drawableId: Int?) {
 fun EditText.removeRightDrawable() {
     val drawables = this.compoundDrawables
     this.setCompoundDrawablesWithIntrinsicBounds(drawables[0], drawables[1], null, drawables[3])
+}
+
+fun View.makeGone(){
+    this.visibility = GONE
+}
+
+
+fun View.makeVisible(){
+    this.visibility = VISIBLE
 }

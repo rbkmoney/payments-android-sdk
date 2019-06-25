@@ -18,13 +18,15 @@
 
 package money.rbk.data.extension
 
-import android.util.Log
-import money.rbk.data.exception.RequestExecutionException
-import money.rbk.data.exception.ResponseParsingException
-import money.rbk.data.exception.ResponseReadingException
+import money.rbk.data.exception.NetworkServiceException.*
+import money.rbk.data.exception.ParseException
 import money.rbk.data.methods.base.ApiRequest
-import money.rbk.data.methods.base.MimeType
 import money.rbk.data.methods.base.PostRequest
+import money.rbk.data.network.Constants
+import money.rbk.data.serialization.Serializable
+import money.rbk.data.utils.ClientInfoUtils
+import money.rbk.data.utils.log
+import money.rbk.domain.entity.ApiError
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
@@ -32,26 +34,32 @@ import okhttp3.Response
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import money.rbk.data.serialization.Serializable
 import java.io.IOException
+import java.util.Locale
 
 internal fun <T> OkHttpClient.execute(
     apiRequest: ApiRequest<T>
 ): T {
-    val url = apiRequest.getUrl()
+    val url = "${Constants.BASE_URL}${apiRequest.endpoint}"
+
+    val userAgent = ClientInfoUtils.userAgent
+
     val requestBuilder = Request.Builder()
         .url(url)
-        .addHeader("accept", "application/json")
+        .addHeader("Accept", "application/json")
+        .addHeader("Content-Type", "application/json; charset=utf-8")
+        .addHeader("Accept-Language", Locale.getDefault().language)
+        .addHeader("Authorization", "Bearer ${apiRequest.accessToken}")
+        .addHeader("X-Request-ID", System.currentTimeMillis().toString())
+        .addHeader("User-Agent", userAgent)
 
-    apiRequest.getHeaders()
+    apiRequest.headers
         .forEach {
             requestBuilder.addHeader(it.first, it.second)
         }
 
     if (apiRequest is PostRequest<T>) {
-        requestBuilder.addHeader("Content-Type", apiRequest.getMimeType().type)
-        val body = createRequestBody(apiRequest.getMimeType(), apiRequest.getPayload())
-        requestBuilder.post(RequestBody.create(null, body))
+        requestBuilder.post(RequestBody.create(null, createRequestBody(apiRequest.payload)))
     } else {
         requestBuilder.get()
     }
@@ -68,15 +76,21 @@ internal fun <T> OkHttpClient.execute(
         response.body()!!.string()
     } catch (e: IOException) {
         throw ResponseReadingException(response, e)
+
     }
 
-    Log.d(javaClass.name, "-> execute ->$stringBody")
+    log(javaClass.name, "[${request.method()}] ${request.url()}", stringBody)
 
+    when (val code = response.code()) {
+        in 500..599 -> throw InternalServerException(code)
+        //TODO: Parse another type of errors
+        in 400..499 -> throw ApiException(code, ApiError.fromJson(stringBody.toJsonObject()))
+    }
 
     try {
         return apiRequest.convertJsonToResponse(stringBody)
     } catch (e: JSONException) {
-        throw ResponseParsingException(stringBody, e)
+        throw ParseException.ResponseParsingException(stringBody, e)
     }
 }
 
@@ -84,31 +98,25 @@ internal fun String.toJsonObject(): JSONObject =
     try {
         JSONObject(this)
     } catch (e: JSONException) {
-        throw ResponseParsingException(this, e)
+        throw ParseException.ResponseParsingException(this, e)
     }
 
 internal fun String.toJsonArray(): JSONArray =
     try {
         JSONArray(this)
     } catch (e: JSONException) {
-        throw ResponseParsingException(this, e)
+        throw ParseException.ResponseParsingException(this, e)
     }
 
-internal fun createRequestBody(mimeType: MimeType,
-    body: List<Pair<String, Any>>): String {
-
-    return when (mimeType) {
-        MimeType.JSON -> {
-            val jsonObject = JSONObject()
-            body.forEach { (key, value) ->
-
-                if (value is Serializable) {
-                    jsonObject.put(key, value.toJson())
-                } else {
-                    jsonObject.put(key, value)
-                }
-            }
-            jsonObject.toString()
+internal fun createRequestBody(body: List<Pair<String, Any>>): String {
+    val jsonObject = JSONObject()
+    body.forEach { (key, value) ->
+        if (value is Serializable) {
+            jsonObject.put(key, value.toJson())
+        } else {
+            jsonObject.put(key, value)
         }
     }
+    return jsonObject.toString()
 }
+

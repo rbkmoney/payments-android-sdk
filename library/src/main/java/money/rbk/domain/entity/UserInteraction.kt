@@ -18,40 +18,31 @@
 
 package money.rbk.domain.entity
 
+import money.rbk.data.exception.ParseException
 import money.rbk.data.extension.findEnumOrNull
 import money.rbk.data.extension.parse
-import org.json.JSONObject
 import money.rbk.data.serialization.Deserializer
+import org.json.JSONObject
 
-sealed class UserInteraction(val interactionType: InteractionType) {
+sealed class UserInteraction {
 
     companion object : Deserializer<JSONObject, UserInteraction> {
         override fun fromJson(json: JSONObject): UserInteraction {
             val type = json.getString("interactionType")
             return when (findEnumOrNull<InteractionType>(type)) {
-                InteractionType.PaymentTerminalReceipt -> PaymentTerminalReceipt(
-                    shortPaymentID = json.getString("shortPaymentID"),
-                    dueDate = json.getString("dueDate")
-                )
                 InteractionType.Redirect -> Redirect(
                     request = json.parse("request", BrowserRequest)
                 )
-                null -> TODO()
+                null -> throw ParseException.UnsupportedUserInteractionTypeException(type)
             }
         }
     }
 
-    data class PaymentTerminalReceipt(
-        val shortPaymentID: String,
-        val dueDate: String //TODO: Date
-    ) : UserInteraction(InteractionType.PaymentTerminalReceipt)
-
     data class Redirect(
         val request: BrowserRequest
-    ) : UserInteraction(InteractionType.Redirect)
+    ) : UserInteraction()
 
-    enum class InteractionType {
-        PaymentTerminalReceipt,
+    private enum class InteractionType {
         Redirect
     }
 }
