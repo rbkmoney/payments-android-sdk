@@ -19,6 +19,7 @@
 package money.rbk.presentation.screen.result
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,13 +27,24 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fmt_payment_results.*
 import money.rbk.R
+import money.rbk.presentation.activity.checkout.InitializeListener
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.base.BasePresenter
-import money.rbk.presentation.screen.card.BankCardPresenter.Companion.ACTION_INITIALIZE
+import money.rbk.presentation.screen.card.ACTION_INITIALIZE
 import money.rbk.presentation.utils.makeGone
 import money.rbk.presentation.utils.makeVisible
 
 class ResultFragment : BaseFragment<ResultView>(), ResultView {
+
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if (context is InitializeListener) {
+            initializeListener = context
+        }
+    }
+
+    private var initializeListener: InitializeListener? = null
 
     companion object {
         const val KEY_ACTION_RESULT = "key_action_result"
@@ -141,7 +153,7 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
 
     override fun sendResult(action: Int) {
         if (action == ACTION_INITIALIZE) {
-
+            initializeListener?.initialize()
         } else {
 
             val intent = Intent()

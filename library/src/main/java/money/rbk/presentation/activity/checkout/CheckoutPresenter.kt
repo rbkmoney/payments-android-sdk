@@ -26,7 +26,7 @@ import money.rbk.presentation.model.InvoiceModel
 import money.rbk.presentation.model.InvoiceStateModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePresenter
-import money.rbk.presentation.screen.card.BankCardPresenter.Companion.ACTION_INITIALIZE
+import money.rbk.presentation.screen.card.ACTION_INITIALIZE
 
 class CheckoutPresenter(
         navigator: Navigator,

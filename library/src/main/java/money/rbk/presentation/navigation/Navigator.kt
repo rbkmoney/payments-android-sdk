@@ -88,19 +88,22 @@ class Navigator(
 
 
     fun openErrorFragment(
-            parent: Fragment,
+            parent: Fragment?,
             @StringRes messageRes: Int,
             positiveAction: Int? = null,
             negativeAction: Int? = null
-    ) = with(parent) {
+    ) {
+
 
         val fragment = ResultFragment.newInstance(
                 ResultType.ERROR,
-                activity?.getString(messageRes),
+                activity.getString(messageRes),
                 positiveAction,
                 negativeAction)
                 .apply {
-                    setTargetFragment(this, REQUEST_ERROR)
+                    if (parent != null) {
+                        setTargetFragment(parent, REQUEST_ERROR)
+                    }
                 }
         addFragmentToActivity(fragment, fragment::class.java.name)
     }

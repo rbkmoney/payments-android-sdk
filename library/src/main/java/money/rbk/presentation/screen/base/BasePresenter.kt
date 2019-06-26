@@ -18,7 +18,6 @@
 
 package money.rbk.presentation.screen.base
 
-import androidx.fragment.app.Fragment
 import money.rbk.R
 import money.rbk.data.exception.NetworkServiceException
 import money.rbk.data.exception.ParseException
@@ -58,7 +57,7 @@ abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator
 
                 NetworkServiceException.NoInternetException ->
                     navigator.openErrorFragment(
-                            parent = view as Fragment,
+                            parent = null,
                             messageRes = R.string.error_connection,
                             positiveAction = retryAction)
 
@@ -67,14 +66,14 @@ abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator
                 is NetworkServiceException.ApiException,
                 is NetworkServiceException.InternalServerException ->
                     navigator.openErrorFragment(
-                            parent = view as Fragment,
+                            parent = null,
                             messageRes = R.string.error_busines_logic,
                             positiveAction = retryAction)
             }
 
     private fun ParseException.process(retryAction: Int?) {
         navigator.openErrorFragment(
-                parent = view as Fragment,
+                parent = null,
                 messageRes = R.string.error_busines_logic,
                 positiveAction = retryAction)
     }

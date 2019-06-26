@@ -34,6 +34,7 @@ import money.rbk.presentation.activity.web.WebViewActivity
 import money.rbk.presentation.model.BrowserRequestModel
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.result.ResultFragment
+import money.rbk.presentation.screen.result.ResultFragment.Companion.KEY_ACTION_RESULT
 import money.rbk.presentation.utils.*
 import ru.tinkoff.decoro.MaskImpl
 import ru.tinkoff.decoro.slots.PredefinedSlots
@@ -101,11 +102,11 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
                 currentYear,
                 currentMonth
         )
-            .setActivatedMonth(currentMonth)
-            .setActivatedYear(currentYear)
-            .setMaxYear(currentYear + MAX_YEARS_CARD_VALIDITY)
-            .setMinYear(currentYear)
-            .build()
+                .setActivatedMonth(currentMonth)
+                .setActivatedYear(currentYear)
+                .setMaxYear(currentYear + MAX_YEARS_CARD_VALIDITY)
+                .setMinYear(currentYear)
+                .build()
     }
 
     override fun onAttach(context: Context?) {
@@ -130,17 +131,17 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             WebViewActivity.REQUEST_CODE -> presenter.on3DsPerformed()
-            ResultFragment.REQUEST_ERROR -> presenter.onErrorTest(data)
+            ResultFragment.REQUEST_ERROR -> presenter.onErrorTest(data?.getIntExtra(KEY_ACTION_RESULT, ACTION_UNKNOWN))
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
     override fun clear() =
-        sequenceOf(edCardNumber, edCardDate, edCardCvv, edCardName, edEmail)
-            .forEach {
-                it.setText(R.string.empty)
-                it.clearState()
-            }
+            sequenceOf(edCardNumber, edCardDate, edCardCvv, edCardName, edEmail)
+                    .forEach {
+                        it.setText(R.string.empty)
+                        it.clearState()
+                    }
 
     override fun showProgress() {
         fieldsSequence.forEach { it.isEnabled = false }
@@ -212,9 +213,9 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
 
         val cardNumberMask = MaskImpl.createNonTerminated(PredefinedSlots.CARD_NUMBER_STANDARD)
         MaskFormatWatcher(cardNumberMask)
-            .apply {
-                setCallback(CardChangeListener(::onCardDetected))
-                installOn(edCardNumber)
-            }
+                .apply {
+                    setCallback(CardChangeListener(::onCardDetected))
+                    installOn(edCardNumber)
+                }
     }
 }

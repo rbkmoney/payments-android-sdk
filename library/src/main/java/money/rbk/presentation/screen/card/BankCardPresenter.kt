@@ -45,13 +45,6 @@ class BankCardPresenter(
         private val invoiceEventsUseCase: UseCase<EmptyInputModel, CheckoutInfoModel> = CheckoutStateUseCase()
 ) : BasePresenter<BankCardView>(navigator) {
 
-    companion object {
-        const val ACTION_RETRY_PAYMENT = 0
-        const val ACTION_UPDATE_CHECKOUT = 1
-        const val ACTION_USE_ANOTHER_CARD = 2
-        const val ACTION_INITIALIZE = 3
-    }
-
     private var cardPaymentInputModel: CardPaymentInputModel? = null
 
     /* Presenter lifecycle */
@@ -250,7 +243,7 @@ class BankCardPresenter(
         view?.clear()
     }
 
-    fun onErrorTest(action: Int) =
+    fun onErrorTest(action: Int?) =
             when (action) {
                 ACTION_RETRY_PAYMENT -> performPayment()
                 ACTION_USE_ANOTHER_CARD -> clearPayment()
