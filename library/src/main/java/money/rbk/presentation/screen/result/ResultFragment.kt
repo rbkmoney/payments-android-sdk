@@ -71,7 +71,7 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
                     putInt(KEY_ACTION_POSITIVE, it)
                 }
                 negativeAction?.let {
-                    putInt(KEY_ACTION_POSITIVE, it)
+                    putInt(KEY_ACTION_NEGATIVE, it)
                 }
 
             }
