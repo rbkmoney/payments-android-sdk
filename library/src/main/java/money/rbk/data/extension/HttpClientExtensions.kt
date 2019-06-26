@@ -35,8 +35,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
-import java.util.Locale
-import java.util.UUID
+import java.util.*
 
 internal fun <T> OkHttpClient.execute(
     apiRequest: ApiRequest<T>
@@ -51,7 +50,7 @@ internal fun <T> OkHttpClient.execute(
         .addHeader("Content-Type", "application/json; charset=utf-8")
         .addHeader("Accept-Language", Locale.getDefault().language)
         .addHeader("Authorization", "Bearer ${apiRequest.invoiceAccessToken}")
-        .addHeader("X-Request-ID", UUID.randomUUID().toString())
+        .addHeader("X-Request-ID", UUID.randomUUID().toString().take(10))
         .addHeader("User-Agent", userAgent)
 
     apiRequest.headers
