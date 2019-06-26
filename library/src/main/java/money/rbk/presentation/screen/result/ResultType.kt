@@ -21,5 +21,5 @@ package money.rbk.presentation.screen.result
 import java.io.Serializable
 
 enum class ResultType : Serializable {
-    SUCCESS, ERROR
+    SUCCESS, ERROR, UNKNOWN
 }

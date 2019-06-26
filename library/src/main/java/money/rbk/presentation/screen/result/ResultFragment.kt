@@ -81,18 +81,18 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
         when (arguments?.get(KEY_RESULT_TYPE)) {
             ResultType.SUCCESS -> showSuccess()
             ResultType.ERROR -> showError()
+            ResultType.UNKNOWN -> showUnknown()
         }
 
     }
 
-    override fun showProgress() {
-    }
+    override fun showProgress() = Unit
 
-    override fun hideProgress() {
-    }
+    override fun hideProgress() = Unit
 
     override fun showSuccess() {
         clSuccessful.makeVisible()
+        clUnknown.makeGone()
         clUnsuccessful.makeGone()
         tvPaidWith.text = arguments?.getString(KEY_MESSAGE)
 
@@ -103,6 +103,7 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
 
     override fun showError() {
         clSuccessful.makeGone()
+        clUnknown.makeGone()
         clUnsuccessful.makeVisible()
         tvCause.text = arguments?.getString(KEY_MESSAGE)
 
@@ -128,6 +129,14 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
         btnUseAnotherCard.setOnClickListener {
             sendResult(actionNegative!!)
         }
+    }
+
+    override fun showUnknown() {
+        clSuccessful.makeGone()
+        clUnknown.makeVisible()
+        clUnsuccessful.makeGone()
+
+        tvRefundMessage.text = arguments?.getString(KEY_MESSAGE)
     }
 
     override fun sendResult(action: Int) {

@@ -96,5 +96,6 @@
     <string name="error_invalid_request">Неверный запрос</string>
     <string name="error_unsupported_card_type_for_invoice">Карта не поддерживается для данного инвойса</string>
     <string name="error_busines_logic">В процессе проведения платежа возникла непредвиденная ошибка. Пожалуйста, повторите попытку платежа. В случае сохранения ошибки обратитесь в службу поддежки</string>
+    <string name="payment_refund">Возврат платежа</string>
 
 </resources>

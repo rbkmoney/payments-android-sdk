@@ -26,4 +26,5 @@ interface ResultView : BaseView{
 
     fun showError()
     fun sendResult(action: Int)
+    fun showUnknown()
 }
