@@ -105,7 +105,7 @@ class Navigator(
                         setTargetFragment(parent, REQUEST_ERROR)
                     }
                 }
-        addFragmentToActivity(fragment, fragment::class.java.name)
+        replaceFragmentInActivity(fragment)
     }
 
     private fun replaceFragmentInActivity(fragment: Fragment) {
