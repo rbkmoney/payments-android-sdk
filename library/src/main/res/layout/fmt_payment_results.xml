@@ -86,7 +86,7 @@
         android:id="@+id/clUnsuccessful"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/tvUnsuccessful"
@@ -122,16 +122,6 @@
             app:layout_constraintTop_toBottomOf="@+id/ivUnsuccessful"
             tools:text="Невалидный способ оплаты" />
 
-        <TextView
-            android:id="@+id/tvSolveProblem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_default"
-            android:text="@string/how_to_solve_problem"
-            android:textAppearance="@style/TextAppearance.RBKMoney.Headline.BlueLight"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvCause" />
 
 
         <Button
@@ -145,7 +135,7 @@
             android:text="@string/try_again"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvSolveProblem" />
+            app:layout_constraintTop_toBottomOf="@+id/tvCause" />
 
 
         <Button
@@ -156,29 +146,20 @@
             android:layout_marginStart="@dimen/spacing_default"
             android:layout_marginTop="@dimen/spacing_default"
             android:layout_marginEnd="@dimen/spacing_default"
+            android:layout_marginBottom="@dimen/spacing_huge"
             android:text="@string/use_another_card"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnTryAgain" />
 
-        <TextView
-            android:id="@+id/tvAllPaymentMethods"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_default"
-            android:layout_marginBottom="@dimen/spacing_default"
-            android:text="@string/all_payment_methods"
-            android:textAppearance="@style/TextAppearance.RBKMoney.Headline.BlueLight"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnUseAnotherCard" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clUnknown"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tvPaymentRefund"
