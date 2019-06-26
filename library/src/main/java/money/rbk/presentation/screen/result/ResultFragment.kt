@@ -31,6 +31,7 @@ import money.rbk.presentation.activity.checkout.InitializeListener
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.base.BasePresenter
 import money.rbk.presentation.screen.card.ACTION_INITIALIZE
+import money.rbk.presentation.screen.card.ACTION_UNKNOWN
 import money.rbk.presentation.utils.makeGone
 import money.rbk.presentation.utils.makeVisible
 
@@ -119,16 +120,16 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
         clUnsuccessful.makeVisible()
         tvCause.text = arguments?.getString(KEY_MESSAGE)
 
-        val actionPositive = arguments?.getInt(KEY_ACTION_POSITIVE)
-        val actionNegative = arguments?.getInt(KEY_ACTION_NEGATIVE)
+        val actionPositive = arguments?.getInt(KEY_ACTION_POSITIVE, ACTION_UNKNOWN)
+        val actionNegative = arguments?.getInt(KEY_ACTION_NEGATIVE, ACTION_UNKNOWN)
 
-        if (actionNegative != null) {
+        if (actionNegative != ACTION_UNKNOWN) {
             btnUseAnotherCard.makeVisible()
         } else {
             btnUseAnotherCard.makeGone()
         }
 
-        if (actionPositive != null) {
+        if (actionPositive != ACTION_UNKNOWN) {
             btnTryAgain.makeVisible()
         } else {
             btnTryAgain.makeGone()

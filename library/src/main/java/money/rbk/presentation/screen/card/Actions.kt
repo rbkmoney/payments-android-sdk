@@ -18,8 +18,8 @@
 
 package money.rbk.presentation.screen.card
 
-const val ACTION_RETRY_PAYMENT = 0
-const val ACTION_UPDATE_CHECKOUT = 1
-const val ACTION_USE_ANOTHER_CARD = 2
-const val ACTION_INITIALIZE = 3
-const val ACTION_UNKNOWN = 4
+const val ACTION_RETRY_PAYMENT = 1
+const val ACTION_UPDATE_CHECKOUT = 2
+const val ACTION_USE_ANOTHER_CARD = 3
+const val ACTION_INITIALIZE = 4
+const val ACTION_UNKNOWN = -1

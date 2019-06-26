@@ -116,7 +116,7 @@ class Navigator(
 
     private fun addFragmentToActivity(fragment: Fragment, tag: String) {
         activity.supportFragmentManager.transact {
-            add(fragment, tag)
+            add(containerId,fragment, tag)
         }
     }
 
