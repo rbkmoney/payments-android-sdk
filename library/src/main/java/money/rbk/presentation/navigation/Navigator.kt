@@ -19,7 +19,6 @@
 package money.rbk.presentation.navigation
 
 import android.app.Activity
-import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
@@ -29,15 +28,16 @@ import androidx.fragment.app.FragmentTransaction
 import money.rbk.R
 import money.rbk.presentation.dialog.showAlert
 import money.rbk.presentation.screen.card.BankCardFragment
+import money.rbk.presentation.screen.gpay.GpayFragment
 import money.rbk.presentation.screen.methods.PaymentMethodsFragment
 import money.rbk.presentation.screen.result.ResultFragment
 import money.rbk.presentation.screen.result.ResultFragment.Companion.REQUEST_ERROR
 import money.rbk.presentation.screen.result.ResultType
 
 class Navigator(
-        private val activity: FragmentActivity,
-        @IdRes
-        private val containerId: Int
+    private val activity: FragmentActivity,
+    @IdRes
+    private val containerId: Int
 ) {
 
     fun openPaymentMethods() {
@@ -46,14 +46,8 @@ class Navigator(
         }
     }
 
-    fun openGooglePay() = inProgress()
-
-    private fun inProgress() {
-        Toast.makeText(
-                activity, "Данный функционал находится в стадии разработки",
-                Toast.LENGTH_LONG
-        )
-                .show()
+    fun openGooglePay() {
+        replaceFragmentInActivity(GpayFragment.newInstance())
     }
 
     fun openBankCard() {
@@ -62,10 +56,10 @@ class Navigator(
 
     fun openInvoiceCancelled() {
         replaceFragmentInActivity(
-                ResultFragment.newInstance(
-                        ResultType.ERROR,
-                        activity.getString(R.string.error_invoice_cancelled)
-                )
+            ResultFragment.newInstance(
+                ResultType.ERROR,
+                activity.getString(R.string.error_invoice_cancelled)
+            )
         )
     }
 
@@ -83,10 +77,10 @@ class Navigator(
 
     fun openSuccessFragment(@StringRes messageRes: Int, vararg formatArgs: String) {
         replaceFragmentInActivity(
-                ResultFragment.newInstance(
-                        ResultType.SUCCESS,
-                        activity.getString(messageRes, *formatArgs)
-                )
+            ResultFragment.newInstance(
+                ResultType.SUCCESS,
+                activity.getString(messageRes, *formatArgs)
+            )
         )
     }
 
@@ -94,34 +88,33 @@ class Navigator(
     fun back() {
         when (currentFragment) {
             is BankCardFragment -> replaceFragmentInActivity(PaymentMethodsFragment.newInstance())
-            is ResultFragment -> replaceFragmentInActivity(BankCardFragment.newInstance())
+            is ResultFragment -> addFragmentToActivity(BankCardFragment.newInstance(),
+                ResultFragment::class.java.name)
             else -> activity.finish()
         }
     }
 
-
     fun openErrorFragment(
-            parent: Fragment? = currentFragment,
-            @StringRes messageRes: Int,
-            positiveAction: Int? = null,
-            negativeAction: Int? = null
+        parent: Fragment? = currentFragment,
+        @StringRes messageRes: Int,
+        positiveAction: Int? = null,
+        negativeAction: Int? = null
     ) {
 
-
         val fragment = ResultFragment.newInstance(
-                ResultType.ERROR,
-                activity.getString(messageRes),
-                positiveAction,
-                negativeAction)
-                .apply {
-                    if (parent != null) {
-                        setTargetFragment(parent, REQUEST_ERROR)
-                    }
+            ResultType.ERROR,
+            activity.getString(messageRes),
+            positiveAction,
+            negativeAction)
+            .apply {
+                if (parent != null) {
+                    setTargetFragment(parent, REQUEST_ERROR)
                 }
+            }
         replaceFragmentInActivity(fragment)
     }
 
-    private val currentFragment : Fragment?
+    private val currentFragment: Fragment?
         get() = activity.supportFragmentManager.findFragmentById(R.id.container)
 
     private fun replaceFragmentInActivity(fragment: Fragment) {
@@ -132,7 +125,7 @@ class Navigator(
 
     private fun addFragmentToActivity(fragment: Fragment, tag: String) {
         activity.supportFragmentManager.transact {
-            add(containerId,fragment, tag)
+            add(containerId, fragment, tag)
         }
     }
 
@@ -140,7 +133,7 @@ class Navigator(
         beginTransaction().apply {
             action()
         }
-                .commitAllowingStateLoss()
+            .commitAllowingStateLoss()
     }
 
 }

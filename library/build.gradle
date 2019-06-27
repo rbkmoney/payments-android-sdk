@@ -53,6 +53,8 @@ dependencies {
     implementation "androidx.cardview:cardview:$androidx.cardview"
     implementation "androidx.recyclerview:recyclerview:$androidx.recyclerview"
 
+    implementation "com.google.android.gms:play-services-wallet:$playServicesWallet"
+
     implementation "ru.tinkoff.decoro:decoro:$decoroVersion"
 
     /* OkHttp */
