@@ -30,6 +30,7 @@ import money.rbk.sample.adapter.InvoiceTemplatesAdapter
 import money.rbk.sample.dialog.showAlert
 import money.rbk.sample.network.model.InvoiceResponse
 import money.rbk.sample.network.model.InvoiceTemplateResponse
+import money.rbk.sample.network.model.InvoiceModel
 
 class MainActivity : AppCompatActivity(), MainView {
 
@@ -46,9 +47,9 @@ class MainActivity : AppCompatActivity(), MainView {
         presenter.attachView(this)
     }
 
-    override fun setTemplates(invoiceTemplates: List<InvoiceTemplateResponse>) {
+    override fun setTemplates(invoiceTemplates: List<InvoiceTemplateResponse>, invoices: List<InvoiceModel>) {
         rvTemplates.layoutManager = LinearLayoutManager(this)
-        rvTemplates.adapter = InvoiceTemplatesAdapter(invoiceTemplates, presenter::onBuyClick)
+        rvTemplates.adapter = InvoiceTemplatesAdapter(invoiceTemplates, invoices, presenter::onBuyFromTemplateClick, presenter::onBuyFromInvoiceClick)
         rvTemplates.visibility = View.VISIBLE
     }
 
@@ -68,12 +69,12 @@ class MainActivity : AppCompatActivity(), MainView {
                 }))
     }
 
-    override fun startCheckout(shopAndInvoice: Pair<String, InvoiceResponse>) {
-        val (shopName, invoiceResponse) = shopAndInvoice
+    override fun startCheckout(invoiceModel: InvoiceModel) {
+
         startActivityForResult(RbkMoney.buildCheckoutIntent(this,
-            invoiceResponse.invoice.id,
-            invoiceResponse.invoiceAccessToken.payload,
-            shopName
+            invoiceModel.id,
+            invoiceModel.invoiceAccessToken,
+            invoiceModel.shopName
         ),
             CHECKOUT_REQUEST_CODE)
     }
