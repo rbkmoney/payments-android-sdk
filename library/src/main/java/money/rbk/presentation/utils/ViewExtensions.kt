@@ -18,6 +18,9 @@
 
 package money.rbk.presentation.utils
 
+import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -78,4 +81,14 @@ fun ImageView.activate(){
 
 fun ImageView.deactivate(){
     isActivated = false
+}
+
+
+fun View.makeGone(){
+    this.visibility = GONE
+}
+
+
+fun View.makeVisible(){
+    this.visibility = VISIBLE
 }

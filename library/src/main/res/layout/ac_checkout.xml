@@ -25,48 +25,48 @@
     android:background="@drawable/background_gradient"
     >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:background="@color/white"
-            android:id="@+id/tbMain"
+    <LinearLayout
+        android:id="@+id/tbMain"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <ImageButton
+            android:id="@+id/ibtnBack"
+            android:layout_width="?attr/actionBarSize"
             android:layout_height="?attr/actionBarSize"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            >
+            android:layout_weight="0"
+            android:background="?selectableItemBackground"
+            android:gravity="center"
+            android:src="@drawable/ic_back"
+            />
 
-            <ImageButton
-                android:id="@+id/ibtnBack"
-                android:layout_width="?attr/actionBarSize"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?selectableItemBackground"
-                android:src="@drawable/ic_back"
-                android:gravity="center"
-                android:layout_weight="0"
-                />
+        <TextView
+            android:id="@+id/tvShopName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.RBKMoney.Normal"
+            tools:text="shop.ru"
+            />
 
-            <TextView
-                android:id="@+id/tvShopName"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textAppearance="@style/TextAppearance.RBKMoney.Normal"
-                android:layout_weight="1"
-                tools:text="shop.ru"
-                />
+        <ImageButton
+            android:id="@+id/ibtnClose"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_weight="0"
+            android:background="?selectableItemBackground"
+            android:gravity="center"
+            android:src="@drawable/ic_cross_green"
+            />
 
-            <ImageButton
-                android:id="@+id/ibtnClose"
-                android:layout_width="?attr/actionBarSize"
-                android:gravity="center"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?selectableItemBackground"
-                android:src="@drawable/ic_cross_green"
-                android:layout_weight="0"
-                />
-
-        </LinearLayout>
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -129,6 +129,13 @@
                 tools:text="@tools:sample/lorem"
                 />
 
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/groupInvoiceInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="tvOrderDetails, tvOrderDetailsLabel, tvPrice, ivFooterLock, tvFooterSecurity, ivFooterLogo, ivFooterLogos, tvFooterCopyright"
+                />
 
             <FrameLayout
                 android:id="@+id/container"
@@ -159,7 +166,8 @@
                 android:text="@string/secure_payment_with"
                 android:textAppearance="@style/TextAppearance.RBKMoney.Headline.White"
                 app:layout_constraintStart_toEndOf="@+id/ivFooterLock"
-                app:layout_constraintTop_toBottomOf="@+id/container" />
+                app:layout_constraintTop_toBottomOf="@+id/container"
+                />
 
             <ImageView
                 android:id="@+id/ivFooterLogo"
@@ -195,7 +203,8 @@
                 android:textAppearance="@style/TextAppearance.RBKMoney.Footer"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivFooterLogos" />
+                app:layout_constraintTop_toBottomOf="@+id/ivFooterLogos"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

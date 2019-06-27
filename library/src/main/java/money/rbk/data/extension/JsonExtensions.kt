@@ -20,6 +20,7 @@ package money.rbk.data.extension
 
 import money.rbk.data.serialization.Deserializer
 import money.rbk.data.utils.parseApiDate
+import money.rbk.data.utils.parseShortApiDate
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -56,6 +57,9 @@ internal inline fun <reified T, O> JSONObject.parseList(key: String, parser: Des
 
 internal fun JSONObject.parseDate(key: String) =
     getString(key).parseApiDate()
+
+internal fun JSONObject.parseShortDate(key: String) =
+    getString(key).parseShortApiDate()
 
 internal inline fun <reified T, O> JSONObject.parseNullableList(key: String,
     parser: Deserializer<O, T>): List<T>? = optJSONArray(key)?.let(parser::fromJsonArray)

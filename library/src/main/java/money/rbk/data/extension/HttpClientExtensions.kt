@@ -35,8 +35,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
-import java.util.Locale
-import java.util.UUID
+import java.util.*
 
 internal fun <T> OkHttpClient.execute(
     apiRequest: ApiRequest<T>
@@ -90,6 +89,8 @@ internal fun <T> OkHttpClient.execute(
     try {
         return apiRequest.convertJsonToResponse(stringBody)
     } catch (e: JSONException) {
+        throw ParseException.ResponseParsingException(stringBody, e)
+    } catch (e: ParseException) {
         throw ParseException.ResponseParsingException(stringBody, e)
     }
 }

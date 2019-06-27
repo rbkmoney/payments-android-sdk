@@ -40,7 +40,7 @@ sealed class PaymentToolDetails {
         val tokenProvider: TokenProvider?
     ) : PaymentToolDetails() {
 
-        override val paymentInfo: String = "$paymentSystem $last4"
+        override val paymentInfo: String = "$paymentSystem ${last4.orEmpty()}"
 
         companion object : Deserializer<JSONObject, BankCard> {
 

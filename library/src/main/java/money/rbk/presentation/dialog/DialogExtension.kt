@@ -21,6 +21,7 @@ package money.rbk.presentation.dialog
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
 
+//TODO: Only for test!!!
 fun Context.showAlert(title: String, message: CharSequence,
     positiveButtonPair: AlertButton? = null,
     negativeButtonPair: AlertButton? = null): AlertDialog =

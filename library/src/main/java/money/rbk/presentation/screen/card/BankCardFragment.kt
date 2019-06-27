@@ -34,20 +34,18 @@ import money.rbk.presentation.activity.checkout.CheckoutActivity
 import money.rbk.presentation.activity.web.WebViewActivity
 import money.rbk.presentation.model.BrowserRequestModel
 import money.rbk.presentation.screen.base.BaseFragment
-import money.rbk.presentation.utils.clearState
-import money.rbk.presentation.utils.hideKeyboard
-import money.rbk.presentation.utils.setRightDrawable
-import money.rbk.presentation.utils.setValid
-import money.rbk.presentation.utils.toDozenString
+import money.rbk.presentation.screen.result.ResultFragment
+import money.rbk.presentation.screen.result.ResultFragment.Companion.KEY_ACTION_RESULT
+import money.rbk.presentation.utils.*
 import ru.tinkoff.decoro.MaskImpl
 import ru.tinkoff.decoro.slots.PredefinedSlots
 import ru.tinkoff.decoro.watchers.MaskFormatWatcher
-import java.util.Calendar
+import java.util.*
 import java.util.Calendar.MONTH
 import java.util.Calendar.YEAR
 
 class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
-    MonthPickerDialog.OnDateSetListener {
+        MonthPickerDialog.OnDateSetListener {
 
     companion object {
         fun newInstance() = BankCardFragment()
@@ -64,10 +62,10 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
     }
 
     override fun onCreateView(inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?
     ): View? =
-        inflater.inflate(R.layout.fmt_card, container, false)
+            inflater.inflate(R.layout.fmt_card, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -77,11 +75,11 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
             activity?.hideKeyboard()
             view.requestFocus()
             presenter.onPerformPayment(
-                cardNumber = edCardNumber.text.toString().replace(" ", ""),
-                expDate = edCardDate.text.toString(),
-                cvv = edCardCvv.text.toString(),
-                cardHolder = edCardName.text.toString(),
-                email = edEmail.text.toString()
+                    cardNumber = edCardNumber.text.toString().replace(" ", ""),
+                    expDate = edCardDate.text.toString(),
+                    cvv = edCardCvv.text.toString(),
+                    cardHolder = edCardName.text.toString(),
+                    email = edEmail.text.toString()
             )
         }
 
@@ -105,16 +103,16 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
         val currentMonth = currentDate.get(MONTH)
         val currentYear = currentDate.get(YEAR)
         return MonthPickerDialog.Builder(
-            activity,
-            this,
-            currentYear,
-            currentMonth
+                activity,
+                this,
+                currentYear,
+                currentMonth
         )
-            .setActivatedMonth(currentMonth)
-            .setActivatedYear(currentYear)
-            .setMaxYear(currentYear + MAX_YEARS_CARD_VALIDITY)
-            .setMinYear(currentYear)
-            .build()
+                .setActivatedMonth(currentMonth)
+                .setActivatedYear(currentYear)
+                .setMaxYear(currentYear + MAX_YEARS_CARD_VALIDITY)
+                .setMinYear(currentYear)
+                .build()
     }
 
     override fun onAttach(context: Context?) {
@@ -133,23 +131,23 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
 
     override fun showRedirect(request: BrowserRequestModel) {
         startActivityForResult(WebViewActivity.buildIntent(activity!!, request),
-            WebViewActivity.REQUEST_CODE)
+                WebViewActivity.REQUEST_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == WebViewActivity.REQUEST_CODE) {
-            presenter.on3DsPerformed()
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            WebViewActivity.REQUEST_CODE -> presenter.on3DsPerformed()
+            ResultFragment.REQUEST_ERROR -> presenter.onErrorTest(data?.getIntExtra(KEY_ACTION_RESULT, ACTION_UNKNOWN))
+            else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
     override fun clear() =
-        sequenceOf(edCardNumber, edCardDate, edCardCvv, edCardName, edEmail)
-            .forEach {
-                it.setText(R.string.empty)
-                it.clearState()
-            }
+            sequenceOf(edCardNumber, edCardDate, edCardCvv, edCardName, edEmail)
+                    .forEach {
+                        it.setText(R.string.empty)
+                        it.clearState()
+                    }
 
     override fun showProgress() {
         fieldsSequence.forEach { it.isEnabled = false }
@@ -221,9 +219,9 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
 
         val cardNumberMask = MaskImpl.createNonTerminated(PredefinedSlots.CARD_NUMBER_STANDARD)
         MaskFormatWatcher(cardNumberMask)
-            .apply {
-                setCallback(CardChangeListener(::onCardDetected))
-                installOn(edCardNumber)
-            }
+                .apply {
+                    setCallback(CardChangeListener(::onCardDetected))
+                    installOn(edCardNumber)
+                }
     }
 }

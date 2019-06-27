@@ -32,7 +32,11 @@ import money.rbk.presentation.utils.adjustSize
 import money.rbk.presentation.utils.extra
 import money.rbk.presentation.utils.extraNullable
 
-class CheckoutActivity : AppCompatActivity(), CheckoutView {
+class CheckoutActivity : AppCompatActivity(), CheckoutView, InitializeListener {
+
+    override fun initialize() {
+        presenter.onInitialize()
+    }
 
     companion object {
         private const val KEY_INVOICE_ID = "invoice_id"
@@ -78,6 +82,7 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
     }
 
     override fun showInvoice(invoiceModel: InvoiceModel) {
+        groupInvoiceInfo.visibility = View.VISIBLE
         tvShopName.text = invoiceModel.shopName
         tvPrice.text = invoiceModel.cost
         tvOrderDetails.text = invoiceModel.orderDetails

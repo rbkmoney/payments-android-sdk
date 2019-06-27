@@ -21,7 +21,6 @@ package money.rbk.presentation.screen.base
 import money.rbk.R
 import money.rbk.data.exception.NetworkServiceException
 import money.rbk.data.exception.ParseException
-import money.rbk.presentation.dialog.AlertButton
 import money.rbk.presentation.navigation.Navigator
 
 abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator) {
@@ -38,27 +37,31 @@ abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator
         onViewDetached()
     }
 
-    fun onError(error: Throwable, retryButton: AlertButton? = null) {
-        when (error) {
-            is NetworkServiceException -> error.process(retryButton)
-            is ParseException -> error.process(retryButton)
-        }
-
+    //TODO: varargs actions
+    fun onError(error: Throwable, retryAction: Int? = null) {
         view?.hideProgress()
         error.printStackTrace()
+        return when (error) {
+            is NetworkServiceException -> error.process(retryAction)
+            is ParseException -> error.process(retryAction)
+            else -> navigator.openErrorFragment(
+                messageRes = R.string.error_busines_logic,
+                positiveAction = retryAction)
+        }
     }
 
     open fun onViewAttached(view: View) = Unit
 
     open fun onViewDetached() = Unit
 
-    private fun NetworkServiceException.process(retryButton: AlertButton?) =
+    //TODO: Make different handling this branches
+    private fun NetworkServiceException.process(retryAction: Int?) =
         when (this) {
-
             NetworkServiceException.NoInternetException ->
                 navigator.openErrorFragment(
+                    parent = null,
                     messageRes = R.string.error_connection,
-                    positiveButtonPair = retryButton)
+                    positiveAction = retryAction)
 
             is NetworkServiceException.RequestExecutionException,
             is NetworkServiceException.ResponseReadingException,
@@ -66,12 +69,13 @@ abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator
             is NetworkServiceException.InternalServerException ->
                 navigator.openErrorFragment(
                     messageRes = R.string.error_busines_logic,
-                    positiveButtonPair = retryButton)
+                    positiveAction = retryAction)
         }
 
-    private fun ParseException.process(retryButton: AlertButton?) {
-        navigator.openErrorFragment(R.string.error, R.string.error_busines_logic,
-            retryButton)
+    private fun ParseException.process(retryAction: Int?) {
+        navigator.openErrorFragment(
+            messageRes = R.string.error_busines_logic,
+            positiveAction = retryAction)
     }
 
 }

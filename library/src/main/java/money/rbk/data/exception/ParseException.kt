@@ -22,7 +22,7 @@ import org.json.JSONException
 
 sealed class ParseException(message: String, cause: Throwable? = null) : Exception(message) {
 
-    internal data class ResponseParsingException(val stringBody: String, val e: JSONException) :
+    internal data class ResponseParsingException(val stringBody: String, val e: Exception) :
         ParseException(stringBody, e)
 
     internal class UnknownFlowTypeException(val flowType: String) :
