@@ -30,6 +30,7 @@ import money.rbk.presentation.model.InvoiceModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.utils.adjustSize
 import money.rbk.presentation.utils.extra
+import money.rbk.presentation.utils.extraNullable
 
 class CheckoutActivity : AppCompatActivity(), CheckoutView {
 
@@ -37,17 +38,20 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
         private const val KEY_INVOICE_ID = "invoice_id"
         private const val KEY_INVOICE_ACCESS_TOKEN = "invoice_access_token"
         private const val KEY_SHOP_NAME = "shop_name"
+        private const val KEY_EMAIL = "email"
 
         fun buildIntent(
             activity: Activity,
             invoiceId: String,
             invoiceAccessToken: String,
-            shopName: String
+            shopName: String,
+            email: String?
         ) = Intent(activity, CheckoutActivity::class.java)
             .apply {
                 putExtra(KEY_INVOICE_ID, invoiceId)
                 putExtra(KEY_INVOICE_ACCESS_TOKEN, invoiceAccessToken)
                 putExtra(KEY_SHOP_NAME, shopName)
+                putExtra(KEY_EMAIL, email)
             }
     }
 
@@ -56,6 +60,7 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
     private val invoiceId by extra<String>(KEY_INVOICE_ID)
     private val invoiceAccessToken by extra<String>(KEY_INVOICE_ACCESS_TOKEN)
     private val shopName by extra<String>(KEY_SHOP_NAME)
+    private val email by extraNullable<String>(KEY_EMAIL)
 
     private val presenter by lazy { CheckoutPresenter(navigator) }
 
@@ -65,7 +70,7 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
         adjustSize()
 
         if (savedInstanceState == null) {
-            Injector.init(applicationContext, invoiceId, invoiceAccessToken, shopName)
+            Injector.init(applicationContext, invoiceId, invoiceAccessToken, shopName, email)
         }
 
         presenter.attachView(this)

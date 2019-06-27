@@ -51,7 +51,7 @@ internal fun <T> OkHttpClient.execute(
         .addHeader("Content-Type", "application/json; charset=utf-8")
         .addHeader("Accept-Language", Locale.getDefault().language)
         .addHeader("Authorization", "Bearer ${apiRequest.invoiceAccessToken}")
-        .addHeader("X-Request-ID", UUID.randomUUID().toString())
+        .addHeader("X-Request-ID", UUID.randomUUID().toString().take(10))
         .addHeader("User-Agent", userAgent)
 
     apiRequest.headers
@@ -84,7 +84,6 @@ internal fun <T> OkHttpClient.execute(
 
     when (val code = response.code()) {
         in 500..599 -> throw InternalServerException(code)
-        //TODO: Parse another type of errors
         in 400..499 -> throw ApiException(code, ApiError.fromJson(stringBody.toJsonObject()))
     }
 

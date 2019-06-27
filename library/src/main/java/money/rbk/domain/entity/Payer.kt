@@ -29,6 +29,8 @@ import org.json.JSONObject
 
 sealed class Payer : Serializable {
 
+    abstract val paymentToolInfo: String?
+
     companion object : Deserializer<JSONObject, Payer> {
         override fun fromJson(json: JSONObject): Payer {
             val payerType = json.getString("payerType")
@@ -53,6 +55,8 @@ sealed class Payer : Serializable {
         val paymentToolDetails: PaymentToolDetails? = null,
         val clientInfo: ClientInfo? = null
     ) : Payer() {
+
+        override val paymentToolInfo: String? = paymentToolDetails?.paymentInfo
 
         override fun toJson(): JSONObject = JSONObject().apply {
             put("payerType", PayerType.PaymentResourcePayer.name)

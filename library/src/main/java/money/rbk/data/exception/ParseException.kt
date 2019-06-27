@@ -40,4 +40,7 @@ sealed class ParseException(message: String, cause: Throwable? = null) : Excepti
     internal class UnsupportedPaymentMethodException(val method: String) :
         ParseException("Unsupported payment method:$method")
 
+    internal class UnsupportedInvoiceChangeTypeException(type: String) :
+        ParseException("Unknown invoice change type: $type")
+
 }

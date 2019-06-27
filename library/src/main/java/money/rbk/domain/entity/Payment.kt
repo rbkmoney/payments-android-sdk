@@ -21,15 +21,17 @@ package money.rbk.domain.entity
 import org.json.JSONObject
 import money.rbk.data.extension.getNullable
 import money.rbk.data.extension.parse
+import money.rbk.data.extension.parseDate
 import money.rbk.data.extension.parseNullable
 import money.rbk.data.extension.parseString
 import money.rbk.data.serialization.Deserializer
+import java.util.Date
 
 internal data class Payment(
     val id: String,
     val externalID: String?,
     val invoiceID: String,
-    val createdAt: String, //TODO DateTime
+    val createdAt: Date,
     val amount: Int,
     val currency: Currency,
     val flow: PaymentFlow,
@@ -44,7 +46,7 @@ internal data class Payment(
             id = json.getString("id"),
             externalID = json.getNullable<String>("externalID"),
             invoiceID = json.getString("invoiceID"),
-            createdAt = json.getString("createdAt"),
+            createdAt = json.parseDate("createdAt"),
             amount = json.getInt("amount"),
             currency = json.parseString("currency", Currency),
             flow = json.parse("flow", PaymentFlow),

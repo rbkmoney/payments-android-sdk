@@ -22,19 +22,16 @@ import money.rbk.di.Injector
 import money.rbk.domain.converter.EntityConverter
 import money.rbk.domain.converter.InvoiceChangesConverter
 import money.rbk.domain.entity.InvoiceEvent
-import money.rbk.domain.entity.InvoiceStatus
 import money.rbk.domain.extension.cost
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.InvoiceInitializeInputModel
 import money.rbk.domain.repository.CheckoutRepository
-import money.rbk.presentation.model.CheckoutState
+import money.rbk.presentation.model.CheckoutStateModel
 import money.rbk.presentation.model.InvoiceModel
-import money.rbk.presentation.model.InvoiceStateModel
-import money.rbk.presentation.utils.formatPrice
 
 internal class InvoiceUseCase(
     private val repository: CheckoutRepository = Injector.checkoutRepository,
-    private val invoiceChangesConverter: EntityConverter<List<InvoiceEvent>, CheckoutState> = InvoiceChangesConverter()) :
+    private val invoiceChangesConverter: EntityConverter<List<InvoiceEvent>, CheckoutStateModel> = InvoiceChangesConverter()) :
     UseCase<InvoiceInitializeInputModel, InvoiceModel>() {
 
     override fun invoke(
@@ -47,11 +44,7 @@ internal class InvoiceUseCase(
             val invoice = repository.loadInvoice()
             repository.loadPaymentMethods()
 
-            val checkoutState =
-                when (invoice.status) {
-                    InvoiceStatus.unpaid -> CheckoutState(InvoiceStateModel.Pending)
-                    else -> invoiceChangesConverter(repository.loadInvoiceEvents())
-                }
+            val checkoutState = invoiceChangesConverter(repository.loadInvoiceEvents())
 
             val invoiceModel = InvoiceModel(
                 invoice.id,

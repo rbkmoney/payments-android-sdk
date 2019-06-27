@@ -20,5 +20,6 @@ package money.rbk.sample.network.model
 
 class Invoice(
     val id: String,
-    val shopID: String
+    val shopID: String,
+    val description: String
 )

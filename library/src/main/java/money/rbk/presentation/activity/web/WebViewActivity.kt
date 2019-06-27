@@ -63,7 +63,7 @@ class WebViewActivity : Activity() {
         WebView(this).apply {
             webViewClient = object : WebViewClient() {
                 override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean =
-                    if (url == TERMINATION_URI) {
+                    if (url.equals(TERMINATION_URI, ignoreCase = true)) {
                         setResult(RESULT_OK)
                         finish()
                         true

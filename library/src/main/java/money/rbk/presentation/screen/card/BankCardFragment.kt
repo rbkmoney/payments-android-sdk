@@ -28,6 +28,7 @@ import android.view.WindowManager
 import com.whiteelephant.monthpicker.MonthPickerDialog
 import kotlinx.android.synthetic.main.fmt_card.*
 import money.rbk.R
+import money.rbk.di.Injector
 import money.rbk.domain.entity.CreditCardType
 import money.rbk.presentation.activity.checkout.CheckoutActivity
 import money.rbk.presentation.activity.web.WebViewActivity
@@ -56,6 +57,8 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
 
     override val presenter: BankCardPresenter by lazy { BankCardPresenter(navigator) }
 
+    private val userEmail = Injector.email
+
     private val fieldsSequence by lazy {
         sequenceOf(btnPay, edCardNumber, edCardDate, edCardCvv, edCardName, edEmail)
     }
@@ -68,11 +71,11 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         (activity as? CheckoutActivity)?.setBackButtonVisibility(true)
         view.requestFocus()
         btnPay.setOnClickListener {
             activity?.hideKeyboard()
+            view.requestFocus()
             presenter.onPerformPayment(
                 cardNumber = edCardNumber.text.toString().replace(" ", ""),
                 expDate = edCardDate.text.toString(),
@@ -84,6 +87,9 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
 
         edCardDate.setOnClickListener {
             setUpDateDialog().show()
+        }
+        if (edEmail.text.isBlank()) {
+            edEmail.setText(userEmail)
         }
         setUpWatchers()
     }
@@ -181,7 +187,7 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
 
     private fun setUpWatchers() {
 
-        edEmail.setOnFocusChangeListener { v, hasFocus ->
+        edEmail.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus.not()) {
                 presenter.validateEmail(edEmail.text.toString())
             } else {

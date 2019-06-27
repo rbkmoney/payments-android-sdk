@@ -26,6 +26,7 @@ import money.rbk.data.methods.GetInvoiceEvents
 import money.rbk.data.methods.GetInvoicePaymentMethods
 import money.rbk.data.response.CreatePaymentResourceResponse
 import money.rbk.data.response.CreatePaymentResponse
+import money.rbk.domain.entity.ClientInfo
 import money.rbk.domain.entity.ContactInfo
 import money.rbk.domain.entity.Flow
 import money.rbk.domain.entity.Invoice
@@ -42,6 +43,13 @@ internal class CheckoutRepositoryImpl(
     private val invoiceAccessToken: String,
     override val shopName: String
 ) : CheckoutRepository {
+
+    @Volatile
+    override var contactInfo: ContactInfo? = null
+    @Volatile
+    override var paymentTool: PaymentTool? = null
+    @Volatile
+    override var paymentId: String? = null
 
     private var invoiceEvents: MutableList<InvoiceEvent> = mutableListOf()
 
@@ -64,6 +72,9 @@ internal class CheckoutRepositoryImpl(
     override fun createPayment(paymentTool: PaymentTool,
         contactInfo: ContactInfo): CreatePaymentResponse {
 
+        this.paymentTool = paymentTool
+        this.contactInfo = contactInfo
+
         val createPaymentResource: CreatePaymentResourceResponse =
             okHttpClient.execute(CreatePaymentResource(invoiceAccessToken, paymentTool))
 
@@ -72,6 +83,9 @@ internal class CheckoutRepositoryImpl(
                 createPaymentResource.paymentToolToken,
                 createPaymentResource.paymentSession,
                 contactInfo), Flow.PaymentFlowInstant))
+            .also {
+                paymentId = it.id
+            }
     }
 
     override fun loadInvoiceEvents(): List<InvoiceEvent> =

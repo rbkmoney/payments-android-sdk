@@ -2,5 +2,5 @@ package money.rbk.presentation.model
 
 class CheckoutInfoModel(
     val cost: String,
-    val checkoutState: CheckoutState
+    val checkoutState: CheckoutStateModel
 ) : BaseIUModel()
