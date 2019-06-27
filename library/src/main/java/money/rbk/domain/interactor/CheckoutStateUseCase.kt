@@ -28,12 +28,11 @@ import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.domain.repository.CheckoutRepository
 import money.rbk.presentation.model.CheckoutInfoModel
-import money.rbk.presentation.model.CheckoutState
-import money.rbk.presentation.model.PaymentStateModel
+import money.rbk.presentation.model.CheckoutStateModel
 
 internal class CheckoutStateUseCase(
     private val checkoutRepository: CheckoutRepository = Injector.checkoutRepository,
-    private val invoiceChangesConverter: EntityConverter<List<InvoiceEvent>, CheckoutState> = InvoiceChangesConverter()
+    private val invoiceChangesConverter: EntityConverter<List<InvoiceEvent>, CheckoutStateModel> = InvoiceChangesConverter()
 ) : UseCase<EmptyInputModel, CheckoutInfoModel>() {
 
     private var startTime: Long = 0
@@ -41,6 +40,7 @@ internal class CheckoutStateUseCase(
     override fun invoke(inputModel: EmptyInputModel,
         onResultCallback: (CheckoutInfoModel) -> Unit,
         onErrorCallback: (Throwable) -> Unit) {
+
         startTime = System.currentTimeMillis()
         requestCheckoutState(onResultCallback, onErrorCallback)
     }
@@ -53,7 +53,7 @@ internal class CheckoutStateUseCase(
 
             val checkoutState = invoiceChangesConverter(checkoutRepository.loadInvoiceEvents())
 
-            if (checkoutState.paymentStateModel == PaymentStateModel.Pending) {
+            if (checkoutState == CheckoutStateModel.PaymentProcessing) {
                 if (System.currentTimeMillis() - startTime > UseCaseConstants.MAX_POLLING_TIME) {
                     throw UseCaseException.PollingTimeExceededException(UseCaseConstants.MAX_POLLING_TIME)
                 }

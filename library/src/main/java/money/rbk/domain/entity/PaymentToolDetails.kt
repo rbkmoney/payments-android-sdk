@@ -19,14 +19,15 @@
 package money.rbk.domain.entity
 
 import money.rbk.data.exception.ParseException
+import money.rbk.data.extension.findEnumOrNull
 import money.rbk.data.extension.getNullable
 import money.rbk.data.extension.parseNullableString
 import money.rbk.data.serialization.Deserializer
 import org.json.JSONObject
 
-const val PaymentToolDetailsBankCardType = "PaymentToolDetailsBankCard"
+sealed class PaymentToolDetails {
 
-sealed class PaymentToolDetails(val detailsType: String) {
+    abstract val paymentInfo: String
 
     data class BankCard(
         val cardNumberMask: String,
@@ -37,7 +38,9 @@ sealed class PaymentToolDetails(val detailsType: String) {
 
         val paymentSystem: String,
         val tokenProvider: TokenProvider?
-    ) : PaymentToolDetails(PaymentToolDetailsBankCardType) {
+    ) : PaymentToolDetails() {
+
+        override val paymentInfo: String = "$paymentSystem $last4"
 
         companion object : Deserializer<JSONObject, BankCard> {
 
@@ -65,11 +68,14 @@ sealed class PaymentToolDetails(val detailsType: String) {
 
         override fun fromJson(json: JSONObject): PaymentToolDetails {
             val detailsType = json.getString("detailsType")
-            return when (detailsType) {
-                PaymentToolDetailsBankCardType -> BankCard.fromJson(json)
-                else -> throw ParseException.UnsupportedPaymentToolDetails(detailsType)
-
+            return when (findEnumOrNull<DetailsType>(detailsType)) {
+                DetailsType.PaymentToolDetailsBankCard -> BankCard.fromJson(json)
+                null -> throw ParseException.UnsupportedPaymentToolDetails(detailsType)
             }
         }
+    }
+
+    private enum class DetailsType {
+        PaymentToolDetailsBankCard
     }
 }

@@ -83,9 +83,6 @@ fun String.isCardValidByLuna(): Boolean {
     return (unevenNumList.sum() + evenSum) % 10 == 0
 }
 
-val String.cardMask
-    get() = "*${substring(Math.max(count() - 4, 0), count())}"
-
 fun Int.toDozenString(): String =
     if (this / 10 == 0) {
         "0$this"

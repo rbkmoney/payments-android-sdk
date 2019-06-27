@@ -21,18 +21,15 @@ package money.rbk.domain.entity
 import money.rbk.data.serialization.Serializable
 import org.json.JSONObject
 
-const val PaymentToolCardDataType = "CardData"
-const val PaymentToolTokenizedCardDataType = "TokenizedCardData"
+sealed class PaymentTool(protected val paymentToolType: PaymentToolType) : Serializable {
 
-sealed class PaymentTool(open val paymentToolType: String) : Serializable {
-
-    //TODO: Make it secured way ???
+    //TODO: Make it secured way
     data class CardData(
         val cardNumber: String,
         val expDate: String,
         val cvv: String,
         val cardHolder: String
-    ) : PaymentTool(PaymentToolCardDataType) {
+    ) : PaymentTool(PaymentToolType.CardData) {
 
         override fun toJson(): JSONObject =
             JSONObject().apply {
@@ -40,18 +37,24 @@ sealed class PaymentTool(open val paymentToolType: String) : Serializable {
                 put("cardNumber", cardNumber)
                 put("expDate", expDate)
                 put("cvv", cvv)
-                put("cardHolder", cardHolder + "Ivan Zdorovko")
+                put("cardHolder", cardHolder)
             }
     }
 
-    data class PaymentToolTokenizedCardData(
+    data class TokenizedCardData(
         val provider: TokenProvider
-    ) : PaymentTool(PaymentToolTokenizedCardDataType) {
+    ) : PaymentTool(PaymentToolType.TokenizedCardData) {
+
         override fun toJson(): JSONObject =
             JSONObject().apply {
                 put("paymentToolType", paymentToolType)
                 put("provider", provider.name)
             }
+    }
+
+    enum class PaymentToolType {
+        CardData,
+        TokenizedCardData
     }
 
 }

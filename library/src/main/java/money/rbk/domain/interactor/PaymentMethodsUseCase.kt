@@ -31,7 +31,6 @@ internal class PaymentMethodsUseCase(
     private val repository: CheckoutRepository = Injector.checkoutRepository) :
     UseCase<EmptyInputModel, PaymentMethodsModel>() {
 
-    // TODO: Make support for cards types
     override fun invoke(
         inputModel: EmptyInputModel,
         onResultCallback: (PaymentMethodsModel) -> Unit,

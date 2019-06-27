@@ -52,7 +52,6 @@ abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator
 
     open fun onViewDetached() = Unit
 
-    //TODO: Make different handling this branches
     private fun NetworkServiceException.process(retryButton: AlertButton?) =
         when (this) {
 

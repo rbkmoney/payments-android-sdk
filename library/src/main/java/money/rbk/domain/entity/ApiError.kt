@@ -22,7 +22,9 @@ import money.rbk.data.extension.findEnumOrNull
 import money.rbk.data.extension.getNullable
 import money.rbk.data.serialization.Deserializer
 import org.json.JSONObject
-//{
+
+//TODO: Make another mapping
+// {
 //    "description":"No match to pattern. Path to item: paymentTool.cardNumber",
 //    "errorType":"schema_violated",
 //    "name":"PaymentResourceParams"

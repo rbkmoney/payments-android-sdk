@@ -19,7 +19,6 @@
 package money.rbk.presentation.navigation
 
 import android.app.Activity
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
@@ -33,7 +32,6 @@ import money.rbk.presentation.dialog.showAlert
 import money.rbk.presentation.screen.card.BankCardFragment
 import money.rbk.presentation.screen.methods.PaymentMethodsFragment
 
-// TODO: Activity Scope
 class Navigator(
     private val activity: FragmentActivity,
     @IdRes
@@ -59,6 +57,18 @@ class Navigator(
 
     fun openInvoiceCancelled() {
         openErrorFragment(message = activity.getString(R.string.error_invoice_cancelled))
+    }
+
+    fun openWarningFragment(@StringRes titleRes: Int, @StringRes messageRes: Int) {
+        val finish = {
+            activity.setResult(Activity.RESULT_OK)
+            activity.finish()
+        }
+
+        activity.showAlert(
+            activity.getString(titleRes),
+            activity.getString(messageRes),
+            positiveButtonPair = R.string.label_ok to finish)
     }
 
     fun openSuccessFragment(@StringRes messageRes: Int, vararg formatArgs: String) {
