@@ -27,37 +27,71 @@ import kotlinx.android.synthetic.main.item_invoice_template.view.*
 import money.rbk.sample.R
 import money.rbk.sample.activity.utils.formatPrice
 import money.rbk.sample.network.model.InvoiceTemplateResponse
+import money.rbk.sample.network.model.InvoiceModel
 
 class InvoiceTemplatesAdapter(
-    private val items: List<InvoiceTemplateResponse>,
-    private val onTemplateBuyListener: OnTemplateBuyListener
-) : RecyclerView.Adapter<InvoiceTemplatesAdapter.InvoiceTemplatesVH>() {
+    invoiceTemplates: List<InvoiceTemplateResponse>,
+    invoices: List<InvoiceModel>,
+    private val onTemplateBuyListener: OnTemplateBuyListener,
+    private val onInvoiceListener: OnInvoiceListener
+) : RecyclerView.Adapter<InvoiceTemplatesAdapter.BaseVH>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InvoiceTemplatesVH =
-        InvoiceTemplatesVH(LayoutInflater.from(parent.context).inflate(R.layout.item_invoice_template,
-            parent, false), onTemplateBuyListener)
+    companion object {
+        private const val VIEW_TYPE_INVOICE_TEMPLATE = 0
+        private const val VIEW_TYPE_INVOICE = 1
+    }
+
+    private val items = invoiceTemplates + invoices
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseVH =
+        when (viewType) {
+            VIEW_TYPE_INVOICE_TEMPLATE -> InvoiceTemplatesVH(LayoutInflater.from(parent.context).inflate(
+                R.layout.item_invoice_template,
+                parent,
+                false), onTemplateBuyListener)
+            VIEW_TYPE_INVOICE -> InvoiceVH(LayoutInflater.from(parent.context).inflate(R.layout.item_invoice_template,
+                parent, false), onInvoiceListener)
+            else -> throw IllegalArgumentException("Unknown view type: $viewType")
+        }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (items[position]) {
+            is InvoiceTemplateResponse -> VIEW_TYPE_INVOICE_TEMPLATE
+            is InvoiceModel -> VIEW_TYPE_INVOICE
+            else -> throw IllegalArgumentException("Unknown item type at position: $position")
+        }
+    }
 
     override fun getItemCount(): Int = items.size
 
-    override fun onBindViewHolder(holder: InvoiceTemplatesVH, position: Int) =
+    override fun onBindViewHolder(holder: BaseVH, position: Int) {
         holder.bind(items[position])
+    }
+
+    abstract class BaseVH(override val containerView: View) :
+        RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+        abstract fun bind(item: Any)
+
+    }
 
     class InvoiceTemplatesVH(
         override val containerView: View,
         private val onTemplateBuyListener: OnTemplateBuyListener) :
-        RecyclerView.ViewHolder(containerView), LayoutContainer {
+        BaseVH(containerView), LayoutContainer {
 
-        private lateinit var item: InvoiceTemplateResponse
+        private lateinit var invoiceTemplateResponse: InvoiceTemplateResponse
 
         private val context = itemView.context
 
         init {
-            itemView.btnBuy.setOnClickListener { onTemplateBuyListener(item) }
+            itemView.btnBuy.setOnClickListener { onTemplateBuyListener(invoiceTemplateResponse) }
         }
 
-        fun bind(invoiceTemplate: InvoiceTemplateResponse) {
+        override fun bind(item: Any) {
+            val invoiceTemplate = item as InvoiceTemplateResponse
 
-            item = invoiceTemplate
+            invoiceTemplateResponse = invoiceTemplate
 
             itemView.tvProductName.text =
                 invoiceTemplate.details.product.ifBlank { context.getString(R.string.label_there_is_no_name) }
@@ -77,6 +111,29 @@ class InvoiceTemplatesAdapter(
                 invoiceTemplate.details.price.currency.symbol)
         }
     }
+
+    class InvoiceVH(
+        override val containerView: View,
+        private val onInvoiceListener: OnInvoiceListener) :
+        BaseVH(containerView), LayoutContainer {
+
+        private lateinit var invoice: InvoiceModel
+
+        private val context = itemView.context
+
+        init {
+            itemView.btnBuy.setOnClickListener { onInvoiceListener(invoice) }
+        }
+
+        override fun bind(item: Any) {
+            invoice = item as InvoiceModel
+            itemView.tvProductName.text = "Тестовый инвойс"
+            itemView.tvProductDescription.text = invoice.description
+            itemView.tvIcon.visibility = View.GONE
+            itemView.btnBuy.text = context.getString(R.string.label_buy)
+        }
+    }
 }
 
 typealias OnTemplateBuyListener = (InvoiceTemplateResponse) -> Unit
+typealias OnInvoiceListener = (InvoiceModel) -> Unit

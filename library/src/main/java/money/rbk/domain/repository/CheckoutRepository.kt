@@ -29,6 +29,12 @@ internal interface CheckoutRepository {
 
     val shopName: String
 
+    var paymentTool: PaymentTool?
+
+    var contactInfo: ContactInfo?
+
+    var paymentId: String?
+
     fun loadInvoice(): Invoice
 
     fun loadPaymentMethods(): List<PaymentMethod>

@@ -54,7 +54,8 @@
         app:layout_constraintStart_toEndOf="@+id/ivPaymentIcon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        />
 
     <TextView
         android:id="@+id/tvDescription"

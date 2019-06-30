@@ -28,57 +28,66 @@ import android.view.WindowManager
 import com.whiteelephant.monthpicker.MonthPickerDialog
 import kotlinx.android.synthetic.main.fmt_card.*
 import money.rbk.R
+import money.rbk.di.Injector
 import money.rbk.domain.entity.CreditCardType
 import money.rbk.presentation.activity.checkout.CheckoutActivity
 import money.rbk.presentation.activity.web.WebViewActivity
 import money.rbk.presentation.model.BrowserRequestModel
 import money.rbk.presentation.screen.base.BaseFragment
-import money.rbk.presentation.utils.clearState
-import money.rbk.presentation.utils.hideKeyboard
-import money.rbk.presentation.utils.setRightDrawable
-import money.rbk.presentation.utils.setValid
-import money.rbk.presentation.utils.toDozenString
+import money.rbk.presentation.screen.result.ResultFragment
+import money.rbk.presentation.screen.result.ResultFragment.Companion.KEY_ACTION_RESULT
+import money.rbk.presentation.utils.*
 import ru.tinkoff.decoro.MaskImpl
 import ru.tinkoff.decoro.slots.PredefinedSlots
 import ru.tinkoff.decoro.watchers.MaskFormatWatcher
-import java.util.Calendar
+import java.util.*
 import java.util.Calendar.MONTH
 import java.util.Calendar.YEAR
 
 class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
-    MonthPickerDialog.OnDateSetListener {
-
-    override val presenter: BankCardPresenter by lazy { BankCardPresenter(navigator) }
+        MonthPickerDialog.OnDateSetListener {
 
     companion object {
         fun newInstance() = BankCardFragment()
+
+        private const val MAX_YEARS_CARD_VALIDITY = 30
+    }
+
+    override val presenter: BankCardPresenter by lazy { BankCardPresenter(navigator) }
+
+    private val userEmail = Injector.email
+
+    private val fieldsSequence by lazy {
+        sequenceOf(btnPay, edCardNumber, edCardDate, edCardCvv, edCardName, edEmail)
     }
 
     override fun onCreateView(inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?
     ): View? =
-        inflater.inflate(R.layout.fmt_card, container, false)
+            inflater.inflate(R.layout.fmt_card, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btnPay.text =
-            getString(R.string.label_pay_f, (activity as? CheckoutActivity)?.getCost().orEmpty())
         (activity as? CheckoutActivity)?.setBackButtonVisibility(true)
-
+        view.requestFocus()
         btnPay.setOnClickListener {
             activity?.hideKeyboard()
+            view.requestFocus()
             presenter.onPerformPayment(
-                cardNumber = edCardNumber.text.toString().replace(" ", ""),
-                expDate = edCardDate.text.toString(),
-                cvv = edCardCvv.text.toString(),
-                cardHolder = edCardName.text.toString(),
-                email = edEmail.text.toString()
+                    cardNumber = edCardNumber.text.toString().replace(" ", ""),
+                    expDate = edCardDate.text.toString(),
+                    cvv = edCardCvv.text.toString(),
+                    cardHolder = edCardName.text.toString(),
+                    email = edEmail.text.toString()
             )
         }
 
         edCardDate.setOnClickListener {
             setUpDateDialog().show()
+        }
+        if (edEmail.text.isBlank()) {
+            edEmail.setText(userEmail)
         }
         setUpWatchers()
     }
@@ -90,21 +99,20 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
     }
 
     private fun setUpDateDialog(): MonthPickerDialog {
-
         val currentDate = Calendar.getInstance()
         val currentMonth = currentDate.get(MONTH)
         val currentYear = currentDate.get(YEAR)
         return MonthPickerDialog.Builder(
-            activity,
-            this,
-            currentYear,
-            currentMonth
+                activity,
+                this,
+                currentYear,
+                currentMonth
         )
-            .setActivatedMonth(currentMonth)
-            .setActivatedYear(currentYear)
-            .setMaxYear(3000)
-            .setMinYear(currentYear)
-            .build()
+                .setActivatedMonth(currentMonth)
+                .setActivatedYear(currentYear)
+                .setMaxYear(currentYear + MAX_YEARS_CARD_VALIDITY)
+                .setMinYear(currentYear)
+                .build()
     }
 
     override fun onAttach(context: Context?) {
@@ -117,30 +125,37 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
         super.onDetach()
     }
 
+    override fun setCost(cost: String) {
+        btnPay.text = getString(R.string.label_pay_f, cost)
+    }
+
     override fun showRedirect(request: BrowserRequestModel) {
         startActivityForResult(WebViewActivity.buildIntent(activity!!, request),
-            WebViewActivity.REQUEST_CODE)
+                WebViewActivity.REQUEST_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == WebViewActivity.REQUEST_CODE) {
-            presenter.on3DsPerformed()
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            WebViewActivity.REQUEST_CODE -> presenter.on3DsPerformed()
+            ResultFragment.REQUEST_ERROR -> presenter.onErrorTest(data?.getIntExtra(KEY_ACTION_RESULT, ACTION_UNKNOWN))
+            else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
     override fun clear() =
-        sequenceOf(edCardNumber, edCardDate, edCardCvv, edCardName, edEmail)
-            .forEach { it.setText(R.string.empty) }
+            sequenceOf(edCardNumber, edCardDate, edCardCvv, edCardName, edEmail)
+                    .forEach {
+                        it.setText(R.string.empty)
+                        it.clearState()
+                    }
 
     override fun showProgress() {
-        btnPay.isEnabled = false
+        fieldsSequence.forEach { it.isEnabled = false }
         pbLoading.visibility = View.VISIBLE
     }
 
     override fun hideProgress() {
-        btnPay.isEnabled = true
+        fieldsSequence.forEach { it.isEnabled = true }
         pbLoading.visibility = View.GONE
     }
 
@@ -170,7 +185,7 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
 
     private fun setUpWatchers() {
 
-        edEmail.setOnFocusChangeListener { v, hasFocus ->
+        edEmail.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus.not()) {
                 presenter.validateEmail(edEmail.text.toString())
             } else {
@@ -204,11 +219,9 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
 
         val cardNumberMask = MaskImpl.createNonTerminated(PredefinedSlots.CARD_NUMBER_STANDARD)
         MaskFormatWatcher(cardNumberMask)
-            .apply {
-                setCallback(CardChangeListener(::onCardDetected))
-                installOn(edCardNumber)
-            }
-
+                .apply {
+                    setCallback(CardChangeListener(::onCardDetected))
+                    installOn(edCardNumber)
+                }
     }
-
 }

@@ -22,7 +22,7 @@ import org.json.JSONException
 
 sealed class ParseException(message: String, cause: Throwable? = null) : Exception(message) {
 
-    internal data class ResponseParsingException(val stringBody: String, val e: JSONException) :
+    internal data class ResponseParsingException(val stringBody: String, val e: Exception) :
         ParseException(stringBody, e)
 
     internal class UnknownFlowTypeException(val flowType: String) :
@@ -39,5 +39,8 @@ sealed class ParseException(message: String, cause: Throwable? = null) : Excepti
 
     internal class UnsupportedPaymentMethodException(val method: String) :
         ParseException("Unsupported payment method:$method")
+
+    internal class UnsupportedInvoiceChangeTypeException(type: String) :
+        ParseException("Unknown invoice change type: $type")
 
 }

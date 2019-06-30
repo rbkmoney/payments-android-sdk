@@ -16,9 +16,16 @@
  *
  */
 
-package money.rbk.presentation.model
+package money.rbk.presentation.screen.result
 
-data class CheckoutState(
-    val invoiceStateModel: InvoiceStateModel? = null,
-    val paymentStateModel: PaymentStateModel? = null
-) : BaseIUModel()
+import money.rbk.presentation.navigation.Navigator
+import money.rbk.presentation.screen.base.BasePresenter
+
+class ResultPresenter(navigator: Navigator) : BasePresenter<ResultView>(navigator) {
+    fun onTryAgain(actionPositive: Int?) {
+        actionPositive?.let {
+            view?.sendResult(it)
+            navigator.back()
+        }
+    }
+}

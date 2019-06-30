@@ -16,6 +16,9 @@
  *
  */
 
-package money.rbk.presentation.model
+package money.rbk.presentation.activity.checkout
 
-class PaymentModel(val isSuccess: Boolean) : BaseIUModel()
+interface InitializeListener {
+
+    fun initialize()
+}

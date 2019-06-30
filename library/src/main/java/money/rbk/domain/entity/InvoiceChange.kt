@@ -18,6 +18,7 @@
 
 package money.rbk.domain.entity
 
+import money.rbk.data.exception.ParseException
 import money.rbk.data.extension.findEnumOrNull
 import money.rbk.data.extension.getNullable
 import money.rbk.data.extension.parse
@@ -26,7 +27,7 @@ import money.rbk.data.extension.parseString
 import money.rbk.data.serialization.Deserializer
 import org.json.JSONObject
 
-internal sealed class InvoiceChange(val eventType: EventType) {
+internal sealed class InvoiceChange {
 
     companion object : Deserializer<JSONObject, InvoiceChange> {
         override fun fromJson(json: JSONObject): InvoiceChange {
@@ -51,45 +52,49 @@ internal sealed class InvoiceChange(val eventType: EventType) {
                     paymentID = json.getString("paymentID"),
                     userInteraction = json.parse("userInteraction", UserInteraction)
                 )
-                null -> throw UnknownInvoiceChangeTypeException(type)
+
+                InvoiceChangeType.RefundStarted,
+                InvoiceChangeType.RefundStatusChanged -> Refund(
+                    paymentID = json.getString("paymentID")
+                )
+
+                null -> throw ParseException.UnsupportedInvoiceChangeTypeException(type)
             }
         }
     }
 
     data class InvoiceCreated(val invoice: Invoice) :
-        InvoiceChange(EventType.Invoice)
+        InvoiceChange()
 
     data class InvoiceStatusChanged(
         val status: InvoiceStatus,
-        val reason: String?) : InvoiceChange(EventType.Invoice)
+        val reason: String?) : InvoiceChange()
 
     data class PaymentStarted(val payment: Payment) :
-        InvoiceChange(EventType.Payment)
+        InvoiceChange()
 
     data class PaymentStatusChanged(
         val status: PaymentStatus,
         val paymentID: String,
-        val error: PaymentError?) : InvoiceChange(EventType.Payment)
+        val error: PaymentError?) : InvoiceChange()
 
     data class PaymentInteractionRequested(
         val paymentID: String,
         val userInteraction: UserInteraction
-    ) : InvoiceChange(EventType.Payment)
+    ) : InvoiceChange()
+
+    data class Refund(
+        val paymentID: String
+    ) : InvoiceChange()
 
     private enum class InvoiceChangeType {
         InvoiceCreated,
         InvoiceStatusChanged,
         PaymentStarted,
         PaymentStatusChanged,
-        PaymentInteractionRequested
-    }
-
-    enum class EventType {
-        Invoice,
-        Payment
+        PaymentInteractionRequested,
+        RefundStarted,
+        RefundStatusChanged
     }
 
 }
-
-class UnknownInvoiceChangeTypeException(type: String) :
-    Throwable("Unknown invoice change type: $type")

@@ -22,20 +22,16 @@ import money.rbk.R
 import money.rbk.domain.interactor.InvoiceUseCase
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.InvoiceInitializeInputModel
-import money.rbk.presentation.dialog.AlertButton
+import money.rbk.presentation.model.CheckoutStateModel
 import money.rbk.presentation.model.InvoiceModel
-import money.rbk.presentation.model.InvoiceStateModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePresenter
+import money.rbk.presentation.screen.card.ACTION_INITIALIZE
 
 class CheckoutPresenter(
-    navigator: Navigator,
-    private val invoiceUseCase: UseCase<InvoiceInitializeInputModel, InvoiceModel> = InvoiceUseCase()
+        navigator: Navigator,
+        private val invoiceUseCase: UseCase<InvoiceInitializeInputModel, InvoiceModel> = InvoiceUseCase()
 ) : BasePresenter<CheckoutView>(navigator) {
-
-    private val retryInitializeButton: AlertButton? by lazy {
-        R.string.label_try_again to { initializeInvoice() }
-    }
 
     override fun onViewAttached(view: CheckoutView) {
         super.onViewAttached(view)
@@ -45,27 +41,43 @@ class CheckoutPresenter(
 
     private fun initializeInvoice() {
         invoiceUseCase(InvoiceInitializeInputModel,
-            ::onInvoiceLoaded,
-            ::onInvoiceLoadError)
+                ::onInvoiceLoaded,
+                ::onInvoiceLoadError)
     }
 
     private fun onInvoiceLoadError(throwable: Throwable) {
-        onError(throwable, retryInitializeButton)
+        onError(throwable, ACTION_INITIALIZE)
     }
 
     private fun onInvoiceLoaded(invoice: InvoiceModel) {
         view?.apply {
             hideProgress()
             showInvoice(invoice)
-            return when (invoice.checkoutState.invoiceStateModel) {
-                is InvoiceStateModel.Cancelled ->
-                    navigator.openInvoiceCancelled()
-                is InvoiceStateModel.Success ->
-                    navigator.openSuccessFragment(R.string.empty)
-                InvoiceStateModel.Pending,
-                InvoiceStateModel.Unknown,
-                null -> navigator.openPaymentMethods()
+            return when (val checkoutState = invoice.checkoutState) {
+
+                is CheckoutStateModel.Success ->
+                    navigator.openSuccessFragment(R.string.label_payed_by_card_f,
+                        checkoutState.paymentToolName)
+
+                is CheckoutStateModel.PaymentFailed ->
+                    navigator.openErrorFragment(messageRes = checkoutState.reasonResId)
+
+                is CheckoutStateModel.InvoiceFailed ->
+                    navigator.openErrorFragment(messageRes = checkoutState.reasonResId)
+
+                is CheckoutStateModel.Warning ->
+                    navigator.openWarningFragment(
+                        titleRes = checkoutState.titleId,
+                        messageRes = checkoutState.messageResId)
+
+                CheckoutStateModel.Pending,
+                CheckoutStateModel.PaymentProcessing,
+                is CheckoutStateModel.BrowserRedirectInteraction ->
+                    navigator.openPaymentMethods()
             }
         }
     }
+
+    fun onInitialize() = initializeInvoice()
+
 }

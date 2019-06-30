@@ -16,22 +16,6 @@
  *
  */
 
-package money.rbk.presentation.model
+package money.rbk.presentation.exception
 
-import androidx.annotation.StringRes
-
-sealed class PaymentStateModel {
-
-    object Unknown : PaymentStateModel()
-
-    object Cancelled : PaymentStateModel()
-
-    object Success : PaymentStateModel()
-
-    object Pending : PaymentStateModel()
-
-    data class BrowserRedirectInteraction(val request: BrowserRequestModel) : PaymentStateModel()
-
-    data class Failed(@StringRes val messageRes: Int) : PaymentStateModel()
-
-}
+class UnknownActionException(message: String) : Exception(message)

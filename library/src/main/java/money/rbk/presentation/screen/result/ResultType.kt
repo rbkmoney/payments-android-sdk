@@ -16,15 +16,10 @@
  *
  */
 
-package money.rbk.domain.interactor.input
+package money.rbk.presentation.screen.result
 
-import money.rbk.domain.entity.CreditCardType
+import java.io.Serializable
 
-class CardPaymentInputModel(
-    val cardNumber: String,
-    val expDate: String,
-    val cvv: String,
-    val cardHolder: String,
-    val cardType: CreditCardType,
-    val email: String?
-) : BaseInputModel()
+enum class ResultType : Serializable {
+    SUCCESS, ERROR, UNKNOWN
+}

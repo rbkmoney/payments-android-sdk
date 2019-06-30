@@ -47,6 +47,7 @@
 
     <dimen name="background_corner_radius">3dp</dimen>
     <dimen name="divider_height">1dp</dimen>
+    <dimen name="thick_divider_height">2dp</dimen>
 
     <dimen name="item_height">90dp</dimen>
 

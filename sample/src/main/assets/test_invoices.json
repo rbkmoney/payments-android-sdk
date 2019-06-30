@@ -1,0 +1,9 @@
+[
+  {
+    "id": "<PASTE_INVOICE_ID>",
+    "shopId": "<PASTE_SHOP_ID>",
+    "shopName": "<PASTE_SHOP_NAME>",
+    "invoiceAccessToken": "<PASTE_INVOICE_ACCESS_TOKEN>",
+    "description": "<PASTE_DESCRIPTION>"
+  }
+]

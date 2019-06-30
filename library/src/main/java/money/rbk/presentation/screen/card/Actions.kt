@@ -16,15 +16,10 @@
  *
  */
 
-package money.rbk.presentation.model
+package money.rbk.presentation.screen.card
 
-sealed class InvoiceStateModel {
-
-    data class Cancelled(val reason: String?) : InvoiceStateModel()
-
-    object Pending : InvoiceStateModel()
-
-    data class Success(val fulfilled: Boolean) : InvoiceStateModel()
-
-    object Unknown : InvoiceStateModel()
-}
+const val ACTION_RETRY_PAYMENT = 1
+const val ACTION_UPDATE_CHECKOUT = 2
+const val ACTION_USE_ANOTHER_CARD = 3
+const val ACTION_INITIALIZE = 4
+const val ACTION_UNKNOWN = -1

@@ -18,19 +18,21 @@
 
 package money.rbk.domain.entity
 
+import money.rbk.data.extension.parseDate
 import money.rbk.data.extension.parseList
 import money.rbk.data.serialization.Deserializer
 import org.json.JSONObject
+import java.util.Date
 
 internal data class InvoiceEvent(
     val id: Int,
-    val createdAt: String,
+    val createdAt: Date,
     val changes: List<InvoiceChange>
 ) {
     companion object : Deserializer<JSONObject, InvoiceEvent> {
         override fun fromJson(json: JSONObject): InvoiceEvent = InvoiceEvent(
             id = json.getInt("id"),
-            createdAt = json.getString("createdAt"),
+            createdAt = json.parseDate("createdAt"),
             changes = json.parseList("changes", InvoiceChange)
         )
     }

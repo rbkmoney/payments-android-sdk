@@ -29,12 +29,12 @@ abstract class BaseFragment<T : BaseView> : Fragment(), BaseView {
 
     val navigator by lazy {
         (activity as? CheckoutActivity)?.navigator
-            ?: throw TODO("BaseFragment can be attached only to CheckoutActivity")
+            ?: throw RuntimeException("BaseFragment can be attached only to CheckoutActivity")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter.attachView(this as? T ?: throw RuntimeException("")) //TODO: Check it
+        presenter.attachView(this as? T ?: throw RuntimeException("Fragment must implement "))
     }
 
     override fun onDestroyView() {

@@ -19,18 +19,20 @@
 package money.rbk.presentation.screen.card
 
 import money.rbk.R
+import money.rbk.domain.entity.CreditCardType
 import money.rbk.domain.entity.getCardType
 import money.rbk.domain.exception.UseCaseException
+import money.rbk.domain.interactor.CancelPaymentUseCase
 import money.rbk.domain.interactor.CheckoutStateUseCase
-import money.rbk.domain.interactor.CreatePaymentResourceUseCase
+import money.rbk.domain.interactor.CreatePaymentUseCase
+import money.rbk.domain.interactor.RepeatPaymentUseCase
 import money.rbk.domain.interactor.base.UseCase
-import money.rbk.domain.interactor.input.CardPaymentInputModel
 import money.rbk.domain.interactor.input.EmptyInputModel
-import money.rbk.presentation.dialog.AlertButton
-import money.rbk.presentation.model.CheckoutState
-import money.rbk.presentation.model.InvoiceStateModel
-import money.rbk.presentation.model.PaymentResourceCreated
-import money.rbk.presentation.model.PaymentStateModel
+import money.rbk.domain.interactor.input.PaymentInputModel
+import money.rbk.presentation.exception.UnknownActionException
+import money.rbk.presentation.model.CheckoutInfoModel
+import money.rbk.presentation.model.CheckoutStateModel
+import money.rbk.presentation.model.EmptyIUModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePresenter
 import money.rbk.presentation.utils.isDateValid
@@ -38,26 +40,15 @@ import money.rbk.presentation.utils.isEmailValid
 import money.rbk.presentation.utils.isValidCvv
 
 class BankCardPresenter(
-    navigator: Navigator,
-    private val paymentUseCase: UseCase<CardPaymentInputModel, PaymentResourceCreated> = CreatePaymentResourceUseCase(),
-    private val invoiceEventsUseCase: UseCase<EmptyInputModel, CheckoutState> = CheckoutStateUseCase()
-) : BasePresenter<BankCardView>(navigator) {
-
-    private var cardPaymentInputModel: CardPaymentInputModel? = null
 
     /* Buttons */
 
-    private val retryPaymentButton: AlertButton? by lazy {
-        R.string.label_try_again to { performPayment() }
-    }
-
-    private val updateCheckoutButton: AlertButton? by lazy {
-        R.string.label_try_again to { updateCheckout() }
-    }
-
-    private val useAnotherCardButton: AlertButton? by lazy {
-        R.string.label_use_another_card to { clearPayment() }
-    }
+    navigator: Navigator,
+    private val paymentUseCase: UseCase<PaymentInputModel, CheckoutInfoModel> = CreatePaymentUseCase(),
+    private val invoiceEventsUseCase: UseCase<EmptyInputModel, CheckoutInfoModel> = CheckoutStateUseCase(),
+    private val repeatPaymentUseCase: UseCase<EmptyInputModel, CheckoutInfoModel> = RepeatPaymentUseCase(),
+    private val cancelPaymentUseCase: UseCase<EmptyInputModel, EmptyIUModel> = CancelPaymentUseCase()
+) : BasePresenter<BankCardView>(navigator) {
 
     /* Presenter lifecycle */
 
@@ -77,20 +68,20 @@ class BankCardPresenter(
         expDate: String,
         cvv: String,
         cardHolder: String,
-        email: String?) {
+        email: String) {
+        val cardType: CreditCardType? = validateNumber(cardNumber)
         if (validateDate(expDate) and validateCcv(cvv) and validateCardholder(
-                cardHolder) and validateEmail(email)) {
-            val cardType = validateNumber(cardNumber)
-            if (cardType != null) {
-                cardPaymentInputModel =
-                    CardPaymentInputModel(cardNumber,
-                        expDate,
-                        cvv,
-                        cardHolder,
-                        cardType,
-                        email?.takeIf { it.isNotBlank() })
-                performPayment()
-            }
+                cardHolder) and validateEmail(email) and (cardType != null) && (cardType != null)) {
+            // Double cardType for smart cast
+
+            val cardPaymentInputModel = PaymentInputModel.buildForCard(
+                cardNumber = cardNumber,
+                expDate = expDate,
+                cvv = cvv,
+                cardHolder = cardHolder,
+                email = email)
+
+            performPayment(cardPaymentInputModel)
         }
     }
 
@@ -98,13 +89,9 @@ class BankCardPresenter(
         updateCheckout()
     }
 
-    fun validateEmail(email: String?): Boolean =
-        if (!email.isNullOrBlank()) {
-            email.isEmailValid()
-                .also { view?.showEmailValid(it) }
-        } else {
-            true
-        }
+    fun validateEmail(email: String): Boolean =
+        email.isEmailValid()
+            .also { view?.showEmailValid(it) }
 
     fun validateCardholder(name: String): Boolean =
         name.isNotEmpty().also {
@@ -133,40 +120,63 @@ class BankCardPresenter(
         invoiceEventsUseCase(EmptyInputModel, ::onCheckoutUpdated, ::onCheckoutUpdateError)
     }
 
-    private fun performPayment() {
+    private fun retryPayment() {
         view?.showProgress()
-        cardPaymentInputModel?.let {
-            paymentUseCase(it, ::onPaymentCreated, ::onPaymentError)
-        }
+        repeatPaymentUseCase(EmptyInputModel, ::onPaymentCreated, ::onPaymentError)
+    }
+
+    private fun performPayment(cardPaymentInputModel: PaymentInputModel) {
+        view?.showProgress()
+        paymentUseCase(cardPaymentInputModel, ::onPaymentCreated, ::onPaymentError)
     }
 
     /* Callbacks */
 
-    private fun onPaymentCreated(paymentResourceCreated: PaymentResourceCreated) {
-        updateCheckout()
+    private fun onPaymentCreated(checkoutInfo: CheckoutInfoModel) {
+        onCheckoutUpdated(checkoutInfo)
     }
 
     private fun onPaymentError(error: Throwable) {
-        if (error is UseCaseException.UnsupportedCardTypeForInvoiceException) {
-            navigator.openErrorFragment(
-                messageRes = R.string.error_unsupported_card_type_for_invoice,
-                negativeButtonPair = useAnotherCardButton)
+
+        if (error is UseCaseException.UnableRepeatPaymentException) {
+            onError(error) // TODO: Add use another card
         } else {
-            onError(error, retryPaymentButton)
+            onError(error, ACTION_RETRY_PAYMENT) // TODO: Add use another card
         }
     }
 
-    private fun onCheckoutUpdated(checkoutState: CheckoutState) {
+    private fun onCheckoutUpdated(checkoutInfo: CheckoutInfoModel) {
         val view = view ?: return
         view.hideProgress()
 
-        checkoutState.invoiceStateModel
-            ?: return navigator.openErrorFragment(messageRes = R.string.error_unknown_payment)
+        when (val checkoutState = checkoutInfo.checkoutState) {
+            is CheckoutStateModel.Success ->
+                navigator.openSuccessFragment(R.string.label_payed_by_card_f,
+                    checkoutState.paymentToolName)
 
+            is CheckoutStateModel.PaymentFailed ->
+                navigator.openErrorFragment(
+                    messageRes = checkoutState.reasonResId
+                    //                    , positiveButtonPair = retryPaymentButton
+                )
+            is CheckoutStateModel.InvoiceFailed ->
+                navigator.openErrorFragment(
+                    messageRes = checkoutState.reasonResId)
 
-        if (!checkoutState.invoiceStateModel.handle()) {
-            checkoutState.paymentStateModel?.handle()
+            is CheckoutStateModel.Warning ->
+                navigator.openWarningFragment(checkoutState.titleId,
+                    checkoutState.messageResId)
+
+            CheckoutStateModel.Pending -> Unit
+
+            CheckoutStateModel.PaymentProcessing ->
+                navigator.openErrorFragment(messageRes = R.string.error_polling_time_exceeded)
+
+            is CheckoutStateModel.BrowserRedirectInteraction ->
+                view.showRedirect(checkoutState.request)
         }
+
+        view.setCost(checkoutInfo.cost)
     }
 
     private fun onCheckoutUpdateError(error: Throwable) {
@@ -176,87 +186,26 @@ class BankCardPresenter(
             when (error) {
                 is UseCaseException.PollingTimeExceededException ->
                     navigator.openErrorFragment(
+                        parent = view as BankCardFragment,
                         messageRes = R.string.error_polling_time_exceeded,
-                        positiveButtonPair = updateCheckoutButton,
-                        negativeButtonPair = useAnotherCardButton)
+                        positiveAction = ACTION_UPDATE_CHECKOUT,
+                        negativeAction = ACTION_USE_ANOTHER_CARD)
             }
         } else {
-            onError(error, updateCheckoutButton)
+            onError(error, ACTION_UPDATE_CHECKOUT)
         }
     }
 
-    /* Handling methods */
-
-    private fun PaymentStateModel.handle() = when (this) {
-        PaymentStateModel.Cancelled ->
-            navigator.openErrorFragment(
-                messageRes = R.string.error_payment_cancelled,
-                positiveButtonPair = retryPaymentButton,
-                negativeButtonPair = useAnotherCardButton)
-
-        is PaymentStateModel.BrowserRedirectInteraction ->
-            view?.showRedirect(request)
-
-        is PaymentStateModel.Failed ->
-            navigator.openErrorFragment(
-                messageRes = messageRes,
-                positiveButtonPair = retryPaymentButton,
-                negativeButtonPair = useAnotherCardButton)
-
-        PaymentStateModel.Unknown ->
-            navigator.openErrorFragment(
-                messageRes = R.string.error_unknown_payment,
-                positiveButtonPair = retryPaymentButton,
-                negativeButtonPair = useAnotherCardButton)
-
-        PaymentStateModel.Success ->
-            navigator.openSuccessFragment(R.string.label_payed_by_card_f,
-                cardTypeName(),
-                paymentMask())
-
-        PaymentStateModel.Pending ->
-            navigator.openErrorFragment(
-                messageRes = R.string.error_polling_time_exceeded,
-                positiveButtonPair = updateCheckoutButton,
-                negativeButtonPair = useAnotherCardButton)
-    }
-
-    private fun InvoiceStateModel.handle(): Boolean = when (this) {
-
-        is InvoiceStateModel.Success ->
-            navigator.openSuccessFragment(R.string.label_payed_by_card_f,
-                cardTypeName(),
-                paymentMask())
-
-        is InvoiceStateModel.Cancelled ->
-            navigator.openErrorFragment(messageRes = R.string.error_invoice_cancelled)
-
-        InvoiceStateModel.Unknown ->
-            navigator.openErrorFragment(
-                messageRes = R.string.error_unknown_invoice,
-                positiveButtonPair = retryPaymentButton,
-                negativeButtonPair = useAnotherCardButton)
-
-        InvoiceStateModel.Pending -> null
-
-    } != null
-
-    private fun cardTypeName() =
-        cardPaymentInputModel
-            ?.cardType
-            ?.cardName ?: ""
-
-    private fun paymentMask() =
-        cardPaymentInputModel
-            ?.cardNumber
-            ?.run {
-                "*${substring(Math.max(count() - 4, 0), count())}"
-            }
-            .orEmpty()
-
     private fun clearPayment() {
-        cardPaymentInputModel = null
+        cancelPaymentUseCase(EmptyInputModel, {}, {})
         view?.clear()
     }
 
+    fun onErrorTest(action: Int?) =
+        when (action) {
+            ACTION_RETRY_PAYMENT -> retryPayment()
+            ACTION_USE_ANOTHER_CARD -> clearPayment()
+            ACTION_UPDATE_CHECKOUT -> updateCheckout()
+            else -> throw UnknownActionException("unknown action with code : $action")
+        }
 }

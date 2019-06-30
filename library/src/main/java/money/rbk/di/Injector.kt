@@ -35,7 +35,14 @@ object Injector {
 
     private lateinit var okHttpClient: OkHttpClient
 
-    fun init(context: Context, invoiceId: String, invoiceAccessToken: String, shopName: String) {
+    var email: String? = null
+
+    fun init(context: Context,
+        invoiceId: String,
+        invoiceAccessToken: String,
+        shopName: String,
+        email: String?) {
+        this.email = email
         ClientInfoUtils.initialize(context)
         okHttpClient = newHttpClient(context)
         checkoutRepository =

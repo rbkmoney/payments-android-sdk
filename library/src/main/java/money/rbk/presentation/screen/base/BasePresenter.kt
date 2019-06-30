@@ -18,12 +18,9 @@
 
 package money.rbk.presentation.screen.base
 
-import androidx.annotation.StringRes
 import money.rbk.R
 import money.rbk.data.exception.NetworkServiceException
 import money.rbk.data.exception.ParseException
-import money.rbk.domain.entity.ApiError
-import money.rbk.presentation.dialog.AlertButton
 import money.rbk.presentation.navigation.Navigator
 
 abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator) {
@@ -40,14 +37,17 @@ abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator
         onViewDetached()
     }
 
-    fun onError(error: Throwable, retryButton: AlertButton? = null) {
-        when (error) {
-            is NetworkServiceException -> error.process(retryButton)
-            is ParseException -> error.process(retryButton)
-        }
-
+    //TODO: varargs actions
+    fun onError(error: Throwable, retryAction: Int? = null) {
         view?.hideProgress()
         error.printStackTrace()
+        return when (error) {
+            is NetworkServiceException -> error.process(retryAction)
+            is ParseException -> error.process(retryAction)
+            else -> navigator.openErrorFragment(
+                messageRes = R.string.error_busines_logic,
+                positiveAction = retryAction)
+        }
     }
 
     open fun onViewAttached(view: View) = Unit
@@ -55,103 +55,27 @@ abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator
     open fun onViewDetached() = Unit
 
     //TODO: Make different handling this branches
-    private fun NetworkServiceException.process(retryButton: AlertButton?) =
+    private fun NetworkServiceException.process(retryAction: Int?) =
         when (this) {
-
             NetworkServiceException.NoInternetException ->
                 navigator.openErrorFragment(
+                    parent = null,
                     messageRes = R.string.error_connection,
-                    positiveButtonPair = retryButton)
+                    positiveAction = retryAction)
 
-            is NetworkServiceException.RequestExecutionException -> // TODO: Make another message
-                navigator.openErrorFragment(
-                    messageRes = R.string.error_connection,
-                    positiveButtonPair = retryButton)
-
-            is NetworkServiceException.ResponseReadingException -> // TODO: Make another message
-                navigator.openErrorFragment(
-                    messageRes = R.string.error_connection,
-                    positiveButtonPair = retryButton)
-
+            is NetworkServiceException.RequestExecutionException,
+            is NetworkServiceException.ResponseReadingException,
+            is NetworkServiceException.ApiException,
             is NetworkServiceException.InternalServerException ->
                 navigator.openErrorFragment(
-                    messageRes = errorMessage(),
-                    positiveButtonPair = retryButton)
-
-            is NetworkServiceException.ApiException ->
-                navigator.openErrorFragment(
-                    messageRes = errorMessage(),
-                    positiveButtonPair = retryButton)
+                    messageRes = R.string.error_busines_logic,
+                    positiveAction = retryAction)
         }
 
-    //TODO: Make different handling this branches
-    private fun ParseException.process(retryButton: AlertButton?) =
-        when (this) {
-            is ParseException.ResponseParsingException ->
-                navigator.openErrorFragment(R.string.error,
-                    R.string.error_unknown_error,
-                    retryButton)
-
-            is ParseException.UnknownFlowTypeException ->
-                navigator.openErrorFragment(R.string.error,
-                    R.string.error_unknown_error,
-                    retryButton)
-
-            is ParseException.UnknownPayerTypeException ->
-                navigator.openErrorFragment(R.string.error,
-                    R.string.error_unknown_error,
-                    retryButton)
-
-            is ParseException.UnsupportedPaymentToolDetails ->
-                navigator.openErrorFragment(R.string.error,
-                    R.string.error_unknown_error,
-                    retryButton)
-
-            is ParseException.UnsupportedUserInteractionTypeException ->
-                navigator.openErrorFragment(R.string.error,
-                    R.string.error_unknown_error,
-                    retryButton)
-
-            is ParseException.UnsupportedPaymentMethodException ->
-                navigator.openErrorFragment(R.string.error,
-                    R.string.error_unknown_error,
-                    retryButton)
-        }
-
-    @StringRes
-    private fun NetworkServiceException.ApiException.errorMessage(): Int = when (error.code) {
-        ApiError.Code.operationNotPermitted -> R.string.error_operation_not_permitted
-        ApiError.Code.invalidPartyStatus -> R.string.error_invalid_party_status
-        ApiError.Code.invalidShopStatus -> R.string.error_invalid_shop_status
-        ApiError.Code.invalidContractStatus -> R.string.error_invalid_contract_status
-        ApiError.Code.invalidShopID -> R.string.error_invalid_shop_id
-        ApiError.Code.invalidInvoiceCost -> R.string.error_invalid_invoice_cost
-        ApiError.Code.invalidInvoiceCart -> R.string.error_invalid_invoice_cart
-        ApiError.Code.invalidInvoiceStatus -> R.string.error_invalid_invoice_status
-        ApiError.Code.invoicePaymentPending -> R.string.error_invoice_payment_pending
-        ApiError.Code.invalidPaymentStatus -> R.string.error_invalid_payment_status
-        ApiError.Code.invalidPaymentResource -> R.string.error_invalid_payment_resource
-        ApiError.Code.invalidPaymentToolToken -> R.string.error_invalid_payment_tool_token
-        ApiError.Code.invalidPaymentSession -> R.string.error_invalid_payment_session
-        ApiError.Code.invalidRecurrentParent -> R.string.error_invalid_recurrent_parent
-        ApiError.Code.insufficentAccountBalance -> R.string.error_insufficent_account_balance
-        ApiError.Code.invoicePaymentAmountExceeded -> R.string.error_invoice_payment_amount_exceeded
-        ApiError.Code.inconsistentRefundCurrency -> R.string.error_inconsistent_refund_currency
-        ApiError.Code.changesetConflict -> R.string.error_changeset_conflict
-        ApiError.Code.invalidChangeset -> R.string.error_invalid_changeset
-        ApiError.Code.invalidClaimStatus -> R.string.error_invalid_claim_status
-        ApiError.Code.invalidClaimRevision -> R.string.error_invalid_claim_revision
-        ApiError.Code.limitExceeded -> R.string.error_limit_exceeded
-        ApiError.Code.invalidDeadline -> R.string.error_invalid_deadline
-        ApiError.Code.invalidRequest -> R.string.error_invalid_request
-        null -> R.string.error_unknown_error
+    private fun ParseException.process(retryAction: Int?) {
+        navigator.openErrorFragment(
+            messageRes = R.string.error_busines_logic,
+            positiveAction = retryAction)
     }
 
-    @StringRes
-    private fun NetworkServiceException.InternalServerException.errorMessage(): Int = when (code) {
-        500 -> R.string.error_internal_server
-        503 -> R.string.error_temporary_unavailable
-        504 -> R.string.error_request_time_exceeded
-        else -> R.string.error_unknown_error
-    }
 }

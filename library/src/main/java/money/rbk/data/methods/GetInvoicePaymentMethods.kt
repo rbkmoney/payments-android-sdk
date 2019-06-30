@@ -29,7 +29,7 @@ internal class GetInvoicePaymentMethods(
 
     override val endpoint = "/processing/invoices/$invoiceId/payment-methods"
 
-    override val accessToken = invoiceAccessToken
+    override val invoiceAccessToken = invoiceAccessToken
 
     override fun convertJsonToResponse(jsonString: String): List<PaymentMethod> =
         PaymentMethod.fromJsonArray(jsonString.toJsonArray())

@@ -18,22 +18,22 @@
 
 package money.rbk.domain.entity
 
+import money.rbk.data.extension.parseDate
+import money.rbk.data.extension.parseShortDate
 import org.json.JSONObject
 import money.rbk.data.serialization.Deserializer
+import java.util.Date
 
 internal data class Invoice(
     val id: String,
     val shopID: String,
     val externalID: String?,
-    // val cart: Cart,
-    val createdAt: String, //TODO: Date
-    val dueDate: String, //TODO: Date
+    val createdAt: Date,
     val amount: Int,
     val currency: Currency,
     val product: String,
     val description: String?,
     val invoiceTemplateID: String?,
-    // val metadata: Object,
     val status: InvoiceStatus,
     val reason: String?
 ) {
@@ -43,8 +43,7 @@ internal data class Invoice(
             id = json.getString("id"),
             shopID = json.getString("shopID"),
             externalID = json.optString("externalID", null),
-            createdAt = json.getString("createdAt"),
-            dueDate = json.getString("dueDate"),
+            createdAt = json.parseDate("createdAt"),
             amount = json.getInt("amount"),
             currency = Currency.fromJson(json.getString("currency")),
             product = json.getString("product"),

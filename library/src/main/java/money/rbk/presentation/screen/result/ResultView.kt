@@ -16,6 +16,15 @@
  *
  */
 
-package money.rbk.presentation.model
+package money.rbk.presentation.screen.result
 
-class PaymentResourceCreated(val pending: Boolean) : BaseIUModel()
+import money.rbk.presentation.screen.base.BaseView
+
+interface ResultView : BaseView{
+
+    fun showSuccess()
+
+    fun showError()
+    fun sendResult(action: Int)
+    fun showUnknown()
+}

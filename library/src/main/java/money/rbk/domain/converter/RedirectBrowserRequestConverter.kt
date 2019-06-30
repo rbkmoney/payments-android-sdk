@@ -24,7 +24,7 @@ import money.rbk.domain.entity.UserInteraction
 import money.rbk.domain.entity.UserInteractionForm
 import money.rbk.presentation.model.BrowserRequestModel
 
-/* TODO: make private */ const val TERMINATION_URI = "rbc://success/"
+/* TODO: make private */ const val TERMINATION_URI = "RBKmoney://success/"
 private const val KEY_TERMINATION_URI = "termination_uri"
 private const val FORM_KEY_TERM_URL = "TermUrl"
 
@@ -53,5 +53,4 @@ object RedirectBrowserRequestConverter :
                 "${form.key}=${template.encode()}"
             })
             .toByteArray()
-
 }

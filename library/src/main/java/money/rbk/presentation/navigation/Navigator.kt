@@ -19,7 +19,6 @@
 package money.rbk.presentation.navigation
 
 import android.app.Activity
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
@@ -28,27 +27,33 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import money.rbk.R
-import money.rbk.presentation.dialog.AlertButton
 import money.rbk.presentation.dialog.showAlert
 import money.rbk.presentation.screen.card.BankCardFragment
 import money.rbk.presentation.screen.methods.PaymentMethodsFragment
+import money.rbk.presentation.screen.result.ResultFragment
+import money.rbk.presentation.screen.result.ResultFragment.Companion.REQUEST_ERROR
+import money.rbk.presentation.screen.result.ResultType
 
-// TODO: Activity Scope
 class Navigator(
-    private val activity: FragmentActivity,
-    @IdRes
-    private val containerId: Int) {
+        private val activity: FragmentActivity,
+        @IdRes
+        private val containerId: Int
+) {
 
     fun openPaymentMethods() {
-        replaceFragmentInActivity(PaymentMethodsFragment.newInstance())
+        if (activity.supportFragmentManager.findFragmentById(R.id.container) == null) {
+            replaceFragmentInActivity(PaymentMethodsFragment.newInstance())
+        }
     }
 
     fun openGooglePay() = inProgress()
 
     private fun inProgress() {
-        Toast.makeText(activity, "Данный функционал находится в стадии разработки",
-            Toast.LENGTH_LONG)
-            .show()
+        Toast.makeText(
+                activity, "Данный функционал находится в стадии разработки",
+                Toast.LENGTH_LONG
+        )
+                .show()
     }
 
     fun openBankCard() {
@@ -56,52 +61,68 @@ class Navigator(
     }
 
     fun openInvoiceCancelled() {
-        openErrorFragment(message = activity.getString(R.string.error_invoice_cancelled))
+        replaceFragmentInActivity(
+                ResultFragment.newInstance(
+                        ResultType.ERROR,
+                        activity.getString(R.string.error_invoice_cancelled)
+                )
+        )
     }
 
-    fun openSuccessFragment(@StringRes messageRes: Int, vararg formatArgs: String) {
+    fun openWarningFragment(@StringRes titleRes: Int, @StringRes messageRes: Int) {
         val finish = {
             activity.setResult(Activity.RESULT_OK)
             activity.finish()
         }
 
         activity.showAlert(
-            activity.getString(R.string.label_successful_payment),
-            activity.getString(messageRes, *formatArgs),
+            activity.getString(titleRes),
+            activity.getString(messageRes),
             positiveButtonPair = R.string.label_ok to finish)
+    }
+
+    fun openSuccessFragment(@StringRes messageRes: Int, vararg formatArgs: String) {
+        replaceFragmentInActivity(
+                ResultFragment.newInstance(
+                        ResultType.SUCCESS,
+                        activity.getString(messageRes, *formatArgs)
+                )
+        )
     }
 
     //TODO: Make proper back stack
     fun back() {
-        if (activity.supportFragmentManager.findFragmentById(R.id.container) is BankCardFragment) {
-            replaceFragmentInActivity(PaymentMethodsFragment.newInstance())
-        } else {
-            activity.finish()
+        when (currentFragment) {
+            is BankCardFragment -> replaceFragmentInActivity(PaymentMethodsFragment.newInstance())
+            is ResultFragment -> replaceFragmentInActivity(BankCardFragment.newInstance())
+            else -> activity.finish()
         }
     }
 
-    fun openErrorFragment(
-        @StringRes titleRes: Int = R.string.error_unpaid,
-        @StringRes messageRes: Int,
-        positiveButtonPair: AlertButton? = null,
-        negativeButtonPair: AlertButton? = null) =
-        openErrorFragment(
-            titleRes,
-            activity.getString(messageRes),
-            positiveButtonPair,
-            negativeButtonPair)
 
     fun openErrorFragment(
-        @StringRes titleRes: Int = R.string.error_unpaid,
-        message: CharSequence,
-        positiveButtonPair: AlertButton? = null,
-        negativeButtonPair: AlertButton? = null) {
-        activity.showAlert(
-            activity.getString(titleRes),
-            message,
-            positiveButtonPair = positiveButtonPair,
-            negativeButtonPair = negativeButtonPair)
+            parent: Fragment? = currentFragment,
+            @StringRes messageRes: Int,
+            positiveAction: Int? = null,
+            negativeAction: Int? = null
+    ) {
+
+
+        val fragment = ResultFragment.newInstance(
+                ResultType.ERROR,
+                activity.getString(messageRes),
+                positiveAction,
+                negativeAction)
+                .apply {
+                    if (parent != null) {
+                        setTargetFragment(parent, REQUEST_ERROR)
+                    }
+                }
+        replaceFragmentInActivity(fragment)
     }
+
+    private val currentFragment : Fragment?
+        get() = activity.supportFragmentManager.findFragmentById(R.id.container)
 
     private fun replaceFragmentInActivity(fragment: Fragment) {
         activity.supportFragmentManager.transact {
@@ -111,7 +132,7 @@ class Navigator(
 
     private fun addFragmentToActivity(fragment: Fragment, tag: String) {
         activity.supportFragmentManager.transact {
-            add(fragment, tag)
+            add(containerId,fragment, tag)
         }
     }
 
@@ -119,7 +140,7 @@ class Navigator(
         beginTransaction().apply {
             action()
         }
-            .commit()
+                .commitAllowingStateLoss()
     }
 
 }

@@ -35,7 +35,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
-import java.util.Locale
+import java.util.*
 
 internal fun <T> OkHttpClient.execute(
     apiRequest: ApiRequest<T>
@@ -49,8 +49,8 @@ internal fun <T> OkHttpClient.execute(
         .addHeader("Accept", "application/json")
         .addHeader("Content-Type", "application/json; charset=utf-8")
         .addHeader("Accept-Language", Locale.getDefault().language)
-        .addHeader("Authorization", "Bearer ${apiRequest.accessToken}")
-        .addHeader("X-Request-ID", System.currentTimeMillis().toString())
+        .addHeader("Authorization", "Bearer ${apiRequest.invoiceAccessToken}")
+        .addHeader("X-Request-ID", UUID.randomUUID().toString().take(10))
         .addHeader("User-Agent", userAgent)
 
     apiRequest.headers
@@ -83,13 +83,14 @@ internal fun <T> OkHttpClient.execute(
 
     when (val code = response.code()) {
         in 500..599 -> throw InternalServerException(code)
-        //TODO: Parse another type of errors
         in 400..499 -> throw ApiException(code, ApiError.fromJson(stringBody.toJsonObject()))
     }
 
     try {
         return apiRequest.convertJsonToResponse(stringBody)
     } catch (e: JSONException) {
+        throw ParseException.ResponseParsingException(stringBody, e)
+    } catch (e: ParseException) {
         throw ParseException.ResponseParsingException(stringBody, e)
     }
 }
@@ -119,4 +120,3 @@ internal fun createRequestBody(body: List<Pair<String, Any>>): String {
     }
     return jsonObject.toString()
 }
-

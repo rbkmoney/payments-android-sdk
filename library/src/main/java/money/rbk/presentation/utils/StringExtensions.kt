@@ -23,7 +23,7 @@ import java.util.ArrayList
 import java.util.Calendar
 
 fun String.isEmailValid(): Boolean =
-    isEmpty() or Patterns.EMAIL_ADDRESS.matcher(this).matches()
+    isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
 fun String.isDateValid(): Boolean {
     if (isBlank() or (length == 5).not()) {

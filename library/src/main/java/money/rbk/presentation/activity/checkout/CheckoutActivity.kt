@@ -20,7 +20,6 @@ package money.rbk.presentation.activity.checkout
 
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -31,49 +30,51 @@ import money.rbk.presentation.model.InvoiceModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.utils.adjustSize
 import money.rbk.presentation.utils.extra
-import money.rbk.presentation.utils.isTablet
+import money.rbk.presentation.utils.extraNullable
 
-class CheckoutActivity : AppCompatActivity(), CheckoutView {
+class CheckoutActivity : AppCompatActivity(), CheckoutView, InitializeListener {
+
+    override fun initialize() {
+        presenter.onInitialize()
+    }
 
     companion object {
         private const val KEY_INVOICE_ID = "invoice_id"
         private const val KEY_INVOICE_ACCESS_TOKEN = "invoice_access_token"
         private const val KEY_SHOP_NAME = "shop_name"
+        private const val KEY_EMAIL = "email"
 
         fun buildIntent(
             activity: Activity,
             invoiceId: String,
             invoiceAccessToken: String,
-            shopName: String
+            shopName: String,
+            email: String?
         ) = Intent(activity, CheckoutActivity::class.java)
             .apply {
                 putExtra(KEY_INVOICE_ID, invoiceId)
                 putExtra(KEY_INVOICE_ACCESS_TOKEN, invoiceAccessToken)
                 putExtra(KEY_SHOP_NAME, shopName)
+                putExtra(KEY_EMAIL, email)
             }
     }
 
     val navigator by lazy { Navigator(this, R.id.container) }
 
-    private lateinit var cost: String
     private val invoiceId by extra<String>(KEY_INVOICE_ID)
     private val invoiceAccessToken by extra<String>(KEY_INVOICE_ACCESS_TOKEN)
     private val shopName by extra<String>(KEY_SHOP_NAME)
+    private val email by extraNullable<String>(KEY_EMAIL)
 
     private val presenter by lazy { CheckoutPresenter(navigator) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (!isTablet) {
-            setTheme(R.style.Theme_RBKMoney)
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        }
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ac_checkout)
         adjustSize()
 
         if (savedInstanceState == null) {
-            Injector.init(applicationContext, invoiceId, invoiceAccessToken, shopName)
+            Injector.init(applicationContext, invoiceId, invoiceAccessToken, shopName, email)
         }
 
         presenter.attachView(this)
@@ -81,7 +82,7 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
     }
 
     override fun showInvoice(invoiceModel: InvoiceModel) {
-        cost = invoiceModel.cost
+        groupInvoiceInfo.visibility = View.VISIBLE
         tvShopName.text = invoiceModel.shopName
         tvPrice.text = invoiceModel.cost
         tvOrderDetails.text = invoiceModel.orderDetails
@@ -114,7 +115,8 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
         lLoader.visibility = View.INVISIBLE
     }
 
-    //TODO: Temporary Workaround
-    fun getCost(): String? = cost
+    override fun onBackPressed() {
+        navigator.back()
+    }
 
 }

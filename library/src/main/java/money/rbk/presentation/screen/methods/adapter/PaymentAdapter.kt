@@ -18,7 +18,9 @@
 
 package money.rbk.presentation.screen.methods.adapter
 
+import android.os.Build
 import android.view.LayoutInflater
+import android.view.MotionEvent.*
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -27,27 +29,30 @@ import kotlinx.android.synthetic.main.item_payment_methods.view.*
 import money.rbk.R
 import money.rbk.presentation.model.PaymentMethodModel
 import money.rbk.presentation.screen.methods.adapter.PaymentAdapter.PaymentHolder
+import money.rbk.presentation.utils.activate
+import money.rbk.presentation.utils.deactivate
+import money.rbk.presentation.utils.setTextColorResource
 
 class PaymentAdapter(
-    private val onItemClickListener: (PaymentMethodModel) -> Unit,
-    private var payments: List<PaymentMethodModel>) : RecyclerView.Adapter<PaymentHolder>() {
+        private val onItemClickListener: (PaymentMethodModel) -> Unit,
+        private var payments: List<PaymentMethodModel>) : RecyclerView.Adapter<PaymentHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PaymentHolder =
-        PaymentHolder(
-            LayoutInflater
-                .from(parent.context)
-                .inflate(R.layout.item_payment_methods, parent, false),
-            onItemClickListener
-        )
+            PaymentHolder(
+                    LayoutInflater
+                            .from(parent.context)
+                            .inflate(R.layout.item_payment_methods, parent, false),
+                    onItemClickListener
+            )
 
     override fun getItemCount(): Int = payments.size
 
     override fun onBindViewHolder(holder: PaymentHolder, position: Int) =
-        holder.bind(payments[position])
+            holder.bind(payments[position])
 
     class PaymentHolder(
-        private val view: View,
-        onItemClickListener: (PaymentMethodModel) -> Unit) : ViewHolder(view) {
+            private val view: View,
+            private val onItemClickListener: (PaymentMethodModel) -> Unit) : ViewHolder(view) {
 
         private lateinit var paymentItem: PaymentMethodModel
 
@@ -56,22 +61,63 @@ class PaymentAdapter(
         }
 
         fun bind(payment: PaymentMethodModel) =
-            with(payment) {
-                paymentItem = this
+                with(payment) {
+                    paymentItem = this
 
-                if (name == null) {
-                    view.tvPaymentType.visibility = View.GONE
-                } else {
-                    view.tvPaymentType.setText(name)
+                    if (name == null) {
+                        view.tvPaymentType.visibility = View.GONE
+                    } else {
+                        view.tvPaymentType.setText(name)
+                    }
+
+                    if (description == null) {
+                        view.tvDescription.visibility = View.GONE
+                    } else {
+                        view.tvDescription.setText(description)
+                    }
+
+                    view.ivPaymentIcon.setImageResource(icon)
+
+                    view.setOnTouchListener { v, event ->
+                        when (event.action) {
+                            ACTION_UP -> {
+                                ripple(v, false)
+                                onItemClickListener(paymentItem)
+                            }
+                            ACTION_CANCEL  -> {
+                                ripple(v, false)
+                            }
+                            ACTION_DOWN -> {
+                                ripple(v, true)
+                            }
+                        }
+                        return@setOnTouchListener true
+
+                    }
                 }
 
-                if (description == null) {
-                    view.tvDescription.visibility = View.GONE
+        private fun ripple(view: View, isRipple: Boolean) =
+                if (isRipple) {
+                    view.setBackgroundResource(R.drawable.background_payment_pressed)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        view.tvDescription.setTextAppearance(R.style.TextAppearance_RBKMoney_Description_White)
+                        view.tvPaymentType.setTextAppearance(R.style.TextAppearance_RBKMoney_Headline_White)
+                    } else {
+                        view.tvDescription.setTextColorResource(R.color.white)
+                        view.tvPaymentType.setTextColorResource(R.color.white)
+                    }
+                    view.ivPaymentIcon.activate()
                 } else {
-                    view.tvDescription.setText(description)
+                    view.setBackgroundResource(R.drawable.background_payment)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        view.tvDescription.setTextAppearance(R.style.TextAppearance_RBKMoney_Description)
+                        view.tvPaymentType.setTextAppearance(R.style.TextAppearance_RBKMoney_Headline_BlueLight)
+                    } else {
+                        view.tvDescription.setTextColorResource(R.color.blue_light)
+                        view.tvPaymentType.setTextColorResource(R.color.white)
+                    }
+                    view.ivPaymentIcon.deactivate()
                 }
 
-                view.ivPaymentIcon.setImageResource(icon)
-            }
     }
 }

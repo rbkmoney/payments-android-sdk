@@ -1,0 +1,7 @@
+[
+  {
+    "shopName": "<PASTE_YOUR_SHOP_NAME>",
+    "invoiceTemplateId": "<PASTE_YOUR_INVOICE_TEMPLATE_ID>",
+    "invoiceTemplateAccessToken": "<PASTE_YOUR_INVOICE_TEMPLATE_ACCESS_TOKEN>"
+  }
+]

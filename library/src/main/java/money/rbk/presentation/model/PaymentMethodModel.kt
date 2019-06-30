@@ -28,7 +28,7 @@ sealed class PaymentMethodModel(
     @DrawableRes val icon: Int
 ) : BaseIUModel() {
 
-    object BankCard : PaymentMethodModel(name = R.string.label_card, icon = R.drawable.ic_card)
+    object BankCard : PaymentMethodModel(name = R.string.label_card, icon = R.drawable.selector_card)
 
     object GooglePay : PaymentMethodModel(icon = R.drawable.ic_google_pay)
 

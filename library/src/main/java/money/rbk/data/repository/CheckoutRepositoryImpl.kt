@@ -26,6 +26,7 @@ import money.rbk.data.methods.GetInvoiceEvents
 import money.rbk.data.methods.GetInvoicePaymentMethods
 import money.rbk.data.response.CreatePaymentResourceResponse
 import money.rbk.data.response.CreatePaymentResponse
+import money.rbk.domain.entity.ClientInfo
 import money.rbk.domain.entity.ContactInfo
 import money.rbk.domain.entity.Flow
 import money.rbk.domain.entity.Invoice
@@ -43,32 +44,23 @@ internal class CheckoutRepositoryImpl(
     override val shopName: String
 ) : CheckoutRepository {
 
+    @Volatile
+    override var contactInfo: ContactInfo? = null
+    @Volatile
+    override var paymentTool: PaymentTool? = null
+    @Volatile
+    override var paymentId: String? = null
+
     private var invoiceEvents: MutableList<InvoiceEvent> = mutableListOf()
 
     private val invoice: Invoice by lazy {
         okHttpClient.execute(GetInvoiceByID(invoiceAccessToken, invoiceId))
     }
-
     private var paymentMethodsInitialized = false
     private val paymentMethods: List<PaymentMethod> by lazy {
         okHttpClient.execute(GetInvoicePaymentMethods(invoiceAccessToken, invoiceId))
             .also { paymentMethodsInitialized = true }
     }
-
-    private val payment by lazy {
-        okHttpClient.execute(CreatePayment(invoiceId,
-            invoiceAccessToken,
-            Payer.PaymentResourcePayer(createPaymentResource.paymentToolToken,
-                createPaymentResource.paymentSession,
-                contactInfo ?: TODO("Create new Exception")), Flow.PaymentFlowInstant))
-    }
-
-    private val createPaymentResource: CreatePaymentResourceResponse
-        get() = okHttpClient.execute(CreatePaymentResource(
-            invoiceAccessToken, paymentTool ?: TODO("Create new Exception")))
-
-    private var paymentTool: PaymentTool? = null
-    private var contactInfo: ContactInfo? = null
 
     override fun loadInvoice(): Invoice = invoice
 
@@ -79,9 +71,21 @@ internal class CheckoutRepositoryImpl(
 
     override fun createPayment(paymentTool: PaymentTool,
         contactInfo: ContactInfo): CreatePaymentResponse {
+
         this.paymentTool = paymentTool
         this.contactInfo = contactInfo
-        return payment
+
+        val createPaymentResource: CreatePaymentResourceResponse =
+            okHttpClient.execute(CreatePaymentResource(invoiceAccessToken, paymentTool))
+
+        return okHttpClient.execute(CreatePayment(invoiceId, invoiceAccessToken,
+            Payer.PaymentResourcePayer(
+                createPaymentResource.paymentToolToken,
+                createPaymentResource.paymentSession,
+                contactInfo), Flow.PaymentFlowInstant))
+            .also {
+                paymentId = it.id
+            }
     }
 
     override fun loadInvoiceEvents(): List<InvoiceEvent> =
