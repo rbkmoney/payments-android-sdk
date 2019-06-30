@@ -23,7 +23,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_height"
     android:background="@drawable/background_payment"
-    android:paddingStart="@dimen/spacing_default"
+    android:paddingStart="@dimen/spacing_huge"
     android:paddingEnd="@dimen/spacing_default"
     app:cardCornerRadius="@dimen/corner_radius"
     >
