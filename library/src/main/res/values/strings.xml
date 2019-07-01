@@ -99,4 +99,6 @@
     <string name="label_payment_refund">Возврат платежа</string>
     <string name="label_google_pay">Google Pay</string>
 
+
+    <string name="payments_show_name" translatable="false">Successfully received payment data for %s!</string>
 </resources>
