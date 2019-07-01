@@ -35,12 +35,12 @@ private fun EditText.setErrorState() {
 
 
 private fun EditText.setOkayState(@DrawableRes onValidDrawable: Int?) {
-    setBackgroundResource(R.drawable.background_edit_text)
+    setBackgroundResource(R.drawable.selector_edittext)
     setRightDrawable(onValidDrawable)
 }
 
 fun EditText.clearState() {
-    setBackgroundResource(R.drawable.background_edit_text)
+    setBackgroundResource(R.drawable.selector_edittext)
     removeRightDrawable()
 }
 

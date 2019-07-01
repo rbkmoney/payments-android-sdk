@@ -31,6 +31,8 @@ class CardChangeListener(private val edCallBack: (cardType: CreditCardType?) -> 
 
         if (predictedCardType != null) {
             edCallBack(predictedCardType)
+        } else {
+            edCallBack(null)
         }
     }
 

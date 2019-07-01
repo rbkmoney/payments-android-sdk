@@ -1,6 +1,7 @@
 .gradle
 /local.properties
 /build
+/config/private.properties
 /reports
 /.idea/workspace.xml
 .DS_Store

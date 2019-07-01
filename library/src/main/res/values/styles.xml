@@ -46,7 +46,7 @@
         <item name="android:maxLines">1</item>
         <item name="android:padding">@dimen/spacing_medium</item>
         <item name="android:drawablePadding">@dimen/spacing_small</item>
-        <item name="android:background">@drawable/seletor_edittext</item>
+        <item name="android:background">@drawable/selector_edittext</item>
     </style>
 
     <style name="Button.Accent" parent="Button">
