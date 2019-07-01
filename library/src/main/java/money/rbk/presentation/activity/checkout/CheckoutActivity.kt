@@ -21,6 +21,7 @@ package money.rbk.presentation.activity.checkout
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.ac_checkout.*
@@ -117,6 +118,12 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView, InitializeListener {
 
     override fun onBackPressed() {
         navigator.back()
+    }
+
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (!navigator.onActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
     }
 
 }

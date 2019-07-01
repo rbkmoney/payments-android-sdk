@@ -19,12 +19,17 @@
 package money.rbk.presentation.navigation
 
 import android.app.Activity
+import android.content.Intent
+import android.util.SparseArray
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.wallet.AutoResolvableResult
+import com.google.android.gms.wallet.AutoResolveHelper
 import money.rbk.R
 import money.rbk.presentation.dialog.showAlert
 import money.rbk.presentation.screen.card.BankCardFragment
@@ -39,6 +44,13 @@ class Navigator(
     @IdRes
     private val containerId: Int
 ) {
+
+    private val expectedResultFragments = SparseArray<String>()
+
+    fun resolveTask(task: Task<out AutoResolvableResult>, requestCode: Int) {
+        expectedResultFragments.put(requestCode, currentFragment?.tag)
+        AutoResolveHelper.resolveTask(task, activity, requestCode)
+    }
 
     fun openPaymentMethods() {
         if (activity.supportFragmentManager.findFragmentById(R.id.container) == null) {
@@ -88,8 +100,7 @@ class Navigator(
     fun back() {
         when (currentFragment) {
             is BankCardFragment -> replaceFragmentInActivity(PaymentMethodsFragment.newInstance())
-            is ResultFragment -> addFragmentToActivity(BankCardFragment.newInstance(),
-                ResultFragment::class.java.name)
+            is ResultFragment -> addFragmentToActivity(BankCardFragment.newInstance())
             else -> activity.finish()
         }
     }
@@ -119,13 +130,13 @@ class Navigator(
 
     private fun replaceFragmentInActivity(fragment: Fragment) {
         activity.supportFragmentManager.transact {
-            replace(containerId, fragment)
+            replace(containerId, fragment, fragment.javaClass.name)
         }
     }
 
-    private fun addFragmentToActivity(fragment: Fragment, tag: String) {
+    private fun addFragmentToActivity(fragment: Fragment) {
         activity.supportFragmentManager.transact {
-            add(containerId, fragment, tag)
+            add(containerId, fragment, fragment.javaClass.name)
         }
     }
 
@@ -135,5 +146,15 @@ class Navigator(
         }
             .commitAllowingStateLoss()
     }
+
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean =
+        expectedResultFragments[requestCode]?.let {
+            activity.supportFragmentManager.findFragmentByTag(it)
+                ?.let { fragment ->
+                    expectedResultFragments.remove(requestCode)
+                    fragment.onActivityResult(requestCode, resultCode, data)
+                }
+
+        } != null
 
 }

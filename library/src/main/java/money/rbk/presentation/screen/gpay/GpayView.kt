@@ -1,5 +1,6 @@
 package money.rbk.presentation.screen.gpay
 
+import money.rbk.presentation.model.BrowserRequestModel
 import money.rbk.presentation.screen.base.BaseView
 
 /**
@@ -7,5 +8,9 @@ import money.rbk.presentation.screen.base.BaseView
  * @since 27.06.19
  */
 interface GpayView : BaseView {
+
+    fun onReadyToPay()
+
+    fun showRedirect(request: BrowserRequestModel)
 
 }

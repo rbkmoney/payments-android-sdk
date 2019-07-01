@@ -24,6 +24,8 @@ object Constants {
 
     const val BASE_URL = "https://api.rbk.money/v2"
 
+    const val GATEWAY = "rbkmoney"
+    const val GATEWAY_MERCHANT_ID = "rbkmoney-test"
 
     // G Pay
     const val PAYMENTS_ENVIRONMENT = WalletConstants.ENVIRONMENT_TEST

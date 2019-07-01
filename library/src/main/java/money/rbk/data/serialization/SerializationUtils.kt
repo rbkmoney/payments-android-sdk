@@ -23,9 +23,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.util.Date
 
-class JsonBuilder {
-
-    val jsonObject = JSONObject()
+class JsonBuilder(val jsonObject : JSONObject) {
 
     infix fun String.set(value: Int?) {
         if (value != null) {
@@ -67,6 +65,11 @@ class JsonBuilder {
         jsonObject.put(this, value)
     }
 
+    infix fun String.set(value: Serializable) {
+        jsonObject.put(this, value.toJson())
+    }
+
+
     infix fun String.setNotNull(value: JSONArray?) {
         if (value != null) {
             jsonObject.put(this, value)
@@ -84,8 +87,8 @@ inline fun <reified T> jsonArray(vararg values: T): JSONArray =
         values.forEach { put(it) }
     }
 
-inline fun json(jsonBuilderCallback: JsonBuilder.() -> Unit): JSONObject =
-    JsonBuilder().also(jsonBuilderCallback).jsonObject
+inline fun json(jsonObject: JSONObject = JSONObject(), jsonBuilderCallback: JsonBuilder.() -> Unit): JSONObject =
+    JsonBuilder(jsonObject).also(jsonBuilderCallback).jsonObject
 
 inline operator fun <reified T, reified D> JSONObject.invoke(key: String,
     parser: Deserializer<D, T>): T {
