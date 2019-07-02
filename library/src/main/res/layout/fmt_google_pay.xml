@@ -48,18 +48,21 @@
 
 
         <RelativeLayout
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edEmail"
-            android:layout_width="0dp"
-            android:layout_margin="@dimen/spacing_medium"
-            android:layout_height="@dimen/height_play_button"
             android:id="@+id/btnPay"
+            android:layout_width="0dp"
+            android:layout_marginStart="@dimen/spacing_gpay_button"
+            android:layout_marginEnd="@dimen/spacing_gpay_button"
+            android:layout_height="@dimen/height_gpay_button"
+            android:layout_marginTop="@dimen/spacing_default"
+            android:layout_marginBottom="@dimen/spacing_huge"
             android:background="@drawable/googlepay_button_no_shadow_background"
             android:clickable="true"
             android:focusable="true"
             android:padding="@dimen/spacing_tiny"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edEmail"
             >
 
             <LinearLayout
@@ -90,7 +93,6 @@
                 android:src="@drawable/googlepay_button_overlay"
                 />
         </RelativeLayout>
-
 
         <FrameLayout
             android:id="@+id/pbLoading"

@@ -28,7 +28,7 @@
 
     <style name="RBKMoney" />
 
-    <style name="Button" parent="RBKMoney" />
+    <style name="Button" parent="RBKMoney"/>
 
 
     <style name="Button.Flat" parent="Button">

@@ -21,12 +21,12 @@
     <dimen name="spacing_xsmall">2dp</dimen>
     <dimen name="spacing_small">4dp</dimen>
     <dimen name="spacing_medium">8dp</dimen>
+    <dimen name="spacing_gpay_button">9dp</dimen> <!-- 3ds less than spacing_default -->
     <dimen name="spacing_default">12dp</dimen>
     <dimen name="spacing_large">14dp</dimen>
     <dimen name="spacing_xlarge">16dp</dimen>
     <dimen name="spacing_xxlarge">20dp</dimen>
     <dimen name="spacing_huge">28dp</dimen>
-
 
     <dimen name="elevation">8dp</dimen>
 
