@@ -25,7 +25,7 @@ import money.rbk.domain.entity.InvoiceEvent
 private const val LIMIT = 100
 
 internal class GetInvoiceEvents(
-    invoiceAccessToken: String,
+    override val invoiceAccessToken: String,
     invoiceId: String,
     eventID: Int?
 ) : GetRequest<List<InvoiceEvent>> {
@@ -33,8 +33,6 @@ internal class GetInvoiceEvents(
     override val endpoint = "/processing/invoices/$invoiceId/events?" +
         "limit=$LIMIT" +
         (eventID?.let { "&eventID=$it" } ?: "")
-
-    override val invoiceAccessToken = invoiceAccessToken
 
     override fun convertJsonToResponse(jsonString: String): List<InvoiceEvent> =
         InvoiceEvent.fromJsonArray(jsonString.toJsonArray())

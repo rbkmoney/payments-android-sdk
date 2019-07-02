@@ -13,4 +13,5 @@ interface GpayView : BaseView {
 
     fun showRedirect(request: BrowserRequestModel)
 
+    fun showEmailValid(isValid: Boolean)
 }

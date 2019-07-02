@@ -18,33 +18,28 @@
 
 package money.rbk.data.network
 
-import com.google.android.gms.wallet.WalletConstants
-
 object Constants {
 
     const val BASE_URL = "https://api.rbk.money/v2"
 
-    const val GATEWAY = "rbkmoney"
-    const val GATEWAY_MERCHANT_ID = "rbkmoney-test"
-
-    // G Pay
-    const val PAYMENTS_ENVIRONMENT = WalletConstants.ENVIRONMENT_TEST
-
-    val SUPPORTED_NETWORKS = listOf(
-        "AMEX",
-        "DISCOVER",
-        "JCB",
-        "MASTERCARD",
-        "VISA")
-
-    val SUPPORTED_METHODS = listOf(
-        "PAN_ONLY",
-        "CRYPTOGRAM_3DS")
-
-    const val PAYMENT_GATEWAY_TOKENIZATION_NAME = "rbkmoney"
-
-    val PAYMENT_GATEWAY_TOKENIZATION_PARAMETERS = mapOf(
-        "gateway" to PAYMENT_GATEWAY_TOKENIZATION_NAME,
-        "gatewayMerchantId" to "rbkmoney-test"
-    )
+    //    // G Pay
+    //    const val PAYMENTS_ENVIRONMENT = WalletConstants.ENVIRONMENT_TEST
+    //
+    //    val SUPPORTED_NETWORKS = listOf(
+    //        "AMEX",
+    //        "DISCOVER",
+    //        "JCB",
+    //        "MASTERCARD",
+    //        "VISA")
+    //
+    //    val SUPPORTED_METHODS = listOf(
+    //        "PAN_ONLY",
+    //        "CRYPTOGRAM_3DS")
+    //
+    //    const val PAYMENT_GATEWAY_TOKENIZATION_NAME = "rbkmoney"
+    //
+    //    val PAYMENT_GATEWAY_TOKENIZATION_PARAMETERS = mapOf(
+    //        "gateway" to PAYMENT_GATEWAY_TOKENIZATION_NAME,
+    //        "gatewayMerchantId" to "rbkmoney-test"
+    //    )
 }

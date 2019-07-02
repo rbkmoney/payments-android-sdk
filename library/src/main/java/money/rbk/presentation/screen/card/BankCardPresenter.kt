@@ -59,6 +59,8 @@ class BankCardPresenter(
     override fun onViewDetached() {
         invoiceEventsUseCase.destroy()
         paymentUseCase.destroy()
+        repeatPaymentUseCase.destroy()
+        cancelPaymentUseCase.destroy()
     }
 
     /* Public methods for view */
@@ -157,7 +159,7 @@ class BankCardPresenter(
             is CheckoutStateModel.PaymentFailed ->
                 navigator.openErrorFragment(
                     messageRes = checkoutState.reasonResId
-                    //                    , positiveButtonPair = retryPaymentButton
+                    //, positiveButtonPair = retryPaymentButton
                 )
             is CheckoutStateModel.InvoiceFailed ->
                 navigator.openErrorFragment(
@@ -176,7 +178,7 @@ class BankCardPresenter(
                 view.showRedirect(checkoutState.request)
         }
 
-        view.setCost(checkoutInfo.cost)
+        view.setCost(checkoutInfo.formattedPriceAndCurrency)
     }
 
     private fun onCheckoutUpdateError(error: Throwable) {

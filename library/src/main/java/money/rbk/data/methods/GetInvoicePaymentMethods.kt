@@ -23,13 +23,11 @@ import money.rbk.data.methods.base.GetRequest
 import money.rbk.domain.entity.PaymentMethod
 
 internal class GetInvoicePaymentMethods(
-    invoiceAccessToken: String,
+    override val invoiceAccessToken: String,
     invoiceId: String
 ) : GetRequest<List<PaymentMethod>> {
 
     override val endpoint = "/processing/invoices/$invoiceId/payment-methods"
-
-    override val invoiceAccessToken = invoiceAccessToken
 
     override fun convertJsonToResponse(jsonString: String): List<PaymentMethod> =
         PaymentMethod.fromJsonArray(jsonString.toJsonArray())

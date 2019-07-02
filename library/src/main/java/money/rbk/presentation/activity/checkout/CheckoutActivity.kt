@@ -21,7 +21,6 @@ package money.rbk.presentation.activity.checkout
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.ac_checkout.*
@@ -44,18 +43,21 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView, InitializeListener {
         private const val KEY_INVOICE_ACCESS_TOKEN = "invoice_access_token"
         private const val KEY_SHOP_NAME = "shop_name"
         private const val KEY_EMAIL = "email"
+        private const val KEY_USE_TEST_ENVIRONMENT = "use_test_environment"
 
         fun buildIntent(
             activity: Activity,
             invoiceId: String,
             invoiceAccessToken: String,
             shopName: String,
+            useTestEnvironment: Boolean,
             email: String?
         ) = Intent(activity, CheckoutActivity::class.java)
             .apply {
                 putExtra(KEY_INVOICE_ID, invoiceId)
                 putExtra(KEY_INVOICE_ACCESS_TOKEN, invoiceAccessToken)
                 putExtra(KEY_SHOP_NAME, shopName)
+                putExtra(KEY_USE_TEST_ENVIRONMENT, useTestEnvironment)
                 putExtra(KEY_EMAIL, email)
             }
     }
@@ -65,6 +67,7 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView, InitializeListener {
     private val invoiceId by extra<String>(KEY_INVOICE_ID)
     private val invoiceAccessToken by extra<String>(KEY_INVOICE_ACCESS_TOKEN)
     private val shopName by extra<String>(KEY_SHOP_NAME)
+    private val useTestEnvironment by extra<Boolean>(KEY_USE_TEST_ENVIRONMENT)
     private val email by extraNullable<String>(KEY_EMAIL)
 
     private val presenter by lazy { CheckoutPresenter(navigator) }
@@ -75,7 +78,7 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView, InitializeListener {
         adjustSize()
 
         if (savedInstanceState == null) {
-            Injector.init(applicationContext, invoiceId, invoiceAccessToken, shopName, email)
+            Injector.init(applicationContext, invoiceId, invoiceAccessToken, shopName, useTestEnvironment, email)
         }
 
         presenter.attachView(this)

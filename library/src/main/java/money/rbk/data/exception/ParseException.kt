@@ -18,8 +18,6 @@
 
 package money.rbk.data.exception
 
-import org.json.JSONException
-
 sealed class ParseException(message: String, cause: Throwable? = null) : Exception(message) {
 
     internal data class ResponseParsingException(val stringBody: String, val e: Exception) :

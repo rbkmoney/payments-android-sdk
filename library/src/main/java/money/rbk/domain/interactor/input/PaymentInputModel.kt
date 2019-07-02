@@ -21,13 +21,11 @@ package money.rbk.domain.interactor.input
 import android.content.Intent
 import com.google.android.gms.wallet.PaymentData
 import com.google.android.gms.wallet.WalletConstants
-import money.rbk.data.network.Constants
 import money.rbk.domain.entity.CardInfo
 import money.rbk.domain.entity.ContactInfo
 import money.rbk.domain.entity.PaymentMethodToken
 import money.rbk.domain.entity.PaymentToken
 import money.rbk.domain.entity.PaymentTool
-import money.rbk.domain.entity.TokenProvider
 
 class PaymentInputModel(
     val paymentTool: PaymentTool,
@@ -54,7 +52,9 @@ class PaymentInputModel(
             )
         )
 
-        fun buildForGpay(intent: Intent?, email: String): PaymentInputModel {
+        fun buildForGpay(intent: Intent?,
+            email: String,
+            gatewayMerchantID: String): PaymentInputModel {
             val paymentData =
                 PaymentData.getFromIntent(intent!!) ?: throw RuntimeException("???") //TODO!!!
             val paymentMethodToken =
@@ -66,7 +66,7 @@ class PaymentInputModel(
 
             return PaymentInputModel(
                 paymentTool = PaymentTool.TokenizedCardData(
-                    gatewayMerchantID = Constants.GATEWAY_MERCHANT_ID,
+                    gatewayMerchantID = gatewayMerchantID,
                     paymentToken = PaymentToken(
                         cardInfo = CardInfo(
                             paymentData.cardInfo.cardNetwork,

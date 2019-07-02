@@ -26,14 +26,12 @@ import money.rbk.domain.entity.Payer
 
 internal class CreatePayment(
     invoiceID: String,
-    invoiceAccessToken: String,
+    override val invoiceAccessToken: String,
     payer: Payer,
     flow: Flow
 ) : PostRequest<CreatePaymentResponse> {
 
     override val endpoint: String = "/processing/invoices/$invoiceID/payments"
-
-    override val invoiceAccessToken = invoiceAccessToken
 
     override fun convertJsonToResponse(jsonString: String): CreatePaymentResponse =
         CreatePaymentResponse.fromJson(jsonString.toJsonObject())

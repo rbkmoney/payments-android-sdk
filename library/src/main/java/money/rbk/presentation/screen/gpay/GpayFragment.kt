@@ -7,12 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.wallet.AutoResolveHelper
-import com.google.android.gms.wallet.WalletConstants
+import kotlinx.android.synthetic.main.fmt_card.*
 import kotlinx.android.synthetic.main.fmt_google_pay.*
+import kotlinx.android.synthetic.main.fmt_google_pay.btnPay
+import kotlinx.android.synthetic.main.fmt_google_pay.edEmail
+import kotlinx.android.synthetic.main.fmt_google_pay.pbLoading
 import money.rbk.R
 import money.rbk.di.Injector
+import money.rbk.presentation.activity.web.WebViewActivity
 import money.rbk.presentation.model.BrowserRequestModel
 import money.rbk.presentation.screen.base.BaseFragment
+import money.rbk.presentation.utils.setValid
 
 /**
  * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
@@ -21,9 +26,6 @@ import money.rbk.presentation.screen.base.BaseFragment
 
 class GpayFragment : BaseFragment<GpayView>(), GpayView {
 
-    override fun showRedirect(request: BrowserRequestModel) {
-    }
-
     override val presenter: GpayPresenter by lazy { GpayPresenter(navigator) }
 
     private val userEmail = Injector.email
@@ -31,21 +33,8 @@ class GpayFragment : BaseFragment<GpayView>(), GpayView {
     companion object {
         fun newInstance() = GpayFragment()
 
-        val LOAD_PAYMENT_DATA_REQUEST_CODE = 123
+        const val LOAD_PAYMENT_DATA_REQUEST_CODE = 123
 
-        val SUPPORTED_PAYMENT_METHODS = listOf(
-            WalletConstants.PAYMENT_METHOD_CARD,
-            WalletConstants.PAYMENT_METHOD_TOKENIZED_CARD
-        )
-
-        val SUPPORTED_NETWORKS = listOf(
-            WalletConstants.CARD_NETWORK_VISA,
-            WalletConstants.CARD_NETWORK_AMEX,
-            WalletConstants.CARD_NETWORK_MASTERCARD,
-            WalletConstants.CARD_NETWORK_DISCOVER,
-            WalletConstants.CARD_NETWORK_INTERAC,
-            WalletConstants.CARD_NETWORK_JCB
-        )
     }
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -56,27 +45,23 @@ class GpayFragment : BaseFragment<GpayView>(), GpayView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         edEmail.setText(userEmail)
-        presenter.init(view.context, this)
     }
 
     override fun onReadyToPay() {
         btnPay.setOnClickListener {
-            btnPay.isClickable = false
-            presenter.performPayment()
+            presenter.onPerformPayment(edEmail.text.toString())
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
+            WebViewActivity.REQUEST_CODE -> presenter.on3DsPerformed()
             LOAD_PAYMENT_DATA_REQUEST_CODE -> {
                 when (resultCode) {
                     Activity.RESULT_OK ->
                         presenter.onGpayPaymentSuccess(data, edEmail.text.toString())
 
-                    Activity.RESULT_CANCELED -> {
-                        // Nothing to do here normally - the user simply cancelled without selecting a
-                        // payment method.
-                    }
+                    Activity.RESULT_CANCELED -> hideProgress()
 
                     AutoResolveHelper.RESULT_ERROR ->
                         presenter.onGpayPaymentError(data)
@@ -85,6 +70,15 @@ class GpayFragment : BaseFragment<GpayView>(), GpayView {
             }
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
+    }
+
+    override fun showEmailValid(isValid: Boolean) {
+        edEmail.setValid(isValid)
+    }
+
+    override fun showRedirect(request: BrowserRequestModel) {
+        startActivityForResult(WebViewActivity.buildIntent(activity!!, request),
+            WebViewActivity.REQUEST_CODE)
     }
 
     override fun showProgress() {

@@ -19,6 +19,7 @@
 package money.rbk.presentation.screen.base
 
 import money.rbk.R
+import money.rbk.data.exception.GpayException
 import money.rbk.data.exception.NetworkServiceException
 import money.rbk.data.exception.ParseException
 import money.rbk.presentation.navigation.Navigator
@@ -44,6 +45,7 @@ abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator
         return when (error) {
             is NetworkServiceException -> error.process(retryAction)
             is ParseException -> error.process(retryAction)
+            is GpayException -> error.process(retryAction)
             else -> navigator.openErrorFragment(
                 messageRes = R.string.error_busines_logic,
                 positiveAction = retryAction)
@@ -71,6 +73,16 @@ abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator
                     messageRes = R.string.error_busines_logic,
                     positiveAction = retryAction)
         }
+
+    private fun GpayException.process(retryAction: Int?) = when (this) {
+        GpayException.GpayNotReadyException ->
+            navigator.openErrorFragment(
+                messageRes = R.string.error_busines_logic)
+
+        is GpayException.GpayCantPerformPaymentException ->
+            navigator.openErrorFragment(
+                messageRes = R.string.error_busines_logic, positiveAction = retryAction)
+    }
 
     private fun ParseException.process(retryAction: Int?) {
         navigator.openErrorFragment(
