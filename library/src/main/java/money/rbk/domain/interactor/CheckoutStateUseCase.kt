@@ -29,6 +29,7 @@ import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.domain.repository.CheckoutRepository
 import money.rbk.presentation.model.CheckoutInfoModel
 import money.rbk.presentation.model.CheckoutStateModel
+import money.rbk.presentation.utils.formatInternationalPrice
 import money.rbk.presentation.utils.formatPrice
 
 internal class CheckoutStateUseCase(
@@ -65,7 +66,7 @@ internal class CheckoutStateUseCase(
             } else {
                 val invoice = checkoutRepository.loadInvoice()
                 val checkoutInfo = CheckoutInfoModel(
-                    price = invoice.amount.formatPrice(),
+                    price = invoice.amount.formatInternationalPrice(),
                     currency = invoice.currency,
                     formattedPriceAndCurrency = invoice.cost,
                     checkoutState = checkoutState

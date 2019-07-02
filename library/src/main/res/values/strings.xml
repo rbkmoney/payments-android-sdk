@@ -101,4 +101,5 @@
 
 
     <string name="payments_show_name" translatable="false">Successfully received payment data for %s!</string>
+    <string name="label_all_payment_methods">Всё платёжные методы</string>
 </resources>

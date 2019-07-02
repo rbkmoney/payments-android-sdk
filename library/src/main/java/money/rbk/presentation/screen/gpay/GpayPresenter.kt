@@ -61,8 +61,7 @@ class GpayPresenter(
     }
 
     fun onGpayPaymentError(data: Intent?) {
-        onError(GpayException.GpayCantPerformPaymentException(AutoResolveHelper.getStatusFromIntent(
-            data)))
+        onError(GpayException.GpayCantPerformPaymentException(AutoResolveHelper.getStatusFromIntent(data)))
     }
 
     fun onGpayPaymentSuccess(data: Intent?, email: String) {

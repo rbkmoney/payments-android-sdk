@@ -28,6 +28,7 @@
     <dimen name="spacing_xlarge">20dp</dimen>
     <dimen name="spacing_xxlarge">24dp</dimen>
     <dimen name="spacing_huge">32dp</dimen>
+    <dimen name="spacing_xxxhuge">50dp</dimen>
 
     <dimen name="elevation">10dp</dimen>
 
@@ -43,7 +44,6 @@
 
     <dimen name="corner_radius">9dp</dimen>
     <dimen name="corner_radius_small">3dp</dimen>
-
 
     <dimen name="background_corner_radius">3dp</dimen>
     <dimen name="divider_height">1dp</dimen>
