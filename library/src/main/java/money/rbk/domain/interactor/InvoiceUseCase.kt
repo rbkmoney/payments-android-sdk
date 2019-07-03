@@ -26,11 +26,13 @@ import money.rbk.domain.extension.cost
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.InvoiceInitializeInputModel
 import money.rbk.domain.repository.CheckoutRepository
+import money.rbk.domain.repository.GpayRepository
 import money.rbk.presentation.model.CheckoutStateModel
 import money.rbk.presentation.model.InvoiceModel
 
 internal class InvoiceUseCase(
     private val repository: CheckoutRepository = Injector.checkoutRepository,
+    private val gpayRepository : GpayRepository = Injector.gpayRepository,
     private val invoiceChangesConverter: EntityConverter<List<InvoiceEvent>, CheckoutStateModel> = InvoiceChangesConverter()) :
     UseCase<InvoiceInitializeInputModel, InvoiceModel>() {
 
@@ -43,6 +45,8 @@ internal class InvoiceUseCase(
 
             val invoice = repository.loadInvoice()
             repository.loadPaymentMethods()
+
+            gpayRepository.init(invoice.shopID)
 
             val checkoutState = invoiceChangesConverter(repository.loadInvoiceEvents())
 

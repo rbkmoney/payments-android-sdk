@@ -20,8 +20,10 @@ package money.rbk.di
 
 import android.content.Context
 import money.rbk.data.repository.CheckoutRepositoryImpl
+import money.rbk.data.repository.GpayRepositoryImpl
 import money.rbk.data.utils.ClientInfoUtils
 import money.rbk.domain.repository.CheckoutRepository
+import money.rbk.domain.repository.GpayRepository
 import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -32,21 +34,24 @@ object Injector {
     private const val DEFAULT_TIMEOUT: Long = 30
 
     internal lateinit var checkoutRepository: CheckoutRepository
+    internal lateinit var gpayRepository: GpayRepository
 
     private lateinit var okHttpClient: OkHttpClient
 
     var email: String? = null
 
-    fun init(context: Context,
+    fun init(applicationContext: Context,
         invoiceId: String,
         invoiceAccessToken: String,
         shopName: String,
+        useTestEnvironment: Boolean,
         email: String?) {
         this.email = email
-        ClientInfoUtils.initialize(context)
-        okHttpClient = newHttpClient(context)
+        ClientInfoUtils.initialize(applicationContext)
+        okHttpClient = newHttpClient(applicationContext)
         checkoutRepository =
             CheckoutRepositoryImpl(okHttpClient, invoiceId, invoiceAccessToken, shopName)
+        gpayRepository = GpayRepositoryImpl(applicationContext, useTestEnvironment)
     }
 
     private fun newHttpClient(context: Context): OkHttpClient = OkHttpClient.Builder()

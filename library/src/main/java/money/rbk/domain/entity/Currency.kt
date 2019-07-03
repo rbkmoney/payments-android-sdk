@@ -21,7 +21,7 @@ package money.rbk.domain.entity
 import money.rbk.data.extension.findEnum
 import money.rbk.data.serialization.Deserializer
 
-internal enum class Currency(val symbol: String) {
+enum class Currency(val symbol: String) {
     RUB("\u20BD"),
     EUR("€"),
     USD("$"),

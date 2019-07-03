@@ -20,11 +20,11 @@ package money.rbk.presentation.screen.result
 
 import money.rbk.presentation.screen.base.BaseView
 
-interface ResultView : BaseView{
+interface ResultView : BaseView {
 
     fun showSuccess()
 
     fun showError()
-    fun sendResult(action: Int)
+
     fun showUnknown()
 }

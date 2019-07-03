@@ -22,4 +22,24 @@ object Constants {
 
     const val BASE_URL = "https://api.rbk.money/v2"
 
+    //    // G Pay
+    //    const val PAYMENTS_ENVIRONMENT = WalletConstants.ENVIRONMENT_TEST
+    //
+    //    val SUPPORTED_NETWORKS = listOf(
+    //        "AMEX",
+    //        "DISCOVER",
+    //        "JCB",
+    //        "MASTERCARD",
+    //        "VISA")
+    //
+    //    val SUPPORTED_METHODS = listOf(
+    //        "PAN_ONLY",
+    //        "CRYPTOGRAM_3DS")
+    //
+    //    const val PAYMENT_GATEWAY_TOKENIZATION_NAME = "rbkmoney"
+    //
+    //    val PAYMENT_GATEWAY_TOKENIZATION_PARAMETERS = mapOf(
+    //        "gateway" to PAYMENT_GATEWAY_TOKENIZATION_NAME,
+    //        "gatewayMerchantId" to "rbkmoney-test"
+    //    )
 }

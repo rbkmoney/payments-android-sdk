@@ -67,7 +67,7 @@ abstract class UseCase<R : BaseInputModel, T : BaseIUModel> {
     }
 
     open fun destroy() {
-        isDestroyed = true
+        // TODO: Temporary workaround: isDestroyed = true
     }
 
     abstract operator fun invoke(

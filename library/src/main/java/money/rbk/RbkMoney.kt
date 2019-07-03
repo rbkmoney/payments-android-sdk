@@ -24,8 +24,18 @@ import money.rbk.presentation.activity.checkout.CheckoutActivity
 
 object RbkMoney {
 
-    fun buildCheckoutIntent(activity: Activity, invoiceId: String,
-        invoiceAccessToken: String, shopName: String, email: String? = null): Intent =
-        CheckoutActivity.buildIntent(activity, invoiceId, invoiceAccessToken, shopName, email)
+    @JvmOverloads
+    fun buildCheckoutIntent(activity: Activity,
+        invoiceId: String,
+        invoiceAccessToken: String,
+        shopName: String,
+        useTestEnvironment: Boolean = true,
+        email: String? = null): Intent =
+        CheckoutActivity.buildIntent(activity,
+            invoiceId,
+            invoiceAccessToken,
+            shopName,
+            useTestEnvironment,
+            email)
 
 }

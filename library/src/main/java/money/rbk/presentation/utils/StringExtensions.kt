@@ -51,10 +51,6 @@ fun String.removeSpaces(): String {
     return this.replace("\\s".toRegex(), "")
 }
 
-fun String.clearLength(): Int {
-    return removeSpaces().length
-}
-
 fun String.isValidCvv() = length == 3
 
 fun String.isCardValidByLuna(): Boolean {

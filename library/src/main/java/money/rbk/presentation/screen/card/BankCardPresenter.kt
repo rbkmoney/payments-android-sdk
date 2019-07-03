@@ -29,12 +29,12 @@ import money.rbk.domain.interactor.RepeatPaymentUseCase
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.domain.interactor.input.PaymentInputModel
-import money.rbk.presentation.exception.UnknownActionException
 import money.rbk.presentation.model.CheckoutInfoModel
 import money.rbk.presentation.model.CheckoutStateModel
 import money.rbk.presentation.model.EmptyIUModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePresenter
+import money.rbk.presentation.screen.result.ResultAction
 import money.rbk.presentation.utils.isDateValid
 import money.rbk.presentation.utils.isEmailValid
 import money.rbk.presentation.utils.isValidCvv
@@ -59,6 +59,8 @@ class BankCardPresenter(
     override fun onViewDetached() {
         invoiceEventsUseCase.destroy()
         paymentUseCase.destroy()
+        repeatPaymentUseCase.destroy()
+        cancelPaymentUseCase.destroy()
     }
 
     /* Public methods for view */
@@ -72,7 +74,7 @@ class BankCardPresenter(
         val cardType: CreditCardType? = validateNumber(cardNumber)
         if (validateDate(expDate) and validateCcv(cvv) and validateCardholder(
                 cardHolder) and validateEmail(email) and (cardType != null) && (cardType != null)) {
-            // Double cardType for smart cast
+            // Double cardType checking for smart cast, until smart contracts is not ready yet
 
             val cardPaymentInputModel = PaymentInputModel.buildForCard(
                 cardNumber = cardNumber,
@@ -115,12 +117,12 @@ class BankCardPresenter(
 
     /* Actions */
 
-    private fun updateCheckout() {
+    fun updateCheckout() {
         view?.showProgress()
         invoiceEventsUseCase(EmptyInputModel, ::onCheckoutUpdated, ::onCheckoutUpdateError)
     }
 
-    private fun retryPayment() {
+    fun retryPayment() {
         view?.showProgress()
         repeatPaymentUseCase(EmptyInputModel, ::onPaymentCreated, ::onPaymentError)
     }
@@ -137,11 +139,10 @@ class BankCardPresenter(
     }
 
     private fun onPaymentError(error: Throwable) {
-
         if (error is UseCaseException.UnableRepeatPaymentException) {
             onError(error) // TODO: Add use another card
         } else {
-            onError(error, ACTION_RETRY_PAYMENT) // TODO: Add use another card
+            onError(error, ResultAction.TRY_AGAIN) // TODO: Add use another card
         }
     }
 
@@ -156,9 +157,11 @@ class BankCardPresenter(
 
             is CheckoutStateModel.PaymentFailed ->
                 navigator.openErrorFragment(
-                    messageRes = checkoutState.reasonResId
-                    //                    , positiveButtonPair = retryPaymentButton
+                    messageRes = checkoutState.reasonResId,
+                    positiveAction = ResultAction.TRY_AGAIN,
+                    negativeAction = ResultAction.USE_ANOTHER_CARD
                 )
+
             is CheckoutStateModel.InvoiceFailed ->
                 navigator.openErrorFragment(
                     messageRes = checkoutState.reasonResId)
@@ -176,8 +179,17 @@ class BankCardPresenter(
                 view.showRedirect(checkoutState.request)
         }
 
-        view.setCost(checkoutInfo.cost)
+        view.setCost(checkoutInfo.formattedPriceAndCurrency)
+
+        navigator.pendingAction?.let(::onResultAction)
     }
+
+    private fun onResultAction(resultAction: ResultAction) =
+        when (resultAction) {
+            ResultAction.TRY_AGAIN -> retryPayment()
+            ResultAction.USE_ANOTHER_CARD -> clearPayment()
+            ResultAction.UPDATE_CHECKOUT -> Unit
+        }
 
     private fun onCheckoutUpdateError(error: Throwable) {
         error.printStackTrace()
@@ -188,24 +200,24 @@ class BankCardPresenter(
                     navigator.openErrorFragment(
                         parent = view as BankCardFragment,
                         messageRes = R.string.error_polling_time_exceeded,
-                        positiveAction = ACTION_UPDATE_CHECKOUT,
-                        negativeAction = ACTION_USE_ANOTHER_CARD)
+                        positiveAction = ResultAction.UPDATE_CHECKOUT,
+                        negativeAction = ResultAction.USE_ANOTHER_CARD)
             }
         } else {
-            onError(error, ACTION_UPDATE_CHECKOUT)
+            onError(error, ResultAction.UPDATE_CHECKOUT)
         }
     }
 
-    private fun clearPayment() {
+    fun clearPayment() {
         cancelPaymentUseCase(EmptyInputModel, {}, {})
         view?.clear()
     }
 
-    fun onErrorTest(action: Int?) =
-        when (action) {
-            ACTION_RETRY_PAYMENT -> retryPayment()
-            ACTION_USE_ANOTHER_CARD -> clearPayment()
-            ACTION_UPDATE_CHECKOUT -> updateCheckout()
-            else -> throw UnknownActionException("unknown action with code : $action")
-        }
+    //    fun onErrorTest(action: Int?) =
+    //        when (action) {
+    //            ACTION_RETRY_PAYMENT -> retryPayment()
+    //            ACTION_USE_ANOTHER_CARD -> clearPayment()
+    //            ACTION_UPDATE_CHECKOUT -> updateCheckout()
+    //            else -> throw UnknownActionException("unknown action with code : $action")
+    //        }
 }

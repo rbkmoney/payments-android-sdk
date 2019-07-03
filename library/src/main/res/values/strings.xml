@@ -97,5 +97,11 @@
     <string name="error_busines_logic">В процессе проведения платежа возникла непредвиденная ошибка. Пожалуйста, повторите попытку платежа. В случае сохранения ошибки обратитесь в службу поддежки</string>
     <string name="message_payment_in_refund_state">Ваш платеж находится в статусе возврата или возвращен</string>
     <string name="label_payment_refund">Возврат платежа</string>
+    <string name="label_google_pay">Google Pay</string>
 
+
+    <string name="payments_show_name" translatable="false">Successfully received payment data for %s!</string>
+    <string name="label_all_payment_methods">Всё платёжные методы</string>
+    <string name="error_cant_load_invoice">Невозможно загрузить инвойс</string>
+    <string name="cancel">Отмена</string>
 </resources>

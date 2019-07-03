@@ -141,19 +141,20 @@
             />
 
         <Button
-                android:id="@+id/btnPay"
-                style="@style/Button.Accent"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_default"
-                android:layout_marginTop="@dimen/spacing_huge"
-                android:layout_marginEnd="@dimen/spacing_default"
-                android:layout_marginBottom="@dimen/spacing_huge"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edEmail"
-                tools:text="Оплатить 6500. 50 Р"/>
+            android:id="@+id/btnPay"
+            style="@style/Button.Accent"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/height_medium_button"
+            android:layout_marginStart="@dimen/spacing_default"
+            android:layout_marginTop="@dimen/spacing_default"
+            android:layout_marginEnd="@dimen/spacing_default"
+            android:layout_marginBottom="@dimen/spacing_huge"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edEmail"
+            tools:text="Оплатить 6500. 50 Р"
+            />
 
         <FrameLayout
             android:id="@+id/pbLoading"

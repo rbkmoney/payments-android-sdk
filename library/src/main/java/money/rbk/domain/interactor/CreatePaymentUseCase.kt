@@ -18,12 +18,14 @@
 
 package money.rbk.domain.interactor
 
+import android.util.Log
 import money.rbk.di.Injector
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.domain.interactor.input.PaymentInputModel
 import money.rbk.domain.repository.CheckoutRepository
 import money.rbk.presentation.model.CheckoutInfoModel
+import money.rbk.presentation.model.CheckoutStateModel
 
 internal class CreatePaymentUseCase(
     private val checkoutRepository: CheckoutRepository = Injector.checkoutRepository,
@@ -35,14 +37,28 @@ internal class CreatePaymentUseCase(
         onResultCallback: (CheckoutInfoModel) -> Unit,
         onErrorCallback: (Throwable) -> Unit) {
 
-        bgExecutor(onErrorCallback) {
+        val onErrorCallbackProxy = { error: Throwable ->
+            checkoutRepository.paymentId = null
+            onErrorCallback(error)
+        }
+
+        val onResultCallbackProxy = { checkoutInfo: CheckoutInfoModel ->
+            if (checkoutInfo.checkoutState is CheckoutStateModel.PaymentFailed) {
+                checkoutRepository.paymentId = null
+            }
+            onResultCallback(checkoutInfo)
+        }
+
+        bgExecutor(onErrorCallbackProxy) {
 
             checkoutRepository.createPayment(
                 inputModel.paymentTool,
                 inputModel.contactInfo)
 
             uiExecutor {
-                checkoutStateUseCase.invoke(EmptyInputModel, onResultCallback, onErrorCallback)
+                checkoutStateUseCase.invoke(EmptyInputModel,
+                    onResultCallbackProxy,
+                    onErrorCallbackProxy)
             }
 
         }

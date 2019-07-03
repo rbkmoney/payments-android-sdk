@@ -25,7 +25,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fmt_payment_methods.*
 import money.rbk.R
-import money.rbk.presentation.activity.checkout.CheckoutActivity
 import money.rbk.presentation.model.PaymentMethodModel
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.common.MarginItemDecoration
@@ -46,7 +45,6 @@ class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethod
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as? CheckoutActivity)?.setBackButtonVisibility(false)
     }
 
     override fun setPaymentMethods(paymentMethods: List<PaymentMethodModel>) {

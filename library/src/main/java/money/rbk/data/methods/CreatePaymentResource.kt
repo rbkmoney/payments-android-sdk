@@ -26,15 +26,13 @@ import money.rbk.domain.entity.ClientInfo
 import money.rbk.domain.entity.PaymentTool
 
 internal class CreatePaymentResource(
-    invoiceAccessToken: String,
+    override val invoiceAccessToken: String,
     paymentTool: PaymentTool
 ) : PostRequest<CreatePaymentResourceResponse> {
 
     private val clientInfo by lazy { ClientInfo(fingerprint = ClientInfoUtils.fingerprint) }
 
     override val endpoint = "/processing/payment-resources"
-
-    override val invoiceAccessToken = invoiceAccessToken
 
     override fun convertJsonToResponse(jsonString: String): CreatePaymentResourceResponse =
         CreatePaymentResourceResponse.fromJson(jsonString.toJsonObject())

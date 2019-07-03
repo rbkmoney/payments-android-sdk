@@ -26,35 +26,35 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.ac_checkout.*
 import money.rbk.R
 import money.rbk.di.Injector
+import money.rbk.presentation.dialog.showAlert
 import money.rbk.presentation.model.InvoiceModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.utils.adjustSize
 import money.rbk.presentation.utils.extra
 import money.rbk.presentation.utils.extraNullable
 
-class CheckoutActivity : AppCompatActivity(), CheckoutView, InitializeListener {
-
-    override fun initialize() {
-        presenter.onInitialize()
-    }
+class CheckoutActivity : AppCompatActivity(), CheckoutView {
 
     companion object {
         private const val KEY_INVOICE_ID = "invoice_id"
         private const val KEY_INVOICE_ACCESS_TOKEN = "invoice_access_token"
         private const val KEY_SHOP_NAME = "shop_name"
         private const val KEY_EMAIL = "email"
+        private const val KEY_USE_TEST_ENVIRONMENT = "use_test_environment"
 
         fun buildIntent(
             activity: Activity,
             invoiceId: String,
             invoiceAccessToken: String,
             shopName: String,
+            useTestEnvironment: Boolean,
             email: String?
         ) = Intent(activity, CheckoutActivity::class.java)
             .apply {
                 putExtra(KEY_INVOICE_ID, invoiceId)
                 putExtra(KEY_INVOICE_ACCESS_TOKEN, invoiceAccessToken)
                 putExtra(KEY_SHOP_NAME, shopName)
+                putExtra(KEY_USE_TEST_ENVIRONMENT, useTestEnvironment)
                 putExtra(KEY_EMAIL, email)
             }
     }
@@ -64,9 +64,13 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView, InitializeListener {
     private val invoiceId by extra<String>(KEY_INVOICE_ID)
     private val invoiceAccessToken by extra<String>(KEY_INVOICE_ACCESS_TOKEN)
     private val shopName by extra<String>(KEY_SHOP_NAME)
+    private val useTestEnvironment by extra<Boolean>(KEY_USE_TEST_ENVIRONMENT)
     private val email by extraNullable<String>(KEY_EMAIL)
 
     private val presenter by lazy { CheckoutPresenter(navigator) }
+
+    private val isRootFragment
+        get() = supportFragmentManager.backStackEntryCount <= 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,11 +78,19 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView, InitializeListener {
         adjustSize()
 
         if (savedInstanceState == null) {
-            Injector.init(applicationContext, invoiceId, invoiceAccessToken, shopName, email)
+            Injector.init(applicationContext,
+                invoiceId,
+                invoiceAccessToken,
+                shopName,
+                useTestEnvironment,
+                email)
         }
 
         presenter.attachView(this)
         initViews()
+
+        supportFragmentManager.addOnBackStackChangedListener(::onBackStackChanged)
+        onBackStackChanged()
     }
 
     override fun showInvoice(invoiceModel: InvoiceModel) {
@@ -93,18 +105,30 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView, InitializeListener {
         super.onDestroy()
     }
 
+    override fun showError() {
+        showAlert(
+            getString(R.string.error),
+            getString(R.string.error_cant_load_invoice),
+            R.string.label_try_again to {
+                presenter.initializeInvoice()
+            },
+            R.string.cancel to {
+                finish()
+            })
+    }
+
     private fun initViews() {
         ibtnBack.setOnClickListener {
-            navigator.back()
+            onBackPressed()
         }
         ibtnClose.setOnClickListener {
             finish()
         }
     }
 
-    //TODO: Only for a while
-    fun setBackButtonVisibility(isVisible: Boolean) {
-        ibtnBack.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+    private fun onBackStackChanged() {
+        ibtnBack.visibility = if (isRootFragment) View.INVISIBLE else View.VISIBLE
+
     }
 
     override fun showProgress() {
@@ -115,8 +139,10 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView, InitializeListener {
         lLoader.visibility = View.INVISIBLE
     }
 
-    override fun onBackPressed() {
-        navigator.back()
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (!navigator.onActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
     }
 
 }

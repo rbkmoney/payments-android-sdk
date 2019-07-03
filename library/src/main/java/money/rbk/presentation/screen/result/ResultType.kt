@@ -18,8 +18,6 @@
 
 package money.rbk.presentation.screen.result
 
-import java.io.Serializable
-
-enum class ResultType : Serializable {
+enum class ResultType {
     SUCCESS, ERROR, UNKNOWN
 }

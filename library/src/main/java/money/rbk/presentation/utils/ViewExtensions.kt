@@ -26,13 +26,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import money.rbk.R
 
 private fun EditText.setErrorState() {
     setBackgroundResource(R.drawable.background_edit_text_error)
     setRightDrawable(R.drawable.ic_cross)
 }
-
 
 private fun EditText.setOkayState(@DrawableRes onValidDrawable: Int?) {
     setBackgroundResource(R.drawable.selector_edittext)
@@ -60,7 +60,10 @@ fun EditText.setRightDrawable(@DrawableRes drawableId: Int?) {
     } else {
         val drawables = this.compoundDrawables
         val currentDrawable = context.getDrawable(drawableId!!)
-        this.setCompoundDrawablesWithIntrinsicBounds(drawables[0], drawables[1], currentDrawable, drawables[3])
+        this.setCompoundDrawablesWithIntrinsicBounds(drawables[0],
+            drawables[1],
+            currentDrawable,
+            drawables[3])
     }
 }
 
@@ -69,26 +72,22 @@ fun EditText.removeRightDrawable() {
     this.setCompoundDrawablesWithIntrinsicBounds(drawables[0], drawables[1], null, drawables[3])
 }
 
-@Suppress("DEPRECATION")
-fun TextView.setTextColorResource(@ColorRes colorRes: Int){
-    setTextColor(context.resources.getColor(colorRes))
+fun TextView.setTextColorResource(@ColorRes colorRes: Int) {
+    setTextColor(ContextCompat.getColor(context, colorRes))
 }
 
-fun ImageView.activate(){
+fun ImageView.activate() {
     isActivated = true
 }
 
-
-fun ImageView.deactivate(){
+fun ImageView.deactivate() {
     isActivated = false
 }
 
-
-fun View.makeGone(){
+fun View.makeGone() {
     this.visibility = GONE
 }
 
-
-fun View.makeVisible(){
+fun View.makeVisible() {
     this.visibility = VISIBLE
 }

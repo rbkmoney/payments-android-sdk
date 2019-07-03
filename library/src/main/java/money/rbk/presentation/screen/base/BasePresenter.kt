@@ -19,9 +19,11 @@
 package money.rbk.presentation.screen.base
 
 import money.rbk.R
+import money.rbk.data.exception.GpayException
 import money.rbk.data.exception.NetworkServiceException
 import money.rbk.data.exception.ParseException
 import money.rbk.presentation.navigation.Navigator
+import money.rbk.presentation.screen.result.ResultAction
 
 abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator) {
 
@@ -37,16 +39,19 @@ abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator
         onViewDetached()
     }
 
-    //TODO: varargs actions
-    fun onError(error: Throwable, retryAction: Int? = null) {
+    fun onError(error: Throwable,
+        positiveAction: ResultAction? = null,
+        negativeAction: ResultAction? = null) {
         view?.hideProgress()
         error.printStackTrace()
         return when (error) {
-            is NetworkServiceException -> error.process(retryAction)
-            is ParseException -> error.process(retryAction)
+            is NetworkServiceException -> error.process(positiveAction, negativeAction)
+            is ParseException -> error.process(positiveAction, negativeAction)
+            is GpayException -> error.process(positiveAction)
             else -> navigator.openErrorFragment(
                 messageRes = R.string.error_busines_logic,
-                positiveAction = retryAction)
+                positiveAction = positiveAction,
+                negativeAction = positiveAction)
         }
     }
 
@@ -55,13 +60,14 @@ abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator
     open fun onViewDetached() = Unit
 
     //TODO: Make different handling this branches
-    private fun NetworkServiceException.process(retryAction: Int?) =
+    private fun NetworkServiceException.process(positiveAction: ResultAction?,
+        negativeAction: ResultAction?) =
         when (this) {
             NetworkServiceException.NoInternetException ->
                 navigator.openErrorFragment(
                     parent = null,
                     messageRes = R.string.error_connection,
-                    positiveAction = retryAction)
+                    positiveAction = positiveAction)
 
             is NetworkServiceException.RequestExecutionException,
             is NetworkServiceException.ResponseReadingException,
@@ -69,13 +75,25 @@ abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator
             is NetworkServiceException.InternalServerException ->
                 navigator.openErrorFragment(
                     messageRes = R.string.error_busines_logic,
-                    positiveAction = retryAction)
+                    negativeAction = negativeAction)
         }
 
-    private fun ParseException.process(retryAction: Int?) {
+    private fun GpayException.process(positiveAction: ResultAction?) = when (this) {
+        GpayException.GpayNotReadyException ->
+            navigator.openErrorFragment(
+                messageRes = R.string.error_busines_logic)
+
+        is GpayException.GpayCantPerformPaymentException ->
+            navigator.openErrorFragment(
+                messageRes = R.string.error_busines_logic, positiveAction = positiveAction)
+    }
+
+    private fun ParseException.process(positiveAction: ResultAction?,
+        negativeAction: ResultAction? = null) {
         navigator.openErrorFragment(
             messageRes = R.string.error_busines_logic,
-            positiveAction = retryAction)
+            positiveAction = positiveAction,
+            negativeAction = negativeAction)
     }
 
 }

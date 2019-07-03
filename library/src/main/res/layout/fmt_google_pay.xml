@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="@dimen/elevation"
+    android:orientation="vertical"
+    app:cardCornerRadius="@dimen/corner_radius"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <TextView
+            android:id="@+id/tvGooglePay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_default"
+            android:layout_marginTop="@dimen/spacing_huge"
+            android:layout_marginEnd="@dimen/spacing_default"
+            android:text="@string/label_google_pay"
+            android:textAppearance="@style/TextAppearance.RBKMoney.Normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <EditText
+            android:id="@+id/edEmail"
+            style="@style/EditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_default"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:layout_marginEnd="@dimen/spacing_default"
+            android:drawableStart="@drawable/selector_email"
+            android:hint="@string/email_for_check"
+            android:imeOptions="actionDone"
+            android:inputType="textEmailAddress"
+            android:maxLength="100"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvGooglePay"
+            />
+
+
+        <RelativeLayout
+            android:id="@+id/btnPay"
+            android:layout_width="0dp"
+            android:layout_marginStart="@dimen/spacing_gpay_button"
+            android:layout_marginEnd="@dimen/spacing_gpay_button"
+            android:layout_height="@dimen/height_gpay_button"
+            android:layout_marginTop="@dimen/spacing_default"
+            android:layout_marginBottom="@dimen/spacing_huge"
+            android:background="@drawable/googlepay_button_no_shadow_background"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="@dimen/spacing_tiny"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edEmail"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:duplicateParentState="true"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:weightSum="2"
+                >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:duplicateParentState="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/buy_with_googlepay_button_content"
+                    />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:duplicateParentState="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/googlepay_button_overlay"
+                />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/pbLoading"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/spacing_medium"
+            android:background="@color/white_overlay"
+            android:clickable="true"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/btnPay"
+                app:layout_constraintEnd_toEndOf="@+id/btnPay"
+                app:layout_constraintStart_toStartOf="@+id/btnPay"
+                app:layout_constraintTop_toTopOf="@+id/btnPay"
+                />
+
+        </FrameLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

@@ -18,10 +18,9 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.extension.parseDate
-import money.rbk.data.extension.parseShortDate
-import org.json.JSONObject
 import money.rbk.data.serialization.Deserializer
+import money.rbk.data.serialization.invoke
+import org.json.JSONObject
 import java.util.Date
 
 internal data class Invoice(
@@ -40,17 +39,17 @@ internal data class Invoice(
     companion object :
         Deserializer<JSONObject, Invoice> {
         override fun fromJson(json: JSONObject) = Invoice(
-            id = json.getString("id"),
-            shopID = json.getString("shopID"),
-            externalID = json.optString("externalID", null),
-            createdAt = json.parseDate("createdAt"),
-            amount = json.getInt("amount"),
-            currency = Currency.fromJson(json.getString("currency")),
-            product = json.getString("product"),
-            description = json.optString("description", null),
-            invoiceTemplateID = json.optString("invoiceTemplateID", null),
-            status = InvoiceStatus.fromJson(json.getString("status")),
-            reason = json.optString("reason", null)
+            id = json("id"),
+            shopID = json("shopID"),
+            externalID = json("externalID"),
+            createdAt = json("createdAt"),
+            amount = json("amount"),
+            currency = json("currency", Currency.Companion),
+            product = json("product"),
+            description = json("description"),
+            invoiceTemplateID = json("invoiceTemplateID"),
+            status = json("status", InvoiceStatus.Companion),
+            reason = json("reason")
         )
     }
 }
