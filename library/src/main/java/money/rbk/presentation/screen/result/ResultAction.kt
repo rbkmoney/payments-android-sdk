@@ -18,13 +18,14 @@
 
 package money.rbk.presentation.screen.result
 
-import money.rbk.presentation.screen.base.BaseView
+import androidx.annotation.StringRes
+import money.rbk.R
+import java.io.Serializable
 
-interface ResultView : BaseView {
-
-    fun showSuccess()
-
-    fun showError()
-
-    fun showUnknown()
+enum class ResultAction(
+    @StringRes val buttonTitle: Int
+) : Serializable {
+    TRY_AGAIN(R.string.try_again),
+    UPDATE_CHECKOUT(R.string.try_again),
+    USE_ANOTHER_CARD(R.string.use_another_card)
 }

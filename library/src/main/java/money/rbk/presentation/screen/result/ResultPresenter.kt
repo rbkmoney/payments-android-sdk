@@ -22,10 +22,9 @@ import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePresenter
 
 class ResultPresenter(navigator: Navigator) : BasePresenter<ResultView>(navigator) {
-    fun onTryAgain(actionPositive: Int?) {
-        actionPositive?.let {
-            view?.sendResult(it)
-            navigator.back()
-        }
+
+    fun onAction(positiveAction: ResultAction) {
+        navigator.backWithAction(positiveAction)
     }
+
 }
