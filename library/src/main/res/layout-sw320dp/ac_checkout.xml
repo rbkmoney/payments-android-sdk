@@ -25,48 +25,48 @@
     android:background="@drawable/background_gradient"
     >
 
-    <LinearLayout
-        android:id="@+id/tbMain"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/white"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
-
-        <ImageButton
-            android:id="@+id/ibtnBack"
-            android:layout_width="?attr/actionBarSize"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_weight="0"
-            android:background="?selectableItemBackground"
-            android:gravity="center"
-            android:src="@drawable/ic_back"
-            />
-
-        <TextView
-            android:id="@+id/tvShopName"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textAppearance="@style/TextAppearance.RBKMoney.Normal"
-            tools:text="shop.ru"
-            />
-
-        <ImageButton
-            android:id="@+id/ibtnClose"
-            android:layout_width="?attr/actionBarSize"
+            android:orientation="horizontal"
+            android:background="@color/white"
+            android:id="@+id/tbMain"
             android:layout_height="?attr/actionBarSize"
-            android:layout_weight="0"
-            android:background="?selectableItemBackground"
-            android:gravity="center"
-            android:src="@drawable/ic_cross_green"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
 
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/ibtnBack"
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?selectableItemBackground"
+                android:src="@drawable/ic_back"
+                android:gravity="center"
+                android:layout_weight="0"
+                />
+
+            <TextView
+                android:id="@+id/tvShopName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.RBKMoney.Normal"
+                android:layout_weight="1"
+                tools:text="shop.ru"
+                />
+
+            <ImageButton
+                android:id="@+id/ibtnClose"
+                android:layout_width="?attr/actionBarSize"
+                android:gravity="center"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?selectableItemBackground"
+                android:src="@drawable/ic_cross_green"
+                android:layout_weight="0"
+                />
+
+        </LinearLayout>
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -125,13 +125,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvOrderDetailsLabel"
                 tools:text="@tools:sample/lorem" />
 
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/groupInvoiceInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:constraint_referenced_ids="tvOrderDetails, tvOrderDetailsLabel, tvPrice, ivFooterLock, tvFooterSecurity, ivFooterLogo, ivFooterLogos, tvFooterCopyright"
-                />
 
             <FrameLayout
                 android:id="@+id/container"
@@ -161,14 +154,13 @@
                 android:text="@string/secure_payment_with"
                 android:textAppearance="@style/TextAppearance.RBKMoney.Headline.White"
                 app:layout_constraintStart_toEndOf="@+id/ivFooterLock"
-                app:layout_constraintTop_toBottomOf="@+id/container"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/container" />
 
             <ImageView
                 android:id="@+id/ivFooterLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_small"
+                android:layout_marginStart="@dimen/spacing_medium"
                 android:src="@drawable/ic_logo"
                 app:layout_constraintBottom_toBottomOf="@+id/tvFooterSecurity"
                 app:layout_constraintStart_toEndOf="@+id/tvFooterSecurity"
@@ -179,7 +171,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_default"
-                android:layout_marginTop="@dimen/spacing_medium"
                 android:layout_marginEnd="@dimen/spacing_default"
                 android:src="@drawable/ic_footer_logos"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -191,14 +182,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_default"
-                android:layout_marginTop="@dimen/spacing_medium"
                 android:layout_marginBottom="@dimen/spacing_huge"
                 android:text="@string/footer"
                 android:textAppearance="@style/TextAppearance.RBKMoney.Footer"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivFooterLogos"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/ivFooterLogos" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
