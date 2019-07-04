@@ -18,13 +18,17 @@
 
 package money.rbk.domain.entity
 
-import org.json.JSONObject
 import money.rbk.data.extension.findEnumOrNull
 import money.rbk.data.serialization.Deserializer
+import money.rbk.data.serialization.SealedDistributor
+import money.rbk.data.serialization.SealedDistributorValue
+import org.json.JSONObject
+import kotlin.reflect.KClass
 
-sealed class PaymentFlow(val type: PaymentFlowType) {
+sealed class PaymentFlow() {
 
     companion object : Deserializer<JSONObject, PaymentFlow> {
+        val DISTRIBUTOR = SealedDistributor("type", PaymentFlowType.values())
 
         override fun fromJson(json: JSONObject): PaymentFlow {
 
@@ -37,10 +41,11 @@ sealed class PaymentFlow(val type: PaymentFlowType) {
         }
     }
 
-    object PaymentFlowInstant : PaymentFlow(PaymentFlowType.PaymentFlowInstant)
+    object PaymentFlowInstant : PaymentFlow()
 
-    enum class PaymentFlowType {
-        PaymentFlowInstant
+    private enum class PaymentFlowType(override val kClass: KClass<out PaymentFlow>) :
+        SealedDistributorValue<PaymentFlow> {
+        PaymentFlowInstant(PaymentFlow.PaymentFlowInstant::class)
     }
 
 }

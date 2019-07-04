@@ -18,14 +18,19 @@
 
 package money.rbk.domain.entity
 
-import org.json.JSONObject
 import money.rbk.data.extension.findEnumOrNull
 import money.rbk.data.extension.parseList
 import money.rbk.data.serialization.Deserializer
+import money.rbk.data.serialization.SealedDistributor
+import money.rbk.data.serialization.SealedDistributorValue
+import org.json.JSONObject
+import kotlin.reflect.KClass
 
-sealed class BrowserRequest(private val requestType: BrowserRequestType,  open val uriTemplate: String) {
+sealed class BrowserRequest(open val uriTemplate: String) {
 
     companion object : Deserializer<JSONObject, BrowserRequest> {
+        val DISTRIBUTOR = SealedDistributor("requestType", BrowserRequestType.values())
+
         override fun fromJson(json: JSONObject): BrowserRequest {
             val type = json.getString("requestType")
             return when (findEnumOrNull<BrowserRequestType>(type)) {
@@ -43,16 +48,17 @@ sealed class BrowserRequest(private val requestType: BrowserRequestType,  open v
 
     data class BrowserGetRequest(
         override val uriTemplate: String
-    ) : BrowserRequest(BrowserRequestType.BrowserGetRequest, uriTemplate)
+    ) : BrowserRequest(uriTemplate)
 
     data class BrowserPostRequest(
         override val uriTemplate: String,
         val form: List<UserInteractionForm>
-    ) : BrowserRequest(BrowserRequestType.BrowserPostRequest, uriTemplate)
+    ) : BrowserRequest(uriTemplate)
 
-    private enum class BrowserRequestType {
-        BrowserGetRequest,
-        BrowserPostRequest
+    private enum class BrowserRequestType(override val kClass: KClass<out BrowserRequest>) :
+        SealedDistributorValue<BrowserRequest> {
+        BrowserGetRequest(BrowserRequest.BrowserGetRequest::class),
+        BrowserPostRequest(BrowserRequest.BrowserPostRequest::class)
     }
 }
 

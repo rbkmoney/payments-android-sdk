@@ -26,6 +26,7 @@ import money.rbk.data.network.Constants
 import money.rbk.data.serialization.Serializable
 import money.rbk.data.utils.ClientInfoUtils
 import money.rbk.data.utils.log
+import money.rbk.di.Injector
 import money.rbk.domain.entity.ApiError
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -35,11 +36,13 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
-import java.util.*
+import java.lang.reflect.ParameterizedType
+import java.util.Locale
+import java.util.UUID
 
-internal fun <T> OkHttpClient.execute(
-    apiRequest: ApiRequest<T>
-): T {
+internal fun <T> OkHttpClient.execute(apiRequest: ApiRequest<T>): T {
+    val gson = Injector.gson
+
     val url = "${Constants.BASE_URL}${apiRequest.endpoint}"
 
     val userAgent = ClientInfoUtils.userAgent
@@ -87,7 +90,9 @@ internal fun <T> OkHttpClient.execute(
     }
 
     try {
-        return apiRequest.convertJsonToResponse(stringBody)
+        val type =
+            (apiRequest.javaClass.genericInterfaces[0] as ParameterizedType).actualTypeArguments[0]
+        return gson.fromJson<T>(stringBody, type)
     } catch (e: JSONException) {
         throw ParseException.ResponseParsingException(stringBody, e)
     } catch (e: ParseException) {

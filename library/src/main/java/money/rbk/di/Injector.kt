@@ -19,9 +19,21 @@
 package money.rbk.di
 
 import android.content.Context
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import money.rbk.data.repository.CheckoutRepositoryImpl
 import money.rbk.data.repository.GpayRepositoryImpl
+import money.rbk.data.serialization.SealedJsonDeserializer
 import money.rbk.data.utils.ClientInfoUtils
+import money.rbk.domain.entity.BrowserRequest
+import money.rbk.domain.entity.Flow
+import money.rbk.domain.entity.InvoiceChange
+import money.rbk.domain.entity.Payer
+import money.rbk.domain.entity.PaymentFlow
+import money.rbk.domain.entity.PaymentMethod
+import money.rbk.domain.entity.PaymentTool
+import money.rbk.domain.entity.PaymentToolDetails
+import money.rbk.domain.entity.UserInteraction
 import money.rbk.domain.repository.CheckoutRepository
 import money.rbk.domain.repository.GpayRepository
 import okhttp3.ConnectionPool
@@ -37,6 +49,39 @@ object Injector {
     internal lateinit var gpayRepository: GpayRepository
 
     private lateinit var okHttpClient: OkHttpClient
+
+    val gson: Gson by lazy {
+        GsonBuilder()
+
+            .registerTypeAdapter(PaymentMethod::class.java,
+                SealedJsonDeserializer(PaymentMethod.DISTRIBUTOR))
+
+            .registerTypeAdapter(BrowserRequest::class.java,
+                SealedJsonDeserializer(BrowserRequest.DISTRIBUTOR))
+
+            .registerTypeAdapter(PaymentToolDetails::class.java,
+                SealedJsonDeserializer(PaymentToolDetails.DISTRIBUTOR))
+
+            .registerTypeAdapter(PaymentTool::class.java,
+                SealedJsonDeserializer(PaymentTool.DISTRIBUTOR))
+
+            .registerTypeAdapter(Payer::class.java,
+                SealedJsonDeserializer(Payer.DISTRIBUTOR))
+
+            .registerTypeAdapter(Flow::class.java,
+                SealedJsonDeserializer(Flow.DISTRIBUTOR))
+
+            .registerTypeAdapter(PaymentFlow::class.java,
+                SealedJsonDeserializer(PaymentFlow.DISTRIBUTOR))
+
+            .registerTypeAdapter(UserInteraction::class.java,
+                SealedJsonDeserializer(UserInteraction.DISTRIBUTOR))
+
+            .registerTypeAdapter(InvoiceChange::class.java,
+                SealedJsonDeserializer(InvoiceChange.DISTRIBUTOR))
+
+            .create()
+    }
 
     var email: String? = null
 

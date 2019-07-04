@@ -19,6 +19,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
     compileSdkVersion app.compileSdkVersion
@@ -46,6 +47,7 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
+    /* androidx */
     implementation "androidx.appcompat:appcompat:$androidx.appcompat"
     implementation "androidx.fragment:fragment:$androidx.fragment"
     implementation "androidx.constraintlayout:constraintlayout:$androidx.constraintlayout"
@@ -53,13 +55,16 @@ dependencies {
     implementation "androidx.cardview:cardview:$androidx.cardview"
     implementation "androidx.recyclerview:recyclerview:$androidx.recyclerview"
 
+    /* play services */
     implementation "com.google.android.gms:play-services-wallet:$playServicesWallet"
 
-    implementation "ru.tinkoff.decoro:decoro:$decoroVersion"
+    /* serialization */
+    implementation "com.google.code.gson:gson:$gsonVersion"
 
     /* OkHttp */
     implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
 
     implementation "com.whiteelephant:monthandyearpicker:$datepickerVersion"
+    implementation "ru.tinkoff.decoro:decoro:$decoroVersion"
 }

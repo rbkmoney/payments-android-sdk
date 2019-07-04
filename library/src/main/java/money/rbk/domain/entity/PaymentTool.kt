@@ -18,11 +18,18 @@
 
 package money.rbk.domain.entity
 
+import money.rbk.data.serialization.SealedDistributor
+import money.rbk.data.serialization.SealedDistributorValue
 import money.rbk.data.serialization.Serializable
 import money.rbk.data.serialization.json
 import org.json.JSONObject
+import kotlin.reflect.KClass
 
 sealed class PaymentTool(protected val paymentToolType: PaymentToolType) : Serializable {
+
+    companion object {
+        val DISTRIBUTOR = SealedDistributor("paymentToolType", PaymentToolType.values())
+    }
 
     //TODO: Make it secured way
     data class CardData(
@@ -57,9 +64,10 @@ sealed class PaymentTool(protected val paymentToolType: PaymentToolType) : Seria
         }
     }
 
-    enum class PaymentToolType {
-        CardData,
-        TokenizedCardData
+    enum class PaymentToolType(override val kClass: KClass<out PaymentTool>) :
+        SealedDistributorValue<PaymentTool> {
+        CardData(PaymentTool.CardData::class),
+        TokenizedCardData(PaymentTool.TokenizedCardData::class)
     }
 
 }

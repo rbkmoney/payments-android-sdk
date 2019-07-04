@@ -32,6 +32,11 @@ data class ContactInfo(
         override fun fromJson(json: JSONObject) = ContactInfo(
             email = json("email")
         )
+
+
+        inline fun parse(json: JSONObject) = ContactInfo(
+            email = json("email")
+        )
     }
 
     override fun toJson() = json {
@@ -39,3 +44,5 @@ data class ContactInfo(
     }
 
 }
+
+

@@ -21,12 +21,17 @@ package money.rbk.domain.entity
 import money.rbk.data.exception.ParseException
 import money.rbk.data.extension.findEnumOrNull
 import money.rbk.data.serialization.Deserializer
+import money.rbk.data.serialization.SealedDistributor
+import money.rbk.data.serialization.SealedDistributorValue
 import money.rbk.data.serialization.Serializable
 import org.json.JSONObject
+import kotlin.reflect.KClass
 
 sealed class Flow : Serializable {
 
     companion object : Deserializer<JSONObject, Flow> {
+        val DISTRIBUTOR = SealedDistributor("type", FlowType.values())
+
         override fun fromJson(json: JSONObject): Flow {
             val type = json.getString("type")
             return when (findEnumOrNull<FlowType>(type)) {
@@ -42,7 +47,8 @@ sealed class Flow : Serializable {
         }
     }
 
-    protected enum class FlowType {
-        PaymentFlowInstant
+    protected enum class FlowType(override val kClass: KClass<out Flow>) :
+        SealedDistributorValue<Flow> {
+        PaymentFlowInstant(Flow.PaymentFlowInstant::class)
     }
 }

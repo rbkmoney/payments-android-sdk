@@ -46,6 +46,8 @@ internal inline fun <reified T> JSONObject.parseString(key: String,
 internal inline fun <reified T> JSONObject.parse(key: String,
     parser: Deserializer<JSONObject, T>): T = getJSONObject(key).let(parser::fromJson)
 
+internal inline fun <reified T> JSONObject.parse(key: String, parser: (JSONObject) -> T): T = getJSONObject(key).let(parser)
+
 internal inline fun <reified T> JSONObject.parseNullableString(key: String,
     parser: Deserializer<String, T>): T? =
     optString(key)

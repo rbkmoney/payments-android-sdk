@@ -22,11 +22,17 @@ import money.rbk.data.exception.ParseException
 import money.rbk.data.extension.findEnumOrNull
 import money.rbk.data.extension.parse
 import money.rbk.data.serialization.Deserializer
+import money.rbk.data.serialization.SealedDistributor
+import money.rbk.data.serialization.SealedDistributorValue
 import org.json.JSONObject
+import kotlin.reflect.KClass
 
 sealed class UserInteraction {
 
     companion object : Deserializer<JSONObject, UserInteraction> {
+
+        val DISTRIBUTOR = SealedDistributor("interactionType", InteractionType.values())
+
         override fun fromJson(json: JSONObject): UserInteraction {
             val type = json.getString("interactionType")
             return when (findEnumOrNull<InteractionType>(type)) {
@@ -42,7 +48,8 @@ sealed class UserInteraction {
         val request: BrowserRequest
     ) : UserInteraction()
 
-    private enum class InteractionType {
-        Redirect
+    private enum class InteractionType(override val kClass: KClass<out UserInteraction>) :
+        SealedDistributorValue<UserInteraction> {
+        Redirect(UserInteraction.Redirect::class)
     }
 }

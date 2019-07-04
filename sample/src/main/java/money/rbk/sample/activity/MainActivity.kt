@@ -74,7 +74,9 @@ class MainActivity : AppCompatActivity(), MainView {
         startActivityForResult(RbkMoney.buildCheckoutIntent(this,
             invoiceModel.id,
             invoiceModel.invoiceAccessToken,
-            invoiceModel.shopName
+            invoiceModel.shopName,
+            true,
+            "test@test.com"
         ),
             CHECKOUT_REQUEST_CODE)
     }

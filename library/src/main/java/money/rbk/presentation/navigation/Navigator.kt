@@ -66,15 +66,6 @@ class Navigator(
         replaceFragmentInActivity(BankCardFragment.newInstance())
     }
 
-    fun openInvoiceCancelled() {
-        replaceFragmentInActivity(
-            ResultFragment.newInstance(
-                ResultType.ERROR,
-                activity.getString(R.string.error_invoice_cancelled)
-            )
-        )
-    }
-
     fun openWarningFragment(@StringRes titleRes: Int, @StringRes messageRes: Int) {
         val finish = {
             activity.setResult(Activity.RESULT_OK)

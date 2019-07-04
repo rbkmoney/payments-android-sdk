@@ -18,22 +18,28 @@
 
 package money.rbk.domain.entity
 
+import com.google.gson.annotations.SerializedName
 import money.rbk.data.exception.ParseException
 import money.rbk.data.extension.findEnumOrNull
 import money.rbk.data.extension.getNullable
 import money.rbk.data.extension.parseNullableString
 import money.rbk.data.serialization.Deserializer
+import money.rbk.data.serialization.SealedDistributor
+import money.rbk.data.serialization.SealedDistributorValue
 import org.json.JSONObject
+import kotlin.reflect.KClass
 
 sealed class PaymentToolDetails {
 
     abstract val paymentInfo: String
 
     data class BankCard(
+
         val cardNumberMask: String,
 
+        @SerializedName("first6", alternate = ["bin"])
         val first6: String?,
-
+        @SerializedName("last4", alternate = ["lastDigits"])
         val last4: String?,
 
         val paymentSystem: String,
@@ -65,6 +71,7 @@ sealed class PaymentToolDetails {
     }
 
     companion object : Deserializer<JSONObject, PaymentToolDetails> {
+        val DISTRIBUTOR = SealedDistributor("detailsType", DetailsType.values())
 
         override fun fromJson(json: JSONObject): PaymentToolDetails {
             val detailsType = json.getString("detailsType")
@@ -75,7 +82,8 @@ sealed class PaymentToolDetails {
         }
     }
 
-    private enum class DetailsType {
-        PaymentToolDetailsBankCard
+    private enum class DetailsType(override val kClass: KClass<out PaymentToolDetails>) :
+        SealedDistributorValue<PaymentToolDetails> {
+        PaymentToolDetailsBankCard(BankCard::class)
     }
 }

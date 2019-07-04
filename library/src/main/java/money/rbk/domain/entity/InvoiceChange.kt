@@ -25,11 +25,16 @@ import money.rbk.data.extension.parse
 import money.rbk.data.extension.parseNullable
 import money.rbk.data.extension.parseString
 import money.rbk.data.serialization.Deserializer
+import money.rbk.data.serialization.SealedDistributor
+import money.rbk.data.serialization.SealedDistributorValue
 import org.json.JSONObject
+import kotlin.reflect.KClass
 
 internal sealed class InvoiceChange {
 
     companion object : Deserializer<JSONObject, InvoiceChange> {
+        val DISTRIBUTOR = SealedDistributor("changeType", InvoiceChangeType.values())
+
         override fun fromJson(json: JSONObject): InvoiceChange {
             val type = json.getString("changeType")
             return when (findEnumOrNull<InvoiceChangeType>(type)) {
@@ -87,14 +92,16 @@ internal sealed class InvoiceChange {
         val paymentID: String
     ) : InvoiceChange()
 
-    private enum class InvoiceChangeType {
-        InvoiceCreated,
-        InvoiceStatusChanged,
-        PaymentStarted,
-        PaymentStatusChanged,
-        PaymentInteractionRequested,
-        RefundStarted,
-        RefundStatusChanged
+    private enum class InvoiceChangeType(override val kClass: KClass<out InvoiceChange>) :
+        SealedDistributorValue<InvoiceChange> {
+
+        InvoiceCreated(InvoiceChange.InvoiceCreated::class),
+        InvoiceStatusChanged(InvoiceChange.InvoiceStatusChanged::class),
+        PaymentStarted(InvoiceChange.PaymentStarted::class),
+        PaymentStatusChanged(InvoiceChange.PaymentStatusChanged::class),
+        PaymentInteractionRequested(InvoiceChange.PaymentInteractionRequested::class),
+        RefundStarted(InvoiceChange.Refund::class),
+        RefundStatusChanged(InvoiceChange.Refund::class)
     }
 
 }

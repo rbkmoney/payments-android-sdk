@@ -23,7 +23,10 @@ import money.rbk.data.extension.findEnumOrNull
 import money.rbk.data.extension.parseNullableList
 import money.rbk.data.extension.parseStringList
 import money.rbk.data.serialization.Deserializer
+import money.rbk.data.serialization.SealedDistributor
+import money.rbk.data.serialization.SealedDistributorValue
 import org.json.JSONObject
+import kotlin.reflect.KClass
 
 sealed class PaymentMethod {
 
@@ -32,22 +35,31 @@ sealed class PaymentMethod {
         val tokenProviders: List<TokenProvider>?
     ) : PaymentMethod()
 
-    companion object :
-        Deserializer<JSONObject, PaymentMethod> {
+    companion object : Deserializer<JSONObject, PaymentMethod> {
+
+        val DISTRIBUTOR = SealedDistributor("method", Method.values())
+
         override fun fromJson(json: JSONObject): PaymentMethod {
             val method = json.getString("method")
+
             return when (findEnumOrNull<Method>(method)) {
+
                 Method.BankCard -> PaymentMethodBankCard(
+
                     json.parseStringList("paymentSystems")
                         .mapNotNull { findEnumOrNull<CreditCardType>(it) },
+
                     json.parseNullableList("tokenProviders", TokenProvider)
                 )
+
                 null -> throw ParseException.UnsupportedPaymentMethodException(method)
             }
         }
+
     }
 
-    private enum class Method {
-        BankCard
+    private enum class Method(override val kClass: KClass<out PaymentMethod>) :
+        SealedDistributorValue<PaymentMethod> {
+        BankCard(PaymentMethodBankCard::class)
     }
 }

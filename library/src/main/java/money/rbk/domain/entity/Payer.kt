@@ -24,25 +24,38 @@ import money.rbk.data.extension.getNullable
 import money.rbk.data.extension.parse
 import money.rbk.data.extension.parseNullable
 import money.rbk.data.serialization.Deserializer
+import money.rbk.data.serialization.SealedDistributor
+import money.rbk.data.serialization.SealedDistributorValue
 import money.rbk.data.serialization.Serializable
 import org.json.JSONObject
+import kotlin.reflect.KClass
 
 sealed class Payer : Serializable {
 
     abstract val paymentToolInfo: String?
 
     companion object : Deserializer<JSONObject, Payer> {
+        val DISTRIBUTOR = SealedDistributor("payerType", PayerType.values())
+
         override fun fromJson(json: JSONObject): Payer {
+
             val payerType = json.getString("payerType")
+
             return when (findEnumOrNull<PayerType>(payerType)) {
+
                 PayerType.PaymentResourcePayer -> PaymentResourcePayer(
+
                     paymentToolToken = json.getString("paymentToolToken"),
+
                     paymentSession = json.getNullable("paymentSession"),
-                    paymentToolDetails = json.parseNullable("paymentToolDetails",
-                        PaymentToolDetails),
+
+                    paymentToolDetails = json.parseNullable("paymentToolDetails", PaymentToolDetails),
+
                     clientInfo = json.parseNullable("clientInfo", ClientInfo),
-                    contactInfo = json.parse("contactInfo", ContactInfo)
+
+                    contactInfo = json.parse("contactInfo", ContactInfo.Companion::parse)
                 )
+
                 null -> throw ParseException.UnknownPayerTypeException(payerType)
             }
         }
@@ -68,8 +81,8 @@ sealed class Payer : Serializable {
         }
     }
 
-    private enum class PayerType {
-        PaymentResourcePayer
+    private enum class PayerType(override val kClass: KClass<out Payer>) : SealedDistributorValue<Payer> {
+        PaymentResourcePayer(Payer.PaymentResourcePayer::class)
     }
 
 }
