@@ -28,7 +28,7 @@
 
     <style name="RBKMoney" />
 
-    <style name="Button" parent="RBKMoney"/>
+    <style name="Button" parent="RBKMoney" />
 
 
     <style name="Button.Flat" parent="Button">
@@ -36,9 +36,14 @@
         <item name="android:textAppearance">@style/TextAppearance.RBKMoney.Accent</item>
     </style>
 
+    <style name="Button.Borderless">
+        <item name="android:background">?selectableItemBackground</item>
+        <item name="android:textAppearance">@style/TextAppearance.RBKMoney.Headline.BlueLight</item>
+    </style>
+
     <style name="Button.Frame">
         <item name="android:background">@drawable/background_button_frame</item>
-        <item name="android:textAppearance">@style/TextAppearance.RBKMoney.Headline.BlueLight.NoCaps</item>
+        <item name="android:textAppearance">@style/TextAppearance.RBKMoney.Normal.BlueLight</item>
     </style>
 
     <style name="EditText" parent="RBKMoney">
@@ -46,7 +51,7 @@
         <item name="android:maxLines">1</item>
         <item name="android:padding">@dimen/spacing_medium</item>
         <item name="android:drawablePadding">@dimen/spacing_small</item>
-        <item name="android:background">@drawable/seletor_edittext</item>
+        <item name="android:background">@drawable/selector_edittext</item>
     </style>
 
     <style name="Button.Accent" parent="Button">
@@ -69,6 +74,10 @@
 
     <style name="TextAppearance.RBKMoney.Normal.White">
         <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TextAppearance.RBKMoney.Normal.BlueLight">
+        <item name="android:textColor">@color/blue_light</item>
     </style>
 
     <style name="TextAppearance.RBKMoney.Footer" parent="TextAppearance.RBKMoney.Normal.White">
@@ -94,7 +103,6 @@
         <item name="android:textSize">@dimen/xsmall_text_size</item>
         <item name="android:letterSpacing">0.2</item>
     </style>
-
 
     <style name="TextAppearance.RBKMoney.Headline.White">
         <item name="android:textColor">@color/white</item>

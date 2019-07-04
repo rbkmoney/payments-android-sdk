@@ -26,7 +26,6 @@ import money.rbk.data.methods.GetInvoiceEvents
 import money.rbk.data.methods.GetInvoicePaymentMethods
 import money.rbk.data.response.CreatePaymentResourceResponse
 import money.rbk.data.response.CreatePaymentResponse
-import money.rbk.domain.entity.ClientInfo
 import money.rbk.domain.entity.ContactInfo
 import money.rbk.domain.entity.Flow
 import money.rbk.domain.entity.Invoice

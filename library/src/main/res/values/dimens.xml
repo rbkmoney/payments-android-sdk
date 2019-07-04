@@ -18,6 +18,8 @@
   -->
 
 <resources>
+
+    <dimen name="spacing_xxsmall">2dp</dimen>
     <dimen name="spacing_tiny">2dp</dimen>
     <dimen name="spacing_xsmall">4dp</dimen>
     <dimen name="spacing_small">8dp</dimen>
@@ -28,22 +30,22 @@
     <dimen name="spacing_xlarge">20dp</dimen>
     <dimen name="spacing_xxlarge">24dp</dimen>
     <dimen name="spacing_huge">32dp</dimen>
+    <dimen name="spacing_xxxhuge">50dp</dimen>
 
     <dimen name="elevation">10dp</dimen>
 
-    <dimen name="xxsmall_text_size">10sp</dimen>
-    <dimen name="xsmall_text_size">12sp</dimen>
-    <dimen name="small_text_size">14sp</dimen>
-    <dimen name="medium_text_size">16sp</dimen>
-    <dimen name="default_text_size">20sp</dimen>
-    <dimen name="large_text_size">24sp</dimen>
-    <dimen name="xlarge_text_size">26sp</dimen>
-    <dimen name="xxlarge_text_size">28sp</dimen>
-    <dimen name="xxxlarge_text_size">30sp</dimen>
+    <dimen name="xxsmall_text_size">14sp</dimen>
+    <dimen name="xsmall_text_size">16sp</dimen>
+    <dimen name="small_text_size">18sp</dimen>
+    <dimen name="medium_text_size">20sp</dimen>
+    <dimen name="default_text_size">24sp</dimen>
+    <dimen name="large_text_size">28sp</dimen>
+    <dimen name="xlarge_text_size">30sp</dimen>
+    <dimen name="xxlarge_text_size">32sp</dimen>
+    <dimen name="xxxlarge_text_size">34sp</dimen>
 
     <dimen name="corner_radius">9dp</dimen>
     <dimen name="corner_radius_small">3dp</dimen>
-
 
     <dimen name="background_corner_radius">3dp</dimen>
     <dimen name="divider_height">1dp</dimen>

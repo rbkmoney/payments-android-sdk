@@ -26,7 +26,6 @@ import money.rbk.presentation.model.CheckoutStateModel
 import money.rbk.presentation.model.InvoiceModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePresenter
-import money.rbk.presentation.screen.card.ACTION_INITIALIZE
 
 class CheckoutPresenter(
     navigator: Navigator,
@@ -35,18 +34,21 @@ class CheckoutPresenter(
 
     override fun onViewAttached(view: CheckoutView) {
         super.onViewAttached(view)
-        view.showProgress()
+
         initializeInvoice()
     }
 
-    private fun initializeInvoice() {
+    fun initializeInvoice() {
+        view?.showProgress()
         invoiceUseCase(InvoiceInitializeInputModel,
             ::onInvoiceLoaded,
             ::onInvoiceLoadError)
     }
 
     private fun onInvoiceLoadError(throwable: Throwable) {
-        onError(throwable, ACTION_INITIALIZE)
+        // TODO: onError(throwable, ACTION_INITIALIZE)
+        throwable.printStackTrace()
+        view?.showError()
     }
 
     private fun onInvoiceLoaded(invoice: InvoiceModel) {

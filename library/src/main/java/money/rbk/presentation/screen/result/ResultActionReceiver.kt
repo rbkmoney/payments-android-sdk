@@ -16,9 +16,8 @@
 // *
 // */
 //
-//package money.rbk.presentation.activity.checkout
+//package money.rbk.presentation.screen.result
 //
-//interface InitializeListener {
-//
-//    fun initialize()
+//interface ResultActionReceiver {
+//    fun onResultAction(resultAction: ResultAction)
 //}

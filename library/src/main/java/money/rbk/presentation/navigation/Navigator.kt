@@ -26,6 +26,7 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.wallet.AutoResolvableResult
@@ -35,6 +36,7 @@ import money.rbk.presentation.dialog.showAlert
 import money.rbk.presentation.screen.card.BankCardFragment
 import money.rbk.presentation.screen.gpay.GpayFragment
 import money.rbk.presentation.screen.methods.PaymentMethodsFragment
+import money.rbk.presentation.screen.result.ResultAction
 import money.rbk.presentation.screen.result.ResultFragment
 import money.rbk.presentation.screen.result.ResultFragment.Companion.REQUEST_ERROR
 import money.rbk.presentation.screen.result.ResultType
@@ -45,11 +47,24 @@ class Navigator(
     private val containerId: Int
 ) {
 
+    var pendingAction: ResultAction? = null
+        get() {
+            val action = field
+            field = null
+            return action
+        }
+
     private val expectedResultFragments = SparseArray<String>()
 
     fun resolveTask(task: Task<out AutoResolvableResult>, requestCode: Int) {
         expectedResultFragments.put(requestCode, currentFragment?.tag)
         AutoResolveHelper.resolveTask(task, activity, requestCode)
+    }
+
+    //TODO: Create single method
+    fun clearOpenPaymentMethods() {
+        activity.supportFragmentManager.popBackStack(PaymentMethodsFragment::class.java.name, POP_BACK_STACK_INCLUSIVE)
+        replaceFragmentInActivity(PaymentMethodsFragment.newInstance())
     }
 
     fun openPaymentMethods() {
@@ -79,35 +94,26 @@ class Navigator(
     }
 
     fun openSuccessFragment(@StringRes messageRes: Int, vararg formatArgs: String) {
+        activity.supportFragmentManager.popBackStack(null, POP_BACK_STACK_INCLUSIVE)
         replaceFragmentInActivity(
             ResultFragment.newInstance(
                 ResultType.SUCCESS,
-                activity.getString(messageRes, *formatArgs)
+                activity.getString(messageRes, *formatArgs),
+                null, null
             )
         )
-    }
-
-    //TODO: Make proper back stack
-    fun back() {
-        when (currentFragment) {
-            is BankCardFragment -> replaceFragmentInActivity(PaymentMethodsFragment.newInstance())
-            is ResultFragment -> addFragmentToActivity(BankCardFragment.newInstance())
-            else -> activity.finish()
-        }
     }
 
     fun openErrorFragment(
         parent: Fragment? = currentFragment,
         @StringRes messageRes: Int,
-        positiveAction: Int? = null,
-        negativeAction: Int? = null
+        positiveAction: ResultAction? = null,
+        negativeAction: ResultAction? = null
     ) {
 
         val fragment = ResultFragment.newInstance(
             ResultType.ERROR,
-            activity.getString(messageRes),
-            positiveAction,
-            negativeAction)
+            activity.getString(messageRes), positiveAction, negativeAction)
             .apply {
                 if (parent != null) {
                     setTargetFragment(parent, REQUEST_ERROR)
@@ -119,15 +125,12 @@ class Navigator(
     private val currentFragment: Fragment?
         get() = activity.supportFragmentManager.findFragmentById(R.id.container)
 
-    private fun replaceFragmentInActivity(fragment: Fragment) {
+    private fun replaceFragmentInActivity(fragment: Fragment, addToBackStack: Boolean = true) {
         activity.supportFragmentManager.transact {
             replace(containerId, fragment, fragment.javaClass.name)
-        }
-    }
-
-    private fun addFragmentToActivity(fragment: Fragment) {
-        activity.supportFragmentManager.transact {
-            add(containerId, fragment, fragment.javaClass.name)
+            if (addToBackStack) {
+                addToBackStack(fragment.javaClass.name)
+            }
         }
     }
 
@@ -147,5 +150,13 @@ class Navigator(
                 }
 
         } != null
+
+    fun backWithAction(resultAction: ResultAction) {
+        pendingAction = resultAction
+        activity.supportFragmentManager.popBackStack()
+        //        if (activity.supportFragmentManager.popBackStackImmediate()) {
+        //            (currentFragment as? ResultActionReceiver)?.onResultAction(resultAction)
+        //        }
+    }
 
 }

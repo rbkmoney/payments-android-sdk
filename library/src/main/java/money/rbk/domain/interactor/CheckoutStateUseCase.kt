@@ -18,6 +18,7 @@
 
 package money.rbk.domain.interactor
 
+import android.util.Log
 import money.rbk.di.Injector
 import money.rbk.domain.converter.EntityConverter
 import money.rbk.domain.converter.InvoiceChangesConverter
@@ -29,7 +30,7 @@ import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.domain.repository.CheckoutRepository
 import money.rbk.presentation.model.CheckoutInfoModel
 import money.rbk.presentation.model.CheckoutStateModel
-import money.rbk.presentation.utils.formatPrice
+import money.rbk.presentation.utils.formatInternationalPrice
 
 internal class CheckoutStateUseCase(
     private val checkoutRepository: CheckoutRepository = Injector.checkoutRepository,
@@ -41,7 +42,6 @@ internal class CheckoutStateUseCase(
     override fun invoke(inputModel: EmptyInputModel,
         onResultCallback: (CheckoutInfoModel) -> Unit,
         onErrorCallback: (Throwable) -> Unit) {
-
         startTime = System.currentTimeMillis()
         requestCheckoutState(onResultCallback, onErrorCallback)
     }
@@ -49,9 +49,7 @@ internal class CheckoutStateUseCase(
     private fun requestCheckoutState(
         onResultCallback: (CheckoutInfoModel) -> Unit,
         onErrorCallback: (Throwable) -> Unit) {
-
         bgExecutor(onErrorCallback) {
-
             val checkoutState = invoiceChangesConverter(checkoutRepository.loadInvoiceEvents())
 
             if (checkoutState == CheckoutStateModel.PaymentProcessing) {
@@ -65,7 +63,7 @@ internal class CheckoutStateUseCase(
             } else {
                 val invoice = checkoutRepository.loadInvoice()
                 val checkoutInfo = CheckoutInfoModel(
-                    price = invoice.amount.formatPrice(),
+                    price = invoice.amount.formatInternationalPrice(),
                     currency = invoice.currency,
                     formattedPriceAndCurrency = invoice.cost,
                     checkoutState = checkoutState

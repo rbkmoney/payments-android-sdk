@@ -19,13 +19,24 @@
 package money.rbk.presentation.utils
 
 import java.text.NumberFormat
+import java.util.Locale
 
-private val format by lazy {
+private val localFormat by lazy {
     NumberFormat.getInstance()
         .apply {
             minimumFractionDigits = 2
         }
 }
 
+private val internationalFormat by lazy {
+    NumberFormat.getInstance(Locale.ENGLISH)
+        .apply {
+            minimumFractionDigits = 2
+        }
+}
+
 internal fun Int.formatPrice(): String =
-    format.format(this / 100.0)
+    localFormat.format(this / 100.0)
+
+internal fun Int.formatInternationalPrice(): String =
+    internationalFormat.format(this / 100.0)

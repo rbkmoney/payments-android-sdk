@@ -18,10 +18,8 @@ import money.rbk.presentation.model.GpayPrepareInfoModel
 import money.rbk.presentation.model.PaymentDataTaskModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePresenter
-import money.rbk.presentation.screen.card.ACTION_RETRY_PAYMENT
-import money.rbk.presentation.screen.card.ACTION_UPDATE_CHECKOUT
-import money.rbk.presentation.screen.card.ACTION_USE_ANOTHER_CARD
 import money.rbk.presentation.screen.card.BankCardFragment
+import money.rbk.presentation.screen.result.ResultAction
 import money.rbk.presentation.utils.isEmailValid
 
 /**
@@ -78,14 +76,14 @@ class GpayPresenter(
         updateCheckout()
     }
 
-    private fun updateCheckout() {
+    public fun updateCheckout() {
         view?.showProgress()
         gpayPrepareUseCase(EmptyInputModel, ::onGpayPrepared, ::onCheckoutUpdateError)
     }
 
     private fun onPaymentDataTaskLoadError(throwable: Throwable) {
         // TODO: Process this error
-        onError(throwable) // TODO: Add actions for retry
+        onError(throwable, ResultAction.TRY_AGAIN) // TODO: Add actions for retry
     }
 
     private fun onPaymentDataTaskLoaded(paymentDataTaskModel: PaymentDataTaskModel) {
@@ -100,6 +98,14 @@ class GpayPresenter(
                 gpayPrepareInfo.checkoutInfoModel.currency,
                 gpayPrepareInfo.gatewayMerchantId)
         onCheckoutUpdated(gpayPrepareInfo.checkoutInfoModel)
+
+        navigator.pendingAction?.let(::onResultAction)
+    }
+
+    private fun onResultAction(resultAction: ResultAction) = when (resultAction) {
+        ResultAction.TRY_AGAIN -> onPerformPayment("") //TODO: Add email
+        ResultAction.UPDATE_CHECKOUT -> Unit
+        ResultAction.USE_ANOTHER_CARD -> Unit
     }
 
     private fun onCheckoutUpdated(checkoutInfo: CheckoutInfoModel) {
@@ -151,19 +157,18 @@ class GpayPresenter(
                     navigator.openErrorFragment(
                         parent = view as BankCardFragment,
                         messageRes = R.string.error_polling_time_exceeded,
-                        positiveAction = ACTION_UPDATE_CHECKOUT,
-                        negativeAction = ACTION_USE_ANOTHER_CARD)
+                        positiveAction = ResultAction.UPDATE_CHECKOUT)
             }
         } else {
-            onError(error, ACTION_UPDATE_CHECKOUT)
+            onError(error, ResultAction.UPDATE_CHECKOUT)
         }
     }
 
     private fun onPaymentError(error: Throwable) {
         if (error is UseCaseException.UnableRepeatPaymentException) {
-            onError(error) // TODO: Add use another card
+            onError(error)
         } else {
-            onError(error, ACTION_RETRY_PAYMENT) // TODO: Add use another card
+            onError(error, ResultAction.TRY_AGAIN)
         }
     }
 

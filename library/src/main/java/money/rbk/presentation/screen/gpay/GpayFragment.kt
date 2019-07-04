@@ -17,6 +17,7 @@ import money.rbk.di.Injector
 import money.rbk.presentation.activity.web.WebViewActivity
 import money.rbk.presentation.model.BrowserRequestModel
 import money.rbk.presentation.screen.base.BaseFragment
+import money.rbk.presentation.screen.result.ResultAction
 import money.rbk.presentation.utils.setValid
 
 /**

@@ -28,20 +28,21 @@ enum class CreditCardType(
     val prefixes: Array<String>,
     val cardName: String,
     @DrawableRes
-    val iconRes: Int) {
+    val iconRes: Int
+) {
 
     visaelectron(
         lengths = intArrayOf(16),
         prefixes = arrayOf("4026", "417500", "4405", "4508", "4844", "4913", "4917"),
         cardName = "Visa Electron",
-        iconRes = R.drawable.selector_logo_visa_electron
+        iconRes = R.drawable.ic_logo_visa_electron
     ),
 
     visa(
         lengths = intArrayOf(13, 16, 19),
         prefixes = arrayOf("4"),
         cardName = "Visa",
-        iconRes = R.drawable.selector_logo_visa
+        iconRes = R.drawable.ic_logo_visa
     ),
 
     maestro(
@@ -63,14 +64,14 @@ enum class CreditCardType(
             "51", "52", "53", "54", "55"
         ),
         cardName = "MasterCard",
-        iconRes = R.drawable.selector_logo_master_card
+        iconRes = R.drawable.ic_master_card_logo
     ),
 
     nspkmir(
         lengths = intArrayOf(13, 16),
         prefixes = arrayOf("2200", "2201", "2202", "2203", "2204"),
         cardName = "MIR",
-        iconRes = R.drawable.selector_logo_mir
+        iconRes = R.drawable.ic_mir
     );
 
     // TODO: "forbrugsforeningen" "dankort" "amex" "dinersclub" "discover" "unionpay" "jcb"
@@ -82,7 +83,7 @@ enum class CreditCardType(
                 .asSequence()
                 .find { cardType ->
                     cardType.lengths.contains(cardNumber.length) &&
-                        (cardType.prefixes.any { cardNumber.startsWith(it) })
+                            (cardType.prefixes.any { cardNumber.startsWith(it) })
                 }
 
         fun suggestCardType(creditCardNumber: String): CreditCardType? =

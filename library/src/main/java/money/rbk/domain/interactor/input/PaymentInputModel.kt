@@ -27,7 +27,7 @@ import money.rbk.domain.entity.PaymentMethodToken
 import money.rbk.domain.entity.PaymentToken
 import money.rbk.domain.entity.PaymentTool
 
-class PaymentInputModel(
+data class PaymentInputModel(
     val paymentTool: PaymentTool,
     val contactInfo: ContactInfo
 ) : BaseInputModel() {
