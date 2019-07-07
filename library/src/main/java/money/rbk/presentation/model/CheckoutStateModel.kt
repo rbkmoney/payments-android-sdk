@@ -19,25 +19,22 @@
 package money.rbk.presentation.model
 
 import androidx.annotation.StringRes
-import money.rbk.domain.entity.ContactInfo
-import money.rbk.domain.entity.PaymentTool
 
 sealed class CheckoutStateModel : BaseIUModel() {
 
-    data class Success(val paymentToolName: String) : CheckoutStateModel()
-
-    data class PaymentFailed(@StringRes val reasonResId: Int/*, val paymentTool: PaymentTool, val contactInfo: ContactInfo*/) :
-        CheckoutStateModel()
-
-    data class InvoiceFailed(@StringRes val reasonResId: Int) : CheckoutStateModel()
-
-    data class Warning(@StringRes val titleId: Int, @StringRes val messageResId: Int) :
-        CheckoutStateModel()
+    class Success(val paymentToolName: String) : CheckoutStateModel()
 
     object Pending : CheckoutStateModel()
 
+    class PaymentFailed(@StringRes val reasonResId: Int) : CheckoutStateModel()
+
+    class InvoiceFailed(@StringRes val reasonResId: Int) : CheckoutStateModel()
+
+    class Warning(@StringRes val titleId: Int, @StringRes val messageResId: Int) :
+        CheckoutStateModel()
+
     object PaymentProcessing : CheckoutStateModel()
 
-    data class BrowserRedirectInteraction(val request: BrowserRequestModel) : CheckoutStateModel()
+    class BrowserRedirectInteraction(val request: BrowserRequestModel) : CheckoutStateModel()
 
 }

@@ -28,17 +28,17 @@ sealed class NetworkServiceException(message: String? = null, cause: Throwable? 
 
     internal object NoInternetException : NetworkServiceException()
 
-    internal data class RequestExecutionException(val request: Request, val e: IOException) :
+    internal class RequestExecutionException(val request: Request, val e: IOException) :
         NetworkServiceException(cause = e)
 
-    internal data class ResponseReadingException(val response: Response, val e: IOException) :
+    internal class ResponseReadingException(val response: Response, val e: IOException) :
         NetworkServiceException(cause = e)
 
-    internal data class InternalServerException(val code: Int) : NetworkServiceException(
+    internal class InternalServerException(val code: Int) : NetworkServiceException(
         "Internal server error, code: $code"
     )
 
-    internal data class ApiException(val code: Int, val error: ApiError) : NetworkServiceException(
+    internal class ApiException(val code: Int, val error: ApiError) : NetworkServiceException(
         "Api error, code: $code"
     )
 

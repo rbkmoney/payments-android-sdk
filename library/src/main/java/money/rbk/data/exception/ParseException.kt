@@ -20,7 +20,7 @@ package money.rbk.data.exception
 
 sealed class ParseException(message: String, cause: Throwable? = null) : Exception(message) {
 
-    internal data class ResponseParsingException(val stringBody: String, val e: Exception) :
+    internal class ResponseParsingException(val stringBody: String, val e: Exception) :
         ParseException(stringBody, e)
 
     internal class UnknownFlowTypeException(val flowType: String) :

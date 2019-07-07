@@ -30,7 +30,7 @@ import org.json.JSONObject
 //    "name":"PaymentResourceParams"
 //}
 
-data class ApiError(
+class ApiError(
     val code: Code?,
     val message: String?,
     val subError: ApiError?

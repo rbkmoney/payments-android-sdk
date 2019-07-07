@@ -18,7 +18,7 @@
 
 package money.rbk.presentation.model
 
-data class InvoiceModel(
+class InvoiceModel(
     val id: String,
     val shopName: String,
     val cost: String,
