@@ -18,22 +18,10 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.extension.findEnum
-import money.rbk.data.extension.parseNullable
-import money.rbk.data.serialization.Deserializer
-import org.json.JSONObject
-
-data class PaymentError(
+class PaymentError(
     val code: Code,
     val subError: PaymentError?
 ) {
-    companion object : Deserializer<JSONObject, PaymentError> {
-        override fun fromJson(json: JSONObject): PaymentError =
-            PaymentError(
-                code = findEnum(json.getString("code"), Code.Unknown),
-                subError = json.parseNullable("subError", this)
-            )
-    }
 
     enum class Code {
         InvalidPaymentTool,     //	Неверный платежный инструмент (введен номер несуществующей карты, отсутствующего аккаунта и т.п.)

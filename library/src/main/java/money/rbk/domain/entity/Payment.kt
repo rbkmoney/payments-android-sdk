@@ -18,16 +18,9 @@
 
 package money.rbk.domain.entity
 
-import org.json.JSONObject
-import money.rbk.data.extension.getNullable
-import money.rbk.data.extension.parse
-import money.rbk.data.extension.parseDate
-import money.rbk.data.extension.parseNullable
-import money.rbk.data.extension.parseString
-import money.rbk.data.serialization.Deserializer
 import java.util.Date
 
-internal data class Payment(
+internal class Payment(
     val id: String,
     val externalID: String?,
     val invoiceID: String,
@@ -39,22 +32,4 @@ internal data class Payment(
     val makeRecurrent: Boolean,
     val status: PaymentStatus,
     val error: PaymentError?
-) {
-
-    companion object : Deserializer<JSONObject, Payment> {
-        override fun fromJson(json: JSONObject): Payment = Payment(
-            id = json.getString("id"),
-            externalID = json.getNullable<String>("externalID"),
-            invoiceID = json.getString("invoiceID"),
-            createdAt = json.parseDate("createdAt"),
-            amount = json.getInt("amount"),
-            currency = json.parseString("currency", Currency),
-            flow = json.parse("flow", PaymentFlow),
-            payer = json.parse("payer", Payer),
-            makeRecurrent = json.optBoolean("makeRecurrent", false),
-            status = json.parseString("status", PaymentStatus),
-            error = json.parseNullable("error", PaymentError)
-        )
-    }
-
-}
+)

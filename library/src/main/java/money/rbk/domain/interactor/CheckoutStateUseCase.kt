@@ -18,10 +18,9 @@
 
 package money.rbk.domain.interactor
 
-import android.util.Log
 import money.rbk.di.Injector
 import money.rbk.domain.converter.EntityConverter
-import money.rbk.domain.converter.InvoiceChangesConverter
+import money.rbk.domain.converter.InvoiceChangesCheckoutStateConverter
 import money.rbk.domain.entity.InvoiceEvent
 import money.rbk.domain.exception.UseCaseException
 import money.rbk.domain.extension.cost
@@ -34,7 +33,7 @@ import money.rbk.presentation.utils.formatInternationalPrice
 
 internal class CheckoutStateUseCase(
     private val checkoutRepository: CheckoutRepository = Injector.checkoutRepository,
-    private val invoiceChangesConverter: EntityConverter<List<InvoiceEvent>, CheckoutStateModel> = InvoiceChangesConverter()
+    private val invoiceChangesConverter: EntityConverter<List<InvoiceEvent>, CheckoutStateModel> = InvoiceChangesCheckoutStateConverter()
 ) : UseCase<EmptyInputModel, CheckoutInfoModel>() {
 
     private var startTime: Long = 0

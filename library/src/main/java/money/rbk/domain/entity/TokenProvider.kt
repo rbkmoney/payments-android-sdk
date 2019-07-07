@@ -18,9 +18,6 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.extension.findEnum
-import money.rbk.data.serialization.Deserializer
-
 enum class TokenProvider {
     applepay,
     googlepay,
@@ -28,7 +25,4 @@ enum class TokenProvider {
 
     unknown;
 
-    companion object : Deserializer<String, TokenProvider> {
-        override fun fromJson(json: String): TokenProvider = findEnum(json, unknown)
-    }
 }

@@ -18,12 +18,12 @@
 
 package money.rbk.data.extension
 
+import com.google.gson.Gson
 import money.rbk.data.exception.NetworkServiceException.*
 import money.rbk.data.exception.ParseException
 import money.rbk.data.methods.base.ApiRequest
 import money.rbk.data.methods.base.PostRequest
 import money.rbk.data.network.Constants
-import money.rbk.data.serialization.Serializable
 import money.rbk.data.utils.ClientInfoUtils
 import money.rbk.data.utils.log
 import money.rbk.di.Injector
@@ -62,7 +62,7 @@ internal fun <T> OkHttpClient.execute(apiRequest: ApiRequest<T>): T {
         }
 
     if (apiRequest is PostRequest<T>) {
-        requestBuilder.post(RequestBody.create(null, createRequestBody(apiRequest.payload)))
+        requestBuilder.post(RequestBody.create(null, createRequestBody(apiRequest.payload, gson)))
     } else {
         requestBuilder.get()
     }
@@ -86,7 +86,7 @@ internal fun <T> OkHttpClient.execute(apiRequest: ApiRequest<T>): T {
 
     when (val code = response.code()) {
         in 500..599 -> throw InternalServerException(code)
-        in 400..499 -> throw ApiException(code, ApiError.fromJson(stringBody.toJsonObject()))
+        in 400..499 -> throw ApiException(code, gson.fromJson(stringBody, ApiError::class.java))
     }
 
     try {
@@ -100,28 +100,10 @@ internal fun <T> OkHttpClient.execute(apiRequest: ApiRequest<T>): T {
     }
 }
 
-internal fun String.toJsonObject(): JSONObject =
-    try {
-        JSONObject(this)
-    } catch (e: JSONException) {
-        throw ParseException.ResponseParsingException(this, e)
-    }
-
-internal fun String.toJsonArray(): JSONArray =
-    try {
-        JSONArray(this)
-    } catch (e: JSONException) {
-        throw ParseException.ResponseParsingException(this, e)
-    }
-
-internal fun createRequestBody(body: List<Pair<String, Any>>): String {
+internal fun createRequestBody(body: List<Pair<String, Any>>, gson: Gson): String {
     val jsonObject = JSONObject()
     body.forEach { (key, value) ->
-        if (value is Serializable) {
-            jsonObject.put(key, value.toJson())
-        } else {
-            jsonObject.put(key, value)
-        }
+        jsonObject.put(key, JSONObject(gson.toJson(value)))
     }
     return jsonObject.toString()
 }

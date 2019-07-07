@@ -18,36 +18,19 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.exception.ParseException
-import money.rbk.data.extension.findEnumOrNull
-import money.rbk.data.serialization.Deserializer
 import money.rbk.data.serialization.SealedDistributor
 import money.rbk.data.serialization.SealedDistributorValue
-import money.rbk.data.serialization.Serializable
-import org.json.JSONObject
 import kotlin.reflect.KClass
 
-sealed class Flow : Serializable {
+sealed class Flow(val type: FlowType) {
 
-    companion object : Deserializer<JSONObject, Flow> {
+    companion object {
         val DISTRIBUTOR = SealedDistributor("type", FlowType.values())
-
-        override fun fromJson(json: JSONObject): Flow {
-            val type = json.getString("type")
-            return when (findEnumOrNull<FlowType>(type)) {
-                FlowType.PaymentFlowInstant -> PaymentFlowInstant
-                null -> throw ParseException.UnknownFlowTypeException(type)
-            }
-        }
     }
 
-    object PaymentFlowInstant : Flow() {
-        override fun toJson(): JSONObject = JSONObject().apply {
-            put("type", FlowType.PaymentFlowInstant.name)
-        }
-    }
+    object PaymentFlowInstant : Flow(FlowType.PaymentFlowInstant)
 
-    protected enum class FlowType(override val kClass: KClass<out Flow>) :
+    enum class FlowType(override val kClass: KClass<out Flow>) :
         SealedDistributorValue<Flow> {
         PaymentFlowInstant(Flow.PaymentFlowInstant::class)
     }

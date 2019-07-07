@@ -18,9 +18,6 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.extension.findEnum
-import money.rbk.data.serialization.Deserializer
-
 internal enum class InvoiceStatus {
     unpaid,
     cancelled,
@@ -29,8 +26,4 @@ internal enum class InvoiceStatus {
 
     unknown;
 
-    companion object :
-        Deserializer<String, InvoiceStatus> {
-        override fun fromJson(json: String) = findEnum(json, unknown)
-    }
 }

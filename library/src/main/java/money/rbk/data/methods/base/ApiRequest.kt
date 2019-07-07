@@ -27,7 +27,6 @@ internal interface ApiRequest<out T> {
     val headers: List<Pair<String, String>>
         get() = emptyList()
 
-    fun convertJsonToResponse(jsonString: String): T
 }
 
 internal interface GetRequest<out T> : ApiRequest<T>

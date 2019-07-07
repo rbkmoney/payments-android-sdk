@@ -21,6 +21,7 @@ package money.rbk.domain.interactor
 import money.rbk.di.Injector
 import money.rbk.domain.entity.PaymentMethod
 import money.rbk.domain.entity.TokenProvider
+import money.rbk.domain.exception.UseCaseException
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.domain.repository.CheckoutRepository
@@ -68,4 +69,9 @@ internal class PaymentMethodsUseCase(
             }
         }
             .distinct()
+            .also {
+                if (it.isEmpty()) {
+                    throw UseCaseException.NoSupportedPaymentMethodsException
+                }
+            }
 }

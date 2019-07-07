@@ -18,7 +18,6 @@
 
 package money.rbk.data.methods
 
-import money.rbk.data.extension.toJsonArray
 import money.rbk.data.methods.base.GetRequest
 import money.rbk.domain.entity.InvoiceEvent
 
@@ -33,8 +32,5 @@ internal class GetInvoiceEvents(
     override val endpoint = "/processing/invoices/$invoiceId/events?" +
         "limit=$LIMIT" +
         (eventID?.let { "&eventID=$it" } ?: "")
-
-    override fun convertJsonToResponse(jsonString: String): List<InvoiceEvent> =
-        InvoiceEvent.fromJsonArray(jsonString.toJsonArray())
 
 }

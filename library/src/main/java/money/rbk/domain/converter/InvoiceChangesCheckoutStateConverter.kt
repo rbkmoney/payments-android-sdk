@@ -32,7 +32,7 @@ import money.rbk.domain.repository.CheckoutRepository
 import money.rbk.presentation.model.BrowserRequestModel
 import money.rbk.presentation.model.CheckoutStateModel
 
-internal class InvoiceChangesConverter(
+internal class InvoiceChangesCheckoutStateConverter(
     private val redirectConverter: EntityConverter<UserInteraction.Redirect, BrowserRequestModel> =
         RedirectBrowserRequestConverter,
     private val checkoutRepository: CheckoutRepository = Injector.checkoutRepository
@@ -45,7 +45,7 @@ internal class InvoiceChangesConverter(
             .asSequence()
             .sortedBy { it.createdAt }
             .flatMap { it.changes.asSequence() }
-            .mapNotNull(::convertInvoiceChange)
+            .mapNotNull { convertInvoiceChange(it) }
             .lastOrNull() ?: CheckoutStateModel.Pending
     }
 

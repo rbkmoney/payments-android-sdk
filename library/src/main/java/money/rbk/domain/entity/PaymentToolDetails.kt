@@ -19,21 +19,19 @@
 package money.rbk.domain.entity
 
 import com.google.gson.annotations.SerializedName
-import money.rbk.data.exception.ParseException
-import money.rbk.data.extension.findEnumOrNull
-import money.rbk.data.extension.getNullable
-import money.rbk.data.extension.parseNullableString
-import money.rbk.data.serialization.Deserializer
 import money.rbk.data.serialization.SealedDistributor
 import money.rbk.data.serialization.SealedDistributorValue
-import org.json.JSONObject
 import kotlin.reflect.KClass
 
 sealed class PaymentToolDetails {
 
+    companion object {
+        val DISTRIBUTOR = SealedDistributor("detailsType", DetailsType.values())
+    }
+
     abstract val paymentInfo: String
 
-    data class BankCard(
+    class BankCard(
 
         val cardNumberMask: String,
 
@@ -43,43 +41,14 @@ sealed class PaymentToolDetails {
         val last4: String?,
 
         val paymentSystem: String,
+
         val tokenProvider: TokenProvider?
+
     ) : PaymentToolDetails() {
 
-        override val paymentInfo: String = "$paymentSystem ${last4.orEmpty()}"
+        override val paymentInfo: String
+            get() = "$paymentSystem ${last4.orEmpty()}"
 
-        companion object : Deserializer<JSONObject, BankCard> {
-
-            override fun fromJson(json: JSONObject): BankCard =
-                BankCard(
-                    cardNumberMask = json.getString("cardNumberMask"),
-                    first6 = json.getNullable("first6") ?: json.getFirst6Legacy(),
-                    last4 = json.getNullable("last4") ?: json.getLast4Legacy(),
-                    paymentSystem = json.getString("paymentSystem"),
-                    tokenProvider = json.parseNullableString("tokenProvider",
-                        TokenProvider)
-                )
-
-            @Deprecated(message = "Should be removed after API update",
-                replaceWith = ReplaceWith(""))
-            private fun JSONObject.getFirst6Legacy() = getNullable<String>("bin")
-
-            @Deprecated(message = "Should be removed after API update",
-                replaceWith = ReplaceWith(""))
-            private fun JSONObject.getLast4Legacy() = getNullable<String>("lastDigits")
-        }
-    }
-
-    companion object : Deserializer<JSONObject, PaymentToolDetails> {
-        val DISTRIBUTOR = SealedDistributor("detailsType", DetailsType.values())
-
-        override fun fromJson(json: JSONObject): PaymentToolDetails {
-            val detailsType = json.getString("detailsType")
-            return when (findEnumOrNull<DetailsType>(detailsType)) {
-                DetailsType.PaymentToolDetailsBankCard -> BankCard.fromJson(json)
-                null -> throw ParseException.UnsupportedPaymentToolDetails(detailsType)
-            }
-        }
     }
 
     private enum class DetailsType(override val kClass: KClass<out PaymentToolDetails>) :

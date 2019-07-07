@@ -18,7 +18,6 @@
 
 package money.rbk.domain.interactor
 
-import android.util.Log
 import money.rbk.di.Injector
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.EmptyInputModel

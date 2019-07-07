@@ -18,77 +18,37 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.exception.ParseException
-import money.rbk.data.extension.findEnumOrNull
-import money.rbk.data.extension.getNullable
-import money.rbk.data.extension.parse
-import money.rbk.data.extension.parseNullable
-import money.rbk.data.extension.parseString
-import money.rbk.data.serialization.Deserializer
 import money.rbk.data.serialization.SealedDistributor
 import money.rbk.data.serialization.SealedDistributorValue
-import org.json.JSONObject
 import kotlin.reflect.KClass
 
 internal sealed class InvoiceChange {
 
-    companion object : Deserializer<JSONObject, InvoiceChange> {
+    companion object {
         val DISTRIBUTOR = SealedDistributor("changeType", InvoiceChangeType.values())
-
-        override fun fromJson(json: JSONObject): InvoiceChange {
-            val type = json.getString("changeType")
-            return when (findEnumOrNull<InvoiceChangeType>(type)) {
-                InvoiceChangeType.InvoiceCreated -> InvoiceCreated(
-                    invoice = json.parse("invoice", Invoice)
-                )
-                InvoiceChangeType.InvoiceStatusChanged -> InvoiceStatusChanged(
-                    status = json.parseString("status", InvoiceStatus),
-                    reason = json.getNullable("reason")
-                )
-                InvoiceChangeType.PaymentStarted -> PaymentStarted(
-                    payment = json.parse("payment", Payment)
-                )
-                InvoiceChangeType.PaymentStatusChanged -> PaymentStatusChanged(
-                    status = json.parseString("status", PaymentStatus),
-                    paymentID = json.getString("paymentID"),
-                    error = json.parseNullable("error", PaymentError)
-                )
-                InvoiceChangeType.PaymentInteractionRequested -> PaymentInteractionRequested(
-                    paymentID = json.getString("paymentID"),
-                    userInteraction = json.parse("userInteraction", UserInteraction)
-                )
-
-                InvoiceChangeType.RefundStarted,
-                InvoiceChangeType.RefundStatusChanged -> Refund(
-                    paymentID = json.getString("paymentID")
-                )
-
-                null -> throw ParseException.UnsupportedInvoiceChangeTypeException(type)
-            }
-        }
     }
 
-    data class InvoiceCreated(val invoice: Invoice) :
+    class InvoiceCreated(val invoice: Invoice) :
         InvoiceChange()
 
-    data class InvoiceStatusChanged(
+    class InvoiceStatusChanged(
         val status: InvoiceStatus,
         val reason: String?) : InvoiceChange()
 
-    data class PaymentStarted(val payment: Payment) :
+    class PaymentStarted(val payment: Payment) :
         InvoiceChange()
 
-    data class PaymentStatusChanged(
+    class PaymentStatusChanged(
         val status: PaymentStatus,
         val paymentID: String,
         val error: PaymentError?) : InvoiceChange()
 
-    data class PaymentInteractionRequested(
+    class PaymentInteractionRequested(
         val paymentID: String,
         val userInteraction: UserInteraction
     ) : InvoiceChange()
 
-    data class Refund(
+    class Refund(
         val paymentID: String
     ) : InvoiceChange()
 

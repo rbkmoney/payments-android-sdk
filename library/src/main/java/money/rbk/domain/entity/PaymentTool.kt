@@ -20,49 +20,28 @@ package money.rbk.domain.entity
 
 import money.rbk.data.serialization.SealedDistributor
 import money.rbk.data.serialization.SealedDistributorValue
-import money.rbk.data.serialization.Serializable
-import money.rbk.data.serialization.json
-import org.json.JSONObject
 import kotlin.reflect.KClass
 
-sealed class PaymentTool(protected val paymentToolType: PaymentToolType) : Serializable {
+sealed class PaymentTool(protected val paymentToolType: PaymentToolType) {
 
     companion object {
         val DISTRIBUTOR = SealedDistributor("paymentToolType", PaymentToolType.values())
     }
 
     //TODO: Make it secured way
-    data class CardData(
+    class CardData(
         val cardNumber: String,
         val expDate: String,
         val cvv: String,
         val cardHolder: String
-    ) : PaymentTool(PaymentToolType.CardData) {
+    ) : PaymentTool(PaymentToolType.CardData)
 
-        override fun toJson(): JSONObject =
-            JSONObject().apply {
-                put("paymentToolType", paymentToolType)
-                put("cardNumber", cardNumber)
-                put("expDate", expDate)
-                put("cvv", cvv)
-                put("cardHolder", cardHolder)
-            }
-    }
-
-    data class TokenizedCardData(
+    class TokenizedCardData(
         val gatewayMerchantID: String,
         val paymentToken: PaymentToken,
         val provider: String
 
-    ) : PaymentTool(PaymentToolType.TokenizedCardData) {
-
-        override fun toJson() = json {
-            "paymentToolType" set paymentToolType.name
-            "provider" set provider
-            "gatewayMerchantID" set gatewayMerchantID
-            "paymentToken" set paymentToken
-        }
-    }
+    ) : PaymentTool(PaymentToolType.TokenizedCardData)
 
     enum class PaymentToolType(override val kClass: KClass<out PaymentTool>) :
         SealedDistributorValue<PaymentTool> {

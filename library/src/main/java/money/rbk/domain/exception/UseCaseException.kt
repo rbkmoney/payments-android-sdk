@@ -20,6 +20,9 @@ package money.rbk.domain.exception
 
 sealed class UseCaseException(message: String) : Exception(message) {
 
+    object NoSupportedPaymentMethodsException :
+        UseCaseException("There is no supported payment methods")
+
     class PollingTimeExceededException(maxTime: Long) :
         UseCaseException("Maximum application poll time ($maxTime ms) exceeded")
 

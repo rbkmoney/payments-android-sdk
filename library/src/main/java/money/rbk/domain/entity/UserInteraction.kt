@@ -18,33 +18,17 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.exception.ParseException
-import money.rbk.data.extension.findEnumOrNull
-import money.rbk.data.extension.parse
-import money.rbk.data.serialization.Deserializer
 import money.rbk.data.serialization.SealedDistributor
 import money.rbk.data.serialization.SealedDistributorValue
-import org.json.JSONObject
 import kotlin.reflect.KClass
 
 sealed class UserInteraction {
 
-    companion object : Deserializer<JSONObject, UserInteraction> {
-
+    companion object {
         val DISTRIBUTOR = SealedDistributor("interactionType", InteractionType.values())
-
-        override fun fromJson(json: JSONObject): UserInteraction {
-            val type = json.getString("interactionType")
-            return when (findEnumOrNull<InteractionType>(type)) {
-                InteractionType.Redirect -> Redirect(
-                    request = json.parse("request", BrowserRequest)
-                )
-                null -> throw ParseException.UnsupportedUserInteractionTypeException(type)
-            }
-        }
     }
 
-    data class Redirect(
+    class Redirect(
         val request: BrowserRequest
     ) : UserInteraction()
 

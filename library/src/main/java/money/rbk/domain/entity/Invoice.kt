@@ -18,12 +18,9 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.serialization.Deserializer
-import money.rbk.data.serialization.invoke
-import org.json.JSONObject
 import java.util.Date
 
-internal data class Invoice(
+internal class Invoice(
     val id: String,
     val shopID: String,
     val externalID: String?,
@@ -35,21 +32,4 @@ internal data class Invoice(
     val invoiceTemplateID: String?,
     val status: InvoiceStatus,
     val reason: String?
-) {
-    companion object :
-        Deserializer<JSONObject, Invoice> {
-        override fun fromJson(json: JSONObject) = Invoice(
-            id = json("id"),
-            shopID = json("shopID"),
-            externalID = json("externalID"),
-            createdAt = json("createdAt"),
-            amount = json("amount"),
-            currency = json("currency", Currency.Companion),
-            product = json("product"),
-            description = json("description"),
-            invoiceTemplateID = json("invoiceTemplateID"),
-            status = json("status", InvoiceStatus.Companion),
-            reason = json("reason")
-        )
-    }
-}
+)

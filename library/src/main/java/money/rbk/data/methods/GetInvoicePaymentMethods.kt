@@ -18,7 +18,6 @@
 
 package money.rbk.data.methods
 
-import money.rbk.data.extension.toJsonArray
 import money.rbk.data.methods.base.GetRequest
 import money.rbk.domain.entity.PaymentMethod
 
@@ -28,8 +27,5 @@ internal class GetInvoicePaymentMethods(
 ) : GetRequest<List<PaymentMethod>> {
 
     override val endpoint = "/processing/invoices/$invoiceId/payment-methods"
-
-    override fun convertJsonToResponse(jsonString: String): List<PaymentMethod> =
-        PaymentMethod.fromJsonArray(jsonString.toJsonArray())
 
 }

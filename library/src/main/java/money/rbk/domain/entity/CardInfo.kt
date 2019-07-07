@@ -18,23 +18,13 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.serialization.Serializable
-import money.rbk.data.serialization.json
-
-data class CardInfo(
+class CardInfo(
     val cardNetwork: String,
     val cardDetails: String,
     val cardDescription: String,
     val cardClass: CardClass
 
-) : Serializable {
-
-    override fun toJson() = json {
-        "cardNetwork" set cardNetwork
-        "cardDetails" set cardDetails
-        "cardDescription" set cardDescription
-        "cardClass" set cardClass.name
-    }
+) {
 
     enum class CardClass {
         CREDIT, DEBIT, PREPAID

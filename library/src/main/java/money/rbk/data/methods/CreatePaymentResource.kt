@@ -18,7 +18,6 @@
 
 package money.rbk.data.methods
 
-import money.rbk.data.extension.toJsonObject
 import money.rbk.data.methods.base.PostRequest
 import money.rbk.data.response.CreatePaymentResourceResponse
 import money.rbk.data.utils.ClientInfoUtils
@@ -33,9 +32,6 @@ internal class CreatePaymentResource(
     private val clientInfo by lazy { ClientInfo(fingerprint = ClientInfoUtils.fingerprint) }
 
     override val endpoint = "/processing/payment-resources"
-
-    override fun convertJsonToResponse(jsonString: String): CreatePaymentResourceResponse =
-        CreatePaymentResourceResponse.fromJson(jsonString.toJsonObject())
 
     override val payload = listOf(
         "paymentTool" to paymentTool,

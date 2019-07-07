@@ -18,40 +18,22 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.extension.findEnumOrNull
-import money.rbk.data.extension.parseList
-import money.rbk.data.serialization.Deserializer
 import money.rbk.data.serialization.SealedDistributor
 import money.rbk.data.serialization.SealedDistributorValue
-import org.json.JSONObject
 import kotlin.reflect.KClass
 
-sealed class BrowserRequest(open val uriTemplate: String) {
+sealed class BrowserRequest(val uriTemplate: String) {
 
-    companion object : Deserializer<JSONObject, BrowserRequest> {
+    companion object {
         val DISTRIBUTOR = SealedDistributor("requestType", BrowserRequestType.values())
-
-        override fun fromJson(json: JSONObject): BrowserRequest {
-            val type = json.getString("requestType")
-            return when (findEnumOrNull<BrowserRequestType>(type)) {
-                BrowserRequestType.BrowserGetRequest -> BrowserGetRequest(
-                    uriTemplate = json.getString("uriTemplate")
-                )
-                BrowserRequestType.BrowserPostRequest -> BrowserPostRequest(
-                    uriTemplate = json.getString("uriTemplate"),
-                    form = json.parseList("form", UserInteractionForm)
-                )
-                null -> throw UnknownBrowserRequestTypeException(type)
-            }
-        }
     }
 
-    data class BrowserGetRequest(
-        override val uriTemplate: String
+    class BrowserGetRequest(
+        uriTemplate: String
     ) : BrowserRequest(uriTemplate)
 
-    data class BrowserPostRequest(
-        override val uriTemplate: String,
+    class BrowserPostRequest(
+        uriTemplate: String,
         val form: List<UserInteractionForm>
     ) : BrowserRequest(uriTemplate)
 
@@ -61,6 +43,3 @@ sealed class BrowserRequest(open val uriTemplate: String) {
         BrowserPostRequest(BrowserRequest.BrowserPostRequest::class)
     }
 }
-
-class UnknownBrowserRequestTypeException(val type: String) :
-    Throwable("Unknown browser request type: $type")

@@ -18,16 +18,7 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.serialization.Serializable
-import money.rbk.data.serialization.json
-
-data class PaymentToken(
+class PaymentToken(
     val cardInfo: CardInfo,
     val paymentMethodToken: PaymentMethodToken
-) : Serializable {
-    override fun toJson() = json {
-        "cardInfo" set cardInfo
-        "paymentMethodToken" set paymentMethodToken
-    }
-
-}
+)

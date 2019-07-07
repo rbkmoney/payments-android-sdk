@@ -18,31 +18,6 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.serialization.Deserializer
-import money.rbk.data.serialization.Serializable
-import money.rbk.data.serialization.invoke
-import money.rbk.data.serialization.json
-import org.json.JSONObject
-
-data class ContactInfo(
+class ContactInfo(
     val email: String?
-) : Serializable {
-
-    companion object : Deserializer<JSONObject, ContactInfo> {
-        override fun fromJson(json: JSONObject) = ContactInfo(
-            email = json("email")
-        )
-
-
-        inline fun parse(json: JSONObject) = ContactInfo(
-            email = json("email")
-        )
-    }
-
-    override fun toJson() = json {
-        "email" setNotNull email
-    }
-
-}
-
-
+)

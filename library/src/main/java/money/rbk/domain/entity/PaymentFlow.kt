@@ -18,27 +18,14 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.extension.findEnumOrNull
-import money.rbk.data.serialization.Deserializer
 import money.rbk.data.serialization.SealedDistributor
 import money.rbk.data.serialization.SealedDistributorValue
-import org.json.JSONObject
 import kotlin.reflect.KClass
 
-sealed class PaymentFlow() {
+sealed class PaymentFlow {
 
-    companion object : Deserializer<JSONObject, PaymentFlow> {
+    companion object {
         val DISTRIBUTOR = SealedDistributor("type", PaymentFlowType.values())
-
-        override fun fromJson(json: JSONObject): PaymentFlow {
-
-            val type = json.getString("type")
-
-            return when (findEnumOrNull<PaymentFlowType>(type)) {
-                PaymentFlowType.PaymentFlowInstant -> PaymentFlowInstant
-                else -> throw UnknownPaymentFlowType(type)
-            }
-        }
     }
 
     object PaymentFlowInstant : PaymentFlow()

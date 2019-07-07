@@ -23,14 +23,19 @@ class SealedJsonDeserializer<T : Any>(private val distributor: SealedDistributor
         val fieldValue = (json.asJsonObject.get(distributor.field) as? JsonPrimitive)?.asString
             ?: throw JsonParseException("Unable to find key field ${distributor.field}")
 
-        val fool = distributor.values.find { fieldValue == it.name }
-            ?: throw JsonParseException("Unable to parse $typeOfT")
+        val fool = distributor.values.find { fieldValue == it.name } ?: if (distributor.fallback != null) {
+            return distributor.fallback
+        } else {
+            throw JsonParseException("Unable to parse $typeOfT")
+        }
 
         return context.deserialize<T>(json, fool.kClass.java)
     }
 }
 
-class SealedDistributor<T : Any>(val field: String, val values: Array<out SealedDistributorValue<T>>)
+class SealedDistributor<T : Any>(val field: String,
+    val values: Array<out SealedDistributorValue<T>>,
+    val fallback: T? = null)
 
 interface SealedDistributorValue<T : Any> {
     val name: String

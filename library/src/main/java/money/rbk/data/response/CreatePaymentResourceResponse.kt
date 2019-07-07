@@ -18,28 +18,12 @@
 
 package money.rbk.data.response
 
-import money.rbk.data.extension.getNullable
-import money.rbk.data.extension.parseNullable
-import money.rbk.data.serialization.Deserializer
 import money.rbk.domain.entity.ClientInfo
 import money.rbk.domain.entity.PaymentToolDetails
-import org.json.JSONObject
 
-data class CreatePaymentResourceResponse(
+class CreatePaymentResourceResponse(
     val paymentToolToken: String,
     val clientInfo: ClientInfo?,
     val paymentSession: String?,
     val paymentToolDetails: PaymentToolDetails?
-) {
-    companion object :
-        Deserializer<JSONObject, CreatePaymentResourceResponse> {
-        override fun fromJson(json: JSONObject): CreatePaymentResourceResponse =
-            CreatePaymentResourceResponse(
-                paymentToolToken = json.getString("paymentToolToken"),
-                clientInfo = json.parseNullable("clientInfo", ClientInfo.Companion),
-                paymentSession = json.getNullable("paymentSession"),
-                paymentToolDetails = json.parseNullable("paymentToolDetails",
-                    PaymentToolDetails.Companion)
-            )
-    }
-}
+)
