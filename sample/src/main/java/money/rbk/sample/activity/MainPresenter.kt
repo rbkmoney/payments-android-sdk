@@ -25,10 +25,8 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import money.rbk.sample.app.RBKSampleApplication
-import money.rbk.sample.network.model.Invoice
-import money.rbk.sample.network.model.InvoiceResponse
-import money.rbk.sample.network.model.InvoiceTemplateResponse
 import money.rbk.sample.network.model.InvoiceModel
+import money.rbk.sample.network.model.InvoiceTemplateResponse
 
 class MainPresenter {
 
@@ -47,7 +45,7 @@ class MainPresenter {
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(::onTemplatesLoaded, ::onTemplatesLoadError)
+            .subscribe({ onTemplatesLoaded(it) }, { onTemplatesLoadError(it) })
             .disposeWhenDetach()
     }
 
@@ -66,7 +64,7 @@ class MainPresenter {
             RBKSampleApplication.networkService.createInvoiceWithTemplate(invoiceTemplate.id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(::onInvoiceCreated, ::onInvoiceCreateError)
+                .subscribe({ onInvoiceCreated(it) }, { onInvoiceCreateError(it) })
                 .disposeWhenDetach()
         }
     }

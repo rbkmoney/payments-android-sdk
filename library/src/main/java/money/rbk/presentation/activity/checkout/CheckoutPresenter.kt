@@ -22,8 +22,8 @@ import money.rbk.R
 import money.rbk.domain.interactor.InvoiceUseCase
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.InvoiceInitializeInputModel
-import money.rbk.presentation.model.CheckoutStateModel
 import money.rbk.presentation.model.InvoiceModel
+import money.rbk.presentation.model.InvoiceStateModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePresenter
 
@@ -34,19 +34,17 @@ class CheckoutPresenter(
 
     override fun onViewAttached(view: CheckoutView) {
         super.onViewAttached(view)
-
         initializeInvoice()
     }
 
     fun initializeInvoice() {
         view?.showProgress()
         invoiceUseCase(InvoiceInitializeInputModel,
-            ::onInvoiceLoaded,
-            ::onInvoiceLoadError)
+            { onInvoiceLoaded(it) },
+            { onInvoiceLoadError(it) })
     }
 
     private fun onInvoiceLoadError(throwable: Throwable) {
-        // TODO: onError(throwable, ACTION_INITIALIZE)
         throwable.printStackTrace()
         view?.showError()
     }
@@ -55,31 +53,19 @@ class CheckoutPresenter(
         view?.apply {
             hideProgress()
             showInvoice(invoice)
-            return when (val checkoutState = invoice.checkoutState) {
 
-                is CheckoutStateModel.Success ->
+            return when (val invoiceState = invoice.invoiceState) {
+
+                is InvoiceStateModel.Success ->
                     navigator.openSuccessFragment(R.string.label_payed_by_card_f,
-                        checkoutState.paymentToolName)
+                        invoiceState.paymentToolName)
 
-                is CheckoutStateModel.PaymentFailed ->
-                    navigator.openErrorFragment(messageRes = checkoutState.reasonResId)
+                is InvoiceStateModel.Failed ->
+                    navigator.openErrorFragment(messageRes = invoiceState.reasonResId)
 
-                is CheckoutStateModel.InvoiceFailed ->
-                    navigator.openErrorFragment(messageRes = checkoutState.reasonResId)
-
-                is CheckoutStateModel.Warning ->
-                    navigator.openWarningFragment(
-                        titleRes = checkoutState.titleId,
-                        messageRes = checkoutState.messageResId)
-
-                CheckoutStateModel.Pending,
-                CheckoutStateModel.PaymentProcessing,
-                is CheckoutStateModel.BrowserRedirectInteraction ->
+                InvoiceStateModel.Pending ->
                     navigator.openPaymentMethods()
             }
         }
     }
-
-    fun onInitialize() = initializeInvoice()
-
 }

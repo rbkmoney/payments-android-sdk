@@ -18,6 +18,8 @@
 
 package money.rbk.presentation.screen.methods
 
+import money.rbk.R
+import money.rbk.domain.exception.UseCaseException
 import money.rbk.domain.interactor.PaymentMethodsUseCase
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.EmptyInputModel
@@ -33,7 +35,9 @@ class PaymentMethodsPresenter(
 
     override fun onViewAttached(view: PaymentMethodsView) {
         view.showProgress()
-        paymentMethodsUseCase(EmptyInputModel, ::onPaymentMethodsLoaded, ::onPaymentMethodsError)
+        paymentMethodsUseCase(EmptyInputModel,
+            { onPaymentMethodsLoaded(it) },
+            { onPaymentMethodsError(it) })
     }
 
     fun onPaymentClick(payment: PaymentMethodModel) =
@@ -50,10 +54,11 @@ class PaymentMethodsPresenter(
     }
 
     private fun onPaymentMethodsError(throwable: Throwable) {
-        view?.apply {
-            hideProgress()
+        if (throwable is UseCaseException.NoSupportedPaymentMethodsException) {
+            navigator.openErrorFragment(messageRes = R.string.error_no_supported_payment_methods)
+        } else {
+            onError(throwable)
         }
-        throwable.printStackTrace()
     }
 
 }

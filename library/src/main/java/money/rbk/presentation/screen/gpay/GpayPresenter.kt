@@ -53,8 +53,8 @@ class GpayPresenter(
         if (validateEmail(email)) {
             view?.showProgress()
             gpayLoadPaymentDataUseCase(gpayLoadPaymentDataInputModel,
-                ::onPaymentDataTaskLoaded,
-                ::onPaymentDataTaskLoadError)
+                { onPaymentDataTaskLoaded(it) },
+                { onPaymentDataTaskLoadError(it) })
         }
     }
 
@@ -68,17 +68,17 @@ class GpayPresenter(
         createPaymentUseCase(PaymentInputModel.buildForGpay(data,
             email,
             gpayLoadPaymentDataInputModel.gatewayMerchantId),
-            ::onCheckoutUpdated,
-            ::onPaymentError)
+            { onCheckoutUpdated(it) },
+            { onPaymentError(it) })
     }
 
     fun on3DsPerformed() {
         updateCheckout()
     }
 
-    public fun updateCheckout() {
+    fun updateCheckout() {
         view?.showProgress()
-        gpayPrepareUseCase(EmptyInputModel, ::onGpayPrepared, ::onCheckoutUpdateError)
+        gpayPrepareUseCase(EmptyInputModel, { onGpayPrepared(it) }, { onCheckoutUpdateError(it) })
     }
 
     private fun onPaymentDataTaskLoadError(throwable: Throwable) {
@@ -99,7 +99,7 @@ class GpayPresenter(
                 gpayPrepareInfo.gatewayMerchantId)
         onCheckoutUpdated(gpayPrepareInfo.checkoutInfoModel)
 
-        navigator.pendingAction?.let(::onResultAction)
+        navigator.pendingAction?.let { onResultAction(it) }
     }
 
     private fun onResultAction(resultAction: ResultAction) = when (resultAction) {

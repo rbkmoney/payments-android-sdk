@@ -51,8 +51,8 @@ class MainActivity : AppCompatActivity(), MainView {
         rvTemplates.layoutManager = LinearLayoutManager(this)
         rvTemplates.adapter = InvoiceTemplatesAdapter(invoiceTemplates,
             invoices,
-            presenter::onBuyFromTemplateClick,
-            presenter::onBuyFromInvoiceClick)
+            { presenter.onBuyFromTemplateClick(it) },
+            { presenter.onBuyFromInvoiceClick(it) })
         rvTemplates.visibility = View.VISIBLE
     }
 

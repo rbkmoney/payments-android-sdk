@@ -22,27 +22,4 @@ class BrowserRequestModel(
     val isPost: Boolean,
     val requestUrl: String,
     val body: ByteArray? = null
-) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as BrowserRequestModel
-
-        if (isPost != other.isPost) return false
-        if (requestUrl != other.requestUrl) return false
-        if (body != null) {
-            if (other.body == null) return false
-            if (!body.contentEquals(other.body)) return false
-        } else if (other.body != null) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = isPost.hashCode()
-        result = 31 * result + requestUrl.hashCode()
-        result = 31 * result + (body?.contentHashCode() ?: 0)
-        return result
-    }
-}
+)

@@ -18,11 +18,7 @@
 
 package money.rbk.presentation.utils
 
-import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
@@ -59,7 +55,7 @@ fun EditText.setRightDrawable(@DrawableRes drawableId: Int?) {
         removeRightDrawable()
     } else {
         val drawables = this.compoundDrawables
-        val currentDrawable = context.getDrawable(drawableId!!)
+        val currentDrawable = context.getDrawable(drawableId)
         this.setCompoundDrawablesWithIntrinsicBounds(drawables[0],
             drawables[1],
             currentDrawable,
@@ -74,20 +70,4 @@ fun EditText.removeRightDrawable() {
 
 fun TextView.setTextColorResource(@ColorRes colorRes: Int) {
     setTextColor(ContextCompat.getColor(context, colorRes))
-}
-
-fun ImageView.activate() {
-    isActivated = true
-}
-
-fun ImageView.deactivate() {
-    isActivated = false
-}
-
-fun View.makeGone() {
-    this.visibility = GONE
-}
-
-fun View.makeVisible() {
-    this.visibility = VISIBLE
 }

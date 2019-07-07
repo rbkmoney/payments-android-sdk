@@ -23,5 +23,5 @@ class InvoiceModel(
     val shopName: String,
     val cost: String,
     val orderDetails: String,
-    val checkoutState: CheckoutStateModel
+    val invoiceState: InvoiceStateModel
 ) : BaseIUModel()

@@ -70,7 +70,7 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
     private val maskFormatWatcher by lazy {
         val cardNumberMask = MaskImpl.createNonTerminated(PredefinedSlots.CARD_NUMBER_STANDARD)
         MaskFormatWatcher(cardNumberMask)
-            .apply { setCallback(CardChangeListener(::onCardDetected)) }
+            .apply { setCallback(CardChangeListener {onCardDetected(it)}) }
     }
 
     override fun onCreateView(inflater: LayoutInflater,

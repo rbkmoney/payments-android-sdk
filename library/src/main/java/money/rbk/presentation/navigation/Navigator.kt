@@ -18,7 +18,6 @@
 
 package money.rbk.presentation.navigation
 
-import android.app.Activity
 import android.content.Intent
 import android.util.SparseArray
 import androidx.annotation.IdRes
@@ -32,7 +31,6 @@ import com.google.android.gms.tasks.Task
 import com.google.android.gms.wallet.AutoResolvableResult
 import com.google.android.gms.wallet.AutoResolveHelper
 import money.rbk.R
-import money.rbk.presentation.dialog.showAlert
 import money.rbk.presentation.screen.card.BankCardFragment
 import money.rbk.presentation.screen.gpay.GpayFragment
 import money.rbk.presentation.screen.methods.PaymentMethodsFragment
@@ -63,7 +61,8 @@ class Navigator(
 
     //TODO: Create single method
     fun clearOpenPaymentMethods() {
-        activity.supportFragmentManager.popBackStack(PaymentMethodsFragment::class.java.name, POP_BACK_STACK_INCLUSIVE)
+        activity.supportFragmentManager.popBackStack(PaymentMethodsFragment::class.java.name,
+            POP_BACK_STACK_INCLUSIVE)
         replaceFragmentInActivity(PaymentMethodsFragment.newInstance())
     }
 
@@ -82,15 +81,15 @@ class Navigator(
     }
 
     fun openWarningFragment(@StringRes titleRes: Int, @StringRes messageRes: Int) {
-        val finish = {
-            activity.setResult(Activity.RESULT_OK)
-            activity.finish()
-        }
-
-        activity.showAlert(
-            activity.getString(titleRes),
-            activity.getString(messageRes),
-            positiveButtonPair = R.string.label_ok to finish)
+        activity.supportFragmentManager.popBackStack(null, POP_BACK_STACK_INCLUSIVE)
+        replaceFragmentInActivity(
+            ResultFragment.newInstance(
+                ResultType.SUCCESS,
+                activity.getString(messageRes),
+                activity.getString(titleRes),
+                null, null
+            )
+        )
     }
 
     fun openSuccessFragment(@StringRes messageRes: Int, vararg formatArgs: String) {
@@ -99,7 +98,7 @@ class Navigator(
             ResultFragment.newInstance(
                 ResultType.SUCCESS,
                 activity.getString(messageRes, *formatArgs),
-                null, null
+                null, null, null
             )
         )
     }
@@ -113,7 +112,7 @@ class Navigator(
 
         val fragment = ResultFragment.newInstance(
             ResultType.ERROR,
-            activity.getString(messageRes), positiveAction, negativeAction)
+            activity.getString(messageRes), null, positiveAction, negativeAction)
             .apply {
                 if (parent != null) {
                     setTargetFragment(parent, REQUEST_ERROR)
@@ -154,9 +153,6 @@ class Navigator(
     fun backWithAction(resultAction: ResultAction) {
         pendingAction = resultAction
         activity.supportFragmentManager.popBackStack()
-        //        if (activity.supportFragmentManager.popBackStackImmediate()) {
-        //            (currentFragment as? ResultActionReceiver)?.onResultAction(resultAction)
-        //        }
     }
 
 }

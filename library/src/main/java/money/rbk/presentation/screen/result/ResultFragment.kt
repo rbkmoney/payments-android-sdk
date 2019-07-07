@@ -26,9 +26,6 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fmt_payment_results.*
 import money.rbk.R
 import money.rbk.presentation.screen.base.BaseFragment
-import money.rbk.presentation.utils.arg
-import money.rbk.presentation.utils.makeGone
-import money.rbk.presentation.utils.makeVisible
 
 class ResultFragment : BaseFragment<ResultView>(), ResultView {
 
@@ -36,6 +33,7 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
         private const val KEY_RESULT_TYPE = "key_result_type"
 
         private const val KEY_MESSAGE = "key_message"
+        private const val KEY_TITLE = "key_title"
 
         private const val KEY_POSITIVE_ACTION = "key_positive_action"
         private const val KEY_NEGATIVE_ACTION = "key_negative_action"
@@ -44,13 +42,15 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
 
         fun newInstance(
             resultType: ResultType,
-            message: String?,
+            message: String,
+            title: String?,
             positiveAction: ResultAction?,
             negativeAction: ResultAction?
         ) = ResultFragment().apply {
 
             arguments = Bundle().apply {
                 putInt(KEY_RESULT_TYPE, resultType.ordinal)
+                putString(KEY_TITLE, title)
                 putString(KEY_MESSAGE, message)
 
                 putInt(KEY_POSITIVE_ACTION, positiveAction?.ordinal ?: -1)
@@ -59,12 +59,26 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
         }
     }
 
+    private var resultTypeOrdinal: Int = 0
+
+    private lateinit var message: String
+    private var title: String? = null
+
+    private var positiveActionOrdinal: Int = 0
+    private var negativeActionOrdinal: Int = 0
+
     override val presenter: ResultPresenter by lazy { ResultPresenter(navigator) }
 
-    private val resultTypeOrdinal by arg<Int>(KEY_RESULT_TYPE)
-    private val message by arg<String>(KEY_MESSAGE)
-    private val positiveActionOrdinal by arg<Int>(KEY_POSITIVE_ACTION)
-    private val negativeActionOrdinal by arg<Int>(KEY_NEGATIVE_ACTION)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //TODO Fix all force unwraps
+
+        resultTypeOrdinal = arguments?.getInt(KEY_RESULT_TYPE)!!
+        message = arguments?.getString(KEY_MESSAGE)!!
+        title = arguments?.getString(KEY_TITLE)
+        positiveActionOrdinal = arguments?.getInt(KEY_POSITIVE_ACTION)!!
+        negativeActionOrdinal = arguments?.getInt(KEY_NEGATIVE_ACTION)!!
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,11 +90,8 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         when (ResultType.values()[resultTypeOrdinal]) {
-
             ResultType.SUCCESS -> showSuccess()
-
             ResultType.ERROR -> showError()
-
             ResultType.UNKNOWN -> showUnknown()
         }
     }
@@ -90,10 +101,11 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
     override fun hideProgress() = Unit
 
     override fun showSuccess() {
-        clSuccessful.makeVisible()
-        clUnknown.makeGone()
-        clUnsuccessful.makeGone()
+        clSuccessful.visibility = View.VISIBLE
+        clUnknown.visibility = View.GONE
+        clUnsuccessful.visibility = View.GONE
         tvPaidWith.text = message
+        tvSuccessful.text = title ?: getString(R.string.successful_payment)
 
         btnOk.setOnClickListener {
             finish()
@@ -101,10 +113,11 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
     }
 
     override fun showError() {
-        clSuccessful.makeGone()
-        clUnknown.makeGone()
-        clUnsuccessful.makeVisible()
+        clSuccessful.visibility = View.GONE
+        clUnknown.visibility = View.GONE
+        clUnsuccessful.visibility = View.VISIBLE
         tvCause.text = message
+        tvUnsuccessful.text = title ?: getString(R.string.unsuccessful_payment)
 
         btnAllPaymentMethods.setOnClickListener {
             navigator.clearOpenPaymentMethods()
@@ -114,28 +127,28 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
             .getOrNull(positiveActionOrdinal)
         if (positiveAction != null) {
             btnPositiveAction.setText(positiveAction.buttonTitle)
-            btnPositiveAction.makeVisible()
+            btnPositiveAction.visibility = View.VISIBLE
             btnPositiveAction.setOnClickListener { presenter.onAction(positiveAction) }
         } else {
-            btnPositiveAction.makeGone()
+            btnPositiveAction.visibility = View.GONE
         }
 
         val negativeAction = ResultAction.values()
             .getOrNull(negativeActionOrdinal)
         if (negativeAction != null) {
             btnNegativeAction.setText(negativeAction.buttonTitle)
-            btnNegativeAction.makeVisible()
+            btnNegativeAction.visibility = View.VISIBLE
             btnNegativeAction.setOnClickListener { presenter.onAction(negativeAction) }
         } else {
-            btnNegativeAction.makeGone()
+            btnNegativeAction.visibility = View.GONE
         }
     }
 
     override fun showUnknown() {
-        clSuccessful.makeGone()
-        clUnknown.makeVisible()
-        clUnsuccessful.makeGone()
-
+        clSuccessful.visibility = View.GONE
+        clUnknown.visibility = View.VISIBLE
+        clUnsuccessful.visibility = View.GONE
+        tvPaymentRefund.text = title ?: getString(R.string.label_payment_refund)
         tvRefundMessage.text = message
     }
 
@@ -143,5 +156,4 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
         activity?.setResult(Activity.RESULT_OK)
         activity?.finish()
     }
-
 }

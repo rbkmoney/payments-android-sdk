@@ -7,8 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.wallet.AutoResolveHelper
-import kotlinx.android.synthetic.main.fmt_card.*
-import kotlinx.android.synthetic.main.fmt_google_pay.*
 import kotlinx.android.synthetic.main.fmt_google_pay.btnPay
 import kotlinx.android.synthetic.main.fmt_google_pay.edEmail
 import kotlinx.android.synthetic.main.fmt_google_pay.pbLoading
@@ -17,7 +15,6 @@ import money.rbk.di.Injector
 import money.rbk.presentation.activity.web.WebViewActivity
 import money.rbk.presentation.model.BrowserRequestModel
 import money.rbk.presentation.screen.base.BaseFragment
-import money.rbk.presentation.screen.result.ResultAction
 import money.rbk.presentation.utils.setValid
 
 /**

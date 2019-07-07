@@ -43,12 +43,8 @@ class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethod
         savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fmt_payment_methods, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     override fun setPaymentMethods(paymentMethods: List<PaymentMethodModel>) {
-        rvPaymentMethods.adapter = PaymentAdapter(presenter::onPaymentClick, paymentMethods)
+        rvPaymentMethods.adapter = PaymentAdapter({ presenter.onPaymentClick(it) }, paymentMethods)
         rvPaymentMethods.layoutManager = LinearLayoutManager(activity)
         rvPaymentMethods.addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.spacing_small).toInt()))
     }

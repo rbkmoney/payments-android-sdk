@@ -23,6 +23,7 @@ import money.rbk.presentation.utils.removeSpaces
 import ru.tinkoff.decoro.FormattedTextChangeListener
 import ru.tinkoff.decoro.watchers.FormatWatcher
 
+// TODO: Fix this class
 class CardChangeListener(private val edCallBack: (cardType: CreditCardType?) -> Unit) :
     FormattedTextChangeListener {
 

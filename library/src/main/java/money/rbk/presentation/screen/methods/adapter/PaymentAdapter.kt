@@ -29,8 +29,6 @@ import kotlinx.android.synthetic.main.item_payment_methods.view.*
 import money.rbk.R
 import money.rbk.presentation.model.PaymentMethodModel
 import money.rbk.presentation.screen.methods.adapter.PaymentAdapter.PaymentHolder
-import money.rbk.presentation.utils.activate
-import money.rbk.presentation.utils.deactivate
 import money.rbk.presentation.utils.setTextColorResource
 
 class PaymentAdapter(
@@ -106,7 +104,7 @@ class PaymentAdapter(
                         view.tvDescription.setTextColorResource(R.color.white)
                         view.tvPaymentType.setTextColorResource(R.color.white)
                     }
-                    view.ivPaymentIcon.activate()
+                    view.ivPaymentIcon.isActivated = true
                 } else {
                     view.setBackgroundResource(R.drawable.background_payment)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -116,7 +114,7 @@ class PaymentAdapter(
                         view.tvDescription.setTextColorResource(R.color.blue_light)
                         view.tvPaymentType.setTextColorResource(R.color.white)
                     }
-                    view.ivPaymentIcon.deactivate()
+                    view.ivPaymentIcon.isActivated = false
                 }
 
     }

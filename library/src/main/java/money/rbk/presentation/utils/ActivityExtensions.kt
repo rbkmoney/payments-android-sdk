@@ -44,5 +44,5 @@ fun Activity.adjustSize() {
 val Activity.screenHeight: Int
     get() = windowManager.defaultDisplay
         .run {
-            Point().also(::getSize).y
+            Point().also { getSize(it) }.y
         }

@@ -74,7 +74,8 @@ class BankCardPresenter(
         val cardType: CreditCardType? = validateNumber(cardNumber)
         if (validateDate(expDate) and validateCcv(cvv) and validateCardholder(
                 cardHolder) and validateEmail(email) and (cardType != null) && (cardType != null)) {
-            // Double cardType checking for smart cast, until smart contracts is not ready yet
+
+            /* Double cardType checking for smart cast, until smart contracts is not ready yet */
 
             val cardPaymentInputModel = PaymentInputModel.buildForCard(
                 cardNumber = cardNumber,
@@ -117,19 +118,21 @@ class BankCardPresenter(
 
     /* Actions */
 
-    fun updateCheckout() {
+    private fun updateCheckout() {
         view?.showProgress()
-        invoiceEventsUseCase(EmptyInputModel, ::onCheckoutUpdated, ::onCheckoutUpdateError)
+        invoiceEventsUseCase(EmptyInputModel,
+            { onCheckoutUpdated(it) },
+            { onCheckoutUpdateError(it) })
     }
 
-    fun retryPayment() {
+    private fun retryPayment() {
         view?.showProgress()
-        repeatPaymentUseCase(EmptyInputModel, ::onPaymentCreated, ::onPaymentError)
+        repeatPaymentUseCase(EmptyInputModel, { onPaymentCreated(it) }, { onPaymentError(it) })
     }
 
     private fun performPayment(cardPaymentInputModel: PaymentInputModel) {
         view?.showProgress()
-        paymentUseCase(cardPaymentInputModel, ::onPaymentCreated, ::onPaymentError)
+        paymentUseCase(cardPaymentInputModel, { onPaymentCreated(it) }, { onPaymentError(it) })
     }
 
     /* Callbacks */
@@ -208,16 +211,9 @@ class BankCardPresenter(
         }
     }
 
-    fun clearPayment() {
+    private fun clearPayment() {
         cancelPaymentUseCase(EmptyInputModel, {}, {})
         view?.clear()
     }
 
-    //    fun onErrorTest(action: Int?) =
-    //        when (action) {
-    //            ACTION_RETRY_PAYMENT -> retryPayment()
-    //            ACTION_USE_ANOTHER_CARD -> clearPayment()
-    //            ACTION_UPDATE_CHECKOUT -> updateCheckout()
-    //            else -> throw UnknownActionException("unknown action with code : $action")
-    //        }
 }
