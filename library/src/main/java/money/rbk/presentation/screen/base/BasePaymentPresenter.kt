@@ -22,7 +22,8 @@ abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Navigator) :
         when (val checkoutState = checkoutInfo.checkoutState) {
             is CheckoutStateModel.Success ->
                 navigator.openSuccessFragment(R.string.label_payed_by_card_f,
-                    checkoutState.paymentToolName)
+                    checkoutState.paymentToolName,
+                    checkoutState.email)
 
             is CheckoutStateModel.PaymentFailed ->
                 navigator.openErrorFragment(

@@ -53,11 +53,12 @@ internal class InvoiceChangesInvoiceStateConverter : EntityConverter<List<Invoic
 
     private fun InvoiceChange.InvoiceStatusChanged.process(): InvoiceStateModel {
         val paymentToolInfo = lastPayment?.payer?.paymentToolInfo.orEmpty()
+        val email = lastPayment?.payer?.email.orEmpty()
         return when (status) {
             InvoiceStatus.unpaid -> InvoiceStateModel.Pending
             InvoiceStatus.cancelled -> InvoiceStateModel.Failed(R.string.error_invoice_cancelled)
-            InvoiceStatus.paid -> InvoiceStateModel.Success(paymentToolInfo)
-            InvoiceStatus.fulfilled -> InvoiceStateModel.Success(paymentToolInfo)
+            InvoiceStatus.paid -> InvoiceStateModel.Success(paymentToolInfo, email)
+            InvoiceStatus.fulfilled -> InvoiceStateModel.Success(paymentToolInfo, email)
             InvoiceStatus.unknown -> InvoiceStateModel.Failed(R.string.error_unknown_invoice)
         }
     }

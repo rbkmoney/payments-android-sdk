@@ -106,11 +106,12 @@ internal class InvoiceChangesCheckoutStateConverter(
 
     private fun InvoiceChange.InvoiceStatusChanged.process(): CheckoutStateModel {
         val paymentToolInfo = lastPayment?.payer?.paymentToolInfo.orEmpty()
+        val email = lastPayment?.payer?.email.orEmpty()
         return when (status) {
             InvoiceStatus.unpaid -> CheckoutStateModel.Pending
             InvoiceStatus.cancelled -> CheckoutStateModel.InvoiceFailed(R.string.error_invoice_cancelled)
-            InvoiceStatus.paid -> CheckoutStateModel.Success(paymentToolInfo)
-            InvoiceStatus.fulfilled -> CheckoutStateModel.Success(paymentToolInfo)
+            InvoiceStatus.paid -> CheckoutStateModel.Success(paymentToolInfo, email)
+            InvoiceStatus.fulfilled -> CheckoutStateModel.Success(paymentToolInfo, email)
             InvoiceStatus.unknown -> CheckoutStateModel.InvoiceFailed(R.string.error_unknown_invoice)
         }
     }

@@ -25,6 +25,7 @@ import kotlin.reflect.KClass
 sealed class Payer(val payerType: PayerType) {
 
     abstract val paymentToolInfo: String?
+    abstract val email: String?
 
     companion object {
         val DISTRIBUTOR = SealedDistributor("payerType", PayerType.values())
@@ -37,6 +38,9 @@ sealed class Payer(val payerType: PayerType) {
         val paymentToolDetails: PaymentToolDetails? = null,
         val clientInfo: ClientInfo? = null
     ) : Payer(PayerType.PaymentResourcePayer) {
+
+        override val email: String?
+            get() = contactInfo.email
 
         override val paymentToolInfo: String?
             get() = paymentToolDetails?.paymentInfo

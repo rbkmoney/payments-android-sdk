@@ -8,7 +8,7 @@ import androidx.annotation.StringRes
  */
 sealed class InvoiceStateModel : BaseIUModel() {
 
-    class Success(val paymentToolName: String) : InvoiceStateModel()
+    class Success(val paymentToolName: String, val email: String) : InvoiceStateModel()
 
     class Failed(@StringRes val reasonResId: Int) : InvoiceStateModel()
 

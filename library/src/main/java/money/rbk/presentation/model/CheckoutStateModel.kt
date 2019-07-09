@@ -22,7 +22,7 @@ import androidx.annotation.StringRes
 
 sealed class CheckoutStateModel : BaseIUModel() {
 
-    class Success(val paymentToolName: String) : CheckoutStateModel()
+    class Success(val paymentToolName: String, val email: String) : CheckoutStateModel()
 
     object Pending : CheckoutStateModel()
 

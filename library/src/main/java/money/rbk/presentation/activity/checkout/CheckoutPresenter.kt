@@ -70,7 +70,8 @@ class CheckoutPresenter(
 
                 is InvoiceStateModel.Success ->
                     navigator.openSuccessFragment(R.string.label_payed_by_card_f,
-                        invoiceState.paymentToolName)
+                        invoiceState.paymentToolName,
+                        invoiceState.email)
 
                 is InvoiceStateModel.Failed ->
                     navigator.openErrorFragment(

@@ -47,7 +47,7 @@ sealed class PaymentToolDetails {
     ) : PaymentToolDetails() {
 
         override val paymentInfo: String
-            get() = "$paymentSystem ${last4.orEmpty()}"
+            get() = "$paymentSystem ••${last4.orEmpty()}"
 
     }
 
