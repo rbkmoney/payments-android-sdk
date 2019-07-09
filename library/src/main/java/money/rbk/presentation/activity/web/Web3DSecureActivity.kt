@@ -22,15 +22,20 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.fragment.app.FragmentActivity
 import money.rbk.R
 import money.rbk.domain.converter.TERMINATION_URI
 import money.rbk.presentation.model.BrowserRequestModel
+import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.utils.adjustSize
 import money.rbk.presentation.utils.isTablet
 
-class WebViewActivity : Activity() {
+class Web3DSecureActivity : FragmentActivity() {
 
     companion object {
         const val REQUEST_CODE = 0x287
@@ -40,13 +45,17 @@ class WebViewActivity : Activity() {
         private const val EXTRA_KEY_BODY = "body"
 
         fun buildIntent(activity: Activity, browserRequest: BrowserRequestModel) =
-            Intent(activity, WebViewActivity::class.java)
+            Intent(activity, Web3DSecureActivity::class.java)
                 .apply {
                     putExtra(EXTRA_KEY_POST, browserRequest.isPost)
                     putExtra(EXTRA_KEY_URL, browserRequest.requestUrl)
                     putExtra(EXTRA_KEY_BODY, browserRequest.body)
                 }
     }
+
+    val navigator by lazy { Navigator(this, R.id.container) }
+
+    private val presenter by lazy { Web3DSecurePresenter(navigator) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!isTablet) {
@@ -61,6 +70,27 @@ class WebViewActivity : Activity() {
 
         WebView(this).apply {
             webViewClient = object : WebViewClient() {
+
+                // This method was deprecated in API level 23.
+                override fun onReceivedError(view: WebView?,
+                    errorCode: Int,
+                    description: String?,
+                    failingUrl: String?) {
+                    super.onReceivedError(view, errorCode, description, failingUrl)
+                }
+
+                override fun onReceivedError(view: WebView?,
+                    request: WebResourceRequest?,
+                    error: WebResourceError?) {
+                    super.onReceivedError(view, request, error)
+                }
+
+                override fun onReceivedHttpError(view: WebView?,
+                    request: WebResourceRequest?,
+                    errorResponse: WebResourceResponse?) {
+                    super.onReceivedHttpError(view, request, errorResponse)
+                }
+
                 override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean =
                     if (url.equals(TERMINATION_URI, ignoreCase = true)) {
                         setResult(RESULT_OK)

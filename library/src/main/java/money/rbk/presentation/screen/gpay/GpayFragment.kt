@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fmt_google_pay.*
 import money.rbk.R
 import money.rbk.di.Injector
-import money.rbk.presentation.activity.web.WebViewActivity
+import money.rbk.presentation.activity.web.Web3DSecureActivity
 import money.rbk.presentation.model.BrowserRequestModel
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.utils.setValid
@@ -50,7 +50,7 @@ class GpayFragment : BaseFragment<GpayView>(), GpayView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         btnPay.isClickable = true
         when (requestCode) {
-            WebViewActivity.REQUEST_CODE -> presenter.on3DsPerformed()
+            Web3DSecureActivity.REQUEST_CODE -> presenter.on3DsPerformed()
             LOAD_PAYMENT_DATA_REQUEST_CODE ->
                 presenter.onGpayPaymentPerformed(resultCode, data)
             else -> super.onActivityResult(requestCode, resultCode, data)
@@ -62,8 +62,8 @@ class GpayFragment : BaseFragment<GpayView>(), GpayView {
     }
 
     override fun showRedirect(request: BrowserRequestModel) {
-        startActivityForResult(WebViewActivity.buildIntent(activity!!, request),
-            WebViewActivity.REQUEST_CODE)
+        startActivityForResult(Web3DSecureActivity.buildIntent(activity!!, request),
+            Web3DSecureActivity.REQUEST_CODE)
     }
 
     override fun showProgress() {

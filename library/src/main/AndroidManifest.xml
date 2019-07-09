@@ -34,7 +34,7 @@
             />
 
         <activity
-            android:name="money.rbk.presentation.activity.web.WebViewActivity"
+            android:name="money.rbk.presentation.activity.web.Web3DSecureActivity"
             android:theme="@style/Theme.RBKMoney"
             />
 

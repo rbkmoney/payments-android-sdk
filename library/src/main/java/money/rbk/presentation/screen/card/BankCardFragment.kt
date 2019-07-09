@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.fmt_card.*
 import money.rbk.R
 import money.rbk.di.Injector
 import money.rbk.domain.entity.CreditCardType
-import money.rbk.presentation.activity.web.WebViewActivity
+import money.rbk.presentation.activity.web.Web3DSecureActivity
 import money.rbk.presentation.model.BrowserRequestModel
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.utils.clearState
@@ -121,14 +121,14 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
 
     override fun showRedirect(request: BrowserRequestModel) {
         startActivityForResult(
-            WebViewActivity.buildIntent(activity!!, request),
-            WebViewActivity.REQUEST_CODE
+            Web3DSecureActivity.buildIntent(activity!!, request),
+            Web3DSecureActivity.REQUEST_CODE
         )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
-            WebViewActivity.REQUEST_CODE -> presenter.on3DsPerformed()
+            Web3DSecureActivity.REQUEST_CODE -> presenter.on3DsPerformed()
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }
