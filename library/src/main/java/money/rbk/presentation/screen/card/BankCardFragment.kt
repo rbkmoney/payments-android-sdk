@@ -25,7 +25,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import com.whiteelephant.monthpicker.MonthPickerDialog
 import kotlinx.android.extensions.CacheImplementation
 import kotlinx.android.extensions.ContainerOptions
 import kotlinx.android.synthetic.main.fmt_card.*
@@ -38,25 +37,19 @@ import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.utils.clearState
 import money.rbk.presentation.utils.hideKeyboard
 import money.rbk.presentation.utils.removeRightDrawable
+import money.rbk.presentation.utils.removeSpaces
 import money.rbk.presentation.utils.setRightDrawable
 import money.rbk.presentation.utils.setValid
-import money.rbk.presentation.utils.toDozenString
 import ru.tinkoff.decoro.MaskImpl
 import ru.tinkoff.decoro.slots.PredefinedSlots
 import ru.tinkoff.decoro.watchers.MaskFormatWatcher
-import java.util.Calendar
-import java.util.Calendar.MONTH
-import java.util.Calendar.YEAR
 
 // TODO: Maybe temporary, edCardNumber after two returns get old value
 @ContainerOptions(cache = CacheImplementation.NO_CACHE)
-class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
-    MonthPickerDialog.OnDateSetListener {
+class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
 
     companion object {
         fun newInstance() = BankCardFragment()
-
-        private const val MAX_YEARS_CARD_VALIDITY = 30
     }
 
     override val presenter: BankCardPresenter by lazy { BankCardPresenter(navigator) }
@@ -70,7 +63,7 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
     private val maskFormatWatcher by lazy {
         val cardNumberMask = MaskImpl.createNonTerminated(PredefinedSlots.CARD_NUMBER_STANDARD)
         MaskFormatWatcher(cardNumberMask)
-            .apply { setCallback(CardChangeListener {onCardDetected(it)}) }
+            .apply { setCallback(CardChangeListener { onCardDetected(it) }) }
     }
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -86,7 +79,7 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
             activity?.hideKeyboard()
             view.requestFocus()
             presenter.onPerformPayment(
-                cardNumber = edCardNumber.text.toString().replace(" ", ""), // TODO: Move to utils
+                cardNumber = edCardNumber.text.removeSpaces(),
                 expDate = edCardDate.text.toString(),
                 cvv = edCardCvv.text.toString(),
                 cardHolder = edCardName.text.toString(),
@@ -95,7 +88,7 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
         }
 
         edCardDate.setOnClickListener {
-            setUpDateDialog().show()
+            presenter.onDateSelect()
         }
         if (edEmail.text.isBlank()) {
             edEmail.setText(userEmail)
@@ -106,29 +99,6 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
     override fun onDestroyView() {
         super.onDestroyView()
         maskFormatWatcher.removeFromTextView()
-    }
-
-    override fun onDateSet(selectedMonth: Int, selectedYear: Int) {
-        val selectedMonthString = (selectedMonth + 1).toDozenString()
-        edCardDate.setText("$selectedMonthString/${selectedYear % 100}") //TODO: Move to utils
-        presenter.validateDate(edCardDate.text.toString())
-    }
-
-    private fun setUpDateDialog(): MonthPickerDialog {
-        val currentDate = Calendar.getInstance()
-        val currentMonth = currentDate.get(MONTH)
-        val currentYear = currentDate.get(YEAR)
-        return MonthPickerDialog.Builder(
-            activity,
-            this,
-            currentYear,
-            currentMonth
-        )
-            .setActivatedMonth(currentMonth)
-            .setActivatedYear(currentYear)
-            .setMaxYear(currentYear + MAX_YEARS_CARD_VALIDITY)
-            .setMinYear(currentYear)
-            .build()
     }
 
     override fun onAttach(context: Context?) {
@@ -145,6 +115,10 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
         btnPay.text = getString(R.string.label_pay_f, cost)
     }
 
+    override fun setCardDate(formatMonthYear: String) {
+        edCardDate.setText(formatMonthYear)
+    }
+
     override fun showRedirect(request: BrowserRequestModel) {
         startActivityForResult(
             WebViewActivity.buildIntent(activity!!, request),
@@ -155,9 +129,6 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView,
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             WebViewActivity.REQUEST_CODE -> presenter.on3DsPerformed()
-            //            ResultFragment.REQUEST_ERROR -> presenter.onErrorTest(data?.getIntExtra(
-            //                KEY_ACTION_RESULT,
-            //                ACTION_UNKNOWN))
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }

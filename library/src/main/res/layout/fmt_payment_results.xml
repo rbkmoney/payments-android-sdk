@@ -117,24 +117,24 @@
             tools:text="Невалидный способ оплаты" />
 
         <Button
-            android:id="@+id/btnPositiveAction"
+            android:id="@+id/btnRetry"
             style="@style/Button.Accent"
             android:layout_width="match_parent"
             android:layout_height="@dimen/height_medium_button"
             android:layout_marginStart="@dimen/spacing_default"
             android:layout_marginTop="@dimen/spacing_huge"
             android:layout_marginEnd="@dimen/spacing_default"
-            tools:text="@string/try_again" />
+            android:text="@string/try_again" />
 
         <Button
-            android:id="@+id/btnNegativeAction"
+            android:id="@+id/btnUseAnotherCard"
             style="@style/Button.Frame"
             android:layout_width="match_parent"
             android:layout_height="@dimen/height_medium_button"
             android:layout_marginStart="@dimen/spacing_default"
             android:layout_marginTop="@dimen/spacing_medium"
             android:layout_marginEnd="@dimen/spacing_default"
-            tools:text="@string/use_another_card"/>
+            android:text="@string/use_another_card"/>
 
         <Button
             android:id="@+id/btnAllPaymentMethods"

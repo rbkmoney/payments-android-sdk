@@ -19,17 +19,18 @@
 package money.rbk.presentation.screen.card
 
 import money.rbk.domain.entity.CreditCardType
-import money.rbk.presentation.model.BrowserRequestModel
-import money.rbk.presentation.screen.base.BaseView
+import money.rbk.presentation.screen.base.BasePaymentView
 
-interface BankCardView : BaseView {
+interface BankCardView : BasePaymentView {
+
+    fun setCardDate(formatMonthYear: String)
 
     fun showEmailValid(isValid: Boolean)
     fun showDateValid(isValid: Boolean)
     fun showNameValid(isValid: Boolean)
     fun showCcvValid(isValid: Boolean)
     fun showNumberValid(cardType: CreditCardType?)
-    fun showRedirect(request: BrowserRequestModel)
     fun setCost(cost: String)
     fun clear()
+
 }

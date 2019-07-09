@@ -22,9 +22,8 @@ import money.rbk.presentation.screen.base.BaseView
 
 interface ResultView : BaseView {
 
-    fun showSuccess()
+    override fun showProgress() = Unit
 
-    fun showError()
+    override fun hideProgress() = Unit
 
-    fun showUnknown()
 }

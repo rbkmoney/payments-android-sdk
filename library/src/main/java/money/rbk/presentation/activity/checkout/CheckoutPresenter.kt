@@ -37,16 +37,28 @@ class CheckoutPresenter(
         initializeInvoice()
     }
 
-    fun initializeInvoice() {
+    /* Private Actions */
+
+    private fun initializeInvoice() {
         view?.showProgress()
         invoiceUseCase(InvoiceInitializeInputModel,
             { onInvoiceLoaded(it) },
             { onInvoiceLoadError(it) })
     }
 
+    /* Callbacks */
+
     private fun onInvoiceLoadError(throwable: Throwable) {
         throwable.printStackTrace()
-        view?.showError()
+        navigator.showAlert(
+            R.string.error,
+            R.string.error_cant_load_invoice,
+            R.string.label_try_again to {
+                initializeInvoice()
+            },
+            R.string.cancel to {
+                navigator.finish()
+            })
     }
 
     private fun onInvoiceLoaded(invoice: InvoiceModel) {
@@ -61,7 +73,11 @@ class CheckoutPresenter(
                         invoiceState.paymentToolName)
 
                 is InvoiceStateModel.Failed ->
-                    navigator.openErrorFragment(messageRes = invoiceState.reasonResId)
+                    navigator.openErrorFragment(
+                        messageRes = invoiceState.reasonResId,
+                        allPaymentMethods = false,
+                        useAnotherCard = false
+                    )
 
                 InvoiceStateModel.Pending ->
                     navigator.openPaymentMethods()

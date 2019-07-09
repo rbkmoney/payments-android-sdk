@@ -18,10 +18,9 @@
 
 package money.rbk.presentation.screen.card
 
-import money.rbk.R
+import com.whiteelephant.monthpicker.MonthPickerDialog
 import money.rbk.domain.entity.CreditCardType
 import money.rbk.domain.entity.getCardType
-import money.rbk.domain.exception.UseCaseException
 import money.rbk.domain.interactor.CancelPaymentUseCase
 import money.rbk.domain.interactor.CheckoutStateUseCase
 import money.rbk.domain.interactor.CreatePaymentUseCase
@@ -30,14 +29,15 @@ import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.domain.interactor.input.PaymentInputModel
 import money.rbk.presentation.model.CheckoutInfoModel
-import money.rbk.presentation.model.CheckoutStateModel
 import money.rbk.presentation.model.EmptyIUModel
 import money.rbk.presentation.navigation.Navigator
-import money.rbk.presentation.screen.base.BasePresenter
+import money.rbk.presentation.screen.base.BasePaymentPresenter
 import money.rbk.presentation.screen.result.ResultAction
-import money.rbk.presentation.utils.isDateValid
+import money.rbk.presentation.utils.DateUtils
+import money.rbk.presentation.utils.ValidationUtils
 import money.rbk.presentation.utils.isEmailValid
 import money.rbk.presentation.utils.isValidCvv
+import java.util.Calendar
 
 class BankCardPresenter(
 
@@ -48,19 +48,34 @@ class BankCardPresenter(
     private val invoiceEventsUseCase: UseCase<EmptyInputModel, CheckoutInfoModel> = CheckoutStateUseCase(),
     private val repeatPaymentUseCase: UseCase<EmptyInputModel, CheckoutInfoModel> = RepeatPaymentUseCase(),
     private val cancelPaymentUseCase: UseCase<EmptyInputModel, EmptyIUModel> = CancelPaymentUseCase()
-) : BasePresenter<BankCardView>(navigator) {
+) : BasePaymentPresenter<BankCardView>(navigator),
+    MonthPickerDialog.OnDateSetListener {
 
     /* Presenter lifecycle */
 
-    override fun onViewAttached(view: BankCardView) {
-        updateCheckout()
-    }
+    override fun onViewAttached(view: BankCardView) =
+        when (navigator.getPendingActionAndClean() ?: ResultAction.UPDATE_CHECKOUT) {
+            ResultAction.USE_ANOTHER_CARD -> clearPayment()
+            ResultAction.RETRY_PAYMENT -> retryPayment()
+            ResultAction.UPDATE_CHECKOUT -> updateCheckout()
+        }
 
     override fun onViewDetached() {
+        //TODO: Really destroy is needed?
         invoiceEventsUseCase.destroy()
         paymentUseCase.destroy()
         repeatPaymentUseCase.destroy()
         cancelPaymentUseCase.destroy()
+    }
+
+    fun onDateSelect() {
+        val currentDate = Calendar.getInstance()
+        val currentMonth = currentDate.get(Calendar.MONTH)
+        val currentYear = currentDate.get(Calendar.YEAR)
+        navigator.showDateDialog(this,
+            currentYear,
+            currentYear + ValidationUtils.MAX_YEARS_CARD_VALIDITY,
+            currentMonth)
     }
 
     /* Public methods for view */
@@ -92,6 +107,11 @@ class BankCardPresenter(
         updateCheckout()
     }
 
+    override fun onDateSet(month: Int, year: Int) {
+        view?.setCardDate(DateUtils.formatMonthYear(month, year))
+        validateDate(month, year)
+    }
+
     fun validateEmail(email: String): Boolean =
         email.isEmailValid()
             .also { view?.showEmailValid(it) }
@@ -99,11 +119,6 @@ class BankCardPresenter(
     fun validateCardholder(name: String): Boolean =
         name.isNotEmpty().also {
             view?.showNameValid(it)
-        }
-
-    fun validateDate(date: String) =
-        date.isDateValid().also {
-            view?.showDateValid(it)
         }
 
     fun validateCcv(cvv: String) =
@@ -116,104 +131,46 @@ class BankCardPresenter(
             view?.showNumberValid(it)
         }
 
+    private fun validateDate(expDate: String) =
+        ValidationUtils.isValidYearMonth(expDate).also {
+            view?.showDateValid(it)
+        }
+
+    private fun validateDate(month: Int, year: Int) =
+        ValidationUtils.isValidYearMonth(month, year).also {
+            view?.showDateValid(it)
+        }
+
     /* Actions */
 
     private fun updateCheckout() {
         view?.showProgress()
         invoiceEventsUseCase(EmptyInputModel,
             { onCheckoutUpdated(it) },
-            { onCheckoutUpdateError(it) })
+            { onCheckoutUpdateError(it) }
+        )
     }
 
     private fun retryPayment() {
         view?.showProgress()
-        repeatPaymentUseCase(EmptyInputModel, { onPaymentCreated(it) }, { onPaymentError(it) })
+        repeatPaymentUseCase(EmptyInputModel, { onCheckoutUpdated(it) }, { onPaymentError(it) })
     }
 
     private fun performPayment(cardPaymentInputModel: PaymentInputModel) {
         view?.showProgress()
-        paymentUseCase(cardPaymentInputModel, { onPaymentCreated(it) }, { onPaymentError(it) })
-    }
-
-    /* Callbacks */
-
-    private fun onPaymentCreated(checkoutInfo: CheckoutInfoModel) {
-        onCheckoutUpdated(checkoutInfo)
-    }
-
-    private fun onPaymentError(error: Throwable) {
-        if (error is UseCaseException.UnableRepeatPaymentException) {
-            onError(error) // TODO: Add use another card
-        } else {
-            onError(error, ResultAction.TRY_AGAIN) // TODO: Add use another card
-        }
-    }
-
-    private fun onCheckoutUpdated(checkoutInfo: CheckoutInfoModel) {
-        val view = view ?: return
-        view.hideProgress()
-
-        when (val checkoutState = checkoutInfo.checkoutState) {
-            is CheckoutStateModel.Success ->
-                navigator.openSuccessFragment(R.string.label_payed_by_card_f,
-                    checkoutState.paymentToolName)
-
-            is CheckoutStateModel.PaymentFailed ->
-                navigator.openErrorFragment(
-                    messageRes = checkoutState.reasonResId,
-                    positiveAction = ResultAction.TRY_AGAIN,
-                    negativeAction = ResultAction.USE_ANOTHER_CARD
-                )
-
-            is CheckoutStateModel.InvoiceFailed ->
-                navigator.openErrorFragment(
-                    messageRes = checkoutState.reasonResId)
-
-            is CheckoutStateModel.Warning ->
-                navigator.openWarningFragment(checkoutState.titleId,
-                    checkoutState.messageResId)
-
-            CheckoutStateModel.Pending -> Unit
-
-            CheckoutStateModel.PaymentProcessing ->
-                navigator.openErrorFragment(messageRes = R.string.error_polling_time_exceeded)
-
-            is CheckoutStateModel.BrowserRedirectInteraction ->
-                view.showRedirect(checkoutState.request)
-        }
-
-        view.setCost(checkoutInfo.formattedPriceAndCurrency)
-
-        navigator.pendingAction?.let(::onResultAction)
-    }
-
-    private fun onResultAction(resultAction: ResultAction) =
-        when (resultAction) {
-            ResultAction.TRY_AGAIN -> retryPayment()
-            ResultAction.USE_ANOTHER_CARD -> clearPayment()
-            ResultAction.UPDATE_CHECKOUT -> Unit
-        }
-
-    private fun onCheckoutUpdateError(error: Throwable) {
-        error.printStackTrace()
-
-        if (error is UseCaseException) {
-            when (error) {
-                is UseCaseException.PollingTimeExceededException ->
-                    navigator.openErrorFragment(
-                        parent = view as BankCardFragment,
-                        messageRes = R.string.error_polling_time_exceeded,
-                        positiveAction = ResultAction.UPDATE_CHECKOUT,
-                        negativeAction = ResultAction.USE_ANOTHER_CARD)
-            }
-        } else {
-            onError(error, ResultAction.UPDATE_CHECKOUT)
-        }
+        paymentUseCase(cardPaymentInputModel, { onCheckoutUpdated(it) }, { onPaymentError(it) })
     }
 
     private fun clearPayment() {
         cancelPaymentUseCase(EmptyInputModel, {}, {})
         view?.clear()
+    }
+
+    /* Callbacks */
+
+    override fun onCheckoutUpdated(checkoutInfo: CheckoutInfoModel) {
+        super.onCheckoutUpdated(checkoutInfo)
+        view?.setCost(checkoutInfo.formattedPriceAndCurrency)
     }
 
 }

@@ -18,12 +18,11 @@
 
 package money.rbk.presentation.screen.base
 
+import money.rbk.BuildConfig
 import money.rbk.R
-import money.rbk.data.exception.GpayException
-import money.rbk.data.exception.NetworkServiceException
-import money.rbk.data.exception.ParseException
+import money.rbk.data.exception.NetworkException
 import money.rbk.presentation.navigation.Navigator
-import money.rbk.presentation.screen.result.ResultAction
+import money.rbk.presentation.screen.result.RepeatAction
 
 abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator) {
 
@@ -39,61 +38,30 @@ abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator
         onViewDetached()
     }
 
-    fun onError(error: Throwable,
-        positiveAction: ResultAction? = null,
-        negativeAction: ResultAction? = null) {
+    fun onError(error: Throwable, repeatAction: RepeatAction? = null) {
+        if (BuildConfig.DEBUG) {
+            error.printStackTrace()
+        }
+
         view?.hideProgress()
-        error.printStackTrace()
         return when (error) {
-            is NetworkServiceException -> error.process(positiveAction, negativeAction)
-            is ParseException -> error.process(positiveAction, negativeAction)
-            is GpayException -> error.process(positiveAction)
+
+            is NetworkException -> navigator.openErrorFragment(
+                messageRes = R.string.error_connection,
+                repeatAction = repeatAction,
+                useAnotherCard = true,
+                allPaymentMethods = true)
+
             else -> navigator.openErrorFragment(
                 messageRes = R.string.error_busines_logic,
-                positiveAction = positiveAction,
-                negativeAction = positiveAction)
+                repeatAction = repeatAction,
+                useAnotherCard = true,
+                allPaymentMethods = true)
         }
     }
 
     open fun onViewAttached(view: View) = Unit
 
     open fun onViewDetached() = Unit
-
-    //TODO: Make different handling this branches
-    private fun NetworkServiceException.process(positiveAction: ResultAction?,
-        negativeAction: ResultAction?) =
-        when (this) {
-            NetworkServiceException.NoInternetException ->
-                navigator.openErrorFragment(
-                    parent = null,
-                    messageRes = R.string.error_connection,
-                    positiveAction = positiveAction)
-
-            is NetworkServiceException.RequestExecutionException,
-            is NetworkServiceException.ResponseReadingException,
-            is NetworkServiceException.ApiException,
-            is NetworkServiceException.InternalServerException ->
-                navigator.openErrorFragment(
-                    messageRes = R.string.error_busines_logic,
-                    negativeAction = negativeAction)
-        }
-
-    private fun GpayException.process(positiveAction: ResultAction?) = when (this) {
-        GpayException.GpayNotReadyException ->
-            navigator.openErrorFragment(
-                messageRes = R.string.error_busines_logic)
-
-        is GpayException.GpayCantPerformPaymentException ->
-            navigator.openErrorFragment(
-                messageRes = R.string.error_busines_logic, positiveAction = positiveAction)
-    }
-
-    private fun ParseException.process(positiveAction: ResultAction?,
-        negativeAction: ResultAction? = null) {
-        navigator.openErrorFragment(
-            messageRes = R.string.error_busines_logic,
-            positiveAction = positiveAction,
-            negativeAction = negativeAction)
-    }
 
 }

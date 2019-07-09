@@ -18,28 +18,17 @@
 
 package money.rbk.data.exception
 
-import money.rbk.domain.entity.ApiError
 import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 
-sealed class NetworkServiceException(message: String? = null, cause: Throwable? = null) :
+sealed class NetworkException(message: String? = null, cause: Throwable? = null) :
     Exception(message, cause) {
 
-    internal object NoInternetException : NetworkServiceException()
+    internal class RequestExecutionException(val request: Request, e: IOException) :
+        NetworkException(cause = e)
 
-    internal class RequestExecutionException(val request: Request, val e: IOException) :
-        NetworkServiceException(cause = e)
-
-    internal class ResponseReadingException(val response: Response, val e: IOException) :
-        NetworkServiceException(cause = e)
-
-    internal class InternalServerException(val code: Int) : NetworkServiceException(
-        "Internal server error, code: $code"
-    )
-
-    internal class ApiException(val code: Int, val error: ApiError) : NetworkServiceException(
-        "Api error, code: $code"
-    )
+    internal class ResponseReadingException(val response: Response, e: IOException) :
+        NetworkException(cause = e)
 
 }

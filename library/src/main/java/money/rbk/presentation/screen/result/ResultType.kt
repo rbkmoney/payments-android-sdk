@@ -18,6 +18,3 @@
 
 package money.rbk.presentation.screen.result
 
-enum class ResultType {
-    SUCCESS, ERROR, UNKNOWN
-}

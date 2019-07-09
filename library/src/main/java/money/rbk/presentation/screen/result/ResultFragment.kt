@@ -26,58 +26,81 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fmt_payment_results.*
 import money.rbk.R
 import money.rbk.presentation.screen.base.BaseFragment
+import money.rbk.presentation.utils.getArgIntOrError
+import money.rbk.presentation.utils.getArgStringOrError
 
 class ResultFragment : BaseFragment<ResultView>(), ResultView {
 
     companion object {
-        private const val KEY_RESULT_TYPE = "key_result_type"
 
-        private const val KEY_MESSAGE = "key_message"
-        private const val KEY_TITLE = "key_title"
+        private const val KEY_MESSAGE = "message"
+        private const val KEY_TITLE = "title"
+        private const val KEY_STATE = "state"
 
-        private const val KEY_POSITIVE_ACTION = "key_positive_action"
-        private const val KEY_NEGATIVE_ACTION = "key_negative_action"
+        /* Error */
+        private const val KEY_REPEAT_ACTION = "repeat_action"
+        private const val KEY_USE_ANOTHER_CARD = "use_another_card"
+        private const val KEY_ALL_PAYMENT_METHODS = "all_payment_methods"
 
-        const val REQUEST_ERROR = 0x0987
-
-        fun newInstance(
-            resultType: ResultType,
-            message: String,
-            title: String?,
-            positiveAction: ResultAction?,
-            negativeAction: ResultAction?
+        fun newInstanceSuccess(message: String
         ) = ResultFragment().apply {
 
             arguments = Bundle().apply {
-                putInt(KEY_RESULT_TYPE, resultType.ordinal)
+                putInt(KEY_STATE, State.SUCCESS.ordinal)
+                putString(KEY_MESSAGE, message)
+            }
+        }
+
+        fun newInstanceError(
+            message: String,
+            repeatAction: RepeatAction? = null,
+            useAnotherCard: Boolean = false,
+            allPaymentMethods: Boolean = false
+
+        ) = ResultFragment().apply {
+
+            arguments = Bundle().apply {
+                putInt(KEY_STATE, State.ERROR.ordinal)
+                putString(KEY_MESSAGE, message)
+                putInt(KEY_REPEAT_ACTION, repeatAction?.ordinal ?: -1)
+                putBoolean(KEY_USE_ANOTHER_CARD, useAnotherCard)
+                putBoolean(KEY_ALL_PAYMENT_METHODS, allPaymentMethods)
+            }
+        }
+
+        fun newInstanceUnknown(
+            message: String,
+            title: String
+        ) = ResultFragment().apply {
+
+            arguments = Bundle().apply {
+                putInt(KEY_STATE, State.UNKNOWN.ordinal)
                 putString(KEY_TITLE, title)
                 putString(KEY_MESSAGE, message)
-
-                putInt(KEY_POSITIVE_ACTION, positiveAction?.ordinal ?: -1)
-                putInt(KEY_NEGATIVE_ACTION, negativeAction?.ordinal ?: -1)
             }
         }
     }
 
-    private var resultTypeOrdinal: Int = 0
-
-    private lateinit var message: String
-    private var title: String? = null
-
-    private var positiveActionOrdinal: Int = 0
-    private var negativeActionOrdinal: Int = 0
-
     override val presenter: ResultPresenter by lazy { ResultPresenter(navigator) }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //TODO Fix all force unwraps
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val state = State.values()[getArgIntOrError(KEY_STATE)]
+        val message = getArgStringOrError(KEY_MESSAGE)
 
-        resultTypeOrdinal = arguments?.getInt(KEY_RESULT_TYPE)!!
-        message = arguments?.getString(KEY_MESSAGE)!!
-        title = arguments?.getString(KEY_TITLE)
-        positiveActionOrdinal = arguments?.getInt(KEY_POSITIVE_ACTION)!!
-        negativeActionOrdinal = arguments?.getInt(KEY_NEGATIVE_ACTION)!!
+        when (state) {
+            State.SUCCESS -> showSuccess(message)
+            State.ERROR -> showError(
+                message = message,
+                repeatAction = getArgIntOrError(KEY_REPEAT_ACTION)
+                    .takeIf { it in RepeatAction.values().indices }
+                    ?.let { RepeatAction.values()[it] },
+                useAnotherCard = arguments?.getBoolean(KEY_USE_ANOTHER_CARD) ?: false,
+                allPaymentMethods = arguments?.getBoolean(KEY_ALL_PAYMENT_METHODS) ?: false
+
+            )
+            State.UNKNOWN -> showUnknown(message)
+        }
     }
 
     override fun onCreateView(
@@ -87,68 +110,59 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
     ): View? =
         inflater.inflate(R.layout.fmt_payment_results, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        when (ResultType.values()[resultTypeOrdinal]) {
-            ResultType.SUCCESS -> showSuccess()
-            ResultType.ERROR -> showError()
-            ResultType.UNKNOWN -> showUnknown()
-        }
-    }
-
-    override fun showProgress() = Unit
-
-    override fun hideProgress() = Unit
-
-    override fun showSuccess() {
+    private fun showSuccess(message: String) {
         clSuccessful.visibility = View.VISIBLE
         clUnknown.visibility = View.GONE
         clUnsuccessful.visibility = View.GONE
         tvPaidWith.text = message
-        tvSuccessful.text = title ?: getString(R.string.successful_payment)
-
-        btnOk.setOnClickListener {
-            finish()
-        }
+        btnOk.setOnClickListener { finish() }
     }
 
-    override fun showError() {
+    private fun showError(
+        message: String,
+        repeatAction: RepeatAction?,
+        useAnotherCard: Boolean,
+        allPaymentMethods: Boolean) {
+
         clSuccessful.visibility = View.GONE
         clUnknown.visibility = View.GONE
         clUnsuccessful.visibility = View.VISIBLE
+
         tvCause.text = message
-        tvUnsuccessful.text = title ?: getString(R.string.unsuccessful_payment)
 
         btnAllPaymentMethods.setOnClickListener {
-            navigator.clearOpenPaymentMethods()
+            presenter.allPaymentMethods()
         }
 
-        val positiveAction = ResultAction.values()
-            .getOrNull(positiveActionOrdinal)
-        if (positiveAction != null) {
-            btnPositiveAction.setText(positiveAction.buttonTitle)
-            btnPositiveAction.visibility = View.VISIBLE
-            btnPositiveAction.setOnClickListener { presenter.onAction(positiveAction) }
+        if (repeatAction != null) {
+            btnRetry.visibility = View.VISIBLE
+            btnRetry.setOnClickListener {
+                presenter.onRepeatAction(repeatAction)
+            }
         } else {
-            btnPositiveAction.visibility = View.GONE
+            btnRetry.visibility = View.GONE
         }
 
-        val negativeAction = ResultAction.values()
-            .getOrNull(negativeActionOrdinal)
-        if (negativeAction != null) {
-            btnNegativeAction.setText(negativeAction.buttonTitle)
-            btnNegativeAction.visibility = View.VISIBLE
-            btnNegativeAction.setOnClickListener { presenter.onAction(negativeAction) }
+        if (useAnotherCard) {
+            btnUseAnotherCard.visibility = View.VISIBLE
+            btnUseAnotherCard.setOnClickListener { presenter.onUseAnotherCard() }
         } else {
-            btnNegativeAction.visibility = View.GONE
+            btnUseAnotherCard.visibility = View.GONE
+        }
+
+        if (allPaymentMethods) {
+            btnAllPaymentMethods.visibility = View.VISIBLE
+            btnAllPaymentMethods.setOnClickListener { presenter.allPaymentMethods() }
+        } else {
+            btnAllPaymentMethods.visibility = View.GONE
         }
     }
 
-    override fun showUnknown() {
+    private fun showUnknown(message: String) {
         clSuccessful.visibility = View.GONE
         clUnknown.visibility = View.VISIBLE
         clUnsuccessful.visibility = View.GONE
-        tvPaymentRefund.text = title ?: getString(R.string.label_payment_refund)
+        tvPaymentRefund.text = getArgStringOrError(KEY_TITLE)
         tvRefundMessage.text = message
     }
 
@@ -156,4 +170,9 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
         activity?.setResult(Activity.RESULT_OK)
         activity?.finish()
     }
+
+    private enum class State {
+        SUCCESS, ERROR, UNKNOWN
+    }
+
 }

@@ -1,10 +1,11 @@
 package money.rbk.presentation.screen.gpay
 
+import android.app.Activity
 import android.content.Intent
 import com.google.android.gms.wallet.AutoResolveHelper
+import money.rbk.BuildConfig
 import money.rbk.R
 import money.rbk.data.exception.GpayException
-import money.rbk.domain.exception.UseCaseException
 import money.rbk.domain.interactor.CreatePaymentUseCase
 import money.rbk.domain.interactor.GpayLoadPaymentDataUseCase
 import money.rbk.domain.interactor.GpayPrepareUseCase
@@ -13,12 +14,11 @@ import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.domain.interactor.input.GpayLoadPaymentDataInputModel
 import money.rbk.domain.interactor.input.PaymentInputModel
 import money.rbk.presentation.model.CheckoutInfoModel
-import money.rbk.presentation.model.CheckoutStateModel
 import money.rbk.presentation.model.GpayPrepareInfoModel
 import money.rbk.presentation.model.PaymentDataTaskModel
 import money.rbk.presentation.navigation.Navigator
-import money.rbk.presentation.screen.base.BasePresenter
-import money.rbk.presentation.screen.card.BankCardFragment
+import money.rbk.presentation.screen.base.BasePaymentPresenter
+import money.rbk.presentation.screen.result.RepeatAction
 import money.rbk.presentation.screen.result.ResultAction
 import money.rbk.presentation.utils.isEmailValid
 
@@ -31,17 +31,23 @@ class GpayPresenter(
     private val createPaymentUseCase: UseCase<PaymentInputModel, CheckoutInfoModel> = CreatePaymentUseCase(),
     private val gpayPrepareUseCase: UseCase<EmptyInputModel, GpayPrepareInfoModel> = GpayPrepareUseCase(),
     private val gpayLoadPaymentDataUseCase: UseCase<GpayLoadPaymentDataInputModel, PaymentDataTaskModel> = GpayLoadPaymentDataUseCase()
-) : BasePresenter<GpayView>(navigator) {
+) : BasePaymentPresenter<GpayView>(navigator) {
 
     /* Presenter lifecycle */
 
     private lateinit var gpayLoadPaymentDataInputModel: GpayLoadPaymentDataInputModel
+    private lateinit var email: String
 
     override fun onViewAttached(view: GpayView) {
-        updateCheckout()
+        when (navigator.getPendingActionAndClean() ?: ResultAction.UPDATE_CHECKOUT) {
+            ResultAction.RETRY_PAYMENT -> onPerformPayment(email)
+            ResultAction.USE_ANOTHER_CARD -> view.hideProgress()
+            ResultAction.UPDATE_CHECKOUT -> updateCheckout()
+        }
     }
 
     override fun onViewDetached() {
+
         gpayPrepareUseCase.destroy()
         createPaymentUseCase.destroy()
         gpayLoadPaymentDataUseCase.destroy()
@@ -51,6 +57,7 @@ class GpayPresenter(
 
     fun onPerformPayment(email: String) {
         if (validateEmail(email)) {
+            this.email = email
             view?.showProgress()
             gpayLoadPaymentDataUseCase(gpayLoadPaymentDataInputModel,
                 { onPaymentDataTaskLoaded(it) },
@@ -58,36 +65,34 @@ class GpayPresenter(
         }
     }
 
-    fun onGpayPaymentError(data: Intent?) {
-        onError(GpayException.GpayCantPerformPaymentException(AutoResolveHelper.getStatusFromIntent(
-            data)))
-    }
-
-    fun onGpayPaymentSuccess(data: Intent?, email: String) {
-        view?.showProgress()
-        createPaymentUseCase(PaymentInputModel.buildForGpay(data,
-            email,
-            gpayLoadPaymentDataInputModel.gatewayMerchantId),
-            { onCheckoutUpdated(it) },
-            { onPaymentError(it) })
+    fun onGpayPaymentPerformed(resultCode: Int, data: Intent?) {
+        when (resultCode) {
+            Activity.RESULT_OK -> onGpayPaymentSuccess(data, email)
+            Activity.RESULT_CANCELED -> view?.hideProgress()
+            AutoResolveHelper.RESULT_ERROR -> onGpayPaymentError(
+                GpayException.GpayCantPerformPaymentException(
+                    AutoResolveHelper.getStatusFromIntent(data)
+                ))
+        }
     }
 
     fun on3DsPerformed() {
         updateCheckout()
     }
 
-    fun updateCheckout() {
+    /* Private requests */
+
+    private fun updateCheckout() {
         view?.showProgress()
-        gpayPrepareUseCase(EmptyInputModel, { onGpayPrepared(it) }, { onCheckoutUpdateError(it) })
+        gpayPrepareUseCase(EmptyInputModel,
+            { onGpayPrepared(it) },
+            { onCheckoutUpdateError(it) })
     }
 
-    private fun onPaymentDataTaskLoadError(throwable: Throwable) {
-        // TODO: Process this error
-        onError(throwable, ResultAction.TRY_AGAIN) // TODO: Add actions for retry
-    }
+    /* Success Callbacks */
 
     private fun onPaymentDataTaskLoaded(paymentDataTaskModel: PaymentDataTaskModel) {
-        navigator.resolveTask(paymentDataTaskModel.PaymentDataTask,
+        navigator.resolveTask(paymentDataTaskModel.paymentDataTask,
             GpayFragment.LOAD_PAYMENT_DATA_REQUEST_CODE)
     }
 
@@ -98,78 +103,49 @@ class GpayPresenter(
                 gpayPrepareInfo.checkoutInfoModel.currency,
                 gpayPrepareInfo.gatewayMerchantId)
         onCheckoutUpdated(gpayPrepareInfo.checkoutInfoModel)
-
-        navigator.pendingAction?.let { onResultAction(it) }
     }
 
-    private fun onResultAction(resultAction: ResultAction) = when (resultAction) {
-        ResultAction.TRY_AGAIN -> onPerformPayment("") //TODO: Add email
-        ResultAction.UPDATE_CHECKOUT -> Unit
-        ResultAction.USE_ANOTHER_CARD -> Unit
+    private fun onGpayPaymentSuccess(data: Intent?, email: String) {
+        view?.showProgress()
+        createPaymentUseCase(PaymentInputModel.buildForGpay(data,
+            email,
+            gpayLoadPaymentDataInputModel.gatewayMerchantId),
+            { onCheckoutUpdated(it) },
+            { onPaymentError(it) })
     }
 
-    private fun onCheckoutUpdated(checkoutInfo: CheckoutInfoModel) {
-        val view = view ?: return
-        view.hideProgress()
-
-        when (val checkoutState = checkoutInfo.checkoutState) {
-            is CheckoutStateModel.Success ->
-                navigator.openSuccessFragment(R.string.label_payed_by_card_f,
-                    checkoutState.paymentToolName)
-
-            is CheckoutStateModel.PaymentFailed ->
+    /* Errors Handling */
+    override fun onCheckoutUpdateError(error: Throwable) =
+        when (error) {
+            is GpayException.GpayNotReadyException ->
                 navigator.openErrorFragment(
-                    messageRes = checkoutState.reasonResId
-                    // TODO: Add retry if can
+                    messageRes = R.string.error_gpay_initialization,
+                    repeatAction = RepeatAction.CHECKOUT,
+                    allPaymentMethods = true
                 )
-            is CheckoutStateModel.InvoiceFailed ->
-                navigator.openErrorFragment(
-                    messageRes = checkoutState.reasonResId)
-
-            is CheckoutStateModel.Warning ->
-                navigator.openWarningFragment(checkoutState.titleId,
-                    checkoutState.messageResId)
-
-            CheckoutStateModel.Pending -> Unit
-
-            CheckoutStateModel.PaymentProcessing ->
-                navigator.openErrorFragment(
-                    messageRes = R.string.error_polling_time_exceeded
-                    // TODO: Add retry if can
-                )
-
-            is CheckoutStateModel.BrowserRedirectInteraction ->
-                view.showRedirect(checkoutState.request)
+            else -> super.onCheckoutUpdateError(error)
         }
 
+    private fun onGpayPaymentError(gpayException: GpayException.GpayCantPerformPaymentException) {
+        @Suppress("ConstantConditionIf")
+        if (BuildConfig.DEBUG) {
+            gpayException.printStackTrace()
+        }
+
+        navigator.openErrorFragment(
+            messageRes = R.string.error_busines_logic,
+            repeatAction = RepeatAction.PAYMENT,
+            useAnotherCard = true,
+            allPaymentMethods = true)
     }
+
+    private fun onPaymentDataTaskLoadError(throwable: Throwable) =
+        onError(throwable, RepeatAction.PAYMENT)
+
+    /* Helper methods */
 
     private fun validateEmail(email: String): Boolean =
         email.isEmailValid()
             .also { view?.showEmailValid(it) }
-
-    private fun onCheckoutUpdateError(error: Throwable) {
-        error.printStackTrace()
-
-        if (error is UseCaseException) {
-            when (error) {
-                is UseCaseException.PollingTimeExceededException ->
-                    navigator.openErrorFragment(
-                        parent = view as BankCardFragment,
-                        messageRes = R.string.error_polling_time_exceeded,
-                        positiveAction = ResultAction.UPDATE_CHECKOUT)
-            }
-        } else {
-            onError(error, ResultAction.UPDATE_CHECKOUT)
-        }
-    }
-
-    private fun onPaymentError(error: Throwable) {
-        if (error is UseCaseException.UnableRepeatPaymentException) {
-            onError(error)
-        } else {
-            onError(error, ResultAction.TRY_AGAIN)
-        }
-    }
 
 }

@@ -25,28 +25,6 @@ import java.util.Calendar
 fun String.isEmailValid(): Boolean =
     isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
-fun String.isDateValid(): Boolean {
-    if (isBlank() or (length == 5).not()) {
-        return false
-    }
-
-    val currentDate = Calendar.getInstance()
-    val currentYear = currentDate.get(Calendar.YEAR) % 100
-    val currentMonth = currentDate.get(Calendar.MONTH) + 1
-
-    val monthYear = split("/")
-
-    val userMonth = monthYear[0].toInt()
-    val userYear = monthYear[1].toInt()
-
-    return when {
-        userMonth > 12 -> false
-        currentYear > userYear -> false
-        currentYear == userYear -> userMonth >= currentMonth
-        else -> true
-    }
-}
-
 fun String.removeSpaces(): String {
     return this.replace("\\s".toRegex(), "")
 }
@@ -79,9 +57,5 @@ fun String.isCardValidByLuna(): Boolean {
     return (unevenNumList.sum() + evenSum) % 10 == 0
 }
 
-fun Int.toDozenString(): String =
-    if (this / 10 == 0) {
-        "0$this"
-    } else {
-        this.toString()
-    }
+fun CharSequence.removeSpaces() =
+    toString().replace(" ", "")

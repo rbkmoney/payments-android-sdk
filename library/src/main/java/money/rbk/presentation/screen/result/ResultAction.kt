@@ -18,14 +18,8 @@
 
 package money.rbk.presentation.screen.result
 
-import androidx.annotation.StringRes
-import money.rbk.R
-import java.io.Serializable
-
-enum class ResultAction(
-    @StringRes val buttonTitle: Int
-) : Serializable {
-    TRY_AGAIN(R.string.try_again),
-    UPDATE_CHECKOUT(R.string.try_again),
-    USE_ANOTHER_CARD(R.string.use_another_card)
+enum class ResultAction {
+    RETRY_PAYMENT,
+    UPDATE_CHECKOUT,
+    USE_ANOTHER_CARD
 }

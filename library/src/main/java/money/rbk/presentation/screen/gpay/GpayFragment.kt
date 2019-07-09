@@ -1,15 +1,11 @@
 package money.rbk.presentation.screen.gpay
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.gms.wallet.AutoResolveHelper
-import kotlinx.android.synthetic.main.fmt_google_pay.btnPay
-import kotlinx.android.synthetic.main.fmt_google_pay.edEmail
-import kotlinx.android.synthetic.main.fmt_google_pay.pbLoading
+import kotlinx.android.synthetic.main.fmt_google_pay.*
 import money.rbk.R
 import money.rbk.di.Injector
 import money.rbk.presentation.activity.web.WebViewActivity
@@ -52,20 +48,11 @@ class GpayFragment : BaseFragment<GpayView>(), GpayView {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        btnPay.isClickable = true
         when (requestCode) {
             WebViewActivity.REQUEST_CODE -> presenter.on3DsPerformed()
-            LOAD_PAYMENT_DATA_REQUEST_CODE -> {
-                when (resultCode) {
-                    Activity.RESULT_OK ->
-                        presenter.onGpayPaymentSuccess(data, edEmail.text.toString())
-
-                    Activity.RESULT_CANCELED -> hideProgress()
-
-                    AutoResolveHelper.RESULT_ERROR ->
-                        presenter.onGpayPaymentError(data)
-                }
-                btnPay.isClickable = true
-            }
+            LOAD_PAYMENT_DATA_REQUEST_CODE ->
+                presenter.onGpayPaymentPerformed(resultCode, data)
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }

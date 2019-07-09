@@ -7,4 +7,4 @@ import com.google.android.gms.wallet.PaymentData
  * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
  * @since 02.07.19
  */
-class PaymentDataTaskModel(val PaymentDataTask: Task<PaymentData>) : BaseIUModel()
+class PaymentDataTaskModel(val paymentDataTask: Task<PaymentData>) : BaseIUModel()

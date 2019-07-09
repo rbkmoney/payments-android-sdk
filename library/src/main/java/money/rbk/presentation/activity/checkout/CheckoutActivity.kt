@@ -26,7 +26,6 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.ac_checkout.*
 import money.rbk.R
 import money.rbk.di.Injector
-import money.rbk.presentation.dialog.showAlert
 import money.rbk.presentation.model.InvoiceModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.utils.adjustSize
@@ -70,7 +69,7 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
         adjustSize()
 
         if (savedInstanceState == null) {
-
+            // TODO Fix all force unwraps
             val invoiceId = intent?.getStringExtra(KEY_INVOICE_ID)!!
             val invoiceAccessToken = intent?.getStringExtra(KEY_INVOICE_ACCESS_TOKEN)!!
             val shopName = intent?.getStringExtra(KEY_SHOP_NAME)!!
@@ -90,6 +89,7 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
 
         supportFragmentManager.addOnBackStackChangedListener { onBackStackChanged() }
         onBackStackChanged()
+
     }
 
     override fun showInvoice(invoiceModel: InvoiceModel) {
@@ -102,18 +102,6 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
     override fun onDestroy() {
         presenter.detachView()
         super.onDestroy()
-    }
-
-    override fun showError() {
-        showAlert(
-            getString(R.string.error),
-            getString(R.string.error_cant_load_invoice),
-            R.string.label_try_again to {
-                presenter.initializeInvoice()
-            },
-            R.string.cancel to {
-                finish()
-            })
     }
 
     private fun initViews() {

@@ -19,8 +19,10 @@
 package money.rbk.data.extension
 
 import com.google.gson.Gson
-import money.rbk.data.exception.NetworkServiceException.*
-import money.rbk.data.exception.ParseException
+import money.rbk.data.exception.ClientError
+import money.rbk.data.exception.InternalServerError
+import money.rbk.data.exception.NetworkException.*
+import money.rbk.data.exception.ResponseParsingException
 import money.rbk.data.methods.base.ApiRequest
 import money.rbk.data.methods.base.PostRequest
 import money.rbk.data.network.Constants
@@ -32,11 +34,11 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
-import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 import java.lang.reflect.ParameterizedType
+import java.text.ParseException
 import java.util.Locale
 import java.util.UUID
 
@@ -85,8 +87,8 @@ internal fun <T> OkHttpClient.execute(apiRequest: ApiRequest<T>): T {
     log(javaClass.name, "[${request.method()}] ${request.url()}", stringBody)
 
     when (val code = response.code()) {
-        in 500..599 -> throw InternalServerException(code)
-        in 400..499 -> throw ApiException(code, gson.fromJson(stringBody, ApiError::class.java))
+        in 500..599 -> throw InternalServerError(code)
+        in 400..499 -> throw ClientError(code, gson.fromJson(stringBody, ApiError::class.java))
     }
 
     try {
@@ -94,9 +96,9 @@ internal fun <T> OkHttpClient.execute(apiRequest: ApiRequest<T>): T {
             (apiRequest.javaClass.genericInterfaces[0] as ParameterizedType).actualTypeArguments[0]
         return gson.fromJson<T>(stringBody, type)
     } catch (e: JSONException) {
-        throw ParseException.ResponseParsingException(stringBody, e)
+        throw ResponseParsingException(stringBody, e)
     } catch (e: ParseException) {
-        throw ParseException.ResponseParsingException(stringBody, e)
+        throw ResponseParsingException(stringBody, e)
     }
 }
 

@@ -38,6 +38,7 @@ class MainPresenter {
         mainView = view
         view.showProgress()
 
+
         Single.zip(
             RBKSampleApplication.networkService.getInvoiceTemplates(),
             RBKSampleApplication.networkService.getInvoices(),

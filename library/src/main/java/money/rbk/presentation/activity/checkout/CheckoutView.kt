@@ -25,6 +25,4 @@ interface CheckoutView : BaseView {
 
     fun showInvoice(invoiceModel: InvoiceModel)
 
-    fun showError()
-
 }
