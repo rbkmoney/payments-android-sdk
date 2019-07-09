@@ -50,11 +50,11 @@ class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethod
     }
 
     override fun showProgress() {
-        pbLoading.visibility = View.VISIBLE
+        checkoutActivity.showProgress()
     }
 
     override fun hideProgress() {
-        pbLoading.visibility = View.GONE
+        checkoutActivity.hideProgress()
     }
 
 }

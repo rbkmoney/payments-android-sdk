@@ -63,22 +63,24 @@ class CheckoutPresenter(
 
     private fun onInvoiceLoaded(invoice: InvoiceModel) {
         view?.apply {
-            hideProgress()
             showInvoice(invoice)
-
             return when (val invoiceState = invoice.invoiceState) {
 
-                is InvoiceStateModel.Success ->
+                is InvoiceStateModel.Success -> {
+                    hideProgress()
                     navigator.openSuccessFragment(R.string.label_payed_by_card_f,
                         invoiceState.paymentToolName,
                         invoiceState.email)
+                }
 
-                is InvoiceStateModel.Failed ->
+                is InvoiceStateModel.Failed -> {
+                    hideProgress()
                     navigator.openErrorFragment(
                         messageRes = invoiceState.reasonResId,
                         allPaymentMethods = false,
                         useAnotherCard = false
                     )
+                }
 
                 InvoiceStateModel.Pending ->
                     navigator.openPaymentMethods()

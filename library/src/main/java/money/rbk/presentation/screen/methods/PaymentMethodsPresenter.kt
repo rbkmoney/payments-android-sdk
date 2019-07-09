@@ -48,8 +48,8 @@ class PaymentMethodsPresenter(
 
     private fun onPaymentMethodsLoaded(paymentMethods: PaymentMethodsModel) {
         view?.apply {
-            hideProgress()
             setPaymentMethods(paymentMethods.paymentMethods)
+            hideProgress()
         }
     }
 

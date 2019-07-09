@@ -146,6 +146,9 @@ class Navigator(
         negativeButtonPair: AlertButton? = null): AlertDialog =
         AlertDialog.Builder(activity)
             .setTitle(titleRes)
+            .setOnCancelListener {
+                negativeButtonPair?.second?.invoke()
+            }
             .setMessage(messageRes)
             .apply {
                 if (positiveButtonPair != null) {

@@ -27,10 +27,12 @@ abstract class BaseFragment<T : BaseView> : Fragment(), BaseView {
 
     protected abstract val presenter: BasePresenter<T>
 
-    val navigator by lazy {
-        (activity as? CheckoutActivity)?.navigator
+    val checkoutActivity: CheckoutActivity
+        get() = (activity as? CheckoutActivity)
             ?: throw TODO("BaseFragment can be attached only to CheckoutActivity")
-    }
+
+    val navigator
+        get() = checkoutActivity.navigator
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
