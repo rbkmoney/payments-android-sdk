@@ -30,8 +30,6 @@ internal typealias DelayedUiExecutor = (Long, () -> Unit) -> Unit
 
 abstract class UseCase<R : BaseInputModel, T : BaseIUModel> {
 
-    private var isDestroyed = false
-
     private val asyncExecutor = AsyncTask.THREAD_POOL_EXECUTOR
 
     private val handler = Handler(Looper.getMainLooper())
@@ -39,9 +37,7 @@ abstract class UseCase<R : BaseInputModel, T : BaseIUModel> {
     protected val bgExecutor: BgExecutor = { onErrorCallback, executeBlock ->
         asyncExecutor.execute {
             try {
-                if (!isDestroyed) {
-                    executeBlock()
-                }
+                executeBlock()
             } catch (error: Throwable) {
                 uiExecutor {
                     onErrorCallback(error)
@@ -52,22 +48,14 @@ abstract class UseCase<R : BaseInputModel, T : BaseIUModel> {
 
     protected val uiExecutor: UiExecutor = { body ->
         handler.post {
-            if (!isDestroyed) {
-                body()
-            }
+            body()
         }
     }
 
     protected val delayedUiExecutor: DelayedUiExecutor = { delay, body ->
         handler.postDelayed({
-            if (!isDestroyed) {
-                body()
-            }
+            body()
         }, delay)
-    }
-
-    open fun destroy() {
-        // TODO: Temporary workaround: isDestroyed = true
     }
 
     abstract operator fun invoke(

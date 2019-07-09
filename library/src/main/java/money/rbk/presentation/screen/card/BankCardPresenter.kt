@@ -60,14 +60,6 @@ class BankCardPresenter(
             ResultAction.UPDATE_CHECKOUT -> updateCheckout()
         }
 
-    override fun onViewDetached() {
-        //TODO: Really destroy is needed?
-        invoiceEventsUseCase.destroy()
-        paymentUseCase.destroy()
-        repeatPaymentUseCase.destroy()
-        cancelPaymentUseCase.destroy()
-    }
-
     fun onDateSelect() {
         val currentDate = Calendar.getInstance()
         val currentMonth = currentDate.get(Calendar.MONTH)

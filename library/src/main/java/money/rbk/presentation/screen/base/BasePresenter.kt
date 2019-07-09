@@ -42,8 +42,8 @@ abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator
         if (BuildConfig.DEBUG) {
             error.printStackTrace()
         }
-
-        view?.hideProgress()
+        val view = view ?: return
+        view.hideProgress()
         return when (error) {
 
             is NetworkException -> navigator.openErrorFragment(

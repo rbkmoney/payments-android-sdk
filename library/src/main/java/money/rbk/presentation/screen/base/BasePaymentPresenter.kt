@@ -17,8 +17,8 @@ abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Navigator) :
 
     @CallSuper
     open fun onCheckoutUpdated(checkoutInfo: CheckoutInfoModel) {
-        view?.hideProgress()
-
+        val view = view ?: return
+        view.hideProgress()
         when (val checkoutState = checkoutInfo.checkoutState) {
             is CheckoutStateModel.Success ->
                 navigator.openSuccessFragment(R.string.label_payed_by_card_f,
@@ -51,7 +51,7 @@ abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Navigator) :
                 )
 
             is CheckoutStateModel.BrowserRedirectInteraction ->
-                view?.showRedirect(checkoutState.request)
+                view.showRedirect(checkoutState.request)
         }
     }
 
@@ -65,8 +65,9 @@ abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Navigator) :
     }
 
     @CallSuper
-    open fun onCheckoutUpdateError(error: Throwable) =
-        when (error) {
+    open fun onCheckoutUpdateError(error: Throwable) {
+        view ?: return
+        return when (error) {
             is UseCaseException.PollingTimeExceededException ->
                 navigator.openErrorFragment(
                     messageRes = R.string.error_polling_time_exceeded,
@@ -75,5 +76,6 @@ abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Navigator) :
                 )
             else -> onError(error, RepeatAction.CHECKOUT)
         }
+    }
 
 }

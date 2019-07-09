@@ -46,13 +46,6 @@ class GpayPresenter(
         }
     }
 
-    override fun onViewDetached() {
-
-        gpayPrepareUseCase.destroy()
-        createPaymentUseCase.destroy()
-        gpayLoadPaymentDataUseCase.destroy()
-    }
-
     /* Public methods for view */
 
     fun onPerformPayment(email: String) {
