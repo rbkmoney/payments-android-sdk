@@ -20,6 +20,7 @@ package money.rbk.domain.interactor
 
 import money.rbk.di.Injector
 import money.rbk.domain.interactor.base.UseCase
+import money.rbk.domain.interactor.input.CheckoutStateInputModel
 import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.domain.interactor.input.PaymentInputModel
 import money.rbk.domain.repository.CheckoutRepository
@@ -28,7 +29,7 @@ import money.rbk.presentation.model.CheckoutStateModel
 
 internal class CreatePaymentUseCase(
     private val checkoutRepository: CheckoutRepository = Injector.checkoutRepository,
-    private val checkoutStateUseCase: UseCase<EmptyInputModel, CheckoutInfoModel> = CheckoutStateUseCase()
+    private val checkoutStateUseCase: UseCase<CheckoutStateInputModel, CheckoutInfoModel> = CheckoutStateUseCase()
 ) : UseCase<PaymentInputModel, CheckoutInfoModel>() {
 
     override fun invoke(
@@ -55,7 +56,7 @@ internal class CreatePaymentUseCase(
                 inputModel.contactInfo)
 
             uiExecutor {
-                checkoutStateUseCase.invoke(EmptyInputModel,
+                checkoutStateUseCase.invoke(CheckoutStateInputModel(),
                     onResultCallbackProxy,
                     onErrorCallbackProxy)
             }

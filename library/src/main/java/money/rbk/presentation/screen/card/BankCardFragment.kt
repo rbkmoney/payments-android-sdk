@@ -128,7 +128,7 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
-            Web3DSecureActivity.REQUEST_CODE -> presenter.on3DsPerformed()
+            Web3DSecureActivity.REQUEST_CODE -> presenter.on3DsPerformed(resultCode)
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }

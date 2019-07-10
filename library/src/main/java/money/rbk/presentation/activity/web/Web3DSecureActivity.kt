@@ -22,20 +22,19 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.webkit.WebResourceError
-import android.webkit.WebResourceRequest
-import android.webkit.WebResourceResponse
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.view.View
 import androidx.fragment.app.FragmentActivity
+import kotlinx.android.synthetic.main.ac_web_3ds.*
+import kotlinx.android.synthetic.main.ac_web_3ds.lLoader
+import kotlinx.android.synthetic.main.ac_web_3ds.tvShopName
 import money.rbk.R
-import money.rbk.domain.converter.TERMINATION_URI
+import money.rbk.di.Injector
 import money.rbk.presentation.model.BrowserRequestModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.utils.adjustSize
 import money.rbk.presentation.utils.isTablet
 
-class Web3DSecureActivity : FragmentActivity() {
+class Web3DSecureActivity : FragmentActivity(), Web3DSecureView {
 
     companion object {
         const val REQUEST_CODE = 0x287
@@ -57,59 +56,56 @@ class Web3DSecureActivity : FragmentActivity() {
 
     private val presenter by lazy { Web3DSecurePresenter(navigator) }
 
+    private var isPost: Boolean = false
+    private var body: ByteArray? = null
+    private lateinit var redirectUrl: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!isTablet) {
-            setTheme(R.style.Theme_RBKMoney)
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
         super.onCreate(savedInstanceState)
-
-        val isPost = intent?.getBooleanExtra(EXTRA_KEY_POST, false)!!
-        val redirectUrl = intent?.getStringExtra(EXTRA_KEY_URL)!!
-        val body = intent?.getByteArrayExtra(EXTRA_KEY_BODY)
-
-        WebView(this).apply {
-            webViewClient = object : WebViewClient() {
-
-                // This method was deprecated in API level 23.
-                override fun onReceivedError(view: WebView?,
-                    errorCode: Int,
-                    description: String?,
-                    failingUrl: String?) {
-                    super.onReceivedError(view, errorCode, description, failingUrl)
-                }
-
-                override fun onReceivedError(view: WebView?,
-                    request: WebResourceRequest?,
-                    error: WebResourceError?) {
-                    super.onReceivedError(view, request, error)
-                }
-
-                override fun onReceivedHttpError(view: WebView?,
-                    request: WebResourceRequest?,
-                    errorResponse: WebResourceResponse?) {
-                    super.onReceivedHttpError(view, request, errorResponse)
-                }
-
-                override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean =
-                    if (url.equals(TERMINATION_URI, ignoreCase = true)) {
-                        setResult(RESULT_OK)
-                        finish()
-                        true
-                    } else {
-                        super.shouldOverrideUrlLoading(view, url)
-                    }
-            }
-
-            if (isPost) {
-                postUrl(redirectUrl, body)
-            } else {
-                loadUrl(redirectUrl)
-            }
-
-            setContentView(this)
-        }
         adjustSize()
+        setContentView(R.layout.ac_web_3ds)
+
+        isPost = intent?.getBooleanExtra(EXTRA_KEY_POST, false)!!
+        redirectUrl = intent?.getStringExtra(EXTRA_KEY_URL)!!
+        body = intent?.getByteArrayExtra(EXTRA_KEY_BODY)
+
+        webView.webViewClient =
+            WebViewClientFactory.build({ presenter.onRequest(it) },
+                { presenter.onError(it) },
+                { showProgress() },
+                { hideProgress() })
+        loadPage()
+
+        tvShopName.text = Injector.shopName
+        ibtnClose.setOnClickListener { presenter.onCancel() }
+
+        presenter.attachView(this)
+    }
+
+    override fun loadPage() {
+        showProgress()
+
+        if (isPost) {
+            webView.postUrl(redirectUrl, body)
+        } else {
+            webView.loadUrl(redirectUrl)
+        }
+    }
+
+    override fun onDestroy() {
+        presenter.detachView()
+        super.onDestroy()
+    }
+
+    override fun showProgress() {
+        lLoader.visibility = View.VISIBLE
+    }
+
+    override fun hideProgress() {
+        lLoader.visibility = View.GONE
     }
 
 }

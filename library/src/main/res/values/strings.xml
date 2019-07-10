@@ -51,7 +51,7 @@
     <string name="error_unknown_invoice">Неизвестная ошибка инвойса</string>
     <string name="error_unknown_invoice_state">Неизвестный статус инвойса</string>
     <string name="error_unknown_payment">Неизвестная ошибка платежа</string>
-    <string name="label_ok">Ok</string>
+    <string name="label_ok">OK</string>
     <string name="empty" />
     <string name="error_payment_cancelled">Платёж отменён</string>
     <string name="error_invalid_payment_tool">Неверный платежный инструмент</string>
@@ -101,9 +101,9 @@
 
 
     <string name="payments_show_name" translatable="false">Successfully received payment data for %s!</string>
-    <string name="label_all_payment_methods">Всё платёжные методы</string>
     <string name="error_cant_load_invoice">Невозможно загрузить инвойс</string>
     <string name="cancel">Отмена</string>
     <string name="error_no_supported_payment_methods">Нет поддерживаемых платёжных методов</string>
     <string name="error_gpay_initialization">Не удалось инициализировать Google Pay</string>
+    <string name="label_cancel">Отмена</string>
 </resources>

@@ -18,6 +18,7 @@
 
 package money.rbk.presentation.screen.card
 
+import androidx.fragment.app.FragmentActivity
 import com.whiteelephant.monthpicker.MonthPickerDialog
 import money.rbk.domain.entity.CreditCardType
 import money.rbk.domain.entity.getCardType
@@ -26,6 +27,7 @@ import money.rbk.domain.interactor.CheckoutStateUseCase
 import money.rbk.domain.interactor.CreatePaymentUseCase
 import money.rbk.domain.interactor.RepeatPaymentUseCase
 import money.rbk.domain.interactor.base.UseCase
+import money.rbk.domain.interactor.input.CheckoutStateInputModel
 import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.domain.interactor.input.PaymentInputModel
 import money.rbk.presentation.model.CheckoutInfoModel
@@ -45,7 +47,7 @@ class BankCardPresenter(
 
     navigator: Navigator,
     private val paymentUseCase: UseCase<PaymentInputModel, CheckoutInfoModel> = CreatePaymentUseCase(),
-    private val invoiceEventsUseCase: UseCase<EmptyInputModel, CheckoutInfoModel> = CheckoutStateUseCase(),
+    private val invoiceEventsUseCase: UseCase<CheckoutStateInputModel, CheckoutInfoModel> = CheckoutStateUseCase(),
     private val repeatPaymentUseCase: UseCase<EmptyInputModel, CheckoutInfoModel> = RepeatPaymentUseCase(),
     private val cancelPaymentUseCase: UseCase<EmptyInputModel, EmptyIUModel> = CancelPaymentUseCase()
 ) : BasePaymentPresenter<BankCardView>(navigator),
@@ -57,7 +59,7 @@ class BankCardPresenter(
         when (navigator.getPendingActionAndClean() ?: ResultAction.UPDATE_CHECKOUT) {
             ResultAction.USE_ANOTHER_CARD -> clearPayment()
             ResultAction.RETRY_PAYMENT -> retryPayment()
-            ResultAction.UPDATE_CHECKOUT -> updateCheckout()
+            ResultAction.UPDATE_CHECKOUT -> updateCheckout(false)
         }
 
     fun onDateSelect() {
@@ -95,8 +97,13 @@ class BankCardPresenter(
         }
     }
 
-    fun on3DsPerformed() {
-        updateCheckout()
+    fun on3DsPerformed(resultCode: Int) {
+        if (resultCode == FragmentActivity.RESULT_OK) {
+            updateCheckout(ignoreBrowserRequest = true)
+        } else {
+            // TODO: Make request
+            updateCheckout(ignoreBrowserRequest = true)
+        }
     }
 
     override fun onDateSet(month: Int, year: Int) {
@@ -135,9 +142,9 @@ class BankCardPresenter(
 
     /* Actions */
 
-    private fun updateCheckout() {
+    private fun updateCheckout(ignoreBrowserRequest: Boolean) {
         view?.showProgress()
-        invoiceEventsUseCase(EmptyInputModel,
+        invoiceEventsUseCase(CheckoutStateInputModel(ignoreBrowserRequest),
             { onCheckoutUpdated(it) },
             { onCheckoutUpdateError(it) }
         )
@@ -154,8 +161,12 @@ class BankCardPresenter(
     }
 
     private fun clearPayment() {
-        cancelPaymentUseCase(EmptyInputModel, {}, {})
+        cancelPayment()
         view?.clear()
+    }
+
+    private fun cancelPayment() {
+        cancelPaymentUseCase(EmptyInputModel, {}, {})
     }
 
     /* Callbacks */

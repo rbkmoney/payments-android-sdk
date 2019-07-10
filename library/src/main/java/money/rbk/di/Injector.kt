@@ -85,6 +85,9 @@ object Injector {
 
     var email: String? = null
 
+    val shopName: String
+        get() = checkoutRepository.shopName
+
     fun init(applicationContext: Context,
         invoiceId: String,
         invoiceAccessToken: String,

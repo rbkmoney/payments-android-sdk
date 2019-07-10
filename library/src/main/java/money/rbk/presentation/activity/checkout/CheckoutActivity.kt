@@ -20,6 +20,7 @@ package money.rbk.presentation.activity.checkout
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +30,7 @@ import money.rbk.di.Injector
 import money.rbk.presentation.model.InvoiceModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.utils.adjustSize
+import money.rbk.presentation.utils.isTablet
 
 class CheckoutActivity : AppCompatActivity(), CheckoutView {
 
@@ -64,6 +66,9 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
         get() = supportFragmentManager.backStackEntryCount <= 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (!isTablet) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ac_checkout)
         adjustSize()

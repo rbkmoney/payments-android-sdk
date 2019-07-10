@@ -160,6 +160,16 @@ class Navigator(
             }
             .show()
 
+    fun finishWithCancel() {
+        activity.setResult(FragmentActivity.RESULT_CANCELED)
+        activity.finish()
+    }
+
+    fun finishWithSuccess() {
+        activity.setResult(FragmentActivity.RESULT_OK)
+        activity.finish()
+    }
+
     fun finish() {
         activity.finish()
     }

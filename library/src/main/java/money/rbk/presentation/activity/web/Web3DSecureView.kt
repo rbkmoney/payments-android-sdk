@@ -7,5 +7,5 @@ import money.rbk.presentation.screen.base.BaseView
  * @since 10.07.19
  */
 interface Web3DSecureView : BaseView {
-
+    fun loadPage()
 }

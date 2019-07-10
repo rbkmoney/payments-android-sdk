@@ -4,6 +4,7 @@ import com.google.android.gms.common.api.ApiException
 import money.rbk.data.exception.GpayException
 import money.rbk.di.Injector
 import money.rbk.domain.interactor.base.UseCase
+import money.rbk.domain.interactor.input.CheckoutStateInputModel
 import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.domain.repository.GpayRepository
 import money.rbk.presentation.model.CheckoutInfoModel
@@ -15,7 +16,7 @@ import money.rbk.presentation.model.GpayPrepareInfoModel
  */
 internal class GpayPrepareUseCase(
     private val gpayRepository: GpayRepository = Injector.gpayRepository,
-    private val checkoutStateUseCase: UseCase<EmptyInputModel, CheckoutInfoModel> = CheckoutStateUseCase()
+    private val checkoutStateUseCase: UseCase<CheckoutStateInputModel, CheckoutInfoModel> = CheckoutStateUseCase()
 ) : UseCase<EmptyInputModel, GpayPrepareInfoModel>() {
 
     override fun invoke(inputModel: EmptyInputModel,
@@ -31,7 +32,7 @@ internal class GpayPrepareUseCase(
                 try {
                     val result = task.getResult(ApiException::class.java)
                     if (result == true) {
-                        checkoutStateUseCase(inputModel, onCheckoutInfoCallback, onErrorCallback)
+                        checkoutStateUseCase(CheckoutStateInputModel(), onCheckoutInfoCallback, onErrorCallback)
                     } else {
                         onErrorCallback(GpayException.GpayNotReadyException)
                     }
