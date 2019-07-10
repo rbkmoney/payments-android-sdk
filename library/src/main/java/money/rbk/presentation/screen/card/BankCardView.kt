@@ -31,6 +31,7 @@ interface BankCardView : BasePaymentView {
     fun showCcvValid(isValid: Boolean)
     fun showNumberValid(cardType: CreditCardType?)
     fun setCost(cost: String)
-    fun clear()
+
+    fun clearPayment()
 
 }

@@ -34,6 +34,7 @@ import money.rbk.presentation.model.CheckoutInfoModel
 import money.rbk.presentation.model.EmptyIUModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePaymentPresenter
+import money.rbk.presentation.screen.result.RepeatAction
 import money.rbk.presentation.screen.result.ResultAction
 import money.rbk.presentation.utils.DateUtils
 import money.rbk.presentation.utils.ValidationUtils
@@ -101,8 +102,7 @@ class BankCardPresenter(
         if (resultCode == FragmentActivity.RESULT_OK) {
             updateCheckout(ignoreBrowserRequest = true)
         } else {
-            // TODO: Make request
-            updateCheckout(ignoreBrowserRequest = true)
+            navigator.finishWithCancel()
         }
     }
 
@@ -145,24 +145,29 @@ class BankCardPresenter(
     private fun updateCheckout(ignoreBrowserRequest: Boolean) {
         view?.showProgress()
         invoiceEventsUseCase(CheckoutStateInputModel(ignoreBrowserRequest),
-            { onCheckoutUpdated(it) },
+            { onCheckoutUpdated(it, RepeatAction.CHECKOUT) },
             { onCheckoutUpdateError(it) }
         )
     }
 
     private fun retryPayment() {
         view?.showProgress()
-        repeatPaymentUseCase(EmptyInputModel, { onCheckoutUpdated(it) }, { onPaymentError(it) })
+        repeatPaymentUseCase(EmptyInputModel,
+            { onCheckoutUpdated(it, RepeatAction.PAYMENT) },
+            { onPaymentError(it) })
     }
 
     private fun performPayment(cardPaymentInputModel: PaymentInputModel) {
         view?.showProgress()
-        paymentUseCase(cardPaymentInputModel, { onCheckoutUpdated(it) }, { onPaymentError(it) })
+        paymentUseCase(cardPaymentInputModel,
+            { onCheckoutUpdated(it, RepeatAction.PAYMENT) },
+            { onPaymentError(it) })
     }
 
     private fun clearPayment() {
+        view?.clearPayment()
         cancelPayment()
-        view?.clear()
+        updateCheckout(false)
     }
 
     private fun cancelPayment() {
@@ -171,8 +176,8 @@ class BankCardPresenter(
 
     /* Callbacks */
 
-    override fun onCheckoutUpdated(checkoutInfo: CheckoutInfoModel) {
-        super.onCheckoutUpdated(checkoutInfo)
+    override fun onCheckoutUpdated(checkoutInfo: CheckoutInfoModel, action: RepeatAction) {
+        super.onCheckoutUpdated(checkoutInfo, action)
         view?.setCost(checkoutInfo.formattedPriceAndCurrency)
     }
 

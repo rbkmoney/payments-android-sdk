@@ -30,12 +30,6 @@
 
     <style name="Button" parent="RBKMoney" />
 
-
-    <style name="Button.Flat" parent="Button">
-        <item name="android:background">?selectableItemBackground</item>
-        <item name="android:textAppearance">@style/TextAppearance.RBKMoney.Accent</item>
-    </style>
-
     <style name="Button.Borderless">
         <item name="android:background">?selectableItemBackground</item>
         <item name="android:textAppearance">@style/TextAppearance.RBKMoney.Headline.BlueLight</item>
@@ -52,6 +46,7 @@
         <item name="android:padding">@dimen/spacing_medium</item>
         <item name="android:drawablePadding">@dimen/spacing_small</item>
         <item name="android:background">@drawable/selector_edittext</item>
+        <item name="android:textSize">@dimen/font_medium</item>
     </style>
 
     <style name="Button.Accent" parent="Button">
@@ -68,7 +63,7 @@
 
     <style name="TextAppearance.RBKMoney.Normal" parent="TextAppearance.RBKMoney">
         <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">@dimen/medium_text_size</item>
+        <item name="android:textSize">@dimen/font_medium</item>
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
@@ -81,12 +76,12 @@
     </style>
 
     <style name="TextAppearance.RBKMoney.Footer" parent="TextAppearance.RBKMoney.Normal.White">
-        <item name="android:textSize">@dimen/xxsmall_text_size</item>
+        <item name="android:textSize">@dimen/font_xtiny</item>
         <item name="android:fontFamily">sans-serif-regular</item>
     </style>
 
     <style name="TextAppearance.RBKMoney.Title" parent="TextAppearance.RBKMoney.Normal">
-        <item name="android:textSize">@dimen/xxxlarge_text_size</item>
+        <item name="android:textSize">@dimen/font_xxxlarge</item>
     </style>
 
     <style name="TextAppearance.RBKMoney.Title.White">
@@ -100,8 +95,9 @@
     <style name="TextAppearance.RBKMoney.Headline" parent="TextAppearance.RBKMoney.Normal">
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">sans-serif-black</item>
-        <item name="android:textSize">@dimen/xsmall_text_size</item>
+        <item name="android:textSize">@dimen/font_tiny</item>
         <item name="android:letterSpacing">0.2</item>
+        <item name="android:lineSpacingExtra">2sp</item>
     </style>
 
     <style name="TextAppearance.RBKMoney.Headline.White">
@@ -120,15 +116,8 @@
         <item name="android:textColor">@color/light_blue_grey</item>
     </style>
 
-    <style name="TextAppearance.RBKMoney.Accent" parent="TextAppearance.RBKMoney.Normal">
-        <item name="android:textColor">@color/blue_light</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textSize">@dimen/small_text_size</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
     <style name="TextAppearance.RBKMoney.Description" parent="TextAppearance.RBKMoney.Normal">
-        <item name="android:textSize">@dimen/small_text_size</item>
+        <item name="android:textSize">@dimen/font_tiny</item>
         <item name="android:textColor">@color/grey</item>
         <item name="android:textStyle">italic</item>
     </style>

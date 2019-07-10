@@ -54,7 +54,7 @@ class PaymentMethodsPresenter(
     }
 
     private fun onPaymentMethodsError(throwable: Throwable) {
-        view ?: return
+        (view ?: return).hideProgress()
         if (throwable is UseCaseException.NoSupportedPaymentMethodsException) {
             navigator.openErrorFragment(messageRes = R.string.error_no_supported_payment_methods)
         } else {

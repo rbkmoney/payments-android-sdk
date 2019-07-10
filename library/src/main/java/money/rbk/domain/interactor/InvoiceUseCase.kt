@@ -44,7 +44,7 @@ internal class InvoiceUseCase(
         bgExecutor(onErrorCallback) {
 
             val invoice = repository.loadInvoice()
-            repository.loadPaymentMethods() //TODO: Make it more proper way
+            repository.loadPaymentMethods()
 
             gpayRepository.init(invoice.shopID)
 

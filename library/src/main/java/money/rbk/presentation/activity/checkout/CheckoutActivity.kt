@@ -69,6 +69,7 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
         if (!isTablet) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ac_checkout)
         adjustSize()
@@ -128,6 +129,14 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
 
     override fun hideProgress() {
         lLoader.visibility = View.INVISIBLE
+    }
+
+    override fun onBackPressed() {
+        if (isRootFragment) {
+            finish()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

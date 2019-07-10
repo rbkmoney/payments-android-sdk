@@ -115,6 +115,7 @@ class ResultFragment : BaseFragment<ResultView>(), ResultView {
         clUnknown.visibility = View.GONE
         clUnsuccessful.visibility = View.GONE
         tvPaidWith.text = message
+        activity?.setResult(Activity.RESULT_OK)
         btnOk.setOnClickListener { finish() }
     }
 

@@ -2,14 +2,15 @@ package money.rbk.presentation.screen.gpay
 
 import android.app.Activity
 import android.content.Intent
+import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.wallet.AutoResolveHelper
-import money.rbk.BuildConfig
 import money.rbk.R
 import money.rbk.data.exception.GpayException
 import money.rbk.domain.interactor.CreatePaymentUseCase
 import money.rbk.domain.interactor.GpayLoadPaymentDataUseCase
 import money.rbk.domain.interactor.GpayPrepareUseCase
 import money.rbk.domain.interactor.base.UseCase
+import money.rbk.domain.interactor.input.CheckoutStateInputModel
 import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.domain.interactor.input.GpayLoadPaymentDataInputModel
 import money.rbk.domain.interactor.input.PaymentInputModel
@@ -29,7 +30,7 @@ import money.rbk.presentation.utils.isEmailValid
 class GpayPresenter(
     navigator: Navigator,
     private val createPaymentUseCase: UseCase<PaymentInputModel, CheckoutInfoModel> = CreatePaymentUseCase(),
-    private val gpayPrepareUseCase: UseCase<EmptyInputModel, GpayPrepareInfoModel> = GpayPrepareUseCase(),
+    private val gpayPrepareUseCase: UseCase<CheckoutStateInputModel, GpayPrepareInfoModel> = GpayPrepareUseCase(),
     private val gpayLoadPaymentDataUseCase: UseCase<GpayLoadPaymentDataInputModel, PaymentDataTaskModel> = GpayLoadPaymentDataUseCase()
 ) : BasePaymentPresenter<GpayView>(navigator) {
 
@@ -42,7 +43,7 @@ class GpayPresenter(
         when (navigator.getPendingActionAndClean() ?: ResultAction.UPDATE_CHECKOUT) {
             ResultAction.RETRY_PAYMENT -> onPerformPayment(email)
             ResultAction.USE_ANOTHER_CARD -> view.hideProgress()
-            ResultAction.UPDATE_CHECKOUT -> updateCheckout()
+            ResultAction.UPDATE_CHECKOUT -> updateCheckout(false)
         }
     }
 
@@ -69,15 +70,19 @@ class GpayPresenter(
         }
     }
 
-    fun on3DsPerformed() {
-        updateCheckout()
+    fun on3DsPerformed(resultCode: Int) {
+        if (resultCode == FragmentActivity.RESULT_OK) {
+            updateCheckout(ignoreBrowserRequest = true)
+        } else {
+            navigator.finishWithCancel()
+        }
     }
 
     /* Private requests */
 
-    private fun updateCheckout() {
+    private fun updateCheckout(ignoreBrowserRequest : Boolean) {
         view?.showProgress()
-        gpayPrepareUseCase(EmptyInputModel,
+        gpayPrepareUseCase(CheckoutStateInputModel(ignoreBrowserRequest),
             { onGpayPrepared(it) },
             { onCheckoutUpdateError(it) })
     }
@@ -95,7 +100,7 @@ class GpayPresenter(
             GpayLoadPaymentDataInputModel(gpayPrepareInfo.checkoutInfoModel.price,
                 gpayPrepareInfo.checkoutInfoModel.currency,
                 gpayPrepareInfo.gatewayMerchantId)
-        onCheckoutUpdated(gpayPrepareInfo.checkoutInfoModel)
+        onCheckoutUpdated(gpayPrepareInfo.checkoutInfoModel, RepeatAction.CHECKOUT)
     }
 
     private fun onGpayPaymentSuccess(data: Intent?, email: String) {
@@ -103,7 +108,7 @@ class GpayPresenter(
         createPaymentUseCase(PaymentInputModel.buildForGpay(data,
             email,
             gpayLoadPaymentDataInputModel.gatewayMerchantId),
-            { onCheckoutUpdated(it) },
+            { onCheckoutUpdated(it, RepeatAction.PAYMENT) },
             { onPaymentError(it) })
     }
 
@@ -121,9 +126,9 @@ class GpayPresenter(
 
     private fun onGpayPaymentError(gpayException: GpayException.GpayCantPerformPaymentException) {
         @Suppress("ConstantConditionIf")
-        if (BuildConfig.DEBUG) {
-            gpayException.printStackTrace()
-        }
+        //        if (BuildConfig.DEBUG) {
+        //            gpayException.printStackTrace()
+        //        }
 
         navigator.openErrorFragment(
             messageRes = R.string.error_busines_logic,

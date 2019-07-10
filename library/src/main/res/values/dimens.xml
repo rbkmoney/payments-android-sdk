@@ -32,17 +32,15 @@
     <dimen name="spacing_huge">32dp</dimen>
     <dimen name="spacing_xxxhuge">50dp</dimen>
 
+
+    <dimen name="spacing_xsmall_еу">5dp</dimen>
+
     <dimen name="elevation">10dp</dimen>
 
-    <dimen name="xxsmall_text_size">14sp</dimen>
-    <dimen name="xsmall_text_size">16sp</dimen>
-    <dimen name="small_text_size">18sp</dimen>
-    <dimen name="medium_text_size">20sp</dimen>
-    <dimen name="default_text_size">24sp</dimen>
-    <dimen name="large_text_size">28sp</dimen>
-    <dimen name="xlarge_text_size">30sp</dimen>
-    <dimen name="xxlarge_text_size">32sp</dimen>
-    <dimen name="xxxlarge_text_size">34sp</dimen>
+    <dimen name="font_xtiny">10sp</dimen>
+    <dimen name="font_tiny">11sp</dimen>
+    <dimen name="font_medium">16sp</dimen>
+    <dimen name="font_xxxlarge">30sp</dimen>
 
     <dimen name="corner_radius">9dp</dimen>
     <dimen name="corner_radius_small">3dp</dimen>
@@ -51,7 +49,7 @@
     <dimen name="divider_height">1dp</dimen>
     <dimen name="thick_divider_height">2dp</dimen>
 
-    <dimen name="item_height">90dp</dimen>
+    <dimen name="item_height">80dp</dimen>
 
     <dimen name="height_medium_button">48dp</dimen>
     <dimen name="height_gpay_button">51dp</dimen> <!-- 3dp more than height_medium_button -->

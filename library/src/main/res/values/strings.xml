@@ -77,7 +77,7 @@
     <string name="error_invalid_shop_id">Указан идентификатор несуществующего магазина.</string>
     <string name="error_invalid_invoice_cost">Стоимость инвойса не указана или неверна.</string>
     <string name="error_invalid_invoice_cart">Некорректная корзина в инвойсе.</string>
-    <string name="error_invalid_invoice_status">Неверный статус инвойса.</string>
+    <string name="error_invalid_invoice_status">Недопустимый статус инвойса.</string>
     <string name="error_invoice_payment_pending">Последний запущенный платёж по указанному инвойсу ещё не достиг финального статуса.</string>
     <string name="error_invalid_payment_status">Неверный статус платежа.</string>
     <string name="error_invalid_payment_resource">Не поддерживаемый системой или не подключенный в рамках действующего договора платежный инструмент.</string>
@@ -106,4 +106,6 @@
     <string name="error_no_supported_payment_methods">Нет поддерживаемых платёжных методов</string>
     <string name="error_gpay_initialization">Не удалось инициализировать Google Pay</string>
     <string name="label_cancel">Отмена</string>
+    <string name="label_invoice_already_payed">Инвойс уже оплачен</string>
+    <string name="error_cant_perform_payment">Невозможно произвести оплату</string>
 </resources>

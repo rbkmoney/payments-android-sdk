@@ -21,6 +21,7 @@ package money.rbk.presentation.screen.card
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,10 +56,6 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
     override val presenter: BankCardPresenter by lazy { BankCardPresenter(navigator) }
 
     private val userEmail = Injector.email
-
-    private val fieldsSequence by lazy {
-        sequenceOf(btnPay, edCardNumber, edCardDate, edCardCvv, edCardName, edEmail)
-    }
 
     private val maskFormatWatcher by lazy {
         val cardNumberMask = MaskImpl.createNonTerminated(PredefinedSlots.CARD_NUMBER_STANDARD)
@@ -133,20 +130,38 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
         }
     }
 
-    override fun clear() =
-        sequenceOf(edCardNumber, edCardDate, edCardCvv, edCardName, edEmail)
-            .forEach {
-                it.setText(R.string.empty)
-                it.clearState()
-            }
+    override fun clearPayment() {
+        Log.d(javaClass.name,"GGG-> clearPayment ->")
+        edCardNumber.setText("")
+        edCardNumber.clearState()
+
+        edCardDate.setText("")
+        edCardDate.clearState()
+        edCardCvv.setText("")
+        edCardCvv.clearState()
+        edCardName.setText("")
+        edCardName.clearState()
+        edEmail.setText("")
+        edEmail.clearState()
+    }
 
     override fun showProgress() {
-        fieldsSequence.forEach { it.isEnabled = false }
+        btnPay.isEnabled = false
+        edCardNumber.isEnabled = false
+        edCardDate.isEnabled = false
+        edCardCvv.isEnabled = false
+        edCardName.isEnabled = false
+        edEmail.isEnabled = false
         pbLoading.visibility = View.VISIBLE
     }
 
     override fun hideProgress() {
-        fieldsSequence.forEach { it.isEnabled = true }
+        btnPay.isEnabled = true
+        edCardNumber.isEnabled = true
+        edCardDate.isEnabled = true
+        edCardCvv.isEnabled = true
+        edCardName.isEnabled = true
+        edEmail.isEnabled = true
         pbLoading.visibility = View.GONE
     }
 

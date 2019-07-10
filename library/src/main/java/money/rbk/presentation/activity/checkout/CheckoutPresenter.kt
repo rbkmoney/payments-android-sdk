@@ -62,28 +62,29 @@ class CheckoutPresenter(
     }
 
     private fun onInvoiceLoaded(invoice: InvoiceModel) {
+
         view?.apply {
             showInvoice(invoice)
             return when (val invoiceState = invoice.invoiceState) {
 
                 is InvoiceStateModel.Success -> {
                     hideProgress()
-                    navigator.openSuccessFragment(R.string.label_payed_by_card_f,
-                        invoiceState.paymentToolName,
-                        invoiceState.email)
+                    navigator.openWarningFragment(R.string.label_invoice_already_payed,
+                        R.string.error_invalid_invoice_status)
                 }
 
                 is InvoiceStateModel.Failed -> {
                     hideProgress()
-                    navigator.openErrorFragment(
-                        messageRes = invoiceState.reasonResId,
-                        allPaymentMethods = false,
-                        useAnotherCard = false
-                    )
+                    navigator.openWarningFragment(invoiceState.reasonResId,
+                        R.string.error_invalid_invoice_status)
                 }
 
-                InvoiceStateModel.Pending ->
-                    navigator.openPaymentMethods()
+                InvoiceStateModel.Pending -> {
+                    if (!navigator.safeOpenPaymentMethods()) {
+                        hideProgress()
+                    } else Unit
+                }
+
             }
         }
     }

@@ -60,10 +60,15 @@ class Navigator(
         AutoResolveHelper.resolveTask(task, activity, requestCode)
     }
 
-    fun openPaymentMethods() {
-        if (activity.supportFragmentManager.findFragmentById(R.id.container) !is PaymentMethodsFragment) {
-            replaceFragmentInActivity(PaymentMethodsFragment.newInstance(), isRoot = true)
+    fun safeOpenPaymentMethods() =
+        (activity.supportFragmentManager.findFragmentById(R.id.container) == null).also {
+            if (it) {
+                replaceFragmentInActivity(PaymentMethodsFragment.newInstance())
+            }
         }
+
+    fun openPaymentMethods() {
+        replaceFragmentInActivity(PaymentMethodsFragment.newInstance(), isRoot = true)
     }
 
     fun openGooglePay() {

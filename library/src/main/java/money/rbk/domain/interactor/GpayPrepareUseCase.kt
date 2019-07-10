@@ -17,9 +17,9 @@ import money.rbk.presentation.model.GpayPrepareInfoModel
 internal class GpayPrepareUseCase(
     private val gpayRepository: GpayRepository = Injector.gpayRepository,
     private val checkoutStateUseCase: UseCase<CheckoutStateInputModel, CheckoutInfoModel> = CheckoutStateUseCase()
-) : UseCase<EmptyInputModel, GpayPrepareInfoModel>() {
+) : UseCase<CheckoutStateInputModel, GpayPrepareInfoModel>() {
 
-    override fun invoke(inputModel: EmptyInputModel,
+    override fun invoke(inputModel: CheckoutStateInputModel,
         onResultCallback: (GpayPrepareInfoModel) -> Unit,
         onErrorCallback: (Throwable) -> Unit) {
 
@@ -32,7 +32,7 @@ internal class GpayPrepareUseCase(
                 try {
                     val result = task.getResult(ApiException::class.java)
                     if (result == true) {
-                        checkoutStateUseCase(CheckoutStateInputModel(), onCheckoutInfoCallback, onErrorCallback)
+                        checkoutStateUseCase(inputModel, onCheckoutInfoCallback, onErrorCallback)
                     } else {
                         onErrorCallback(GpayException.GpayNotReadyException)
                     }

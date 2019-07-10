@@ -32,7 +32,7 @@
         android:id="@+id/ivPaymentIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_cash"
+        android:src="@drawable/ic_card"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tvPaymentType"
         app:layout_constraintHorizontal_chainStyle="spread"
