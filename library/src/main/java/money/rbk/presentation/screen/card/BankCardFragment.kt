@@ -21,7 +21,6 @@ package money.rbk.presentation.screen.card
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,7 +75,7 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
             activity?.hideKeyboard()
             view.requestFocus()
             presenter.onPerformPayment(
-                cardNumber = edCardNumber.text.removeSpaces(),
+                cardNumber = edCardNumber.text?.removeSpaces() ?: "",
                 expDate = edCardDate.text.toString(),
                 cvv = edCardCvv.text.toString(),
                 cardHolder = edCardName.text.toString(),
@@ -131,17 +130,18 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
     }
 
     override fun clearPayment() {
-        edCardNumber.setText("")
-        edCardNumber.clearState()
-
-        edCardDate.setText("")
-        edCardDate.clearState()
-        edCardCvv.setText("")
-        edCardCvv.clearState()
-        edCardName.setText("")
-        edCardName.clearState()
-        edEmail.setText("")
-        edEmail.clearState()
+        edCardNumber.post {
+            edCardNumber.setText(R.string.empty)
+            edCardNumber.clearState()
+            edCardDate.setText(R.string.empty)
+            edCardDate.clearState()
+            edCardCvv.setText(R.string.empty)
+            edCardCvv.clearState()
+            edCardName.setText(R.string.empty)
+            edCardName.clearState()
+            edEmail.setText(R.string.empty)
+            edEmail.clearState()
+        }
     }
 
     override fun showProgress() {
