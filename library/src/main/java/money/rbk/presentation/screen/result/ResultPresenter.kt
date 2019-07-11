@@ -18,14 +18,12 @@
 
 package money.rbk.presentation.screen.result
 
-import android.util.Log
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePresenter
 
 class ResultPresenter(navigator: Navigator) : BasePresenter<ResultView>(navigator) {
 
     fun onUseAnotherCard() {
-        Log.d(javaClass.name, "-> onUseAnotherCard ->")
         navigator.backWithAction(ResultAction.USE_ANOTHER_CARD)
     }
 

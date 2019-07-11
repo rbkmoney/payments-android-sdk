@@ -32,6 +32,8 @@
     <dimen name="spacing_huge">32dp</dimen>
     <dimen name="spacing_xxxhuge">50dp</dimen>
 
+    <dimen name="spacing_ten">10dp</dimen>
+
 
     <dimen name="spacing_xsmall_еу">5dp</dimen>
 

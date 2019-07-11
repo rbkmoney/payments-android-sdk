@@ -26,12 +26,9 @@ class MarginItemDecoration(private val spaceHeight: Int) : RecyclerView.ItemDeco
     override fun getItemOffsets(outRect: Rect, view: View,
         parent: RecyclerView, state: RecyclerView.State) {
         with(outRect) {
-            if (parent.getChildAdapterPosition(view) == 0) {
+            if (parent.getChildAdapterPosition(view) != 0) {
                 top = spaceHeight
             }
-            //left =  spaceHeight
-            //right = spaceHeight
-            bottom = spaceHeight
         }
     }
 }

@@ -131,7 +131,6 @@ class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
     }
 
     override fun clearPayment() {
-        Log.d(javaClass.name,"GGG-> clearPayment ->")
         edCardNumber.setText("")
         edCardNumber.clearState()
 

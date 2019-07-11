@@ -12,20 +12,26 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:paddingStart="17dp"
+        android:paddingEnd="17dp"
         >
 
         <TextView
             android:id="@+id/tvGooglePay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_default"
-            android:layout_marginTop="@dimen/spacing_huge"
-            android:layout_marginEnd="@dimen/spacing_default"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:text="@string/label_google_pay"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="3dp"
             android:textAppearance="@style/TextAppearance.RBKMoney.Normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/edEmail"
             />
 
         <EditText
@@ -33,9 +39,9 @@
             style="@style/EditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_default"
-            android:layout_marginTop="@dimen/spacing_small"
-            android:layout_marginEnd="@dimen/spacing_default"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="3dp"
             android:drawableStart="@drawable/selector_email"
             android:hint="@string/email_for_check"
             android:imeOptions="actionDone"
@@ -46,15 +52,12 @@
             app:layout_constraintTop_toBottomOf="@+id/tvGooglePay"
             />
 
-
         <RelativeLayout
             android:id="@+id/btnPay"
             android:layout_width="0dp"
-            android:layout_marginStart="@dimen/spacing_gpay_button"
-            android:layout_marginEnd="@dimen/spacing_gpay_button"
             android:layout_height="@dimen/height_gpay_button"
-            android:layout_marginTop="@dimen/spacing_default"
-            android:layout_marginBottom="@dimen/spacing_huge"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/googlepay_button_no_shadow_background"
             android:clickable="true"
             android:focusable="true"
@@ -98,7 +101,6 @@
             android:id="@+id/pbLoading"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="@dimen/spacing_medium"
             android:background="@color/white_overlay"
             android:clickable="true"
             android:visibility="invisible"

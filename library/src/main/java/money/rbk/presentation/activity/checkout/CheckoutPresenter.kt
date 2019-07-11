@@ -62,7 +62,6 @@ class CheckoutPresenter(
     }
 
     private fun onInvoiceLoaded(invoice: InvoiceModel) {
-
         view?.apply {
             showInvoice(invoice)
             return when (val invoiceState = invoice.invoiceState) {

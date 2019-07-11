@@ -44,7 +44,7 @@
     <string name="label_try_again">Повторить снова</string>
     <string name="label_use_another_card">Использовать другую карту</string>
 
-    <string name="label_payed_by_card_f">Оплачено картой %1$s\nЧек отправлен по адресу %2$s</string>
+    <string name="label_payed_by_card_f">Заказ оплачен картой %1$s\nЧек отправлен по адресу %2$s</string>
 
     <string name="error_unpaid">Не оплачено</string>
     <string name="error_invoice_cancelled">Инвойс отменён</string>

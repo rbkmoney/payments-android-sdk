@@ -42,30 +42,39 @@
 
     </LinearLayout>
 
-    <WebView
-        android:id="@+id/webView"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tbMain"
-        />
-
-    <FrameLayout
-        android:id="@+id/lLoader"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/white"
-        android:visibility="gone"
+        android:layout_margin="5dp"
+        android:elevation="@dimen/elevation"
+        android:orientation="vertical"
+        app:cardCornerRadius="@dimen/corner_radius"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tbMain"
         >
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             />
 
-    </FrameLayout>
+        <FrameLayout
+            android:id="@+id/lLoader"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:visibility="gone"
+            >
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                />
+
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

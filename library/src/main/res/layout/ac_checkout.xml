@@ -75,12 +75,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tbMain">
+        app:layout_constraintTop_toBottomOf="@+id/tbMain"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/spacing_xsmall_еу">
+            android:padding="5dp"
+            >
 
             <TextView
                 android:id="@+id/tvPrice"
@@ -94,7 +96,8 @@
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="6 500, 50 ₽" />
+                tools:text="6 500, 50 ₽"
+                />
 
             <TextView
                 android:id="@+id/tvOrderDetailsLabel"
@@ -108,7 +111,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvPrice" />
+                app:layout_constraintTop_toBottomOf="@+id/tvPrice"
+                />
 
             <TextView
                 android:id="@+id/tvOrderDetails"
@@ -122,13 +126,14 @@
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvOrderDetailsLabel"
-                tools:text="@tools:sample/lorem" />
+                tools:text="@tools:sample/lorem"
+                />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/groupInvoiceInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:constraint_referenced_ids="tvOrderDetails, tvOrderDetailsLabel, tvPrice, ivFooterLock, tvFooterSecurity, ivFooterLogo, ivFooterLogos, tvFooterCopyright"
                 />
 
@@ -139,17 +144,19 @@
                 android:layout_marginTop="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvOrderDetails" />
+                app:layout_constraintTop_toBottomOf="@+id/tvOrderDetails"
+                />
 
             <ImageView
-                android:layout_marginBottom="@dimen/spacing_xxsmall"
                 android:id="@+id/ivFooterLock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
                 android:src="@drawable/ic_lock"
                 app:layout_constraintBottom_toBottomOf="@+id/tvFooterSecurity"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintEnd_toStartOf="@+id/tvFooterSecurity"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                />
 
             <TextView
                 android:id="@+id/tvFooterSecurity"
@@ -159,6 +166,8 @@
                 android:layout_marginTop="25dp"
                 android:text="@string/secure_payment_with"
                 android:textAppearance="@style/TextAppearance.RBKMoney.Headline.White"
+                app:layout_constraintEnd_toStartOf="@+id/ivFooterLogo"
+                app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toEndOf="@+id/ivFooterLock"
                 app:layout_constraintTop_toBottomOf="@+id/container"
                 />
@@ -170,32 +179,32 @@
                 android:layout_marginStart="8dp"
                 android:src="@drawable/ic_logo"
                 app:layout_constraintBottom_toBottomOf="@+id/tvFooterSecurity"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toEndOf="@+id/tvFooterSecurity"
-                app:layout_constraintTop_toTopOf="@+id/tvFooterSecurity" />
+                app:layout_constraintTop_toTopOf="@+id/tvFooterSecurity"
+                />
 
             <ImageView
                 android:id="@+id/ivFooterLogos"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_default"
-                android:layout_marginTop="@dimen/spacing_medium"
-                android:layout_marginEnd="@dimen/spacing_default"
-                android:src="@drawable/ic_footer_logos"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivFooterLock" />
+                android:layout_marginTop="14dp"
+                android:src="@drawable/image_footer_logos"
+                app:layout_constraintStart_toStartOf="@+id/ivFooterLock"
+                app:layout_constraintTop_toBottomOf="@+id/ivFooterLock"
+                />
 
             <TextView
                 android:id="@+id/tvFooterCopyright"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_default"
-                android:layout_marginTop="@dimen/spacing_medium"
-                android:layout_marginBottom="@dimen/spacing_huge"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="25dp"
                 android:text="@string/footer"
                 android:textAppearance="@style/TextAppearance.RBKMoney.Footer"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/ivFooterLock"
                 app:layout_constraintTop_toBottomOf="@+id/ivFooterLogos"
                 />
 

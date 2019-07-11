@@ -23,8 +23,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_height"
     android:background="@drawable/background_payment"
-    android:paddingStart="@dimen/spacing_huge"
-    android:paddingEnd="@dimen/spacing_default"
+    android:paddingStart="23dp"
+    android:paddingEnd="23dp"
     app:cardCornerRadius="@dimen/corner_radius"
     >
 
@@ -32,6 +32,7 @@
         android:id="@+id/ivPaymentIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="5dp"
         android:src="@drawable/ic_card"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tvPaymentType"
@@ -44,8 +45,7 @@
         android:id="@+id/tvPaymentType"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_default"
-        android:layout_marginEnd="@dimen/spacing_small"
+        android:layout_marginStart="15dp"
         android:text="@string/cash"
         android:textAppearance="@style/TextAppearance.RBKMoney.Headline.BlueLight"
         app:layout_constraintBottom_toTopOf="@+id/tvDescription"

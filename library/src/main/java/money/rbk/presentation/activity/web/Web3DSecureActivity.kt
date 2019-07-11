@@ -25,8 +25,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import kotlinx.android.synthetic.main.ac_web_3ds.*
-import kotlinx.android.synthetic.main.ac_web_3ds.lLoader
-import kotlinx.android.synthetic.main.ac_web_3ds.tvShopName
 import money.rbk.R
 import money.rbk.di.Injector
 import money.rbk.presentation.model.BrowserRequestModel

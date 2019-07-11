@@ -46,7 +46,7 @@ class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethod
     override fun setPaymentMethods(paymentMethods: List<PaymentMethodModel>) {
         rvPaymentMethods.adapter = PaymentAdapter({ presenter.onPaymentClick(it) }, paymentMethods)
         rvPaymentMethods.layoutManager = LinearLayoutManager(activity)
-        rvPaymentMethods.addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.spacing_small).toInt()))
+        rvPaymentMethods.addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.spacing_ten).toInt()))
     }
 
     override fun showProgress() {
