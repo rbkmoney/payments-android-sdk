@@ -2,6 +2,8 @@ package money.rbk.presentation.screen.base
 
 import androidx.annotation.CallSuper
 import money.rbk.R
+import money.rbk.data.exception.NetworkException
+import money.rbk.data.utils.log
 import money.rbk.domain.exception.UseCaseException
 import money.rbk.presentation.model.CheckoutInfoModel
 import money.rbk.presentation.model.CheckoutStateModel
@@ -15,10 +17,13 @@ import money.rbk.presentation.screen.result.RepeatAction
 abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Navigator) :
     BasePresenter<T>(navigator) {
 
+    abstract val canUseAnotherCard: Boolean
+
     @CallSuper
     open fun onCheckoutUpdated(checkoutInfo: CheckoutInfoModel, action: RepeatAction) {
         val view = view ?: return
         view.hideProgress()
+        
         when (val checkoutState = checkoutInfo.checkoutState) {
             is CheckoutStateModel.Success ->
                 navigator.openSuccessFragment(R.string.label_payed_by_card_f,
@@ -28,7 +33,7 @@ abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Navigator) :
             is CheckoutStateModel.PaymentFailed ->
                 navigator.openErrorFragment(
                     messageRes = checkoutState.reasonResId,
-                    useAnotherCard = true,
+                    useAnotherCard = canUseAnotherCard,
                     allPaymentMethods = true
                 )
 
@@ -56,16 +61,37 @@ abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Navigator) :
 
     @CallSuper
     open fun onPaymentError(error: Throwable) {
-        if (error is UseCaseException.UnableRepeatPaymentException) {
-            onError(error)
-        } else {
-            onError(error, RepeatAction.PAYMENT)
+        log(error)
+        (view ?: return).hideProgress()
+
+        return when (error) {
+            is UseCaseException.UnableRepeatPaymentException ->
+                navigator.openErrorFragment(
+                    messageRes = R.string.error_connection,
+                    useAnotherCard = canUseAnotherCard,
+                    allPaymentMethods = true)
+
+            is NetworkException ->
+                navigator.openErrorFragment(
+                    messageRes = R.string.error_connection,
+                    repeatAction = RepeatAction.PAYMENT,
+                    useAnotherCard = canUseAnotherCard,
+                    allPaymentMethods = true)
+
+            else ->
+                navigator.openErrorFragment(
+                    messageRes = R.string.error_busines_logic,
+                    repeatAction = RepeatAction.PAYMENT,
+                    useAnotherCard = canUseAnotherCard,
+                    allPaymentMethods = true)
         }
     }
 
     @CallSuper
     open fun onCheckoutUpdateError(error: Throwable) {
-        view ?: return
+        log(error)
+        (view ?: return).hideProgress()
+
         return when (error) {
             is UseCaseException.PollingTimeExceededException ->
                 navigator.openErrorFragment(
@@ -73,7 +99,19 @@ abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Navigator) :
                     repeatAction = RepeatAction.CHECKOUT,
                     allPaymentMethods = true
                 )
-            else -> onError(error, RepeatAction.CHECKOUT)
+            is NetworkException ->
+                navigator.openErrorFragment(
+                    messageRes = R.string.error_connection,
+                    repeatAction = RepeatAction.CHECKOUT,
+                    useAnotherCard = canUseAnotherCard,
+                    allPaymentMethods = true)
+
+            else ->
+                navigator.openErrorFragment(
+                    messageRes = R.string.error_busines_logic,
+                    repeatAction = RepeatAction.CHECKOUT,
+                    useAnotherCard = canUseAnotherCard,
+                    allPaymentMethods = true)
         }
     }
 

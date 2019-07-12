@@ -6,12 +6,13 @@ import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.wallet.AutoResolveHelper
 import money.rbk.R
 import money.rbk.data.exception.GpayException
+import money.rbk.data.exception.NetworkException
+import money.rbk.data.utils.log
 import money.rbk.domain.interactor.CreatePaymentUseCase
 import money.rbk.domain.interactor.GpayLoadPaymentDataUseCase
 import money.rbk.domain.interactor.GpayPrepareUseCase
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.CheckoutStateInputModel
-import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.domain.interactor.input.GpayLoadPaymentDataInputModel
 import money.rbk.domain.interactor.input.PaymentInputModel
 import money.rbk.presentation.model.CheckoutInfoModel
@@ -34,6 +35,8 @@ class GpayPresenter(
     private val gpayLoadPaymentDataUseCase: UseCase<GpayLoadPaymentDataInputModel, PaymentDataTaskModel> = GpayLoadPaymentDataUseCase()
 ) : BasePaymentPresenter<GpayView>(navigator) {
 
+    override val canUseAnotherCard = false
+
     /* Presenter lifecycle */
 
     private lateinit var gpayLoadPaymentDataInputModel: GpayLoadPaymentDataInputModel
@@ -41,8 +44,8 @@ class GpayPresenter(
 
     override fun onViewAttached(view: GpayView) {
         when (navigator.getPendingActionAndClean() ?: ResultAction.UPDATE_CHECKOUT) {
-            ResultAction.RETRY_PAYMENT -> onPerformPayment(email)
-            ResultAction.USE_ANOTHER_CARD -> view.hideProgress()
+            ResultAction.RETRY_PAYMENT,
+            ResultAction.USE_ANOTHER_CARD,
             ResultAction.UPDATE_CHECKOUT -> updateCheckout(false)
         }
     }
@@ -80,7 +83,7 @@ class GpayPresenter(
 
     /* Private requests */
 
-    private fun updateCheckout(ignoreBrowserRequest : Boolean) {
+    private fun updateCheckout(ignoreBrowserRequest: Boolean) {
         view?.showProgress()
         gpayPrepareUseCase(CheckoutStateInputModel(ignoreBrowserRequest),
             { onGpayPrepared(it) },
@@ -125,20 +128,29 @@ class GpayPresenter(
         }
 
     private fun onGpayPaymentError(gpayException: GpayException.GpayCantPerformPaymentException) {
-        @Suppress("ConstantConditionIf")
-        //        if (BuildConfig.DEBUG) {
-        //            gpayException.printStackTrace()
-        //        }
-
+        log(gpayException)
         navigator.openErrorFragment(
             messageRes = R.string.error_busines_logic,
             repeatAction = RepeatAction.PAYMENT,
-            useAnotherCard = true,
+            useAnotherCard = false,
             allPaymentMethods = true)
     }
 
-    private fun onPaymentDataTaskLoadError(throwable: Throwable) =
-        onError(throwable, RepeatAction.PAYMENT)
+    private fun onPaymentDataTaskLoadError(throwable: Throwable) {
+        log(throwable)
+        (view ?: return).hideProgress()
+        return when (throwable) {
+            is NetworkException -> navigator.openErrorFragment(
+                messageRes = R.string.error_connection,
+                repeatAction = RepeatAction.PAYMENT,
+                allPaymentMethods = true)
+
+            else -> navigator.openErrorFragment(
+                messageRes = R.string.error_busines_logic,
+                repeatAction = RepeatAction.PAYMENT,
+                allPaymentMethods = true)
+        }
+    }
 
     /* Helper methods */
 

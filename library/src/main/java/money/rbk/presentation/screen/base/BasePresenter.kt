@@ -18,11 +18,7 @@
 
 package money.rbk.presentation.screen.base
 
-import money.rbk.BuildConfig
-import money.rbk.R
-import money.rbk.data.exception.NetworkException
 import money.rbk.presentation.navigation.Navigator
-import money.rbk.presentation.screen.result.RepeatAction
 
 abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator) {
 
@@ -36,28 +32,6 @@ abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator
     fun detachView() {
         this.view = null
         onViewDetached()
-    }
-
-    fun onError(error: Throwable, repeatAction: RepeatAction? = null) {
-        if (BuildConfig.DEBUG) {
-            error.printStackTrace()
-        }
-        val view = view ?: return
-        view.hideProgress()
-        return when (error) {
-
-            is NetworkException -> navigator.openErrorFragment(
-                messageRes = R.string.error_connection,
-                repeatAction = repeatAction,
-                useAnotherCard = true,
-                allPaymentMethods = true)
-
-            else -> navigator.openErrorFragment(
-                messageRes = R.string.error_busines_logic,
-                repeatAction = repeatAction,
-                useAnotherCard = true,
-                allPaymentMethods = true)
-        }
     }
 
     open fun onViewAttached(view: View) = Unit

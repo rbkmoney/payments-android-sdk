@@ -25,3 +25,8 @@ import money.rbk.BuildConfig
 inline fun log(tag: String, method: String, text: String) {
     if (BuildConfig.DEBUG) Log.d(tag, "-> $method ->$text")
 }
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun log(throwable: Throwable) {
+    if (BuildConfig.DEBUG) throwable.printStackTrace()
+}

@@ -54,6 +54,8 @@ class BankCardPresenter(
 ) : BasePaymentPresenter<BankCardView>(navigator),
     MonthPickerDialog.OnDateSetListener {
 
+    override val canUseAnotherCard = true
+
     /* Presenter lifecycle */
 
     override fun onViewAttached(view: BankCardView) =
@@ -150,18 +152,17 @@ class BankCardPresenter(
         )
     }
 
-    private fun retryPayment() {
-        view?.showProgress()
-        repeatPaymentUseCase(EmptyInputModel,
-            { onCheckoutUpdated(it, RepeatAction.PAYMENT) },
-            { onPaymentError(it) })
-    }
-
     private fun performPayment(cardPaymentInputModel: PaymentInputModel) {
         view?.showProgress()
         paymentUseCase(cardPaymentInputModel,
             { onCheckoutUpdated(it, RepeatAction.PAYMENT) },
             { onPaymentError(it) })
+    }
+
+    private fun retryPayment() {
+        // TODO: When payment is started, should I cancel it?
+        cancelPayment()
+        updateCheckout(false)
     }
 
     private fun clearPayment() {
