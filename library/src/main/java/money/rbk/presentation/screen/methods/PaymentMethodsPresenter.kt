@@ -19,6 +19,7 @@
 package money.rbk.presentation.screen.methods
 
 import money.rbk.R
+import money.rbk.data.exception.NetworkException
 import money.rbk.domain.exception.UseCaseException
 import money.rbk.domain.interactor.PaymentMethodsUseCase
 import money.rbk.domain.interactor.base.UseCase
@@ -55,10 +56,13 @@ class PaymentMethodsPresenter(
 
     private fun onPaymentMethodsError(throwable: Throwable) {
         (view ?: return).hideProgress()
-        if (throwable is UseCaseException.NoSupportedPaymentMethodsException) {
-            navigator.openErrorFragment(messageRes = R.string.error_no_supported_payment_methods)
-        } else {
-            onError(throwable)
+        return when (throwable) {
+            is UseCaseException.NoSupportedPaymentMethodsException ->
+                navigator.openErrorFragment(R.string.error_no_supported_payment_methods)
+            is NetworkException ->
+                navigator.openErrorFragment(R.string.error_connection)
+            else ->
+                navigator.openErrorFragment(R.string.error_busines_logic)
         }
     }
 

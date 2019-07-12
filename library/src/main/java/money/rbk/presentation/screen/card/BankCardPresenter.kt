@@ -49,10 +49,12 @@ class BankCardPresenter(
     navigator: Navigator,
     private val paymentUseCase: UseCase<PaymentInputModel, CheckoutInfoModel> = CreatePaymentUseCase(),
     private val invoiceEventsUseCase: UseCase<CheckoutStateInputModel, CheckoutInfoModel> = CheckoutStateUseCase(),
-     private val repeatPaymentUseCase: UseCase<EmptyInputModel, CheckoutInfoModel> = RepeatPaymentUseCase(),
+    private val repeatPaymentUseCase: UseCase<EmptyInputModel, CheckoutInfoModel> = RepeatPaymentUseCase(),
     private val cancelPaymentUseCase: UseCase<EmptyInputModel, EmptyIUModel> = CancelPaymentUseCase()
 ) : BasePaymentPresenter<BankCardView>(navigator),
     MonthPickerDialog.OnDateSetListener {
+
+    override val canUseAnotherCard = true
 
     /* Presenter lifecycle */
 
@@ -156,7 +158,7 @@ class BankCardPresenter(
             { onCheckoutUpdated(it, RepeatAction.PAYMENT) },
             { onPaymentError(it) })
     }
-    
+
     private fun retryPayment() {
         // TODO: When payment is started, should I cancel it?
         cancelPayment()
