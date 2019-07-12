@@ -17,9 +17,9 @@ class Web3DSecurePresenter(
     fun onError(url: String?) {
         if (!handleUrl(url)) {
             navigator.showAlert(
-                R.string.error,
+                R.string.label_error,
                 R.string.error_connection,
-                R.string.label_try_again to {
+                R.string.label_retry to {
                     view?.loadPage() ?: Unit
                 },
                 R.string.label_cancel to {

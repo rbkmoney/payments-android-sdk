@@ -51,12 +51,12 @@ class CheckoutPresenter(
     private fun onInvoiceLoadError(throwable: Throwable) {
         throwable.printStackTrace()
         navigator.showAlert(
-            R.string.error,
+            R.string.label_error,
             R.string.error_cant_load_invoice,
-            R.string.label_try_again to {
+            R.string.label_retry to {
                 initializeInvoice()
             },
-            R.string.cancel to {
+            R.string.label_cancel to {
                 navigator.finish()
             })
     }
@@ -68,7 +68,7 @@ class CheckoutPresenter(
 
                 is InvoiceStateModel.Success -> {
                     hideProgress()
-                    navigator.openWarningFragment(R.string.label_invoice_already_payed,
+                    navigator.openWarningFragment(R.string.error_invoice_already_payed,
                         R.string.error_invalid_invoice_status)
                 }
 

@@ -43,7 +43,7 @@
             android:layout_marginStart="3dp"
             android:layout_marginEnd="3dp"
             android:drawableStart="@drawable/selector_email"
-            android:hint="@string/email_for_check"
+            android:hint="@string/label_email_for_check"
             android:imeOptions="actionDone"
             android:inputType="textEmailAddress"
             android:maxLength="100"

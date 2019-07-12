@@ -46,7 +46,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:text="@string/cash"
+        tools:text="@tools:sample/lorem"
         android:textAppearance="@style/TextAppearance.RBKMoney.Headline.BlueLight"
         app:layout_constraintBottom_toTopOf="@+id/tvDescription"
         app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +69,7 @@
         app:layout_constraintStart_toStartOf="@+id/tvPaymentType"
         app:layout_constraintTop_toBottomOf="@+id/tvPaymentType"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:text="@string/cash_description"
+        tools:text="@tools:sample/lorem"
         tools:visibility="visible"
         />
 

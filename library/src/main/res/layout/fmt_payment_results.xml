@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="@string/successful_payment"
+            android:text="@string/label_successful_payment"
             android:textAppearance="@style/TextAppearance.RBKMoney.Title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -106,7 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="@string/unsuccessful_payment"
+            android:text="@string/label_unsuccessful_payment"
             android:textAppearance="@style/TextAppearance.RBKMoney.Title.Red"
             />
 
@@ -136,7 +136,7 @@
             android:layout_marginStart="@dimen/spacing_default"
             android:layout_marginTop="@dimen/spacing_huge"
             android:layout_marginEnd="@dimen/spacing_default"
-            android:text="@string/try_again"
+            android:text="@string/label_try_again"
             />
 
         <Button
@@ -147,7 +147,7 @@
             android:layout_marginStart="@dimen/spacing_default"
             android:layout_marginTop="@dimen/spacing_medium"
             android:layout_marginEnd="@dimen/spacing_default"
-            android:text="@string/use_another_card"
+            android:text="@string/label_use_another_card"
             />
 
         <Button
@@ -158,7 +158,7 @@
             android:layout_marginStart="@dimen/spacing_default"
             android:layout_marginTop="@dimen/spacing_medium"
             android:layout_marginEnd="@dimen/spacing_default"
-            android:text="@string/all_payment_methods"
+            android:text="@string/label_all_payment_methods"
             />
 
     </LinearLayout>

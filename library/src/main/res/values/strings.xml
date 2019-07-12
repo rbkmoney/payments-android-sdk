@@ -19,40 +19,44 @@
 <resources>
     <string name="app_name">RBKMoney</string>
 
-    <string name="choose_payment_method">Выберите способ оплаты</string>
-    <string name="other_payment_methods">Другие способы оплаты</string>
-    <string name="footer">© 2008–2018 RBKmoney | Direct Payments Ltd.</string>
-    <string name="cash">Наличные</string>
-    <string name="cash_description">Оплата через терминал, банкомат или салон связи</string>
-    <string name="label_card">Банковская карта</string>
-    <string name="wallet">Электронные кошельки</string>
-    <string name="payment_by_card">Оплата банковской картой</string>
-    <string name="email_for_check">Email для чека</string>
-    <string name="name_on_the_card">Имя на карте</string>
-    <string name="date_card">ММ/ГГ</string>
-    <string name="ccv_card">CVV/CVC</string>
-    <string name="number_on_card">Номер на карте</string>
-    <string name="secure_payment_with">Безопасная оплата с</string>
+    <!-- checkout -->
+    <string name="label_footer">© 2008–2018 RBKmoney | Direct Payments Ltd.</string>
+    <string name="label_secure_payment_with">Безопасная оплата с</string>
     <string name="label_order_details">Детали заказа</string>
+
+    <!-- payment_methods -->
+    <string name="label_all_payment_methods">Все способы оплаты</string>
+    <string name="label_choose_payment_method">Выберите способ оплаты</string>
+    <string name="label_other_payment_methods">Другие способы оплаты</string>
+    <string name="label_card">Банковская карта</string>
+
+    <!-- card -->
+    <string name="label_payment_by_card">Оплата банковской картой</string>
+    <string name="label_email_for_check">Email для чека</string>
+    <string name="label_name_on_the_card">Имя на карте</string>
+    <string name="label_date_card">ММ/ГГ</string>
+    <string name="label_ccv_card">CVV/CVC</string>
+    <string name="label_number_on_card">Номер на карте</string>
     <string name="label_pay_f">Оплатить %1$s</string>
-    <string name="successful_payment">Успешная\nоплата!</string>
-    <string name="unsuccessful_payment">Не оплачено</string>
-    <string name="how_to_solve_problem">Как решить проблему?</string>
-    <string name="try_again">Попробовать еще раз</string>
-    <string name="all_payment_methods">Все способы оплаты</string>
-    <string name="use_another_card">Использовать другую карту</string>
-    <string name="label_try_again">Повторить снова</string>
+
+    <!-- Google Pay -->
+    <string name="label_google_pay">Google Pay</string>
+
+    <!-- result -->
+    <string name="label_successful_payment">Успешная\nоплата!</string>
+    <string name="label_unsuccessful_payment">Не оплачено</string>
+    <string name="label_try_again">Попробовать еще раз</string>
     <string name="label_use_another_card">Использовать другую карту</string>
-
+    <string name="label_retry">Повторить снова</string>
     <string name="label_payed_by_card_f">Заказ оплачен картой %1$s\nЧек отправлен по адресу %2$s</string>
+    <string name="label_ok">OK</string>
+    <string name="label_cancel">Отмена</string>
+    <string name="label_error">Ошибка</string>
+    <string name="label_payment_refund">Возврат платежа</string>
 
-    <string name="error_unpaid">Не оплачено</string>
     <string name="error_invoice_cancelled">Инвойс отменён</string>
     <string name="error_unknown_invoice">Неизвестная ошибка инвойса</string>
-    <string name="error_unknown_invoice_state">Неизвестный статус инвойса</string>
     <string name="error_unknown_payment">Неизвестная ошибка платежа</string>
-    <string name="label_ok">OK</string>
-    <string name="empty" />
     <string name="error_payment_cancelled">Платёж отменён</string>
     <string name="error_invalid_payment_tool">Неверный платежный инструмент</string>
     <string name="error_account_limits_exceeded">Превышены лимиты</string>
@@ -61,51 +65,14 @@
     <string name="error_rejected_by_issuer">Платёж отклонён эмитентом</string>
     <string name="error_payment_rejected">Платёж отклонён</string>
     <string name="error_payment_failed">Ошибка платежа</string>
-    <string name="label_successful_payment">Платёж успешно завершён!</string>
-    <string name="error">Ошибка</string>
     <string name="error_connection">Отсутствует интернет соединение</string>
-    <string name="error_unknown_error">Что-то пошло не так</string>
     <string name="error_polling_time_exceeded">Превышено время опроса сервера</string>
-    <string name="error_server">Внутренняя ошибка сервера</string>
-    <string name="error_internal_server">В процессе проведения платежа возникла непредвиденная ошибка. Пожалуйста, повторите попытку платежа. В случае сохранения ошибки обратитесь в службу поддежки</string>
-    <string name="error_temporary_unavailable">Платформа временно недоступна и не готова обслуживать данный запрос.</string>
-    <string name="error_request_time_exceeded">Платформа превысила допустимое время обработки запроса, результат запроса не определён.</string>
-    <string name="error_operation_not_permitted">Недоступная в рамках действующего договора операция.</string>
-    <string name="error_invalid_party_status">Ваш участник заблокирован или его операции приостановлены.</string>
-    <string name="error_invalid_shop_status">Ваш магазин заблокирован или его операции приостановлены.</string>
-    <string name="error_invalid_contract_status">Ваш договор более не имеет силы, по причине истечения срока действия или расторжения.</string>
-    <string name="error_invalid_shop_id">Указан идентификатор несуществующего магазина.</string>
-    <string name="error_invalid_invoice_cost">Стоимость инвойса не указана или неверна.</string>
-    <string name="error_invalid_invoice_cart">Некорректная корзина в инвойсе.</string>
     <string name="error_invalid_invoice_status">Недопустимый статус инвойса.</string>
-    <string name="error_invoice_payment_pending">Последний запущенный платёж по указанному инвойсу ещё не достиг финального статуса.</string>
-    <string name="error_invalid_payment_status">Неверный статус платежа.</string>
-    <string name="error_invalid_payment_resource">Не поддерживаемый системой или не подключенный в рамках действующего договора платежный инструмент.</string>
-    <string name="error_invalid_payment_tool_token">Неверное содержимое токена платёжного инструмента.</string>
-    <string name="error_invalid_payment_session">Невернoе содержимое платёжной сессии.</string>
-    <string name="error_invalid_recurrent_parent">Невернo указан родительский рекуррентный платеж.</string>
-    <string name="error_insufficent_account_balance">Недостаточный объём денежных средств на счёте магазина.</string>
-    <string name="error_invoice_payment_amount_exceeded">Попытка возврата сверх суммы платежа.</string>
-    <string name="error_inconsistent_refund_currency">Попытка возврата средств в валюте, отличной от валюты платежа.</string>
-    <string name="error_changeset_conflict">Попытка внести изменения участника, конфликтующие с изменениями в других заявках, ожидающих рассмотрения.</string>
-    <string name="error_invalid_changeset">Неверные изменения участника.</string>
-    <string name="error_invalid_claim_status">Неверный статус заявки.</string>
-    <string name="error_invalid_claim_revision">Неверная ревизия заявки.</string>
-    <string name="error_limit_exceeded">Превышен разумный лимит выборки.</string>
-    <string name="error_invalid_deadline">Неверный формат времени.</string>
-    <string name="error_invalid_request">Неверный запрос</string>
     <string name="error_busines_logic">В процессе проведения платежа возникла непредвиденная ошибка. Пожалуйста, повторите попытку платежа. В случае сохранения ошибки обратитесь в службу поддежки</string>
-    <string name="message_payment_in_refund_state">Ваш платеж находится в статусе возврата или возвращен</string>
-    <string name="label_payment_refund">Возврат платежа</string>
-    <string name="label_google_pay">Google Pay</string>
-
-
-    <string name="payments_show_name" translatable="false">Successfully received payment data for %s!</string>
+    <string name="error_payment_in_refund_state">Ваш платеж находится в статусе возврата или возвращен</string>
     <string name="error_cant_load_invoice">Невозможно загрузить инвойс</string>
-    <string name="cancel">Отмена</string>
     <string name="error_no_supported_payment_methods">Нет поддерживаемых платёжных методов</string>
     <string name="error_gpay_initialization">Не удалось инициализировать Google Pay</string>
-    <string name="label_cancel">Отмена</string>
-    <string name="label_invoice_already_payed">Инвойс уже оплачен</string>
-    <string name="error_cant_perform_payment">Невозможно произвести оплату</string>
+    <string name="error_invoice_already_payed">Инвойс уже оплачен</string>
+    <string name="empty" />
 </resources>

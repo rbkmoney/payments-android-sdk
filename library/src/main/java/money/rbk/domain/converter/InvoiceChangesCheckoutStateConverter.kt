@@ -78,7 +78,7 @@ internal class InvoiceChangesCheckoutStateConverter(
         if (paymentID != checkoutRepository.paymentId) return null
 
         return CheckoutStateModel.Warning(R.string.label_payment_refund,
-            R.string.message_payment_in_refund_state)
+            R.string.error_payment_in_refund_state)
     }
 
     private fun InvoiceChange.PaymentStatusChanged.process(): CheckoutStateModel? {
@@ -89,7 +89,7 @@ internal class InvoiceChangesCheckoutStateConverter(
             PaymentStatus.processed,
             PaymentStatus.captured -> null
             PaymentStatus.refunded -> CheckoutStateModel.Warning(R.string.label_payment_refund,
-                R.string.message_payment_in_refund_state)
+                R.string.error_payment_in_refund_state)
             PaymentStatus.cancelled -> CheckoutStateModel.PaymentFailed(R.string.error_payment_cancelled)
             PaymentStatus.failed -> CheckoutStateModel.PaymentFailed(error.errorText())
             PaymentStatus.unknown -> CheckoutStateModel.PaymentFailed(R.string.error_unknown_payment)
