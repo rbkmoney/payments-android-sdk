@@ -21,7 +21,8 @@ package money.rbk.data.extension
 import com.google.gson.Gson
 import money.rbk.data.exception.ClientError
 import money.rbk.data.exception.InternalServerError
-import money.rbk.data.exception.NetworkException.*
+import money.rbk.data.exception.NetworkException.RequestExecutionException
+import money.rbk.data.exception.NetworkException.ResponseReadingException
 import money.rbk.data.exception.ResponseParsingException
 import money.rbk.data.methods.base.ApiRequest
 import money.rbk.data.methods.base.PostRequest
@@ -105,7 +106,11 @@ internal fun <T> OkHttpClient.execute(apiRequest: ApiRequest<T>): T {
 internal fun createRequestBody(body: List<Pair<String, Any>>, gson: Gson): String {
     val jsonObject = JSONObject()
     body.forEach { (key, value) ->
-        jsonObject.put(key, JSONObject(gson.toJson(value)))
+        val jsonValue = when (value) {
+            is String -> value
+            else -> JSONObject(gson.toJson(value))
+        }
+        jsonObject.put(key, jsonValue)
     }
     return jsonObject.toString()
 }
