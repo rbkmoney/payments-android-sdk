@@ -15,13 +15,12 @@ import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.CheckoutStateInputModel
 import money.rbk.domain.interactor.input.GpayLoadPaymentDataInputModel
 import money.rbk.domain.interactor.input.PaymentInputModel
+import money.rbk.presentation.activity.web.Web3DSecureActivity
 import money.rbk.presentation.model.CheckoutInfoModel
 import money.rbk.presentation.model.GpayPrepareInfoModel
 import money.rbk.presentation.model.PaymentDataTaskModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePaymentPresenter
-import money.rbk.presentation.screen.result.ResultAction
-import money.rbk.presentation.activity.web.Web3DSecureActivity
 import money.rbk.presentation.utils.isEmailValid
 
 /**
@@ -39,21 +38,15 @@ class GpayPresenter(
 
     /* Presenter lifecycle */
 
-    private lateinit var gpayLoadPaymentDataInputModel: GpayLoadPaymentDataInputModel
-    private lateinit var email: String
-
     override fun onViewAttached(view: GpayView) {
-        when (navigator.getPendingActionAndClean() ?: ResultAction.UPDATE_CHECKOUT) {
-            ResultAction.USE_ANOTHER_CARD,
-            ResultAction.UPDATE_CHECKOUT -> updateCheckout(false)
-        }
+        updateCheckout(false)
     }
 
     /* Public methods for view */
 
-    fun onPerformPayment(email: String) {
+    fun onPerformPayment(email: String,
+        gpayLoadPaymentDataInputModel: GpayLoadPaymentDataInputModel) {
         if (validateEmail(email)) {
-            this.email = email
             view?.showProgress()
             gpayLoadPaymentDataUseCase(gpayLoadPaymentDataInputModel,
                 { onPaymentDataTaskLoaded(it) },
@@ -61,10 +54,12 @@ class GpayPresenter(
         }
     }
 
-    fun onGpayPaymentPerformed(resultCode: Int, data: Intent?) {
+    fun onGpayPaymentPerformed(resultCode: Int, data: Intent?, email: String) {
+
         when (resultCode) {
             Activity.RESULT_OK -> onGpayPaymentSuccess(data, email)
             Activity.RESULT_CANCELED -> view?.hideProgress()
+
             AutoResolveHelper.RESULT_ERROR -> onGpayPaymentError(
                 GpayException.GpayCantPerformPaymentException(
                     AutoResolveHelper.getStatusFromIntent(data)
@@ -102,19 +97,18 @@ class GpayPresenter(
     }
 
     private fun onGpayPrepared(gpayPrepareInfo: GpayPrepareInfoModel) {
-        view?.onReadyToPay()
-        gpayLoadPaymentDataInputModel =
+        val gpayLoadPaymentDataInputModel =
             GpayLoadPaymentDataInputModel(gpayPrepareInfo.checkoutInfoModel.price,
-                gpayPrepareInfo.checkoutInfoModel.currency,
-                gpayPrepareInfo.gatewayMerchantId)
+                gpayPrepareInfo.checkoutInfoModel.currency)
+
+        view?.onReadyToPay(gpayLoadPaymentDataInputModel)
+
         onCheckoutUpdated(gpayPrepareInfo.checkoutInfoModel)
     }
 
     private fun onGpayPaymentSuccess(data: Intent?, email: String) {
         view?.showProgress()
-        createPaymentUseCase(PaymentInputModel.buildForGpay(data,
-            email,
-            gpayLoadPaymentDataInputModel.gatewayMerchantId),
+        createPaymentUseCase(PaymentInputModel.PaymentGpay(email, data),
             { onCheckoutUpdated(it) },
             { onPaymentError(it) { onGpayPaymentSuccess(data, email) } })
     }

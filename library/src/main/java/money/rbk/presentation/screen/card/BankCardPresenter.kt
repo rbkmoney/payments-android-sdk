@@ -34,7 +34,6 @@ import money.rbk.presentation.model.CheckoutInfoModel
 import money.rbk.presentation.model.EmptyIUModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePaymentPresenter
-import money.rbk.presentation.screen.result.ResultAction
 import money.rbk.presentation.activity.web.Web3DSecureActivity
 import money.rbk.presentation.utils.DateUtils
 import money.rbk.presentation.utils.ValidationUtils
@@ -58,10 +57,7 @@ class BankCardPresenter(
     /* Presenter lifecycle */
 
     override fun onViewAttached(view: BankCardView) =
-        when (navigator.getPendingActionAndClean() ?: ResultAction.UPDATE_CHECKOUT) {
-            ResultAction.USE_ANOTHER_CARD -> clearPayment()
-            ResultAction.UPDATE_CHECKOUT -> updateCheckout(false)
-        }
+        updateCheckout(false)
 
     fun onDateSelect() {
         val currentDate = Calendar.getInstance()
@@ -87,7 +83,7 @@ class BankCardPresenter(
 
             /* Double cardType checking for smart cast, until smart contracts is not ready yet */
 
-            val cardPaymentInputModel = PaymentInputModel.buildForCard(
+            val cardPaymentInputModel = PaymentInputModel.PaymentCard(
                 cardNumber = cardNumber,
                 expDate = expDate,
                 cvv = cvv,

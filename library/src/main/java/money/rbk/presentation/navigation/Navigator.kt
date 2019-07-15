@@ -36,7 +36,6 @@ import money.rbk.R
 import money.rbk.presentation.screen.card.BankCardFragment
 import money.rbk.presentation.screen.gpay.GpayFragment
 import money.rbk.presentation.screen.methods.PaymentMethodsFragment
-import money.rbk.presentation.screen.result.ResultAction
 import money.rbk.presentation.screen.result.ResultFragment
 
 class Navigator(
@@ -45,15 +44,9 @@ class Navigator(
     private val containerId: Int
 ) {
 
-    private var pendingAction: ResultAction? = null
-
-    private val expectedResultFragments = SparseArray<String>()
-
-    //TODO: Eliminate of this
-    fun getPendingActionAndClean(): ResultAction? =
-        pendingAction.also {
-            pendingAction = null
-        }
+    companion object {
+        private val expectedResultFragments = SparseArray<String>()
+    }
 
     fun resolveTask(task: Task<out AutoResolvableResult>, requestCode: Int) {
         expectedResultFragments.put(requestCode, currentFragment?.tag)
@@ -114,7 +107,7 @@ class Navigator(
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean =
-        expectedResultFragments[requestCode]?.let {
+        expectedResultFragments[requestCode]?.also {
             activity.supportFragmentManager.findFragmentByTag(it)
                 ?.let { fragment ->
                     expectedResultFragments.remove(requestCode)
@@ -123,8 +116,12 @@ class Navigator(
 
         } != null
 
-    fun backWithAction(retryAction: ResultAction) {
-        pendingAction = retryAction
+    fun backAndOpenCardFragment() {
+        activity.supportFragmentManager.popBackStackImmediate(BankCardFragment::class.java.name, POP_BACK_STACK_INCLUSIVE)
+        openBankCard()
+    }
+
+    fun back() {
         activity.supportFragmentManager.popBackStackImmediate()
     }
 
@@ -180,7 +177,6 @@ class Navigator(
         activity.finish()
     }
 
-
     fun finish() {
         activity.finish()
     }
@@ -208,7 +204,7 @@ class Navigator(
             .commitAllowingStateLoss()
     }
 
-
 }
+
 
 typealias AlertButton = Pair<Int, () -> Unit>

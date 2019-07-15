@@ -27,69 +27,56 @@ import money.rbk.domain.entity.PaymentMethodToken
 import money.rbk.domain.entity.PaymentToken
 import money.rbk.domain.entity.PaymentTool
 
-class PaymentInputModel(
-    val paymentTool: PaymentTool,
-    val contactInfo: ContactInfo
-) : BaseInputModel() {
+sealed class PaymentInputModel(private val email: String) : BaseInputModel() {
 
-    companion object {
+    fun getContactInfo() = ContactInfo(email = email)
 
-        fun buildForCard(
-            cardNumber: String,
-            expDate: String,
-            cvv: String,
-            cardHolder: String,
-            email: String?
-        ) = PaymentInputModel(
-            paymentTool = PaymentTool.CardData(
-                cardNumber = cardNumber,
-                expDate = expDate,
-                cvv = cvv,
-                cardHolder = cardHolder
-            ),
-            contactInfo = ContactInfo(
-                email = email
-            )
+    class PaymentCard(
+        email: String,
+        private val cardNumber: String,
+        private val expDate: String,
+        private val cvv: String,
+        private val cardHolder: String) : PaymentInputModel(email) {
+
+        fun getPaymentTool() = PaymentTool.CardData(
+            cardNumber = cardNumber,
+            expDate = expDate,
+            cvv = cvv,
+            cardHolder = cardHolder
         )
+    }
 
-        fun buildForGpay(intent: Intent?,
-            email: String,
-            gatewayMerchantID: String): PaymentInputModel {
+    class PaymentGpay(
+        email: String,
+        private val intent: Intent?) : PaymentInputModel(email) {
+
+        fun getPaymentTool(gatewayMerchantID: String): PaymentTool {
             val paymentData =
                 PaymentData.getFromIntent(intent!!) ?: throw RuntimeException("???") //TODO!!!
             val paymentMethodToken =
                 paymentData.paymentMethodToken ?: throw RuntimeException("???") //TODO!!!
 
-            //TODO: Make Validation            when(paymentMethodToken.paymentMethodTokenizationType){
-            //                WalletConstants.PAYMENT_METHOD_TOKENIZATION_TYPE_PAYMENT_GATEWAY
-            //            }
-
-            return PaymentInputModel(
-                paymentTool = PaymentTool.TokenizedCardData(
-                    gatewayMerchantID = gatewayMerchantID,
-                    paymentToken = PaymentToken(
-                        cardInfo = CardInfo(
-                            paymentData.cardInfo.cardNetwork,
-                            paymentData.cardInfo.cardDetails,
-                            paymentData.cardInfo.cardDescription,
-                            when (paymentData.cardInfo.cardClass) {
-                                WalletConstants.CARD_CLASS_DEBIT -> CardInfo.CardClass.DEBIT
-                                WalletConstants.CARD_CLASS_PREPAID -> CardInfo.CardClass.PREPAID
-                                else -> CardInfo.CardClass.CREDIT
-                            }
-                        ),
-                        paymentMethodToken = PaymentMethodToken(
-                            tokenizationType = "PAYMENT_GATEWAY",
-                            token = paymentMethodToken.token
-                        )
+            return PaymentTool.TokenizedCardData(
+                gatewayMerchantID = gatewayMerchantID,
+                paymentToken = PaymentToken(
+                    cardInfo = CardInfo(
+                        paymentData.cardInfo.cardNetwork,
+                        paymentData.cardInfo.cardDetails,
+                        paymentData.cardInfo.cardDescription,
+                        when (paymentData.cardInfo.cardClass) {
+                            WalletConstants.CARD_CLASS_DEBIT -> CardInfo.CardClass.DEBIT
+                            WalletConstants.CARD_CLASS_PREPAID -> CardInfo.CardClass.PREPAID
+                            else -> CardInfo.CardClass.CREDIT
+                        }
                     ),
-                    provider = "GooglePay"
+                    paymentMethodToken = PaymentMethodToken(
+                        tokenizationType = "PAYMENT_GATEWAY",
+                        token = paymentMethodToken.token
+                    )
                 ),
-                contactInfo = ContactInfo(
-                    email = email
-                )
+                provider = "GooglePay"
             )
-
         }
     }
+
 }

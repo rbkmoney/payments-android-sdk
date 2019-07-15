@@ -5,7 +5,6 @@ import money.rbk.data.exception.GpayException
 import money.rbk.di.Injector
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.CheckoutStateInputModel
-import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.domain.repository.GpayRepository
 import money.rbk.presentation.model.CheckoutInfoModel
 import money.rbk.presentation.model.GpayPrepareInfoModel
@@ -24,7 +23,7 @@ internal class GpayPrepareUseCase(
         onErrorCallback: (Throwable) -> Unit) {
 
         val onCheckoutInfoCallback = { checkoutInfoModel: CheckoutInfoModel ->
-            onResultCallback(GpayPrepareInfoModel(gpayRepository.gatewayMerchantId, checkoutInfoModel))
+            onResultCallback(GpayPrepareInfoModel(checkoutInfoModel))
         }
 
         gpayRepository.checkReadyToPay()

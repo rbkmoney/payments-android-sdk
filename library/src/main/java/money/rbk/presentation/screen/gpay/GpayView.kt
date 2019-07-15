@@ -1,5 +1,6 @@
 package money.rbk.presentation.screen.gpay
 
+import money.rbk.domain.interactor.input.GpayLoadPaymentDataInputModel
 import money.rbk.presentation.screen.base.BasePaymentView
 
 /**
@@ -8,7 +9,7 @@ import money.rbk.presentation.screen.base.BasePaymentView
  */
 interface GpayView : BasePaymentView {
 
-    fun onReadyToPay()
+    fun onReadyToPay(gpayLoadPaymentDataInputModel : GpayLoadPaymentDataInputModel)
 
     fun showEmailValid(isValid: Boolean)
 }

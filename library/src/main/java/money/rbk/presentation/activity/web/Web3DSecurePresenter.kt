@@ -25,13 +25,6 @@ class Web3DSecurePresenter(
                 },
                 R.string.label_cancel to {
                     navigator.finishWithResult(Web3DSecureActivity.RESULT_NETWORK_ERROR)
-//                    navigator.finish()
-//                    navigator.openErrorFragment(
-//                        R.string.error_connection,
-//                        repeatAction = true,
-//                        useAnotherCard = true,
-//                        allPaymentMethods = true
-//                    )
                 }
             )
         }

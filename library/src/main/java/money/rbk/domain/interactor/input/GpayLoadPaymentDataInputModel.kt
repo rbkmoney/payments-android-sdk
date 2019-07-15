@@ -8,6 +8,5 @@ import money.rbk.domain.entity.Currency
  */
 class GpayLoadPaymentDataInputModel(
     val price: String,
-    val currency: Currency,
-    val gatewayMerchantId: String
+    val currency: Currency
 ) : BaseInputModel()

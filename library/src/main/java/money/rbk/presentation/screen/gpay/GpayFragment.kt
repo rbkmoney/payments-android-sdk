@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fmt_google_pay.*
 import money.rbk.R
 import money.rbk.di.Injector
+import money.rbk.domain.interactor.input.GpayLoadPaymentDataInputModel
 import money.rbk.presentation.activity.web.Web3DSecureActivity
 import money.rbk.presentation.model.BrowserRequestModel
 import money.rbk.presentation.screen.base.BaseFragment
@@ -41,9 +42,9 @@ internal class GpayFragment : BaseFragment<GpayView>(), GpayView {
         edEmail.setText(userEmail)
     }
 
-    override fun onReadyToPay() {
+    override fun onReadyToPay(gpayLoadPaymentDataInputModel: GpayLoadPaymentDataInputModel) {
         btnPay.setOnClickListener {
-            presenter.onPerformPayment(edEmail.text.toString())
+            presenter.onPerformPayment(edEmail.text.toString(), gpayLoadPaymentDataInputModel)
         }
     }
 
@@ -52,7 +53,7 @@ internal class GpayFragment : BaseFragment<GpayView>(), GpayView {
         when (requestCode) {
             Web3DSecureActivity.REQUEST_CODE -> presenter.on3DsPerformed(resultCode)
             LOAD_PAYMENT_DATA_REQUEST_CODE ->
-                presenter.onGpayPaymentPerformed(resultCode, data)
+                presenter.onGpayPaymentPerformed(resultCode, data, edEmail.text.toString())
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }

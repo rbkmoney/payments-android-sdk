@@ -25,11 +25,13 @@ import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.CheckoutStateInputModel
 import money.rbk.domain.interactor.input.PaymentInputModel
 import money.rbk.domain.repository.CheckoutRepository
+import money.rbk.domain.repository.GpayRepository
 import money.rbk.presentation.model.CheckoutInfoModel
 import money.rbk.presentation.model.CheckoutStateModel
 
 internal class CreatePaymentUseCase(
     private val checkoutRepository: CheckoutRepository = Injector.checkoutRepository,
+    private val gpayRepository: GpayRepository = Injector.gpayRepository,
     private val checkoutStateUseCase: UseCase<CheckoutStateInputModel, CheckoutInfoModel> = CheckoutStateUseCase()
 ) : UseCase<PaymentInputModel, CheckoutInfoModel>() {
 
@@ -52,10 +54,15 @@ internal class CreatePaymentUseCase(
 
         bgExecutor(onErrorCallbackProxy) {
 
+            val paymentTool = when (inputModel) {
+                is PaymentInputModel.PaymentCard -> inputModel.getPaymentTool()
+                is PaymentInputModel.PaymentGpay -> inputModel.getPaymentTool(gpayRepository.gatewayMerchantId)
+            }
+
             try {
                 checkoutRepository.createPayment(
-                    inputModel.paymentTool,
-                    inputModel.contactInfo)
+                    paymentTool,
+                    inputModel.getContactInfo())
 
             } catch (error: Throwable) {
                 error.printStackTrace()

@@ -1,6 +1,3 @@
 package money.rbk.presentation.model
 
-class GpayPrepareInfoModel(
-    val gatewayMerchantId: String,
-    val checkoutInfoModel: CheckoutInfoModel
-) : BaseIUModel()
+class GpayPrepareInfoModel(val checkoutInfoModel: CheckoutInfoModel) : BaseIUModel()
