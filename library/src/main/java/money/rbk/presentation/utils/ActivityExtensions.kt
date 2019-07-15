@@ -36,7 +36,7 @@ fun Activity.adjustSize() {
         val lp = WindowManager.LayoutParams()
         lp.copyFrom(window.attributes)
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT
-        lp.height = screenHeight
+        lp.height = screenHeight //TODO: Make more apprepriate size!
         window.attributes = lp
     }
 }
@@ -44,5 +44,6 @@ fun Activity.adjustSize() {
 val Activity.screenHeight: Int
     get() = windowManager.defaultDisplay
         .run {
-            Point().also { getSize(it) }.y
+            Point().also { getSize(it) }
+                .y
         }

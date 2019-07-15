@@ -30,7 +30,7 @@ import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.common.MarginItemDecoration
 import money.rbk.presentation.screen.methods.adapter.PaymentAdapter
 
-class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethodsView {
+internal class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethodsView {
 
     override val presenter: PaymentMethodsPresenter by lazy { PaymentMethodsPresenter(navigator) }
 

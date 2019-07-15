@@ -65,18 +65,25 @@ abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Navigator) :
         (view ?: return).hideProgress()
 
         return when (error) {
-            is UseCaseException.UnableRepeatPaymentException ->
+            is UseCaseException.UnableRepeatPaymentException -> // TODO: Why error_connection?
                 navigator.openErrorFragment(
                     messageRes = R.string.error_connection,
                     useAnotherCard = canUseAnotherCard,
                     allPaymentMethods = true)
 
-            is NetworkException ->
-                navigator.openErrorFragment(
-                    messageRes = R.string.error_connection,
-                    repeatAction = RepeatAction.PAYMENT,
-                    useAnotherCard = canUseAnotherCard,
-                    allPaymentMethods = true)
+            is NetworkException -> {
+                alert = navigator.showAlert(R.string.label_error,
+                    R.string.error_connection,
+                    R.string.label_retry to { retryPayment() },
+                    R.string.label_cancel to {
+                        navigator.openErrorFragment(
+                            messageRes = R.string.error_connection,
+                            repeatAction = RepeatAction.PAYMENT,
+                            useAnotherCard = canUseAnotherCard,
+                            allPaymentMethods = true)
+                    }
+                )
+            }
 
             else ->
                 navigator.openErrorFragment(
@@ -100,19 +107,32 @@ abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Navigator) :
                     allPaymentMethods = true
                 )
             is NetworkException ->
-                navigator.openErrorFragment(
-                    messageRes = R.string.error_connection,
-                    repeatAction = RepeatAction.CHECKOUT,
-                    useAnotherCard = canUseAnotherCard,
-                    allPaymentMethods = true)
-
+                alert = navigator.showAlert(R.string.label_error,
+                    R.string.error_connection,
+                    R.string.label_retry to {
+                        updateCheckout()
+                    },
+                    R.string.label_cancel to {
+                        navigator.openErrorFragment(
+                            messageRes = R.string.error_connection,
+                            repeatAction = RepeatAction.PAYMENT,
+                            useAnotherCard = canUseAnotherCard,
+                            allPaymentMethods = true)
+                    }
+                )
             else ->
                 navigator.openErrorFragment(
                     messageRes = R.string.error_busines_logic,
                     repeatAction = RepeatAction.CHECKOUT,
-                    useAnotherCard = canUseAnotherCard,
+                    useAnotherCard = canUseAnotherCard, // TODO: А проводился ли платёж вообще?
                     allPaymentMethods = true)
         }
+    }
+
+    override fun onViewDetached() {
+        alert?.dismiss()
+        alert = null
+        super.onViewDetached()
     }
 
 }

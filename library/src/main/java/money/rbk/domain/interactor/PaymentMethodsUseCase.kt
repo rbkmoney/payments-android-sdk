@@ -37,16 +37,6 @@ internal class PaymentMethodsUseCase(
         onResultCallback: (PaymentMethodsModel) -> Unit,
         onErrorCallback: (Throwable) -> Unit) {
 
-        try {
-            val paymentMethods = repository.getPaymentMethodsSync()
-            if (paymentMethods != null) {
-                onResultCallback(PaymentMethodsModel(paymentMethods.mapPaymentMethods()))
-                return
-            }
-        } catch (error: Throwable) {
-            onErrorCallback(error)
-        }
-
         bgExecutor(onErrorCallback) {
 
             val paymentMethods = repository.loadPaymentMethods()

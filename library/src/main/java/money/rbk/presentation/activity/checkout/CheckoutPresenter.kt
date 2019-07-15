@@ -18,16 +18,17 @@
 
 package money.rbk.presentation.activity.checkout
 
+import android.os.Bundle
 import money.rbk.R
+import money.rbk.domain.entity.InvoiceStatus
 import money.rbk.domain.interactor.InvoiceUseCase
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.InvoiceInitializeInputModel
 import money.rbk.presentation.model.InvoiceModel
-import money.rbk.presentation.model.InvoiceStateModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePresenter
 
-class CheckoutPresenter(
+internal class CheckoutPresenter(
     navigator: Navigator,
     private val invoiceUseCase: UseCase<InvoiceInitializeInputModel, InvoiceModel> = InvoiceUseCase()
 ) : BasePresenter<CheckoutView>(navigator) {
@@ -64,26 +65,29 @@ class CheckoutPresenter(
     private fun onInvoiceLoaded(invoice: InvoiceModel) {
         view?.apply {
             showInvoice(invoice)
-            return when (val invoiceState = invoice.invoiceState) {
 
-                is InvoiceStateModel.Success -> {
-                    hideProgress()
-                    navigator.openWarningFragment(R.string.error_invoice_already_payed,
-                        R.string.error_invalid_invoice_status)
-                }
-
-                is InvoiceStateModel.Failed -> {
-                    hideProgress()
-                    navigator.openWarningFragment(invoiceState.reasonResId,
-                        R.string.error_invalid_invoice_status)
-                }
-
-                InvoiceStateModel.Pending -> {
+            return when (invoice.status) {
+                InvoiceStatus.unpaid -> {
                     if (!navigator.safeOpenPaymentMethods()) {
                         hideProgress()
                     } else Unit
                 }
-
+                InvoiceStatus.cancelled -> {
+                    hideProgress()
+                    navigator.openWarningFragment(R.string.error_invoice_cancelled,
+                        R.string.error_invalid_invoice_status)
+                }
+                InvoiceStatus.paid -> {
+                    hideProgress()
+                    navigator.openWarningFragment(R.string.error_invoice_already_payed,
+                        R.string.error_invalid_invoice_status)
+                }
+                InvoiceStatus.fulfilled,
+                InvoiceStatus.unknown -> {
+                    hideProgress()
+                    navigator.openWarningFragment(R.string.error_unknown_invoice,
+                        R.string.error_invalid_invoice_status)
+                }
             }
         }
     }

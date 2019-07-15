@@ -18,7 +18,7 @@ import money.rbk.presentation.utils.setValid
  * @since 27.06.19
  */
 
-class GpayFragment : BaseFragment<GpayView>(), GpayView {
+internal class GpayFragment : BaseFragment<GpayView>(), GpayView {
 
     override val presenter: GpayPresenter by lazy { GpayPresenter(navigator) }
 

@@ -21,7 +21,7 @@ package money.rbk.presentation.activity.checkout
 import money.rbk.presentation.model.InvoiceModel
 import money.rbk.presentation.screen.base.BaseView
 
-interface CheckoutView : BaseView {
+internal interface CheckoutView : BaseView {
 
     fun showInvoice(invoiceModel: InvoiceModel)
 

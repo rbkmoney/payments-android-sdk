@@ -2,6 +2,7 @@ package money.rbk.presentation.screen.gpay
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.wallet.AutoResolveHelper
 import money.rbk.R
@@ -112,7 +113,7 @@ class GpayPresenter(
             email,
             gpayLoadPaymentDataInputModel.gatewayMerchantId),
             { onCheckoutUpdated(it, RepeatAction.PAYMENT) },
-            { onPaymentError(it) })
+            { onPaymentError(it) { /* TODO create retry */ } })
     }
 
     /* Errors Handling */

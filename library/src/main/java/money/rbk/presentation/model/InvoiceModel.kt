@@ -18,10 +18,12 @@
 
 package money.rbk.presentation.model
 
-class InvoiceModel(
+import money.rbk.domain.entity.InvoiceStatus
+
+internal class InvoiceModel(
     val id: String,
     val shopName: String,
     val cost: String,
     val orderDetails: String,
-    val invoiceState: InvoiceStateModel
+    val status: InvoiceStatus
 ) : BaseIUModel()

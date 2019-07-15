@@ -23,7 +23,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import money.rbk.presentation.activity.checkout.CheckoutActivity
 
-abstract class BaseFragment<T : BaseView> : Fragment(), BaseView {
+internal abstract class BaseFragment<T : BaseView> : Fragment(), BaseView {
 
     protected abstract val presenter: BasePresenter<T>
 
@@ -36,6 +36,7 @@ abstract class BaseFragment<T : BaseView> : Fragment(), BaseView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         presenter.attachView(this as? T ?: throw RuntimeException("")) //TODO: Check it
     }
 

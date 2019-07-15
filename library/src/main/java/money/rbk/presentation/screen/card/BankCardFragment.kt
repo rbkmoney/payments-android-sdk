@@ -46,7 +46,7 @@ import ru.tinkoff.decoro.watchers.MaskFormatWatcher
 
 // TODO: Maybe temporary, edCardNumber after two returns get old value
 @ContainerOptions(cache = CacheImplementation.NO_CACHE)
-class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
+internal class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
 
     companion object {
         fun newInstance() = BankCardFragment()

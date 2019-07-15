@@ -29,7 +29,7 @@ import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.utils.getArgIntOrError
 import money.rbk.presentation.utils.getArgStringOrError
 
-class ResultFragment : BaseFragment<ResultView>(), ResultView {
+internal class ResultFragment : BaseFragment<ResultView>(), ResultView {
 
     companion object {
 
