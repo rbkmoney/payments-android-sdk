@@ -19,7 +19,6 @@
 package money.rbk.presentation.screen.result
 
 enum class ResultAction {
-    RETRY_PAYMENT,
     UPDATE_CHECKOUT,
     USE_ANOTHER_CARD
 }

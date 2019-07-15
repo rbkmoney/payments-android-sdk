@@ -18,10 +18,11 @@
 
 package money.rbk.domain.interactor
 
+import money.rbk.data.exception.ClientError
 import money.rbk.di.Injector
+import money.rbk.domain.entity.ApiError
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.CheckoutStateInputModel
-import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.domain.interactor.input.PaymentInputModel
 import money.rbk.domain.repository.CheckoutRepository
 import money.rbk.presentation.model.CheckoutInfoModel
@@ -51,9 +52,18 @@ internal class CreatePaymentUseCase(
 
         bgExecutor(onErrorCallbackProxy) {
 
-            checkoutRepository.createPayment(
-                inputModel.paymentTool,
-                inputModel.contactInfo)
+            try {
+                checkoutRepository.createPayment(
+                    inputModel.paymentTool,
+                    inputModel.contactInfo)
+
+            } catch (error: Throwable) {
+                error.printStackTrace()
+
+                if (error !is ClientError || error.error.code != ApiError.Code.invalidInvoiceStatus) {
+                    throw error
+                }
+            }
 
             uiExecutor {
                 checkoutStateUseCase.invoke(CheckoutStateInputModel(),

@@ -36,7 +36,6 @@ import money.rbk.R
 import money.rbk.presentation.screen.card.BankCardFragment
 import money.rbk.presentation.screen.gpay.GpayFragment
 import money.rbk.presentation.screen.methods.PaymentMethodsFragment
-import money.rbk.presentation.screen.result.RepeatAction
 import money.rbk.presentation.screen.result.ResultAction
 import money.rbk.presentation.screen.result.ResultFragment
 
@@ -100,7 +99,7 @@ class Navigator(
 
     fun openErrorFragment(
         @StringRes messageRes: Int,
-        repeatAction: RepeatAction? = null,
+        repeatAction: Boolean = false,
         useAnotherCard: Boolean = false,
         allPaymentMethods: Boolean = false
     ) {

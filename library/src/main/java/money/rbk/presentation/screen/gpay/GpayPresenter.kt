@@ -2,7 +2,6 @@ package money.rbk.presentation.screen.gpay
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.wallet.AutoResolveHelper
 import money.rbk.R
@@ -21,7 +20,6 @@ import money.rbk.presentation.model.GpayPrepareInfoModel
 import money.rbk.presentation.model.PaymentDataTaskModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePaymentPresenter
-import money.rbk.presentation.screen.result.RepeatAction
 import money.rbk.presentation.screen.result.ResultAction
 import money.rbk.presentation.utils.isEmailValid
 
@@ -45,7 +43,6 @@ class GpayPresenter(
 
     override fun onViewAttached(view: GpayView) {
         when (navigator.getPendingActionAndClean() ?: ResultAction.UPDATE_CHECKOUT) {
-            ResultAction.RETRY_PAYMENT,
             ResultAction.USE_ANOTHER_CARD,
             ResultAction.UPDATE_CHECKOUT -> updateCheckout(false)
         }
@@ -88,7 +85,7 @@ class GpayPresenter(
         view?.showProgress()
         gpayPrepareUseCase(CheckoutStateInputModel(ignoreBrowserRequest),
             { onGpayPrepared(it) },
-            { onCheckoutUpdateError(it) })
+            { onCheckoutUpdateError(it) { updateCheckout(ignoreBrowserRequest) } })
     }
 
     /* Success Callbacks */
@@ -104,7 +101,7 @@ class GpayPresenter(
             GpayLoadPaymentDataInputModel(gpayPrepareInfo.checkoutInfoModel.price,
                 gpayPrepareInfo.checkoutInfoModel.currency,
                 gpayPrepareInfo.gatewayMerchantId)
-        onCheckoutUpdated(gpayPrepareInfo.checkoutInfoModel, RepeatAction.CHECKOUT)
+        onCheckoutUpdated(gpayPrepareInfo.checkoutInfoModel)
     }
 
     private fun onGpayPaymentSuccess(data: Intent?, email: String) {
@@ -112,27 +109,27 @@ class GpayPresenter(
         createPaymentUseCase(PaymentInputModel.buildForGpay(data,
             email,
             gpayLoadPaymentDataInputModel.gatewayMerchantId),
-            { onCheckoutUpdated(it, RepeatAction.PAYMENT) },
-            { onPaymentError(it) { /* TODO create retry */ } })
+            { onCheckoutUpdated(it) },
+            { onPaymentError(it) { onGpayPaymentSuccess(data, email) } })
     }
 
     /* Errors Handling */
-    override fun onCheckoutUpdateError(error: Throwable) =
+    override fun onCheckoutUpdateError(error: Throwable, retryAction: () -> Unit) =
         when (error) {
             is GpayException.GpayNotReadyException ->
                 navigator.openErrorFragment(
                     messageRes = R.string.error_gpay_initialization,
-                    repeatAction = RepeatAction.CHECKOUT,
+                    repeatAction = true,
                     allPaymentMethods = true
                 )
-            else -> super.onCheckoutUpdateError(error)
+            else -> super.onCheckoutUpdateError(error, retryAction)
         }
 
     private fun onGpayPaymentError(gpayException: GpayException.GpayCantPerformPaymentException) {
         log(gpayException)
         navigator.openErrorFragment(
             messageRes = R.string.error_busines_logic,
-            repeatAction = RepeatAction.PAYMENT,
+            repeatAction = true,
             useAnotherCard = false,
             allPaymentMethods = true)
     }
@@ -143,12 +140,12 @@ class GpayPresenter(
         return when (throwable) {
             is NetworkException -> navigator.openErrorFragment(
                 messageRes = R.string.error_connection,
-                repeatAction = RepeatAction.PAYMENT,
+                repeatAction = true,
                 allPaymentMethods = true)
 
             else -> navigator.openErrorFragment(
                 messageRes = R.string.error_busines_logic,
-                repeatAction = RepeatAction.PAYMENT,
+                repeatAction = true,
                 allPaymentMethods = true)
         }
     }

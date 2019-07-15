@@ -23,19 +23,13 @@ import money.rbk.presentation.screen.base.BasePresenter
 
 class ResultPresenter(navigator: Navigator) : BasePresenter<ResultView>(navigator) {
 
-    fun onUseAnotherCard() {
+    fun onUseAnotherCard() =
         navigator.backWithAction(ResultAction.USE_ANOTHER_CARD)
-    }
 
-    fun onRepeatAction(repeatAction: RepeatAction) = navigator.backWithAction(
-        when (repeatAction) {
-            RepeatAction.CHECKOUT -> ResultAction.UPDATE_CHECKOUT
-            RepeatAction.PAYMENT -> ResultAction.RETRY_PAYMENT
-        }
-    )
+    fun onRepeatAction() =
+        navigator.backWithAction(ResultAction.UPDATE_CHECKOUT)
 
-    fun allPaymentMethods() {
+    fun onAllPaymentMethods() =
         navigator.openPaymentMethods()
-    }
 
 }

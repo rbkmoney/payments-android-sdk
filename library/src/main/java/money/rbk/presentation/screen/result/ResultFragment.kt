@@ -53,7 +53,7 @@ internal class ResultFragment : BaseFragment<ResultView>(), ResultView {
 
         fun newInstanceError(
             message: String,
-            repeatAction: RepeatAction? = null,
+            repeatAction: Boolean = false,
             useAnotherCard: Boolean = false,
             allPaymentMethods: Boolean = false
 
@@ -62,7 +62,7 @@ internal class ResultFragment : BaseFragment<ResultView>(), ResultView {
             arguments = Bundle().apply {
                 putInt(KEY_STATE, State.ERROR.ordinal)
                 putString(KEY_MESSAGE, message)
-                putInt(KEY_REPEAT_ACTION, repeatAction?.ordinal ?: -1)
+                putBoolean(KEY_REPEAT_ACTION, repeatAction)
                 putBoolean(KEY_USE_ANOTHER_CARD, useAnotherCard)
                 putBoolean(KEY_ALL_PAYMENT_METHODS, allPaymentMethods)
             }
@@ -92,9 +92,7 @@ internal class ResultFragment : BaseFragment<ResultView>(), ResultView {
             State.SUCCESS -> showSuccess(message)
             State.ERROR -> showError(
                 message = message,
-                repeatAction = getArgIntOrError(KEY_REPEAT_ACTION)
-                    .takeIf { it in RepeatAction.values().indices }
-                    ?.let { RepeatAction.values()[it] },
+                repeatAction = arguments?.getBoolean(KEY_REPEAT_ACTION) ?: false,
                 useAnotherCard = arguments?.getBoolean(KEY_USE_ANOTHER_CARD) ?: false,
                 allPaymentMethods = arguments?.getBoolean(KEY_ALL_PAYMENT_METHODS) ?: false
 
@@ -121,7 +119,7 @@ internal class ResultFragment : BaseFragment<ResultView>(), ResultView {
 
     private fun showError(
         message: String,
-        repeatAction: RepeatAction?,
+        repeatAction: Boolean,
         useAnotherCard: Boolean,
         allPaymentMethods: Boolean) {
 
@@ -132,13 +130,13 @@ internal class ResultFragment : BaseFragment<ResultView>(), ResultView {
         tvCause.text = message
 
         btnAllPaymentMethods.setOnClickListener {
-            presenter.allPaymentMethods()
+            presenter.onAllPaymentMethods()
         }
 
-        if (repeatAction != null) {
+        if (repeatAction) {
             btnRetry.visibility = View.VISIBLE
             btnRetry.setOnClickListener {
-                presenter.onRepeatAction(repeatAction)
+                presenter.onRepeatAction()
             }
         } else {
             btnRetry.visibility = View.GONE
@@ -153,7 +151,7 @@ internal class ResultFragment : BaseFragment<ResultView>(), ResultView {
 
         if (allPaymentMethods) {
             btnAllPaymentMethods.visibility = View.VISIBLE
-            btnAllPaymentMethods.setOnClickListener { presenter.allPaymentMethods() }
+            btnAllPaymentMethods.setOnClickListener { presenter.onAllPaymentMethods() }
         } else {
             btnAllPaymentMethods.visibility = View.GONE
         }

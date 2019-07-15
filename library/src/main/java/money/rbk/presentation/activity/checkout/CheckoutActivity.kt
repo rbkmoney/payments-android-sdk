@@ -32,7 +32,7 @@ import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.utils.adjustSize
 import money.rbk.presentation.utils.isTablet
 
-class CheckoutActivity : AppCompatActivity(), CheckoutView {
+internal class CheckoutActivity : AppCompatActivity(), CheckoutView {
 
     companion object {
         private const val KEY_INVOICE_ID = "invoice_id"
