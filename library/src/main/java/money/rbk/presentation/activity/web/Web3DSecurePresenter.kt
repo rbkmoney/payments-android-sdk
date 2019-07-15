@@ -14,6 +14,7 @@ class Web3DSecurePresenter(
     navigator: Navigator
 ) : BasePresenter<Web3DSecureView>(navigator) {
 
+    //TODO: Обработка не только интернет соединения
     fun onError(url: String?) {
         if (!handleUrl(url)) {
             navigator.showAlert(
@@ -23,7 +24,14 @@ class Web3DSecurePresenter(
                     view?.loadPage() ?: Unit
                 },
                 R.string.label_cancel to {
-                    navigator.finishWithCancel()
+                    navigator.finishWithResult(Web3DSecureActivity.RESULT_NETWORK_ERROR)
+//                    navigator.finish()
+//                    navigator.openErrorFragment(
+//                        R.string.error_connection,
+//                        repeatAction = true,
+//                        useAnotherCard = true,
+//                        allPaymentMethods = true
+//                    )
                 }
             )
         }
@@ -36,7 +44,7 @@ class Web3DSecurePresenter(
     fun onCancel() {
         navigator.finishWithCancel()
     }
-    
+
     private fun handleUrl(url: String?) = url.equals(TERMINATION_URI, ignoreCase = true)
         .also {
             if (it) {

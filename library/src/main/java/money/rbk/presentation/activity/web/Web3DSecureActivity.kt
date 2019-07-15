@@ -37,6 +37,8 @@ class Web3DSecureActivity : FragmentActivity(), Web3DSecureView {
     companion object {
         const val REQUEST_CODE = 0x287
 
+        const val RESULT_NETWORK_ERROR = 2
+
         private const val EXTRA_KEY_POST = "post"
         private const val EXTRA_KEY_URL = "url"
         private const val EXTRA_KEY_BODY = "body"

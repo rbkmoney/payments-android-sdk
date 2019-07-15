@@ -49,6 +49,7 @@ class Navigator(
 
     private val expectedResultFragments = SparseArray<String>()
 
+    //TODO: Eliminate of this
     fun getPendingActionAndClean(): ResultAction? =
         pendingAction.also {
             pendingAction = null
@@ -174,6 +175,12 @@ class Navigator(
         activity.finish()
     }
 
+    fun finishWithResult(resultCode: Int) {
+        activity.setResult(resultCode)
+        activity.finish()
+    }
+
+
     fun finish() {
         activity.finish()
     }
@@ -200,6 +207,7 @@ class Navigator(
         }
             .commitAllowingStateLoss()
     }
+
 
 }
 

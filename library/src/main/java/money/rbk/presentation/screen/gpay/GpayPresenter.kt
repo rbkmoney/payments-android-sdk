@@ -21,6 +21,7 @@ import money.rbk.presentation.model.PaymentDataTaskModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePaymentPresenter
 import money.rbk.presentation.screen.result.ResultAction
+import money.rbk.presentation.activity.web.Web3DSecureActivity
 import money.rbk.presentation.utils.isEmailValid
 
 /**
@@ -72,10 +73,15 @@ class GpayPresenter(
     }
 
     fun on3DsPerformed(resultCode: Int) {
-        if (resultCode == FragmentActivity.RESULT_OK) {
-            updateCheckout(ignoreBrowserRequest = true)
-        } else {
-            navigator.finishWithCancel()
+        when (resultCode) {
+            FragmentActivity.RESULT_OK -> updateCheckout(ignoreBrowserRequest = true)
+            FragmentActivity.RESULT_CANCELED -> navigator.finishWithCancel()
+            Web3DSecureActivity.RESULT_NETWORK_ERROR ->
+                navigator.openErrorFragment(
+                    messageRes = R.string.error_connection,
+                    repeatAction = true,
+                    useAnotherCard = canUseAnotherCard,
+                    allPaymentMethods = true)
         }
     }
 
