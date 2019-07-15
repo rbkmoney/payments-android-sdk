@@ -70,6 +70,12 @@ internal class InvoiceChangesCheckoutStateConverter(
     private fun InvoiceChange.PaymentStarted.process(): CheckoutStateModel? {
         lastPayment = payment
 
+        val externalPaymentId = checkoutRepository.externalPaymentId
+        if (externalPaymentId != null && payment.externalID == externalPaymentId) {
+            checkoutRepository.paymentId = payment.id
+            checkoutRepository.externalPaymentId = null
+        }
+
         if (payment.id != checkoutRepository.paymentId) return null
         return CheckoutStateModel.PaymentProcessing
     }

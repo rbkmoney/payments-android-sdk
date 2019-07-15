@@ -158,12 +158,6 @@ class BankCardPresenter(
             { onPaymentError(it) { performPayment(cardPaymentInputModel) } })
     }
 
-    private fun clearPayment() {
-        view?.clearPayment()
-        cancelPayment()
-        updateCheckout(false)
-    }
-
     private fun cancelPayment() {
         cancelPaymentUseCase(EmptyInputModel, {}, {})
     }

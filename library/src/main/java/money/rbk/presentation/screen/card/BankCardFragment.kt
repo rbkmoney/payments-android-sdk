@@ -129,21 +129,6 @@ internal class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
         }
     }
 
-    override fun clearPayment() {
-        edCardNumber.post {
-            edCardNumber.setText(R.string.empty)
-            edCardNumber.clearState()
-            edCardDate.setText(R.string.empty)
-            edCardDate.clearState()
-            edCardCvv.setText(R.string.empty)
-            edCardCvv.clearState()
-            edCardName.setText(R.string.empty)
-            edCardName.clearState()
-            edEmail.setText(R.string.empty)
-            edEmail.clearState()
-        }
-    }
-
     override fun showProgress() {
         btnPay.isEnabled = false
         edCardNumber.isEnabled = false

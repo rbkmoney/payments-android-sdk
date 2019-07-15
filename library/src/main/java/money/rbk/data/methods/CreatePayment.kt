@@ -26,6 +26,7 @@ import money.rbk.domain.entity.Payer
 internal class CreatePayment(
     invoiceID: String,
     override val invoiceAccessToken: String,
+    externalID: String,
     payer: Payer,
     flow: Flow
 ) : PostRequest<CreatePaymentResponse> {
@@ -33,6 +34,7 @@ internal class CreatePayment(
     override val endpoint: String = "/processing/invoices/$invoiceID/payments"
 
     override val payload: List<Pair<String, Any>> = listOf(
+        "externalID" to externalID,
         "payer" to payer,
         "flow" to flow)
 

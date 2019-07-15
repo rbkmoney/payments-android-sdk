@@ -24,6 +24,7 @@ import money.rbk.data.methods.CreatePaymentResource
 import money.rbk.data.methods.GetInvoiceByID
 import money.rbk.data.methods.GetInvoiceEvents
 import money.rbk.data.methods.GetInvoicePaymentMethods
+import money.rbk.data.methods.GetPayments
 import money.rbk.data.response.CreatePaymentResourceResponse
 import money.rbk.data.response.CreatePaymentResponse
 import money.rbk.domain.entity.ContactInfo
@@ -31,10 +32,12 @@ import money.rbk.domain.entity.Flow
 import money.rbk.domain.entity.Invoice
 import money.rbk.domain.entity.InvoiceEvent
 import money.rbk.domain.entity.Payer
+import money.rbk.domain.entity.Payment
 import money.rbk.domain.entity.PaymentMethod
 import money.rbk.domain.entity.PaymentTool
 import money.rbk.domain.repository.CheckoutRepository
 import okhttp3.OkHttpClient
+import java.util.UUID
 
 internal class CheckoutRepositoryImpl(
     private val okHttpClient: OkHttpClient,
@@ -49,6 +52,8 @@ internal class CheckoutRepositoryImpl(
     override var paymentTool: PaymentTool? = null
     @Volatile
     override var paymentId: String? = null
+    @Volatile
+    override var externalPaymentId: String? = null
 
     private var invoiceEvents: MutableList<InvoiceEvent> = mutableListOf()
 
@@ -65,6 +70,9 @@ internal class CheckoutRepositoryImpl(
 
     override fun loadPaymentMethods(): List<PaymentMethod> = paymentMethods
 
+    override fun loadPayments(): List<Payment> =
+        okHttpClient.execute(GetPayments(invoiceAccessToken, invoiceId))
+
     override fun getPaymentMethodsSync(): List<PaymentMethod>? =
         if (paymentMethodsInitialized) paymentMethods else null
 
@@ -77,7 +85,11 @@ internal class CheckoutRepositoryImpl(
         val createPaymentResource: CreatePaymentResourceResponse =
             okHttpClient.execute(CreatePaymentResource(invoiceAccessToken, paymentTool))
 
-        return okHttpClient.execute(CreatePayment(invoiceId, invoiceAccessToken,
+        val externalID = UUID.randomUUID()
+            .toString()
+        externalPaymentId = externalID
+
+        return okHttpClient.execute(CreatePayment(invoiceId, invoiceAccessToken, externalID,
             Payer.PaymentResourcePayer(
                 createPaymentResource.paymentToolToken,
                 createPaymentResource.paymentSession,

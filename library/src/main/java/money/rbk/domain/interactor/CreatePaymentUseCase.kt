@@ -48,28 +48,40 @@ internal class CreatePaymentUseCase(
         val onResultCallbackProxy = { checkoutInfo: CheckoutInfoModel ->
             if (checkoutInfo.checkoutState is CheckoutStateModel.PaymentFailed) {
                 checkoutRepository.paymentId = null
+                checkoutRepository.externalPaymentId = null
             }
             onResultCallback(checkoutInfo)
         }
 
         bgExecutor(onErrorCallbackProxy) {
 
-            val paymentTool = when (inputModel) {
-                is PaymentInputModel.PaymentCard -> inputModel.getPaymentTool()
-                is PaymentInputModel.PaymentGpay -> inputModel.getPaymentTool(gpayRepository.gatewayMerchantId)
+            val externalId = checkoutRepository.externalPaymentId
+            if (externalId != null) {
+                val payment = checkoutRepository.loadPayments()
+                    .find { it.externalID == externalId }
+                checkoutRepository.paymentId = payment?.id
             }
 
-            try {
-                checkoutRepository.createPayment(
-                    paymentTool,
-                    inputModel.getContactInfo())
+            if (checkoutRepository.paymentId == null) {
 
-            } catch (error: Throwable) {
-                error.printStackTrace()
-
-                if (error !is ClientError || error.error.code != ApiError.Code.invalidInvoiceStatus) {
-                    throw error
+                val paymentTool = when (inputModel) {
+                    is PaymentInputModel.PaymentCard -> inputModel.getPaymentTool()
+                    is PaymentInputModel.PaymentGpay -> inputModel.getPaymentTool(gpayRepository.gatewayMerchantId)
                 }
+
+                try {
+                    checkoutRepository.createPayment(
+                        paymentTool,
+                        inputModel.getContactInfo())
+
+                } catch (error: Throwable) {
+                    error.printStackTrace()
+
+                    if (error !is ClientError || error.error.code != ApiError.Code.invalidInvoiceStatus) {
+                        throw error
+                    }
+                }
+
             }
 
             uiExecutor {

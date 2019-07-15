@@ -22,6 +22,7 @@ import money.rbk.data.response.CreatePaymentResponse
 import money.rbk.domain.entity.ContactInfo
 import money.rbk.domain.entity.Invoice
 import money.rbk.domain.entity.InvoiceEvent
+import money.rbk.domain.entity.Payment
 import money.rbk.domain.entity.PaymentMethod
 import money.rbk.domain.entity.PaymentTool
 
@@ -35,6 +36,8 @@ internal interface CheckoutRepository {
 
     var paymentId: String?
 
+    var externalPaymentId: String?
+
     fun loadInvoice(): Invoice
 
     fun loadPaymentMethods(): List<PaymentMethod>
@@ -47,4 +50,5 @@ internal interface CheckoutRepository {
 
     fun loadInvoiceEvents(): List<InvoiceEvent>
 
+    fun loadPayments(): List<Payment>
 }
