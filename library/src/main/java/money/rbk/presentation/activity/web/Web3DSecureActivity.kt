@@ -23,7 +23,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.FragmentActivity
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.ac_web_3ds.*
 import money.rbk.R
 import money.rbk.di.Injector
@@ -32,7 +32,7 @@ import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.utils.adjustSize
 import money.rbk.presentation.utils.isTablet
 
-class Web3DSecureActivity : FragmentActivity(), Web3DSecureView {
+class Web3DSecureActivity : AppCompatActivity(), Web3DSecureView {
 
     companion object {
         const val REQUEST_CODE = 0x287
@@ -65,8 +65,8 @@ class Web3DSecureActivity : FragmentActivity(), Web3DSecureView {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
         super.onCreate(savedInstanceState)
-        adjustSize()
         setContentView(R.layout.ac_web_3ds)
+        adjustSize()
 
         isPost = intent?.getBooleanExtra(EXTRA_KEY_POST, false)!!
         redirectUrl = intent?.getStringExtra(EXTRA_KEY_URL)!!
