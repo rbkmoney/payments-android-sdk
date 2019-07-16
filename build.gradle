@@ -75,7 +75,7 @@ plugins {
 detekt {
     version = "1.0.0.RC7"
     profile("main") {
-        input = "$projectDir/app/src/main/java"
+        input = "$projectDir/library/src/main/java"
         config = "$projectDir/gradle/linter/detekt-config.yml"
         output = "${project.buildDir}/reports/detekt"
         filters = ".*test.*,.*/resources/.*,.*/tmp/.*"

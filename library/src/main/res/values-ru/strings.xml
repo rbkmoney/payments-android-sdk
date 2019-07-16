@@ -37,9 +37,6 @@
     <string name="label_number_on_card">Номер на карте</string>
     <string name="label_pay_f">Оплатить %1$s</string>
 
-    <!-- Google Pay -->
-    <string name="label_google_pay">Google Pay</string>
-
     <!-- result -->
     <string name="label_successful_payment">Успешная\nоплата!</string>
     <string name="label_unsuccessful_payment">Не оплачено</string>

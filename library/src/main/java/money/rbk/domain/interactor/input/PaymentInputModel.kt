@@ -21,6 +21,7 @@ package money.rbk.domain.interactor.input
 import android.content.Intent
 import com.google.android.gms.wallet.PaymentData
 import com.google.android.gms.wallet.WalletConstants
+import money.rbk.data.exception.GpayException
 import money.rbk.domain.entity.CardInfo
 import money.rbk.domain.entity.ContactInfo
 import money.rbk.domain.entity.PaymentMethodToken
@@ -48,13 +49,12 @@ sealed class PaymentInputModel(private val email: String) : BaseInputModel() {
 
     class PaymentGpay(
         email: String,
-        private val intent: Intent?) : PaymentInputModel(email) {
+        private val intent: Intent) : PaymentInputModel(email) {
 
         fun getPaymentTool(gatewayMerchantID: String): PaymentTool {
-            val paymentData =
-                PaymentData.getFromIntent(intent!!) ?: throw RuntimeException("???") //TODO!!!
-            val paymentMethodToken =
-                paymentData.paymentMethodToken ?: throw RuntimeException("???") //TODO!!!
+            val paymentData = PaymentData.getFromIntent(intent)
+            val paymentMethodToken = paymentData?.paymentMethodToken
+                ?: throw GpayException.GpayPaymentMethodTokenException
 
             return PaymentTool.TokenizedCardData(
                 gatewayMerchantID = gatewayMerchantID,
