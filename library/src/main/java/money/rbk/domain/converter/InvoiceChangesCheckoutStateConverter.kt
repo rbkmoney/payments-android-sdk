@@ -96,9 +96,12 @@ internal class InvoiceChangesCheckoutStateConverter(
             PaymentStatus.captured -> null
             PaymentStatus.refunded -> CheckoutStateModel.Warning(R.string.label_payment_refund,
                 R.string.error_payment_in_refund_state)
-            PaymentStatus.cancelled -> CheckoutStateModel.PaymentFailed(R.string.error_payment_cancelled)
-            PaymentStatus.failed -> CheckoutStateModel.PaymentFailed(error.errorText())
-            PaymentStatus.unknown -> CheckoutStateModel.PaymentFailed(R.string.error_unknown_payment)
+            PaymentStatus.cancelled -> CheckoutStateModel.PaymentFailed(R.string.error_payment_cancelled,
+                false)
+            PaymentStatus.failed -> CheckoutStateModel.PaymentFailed(error.errorText(),
+                error.canRetry())
+            PaymentStatus.unknown -> CheckoutStateModel.PaymentFailed(R.string.error_unknown_payment,
+                true)
         }
     }
 
@@ -121,6 +124,19 @@ internal class InvoiceChangesCheckoutStateConverter(
             InvoiceStatus.unknown -> CheckoutStateModel.InvoiceFailed(R.string.error_unknown_invoice)
         }
     }
+
+    private fun PaymentError?.canRetry(): Boolean =
+        when (this?.code) {
+            PaymentError.Code.RejectedByIssuer,
+            PaymentError.Code.AccountLimitsExceeded,
+            PaymentError.Code.PaymentRejected,
+            PaymentError.Code.InvalidPaymentTool -> false
+            
+            PaymentError.Code.Unknown,
+            PaymentError.Code.PreauthorizationFailed,
+            PaymentError.Code.InsufficientFunds,
+            null -> true
+        }
 
     @StringRes
     private fun PaymentError?.errorText(): Int =
