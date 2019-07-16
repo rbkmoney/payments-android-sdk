@@ -55,12 +55,7 @@ internal class CreatePaymentUseCase(
 
         bgExecutor(onErrorCallbackProxy) {
 
-            val externalId = checkoutRepository.externalPaymentId
-            if (externalId != null) {
-                val payment = checkoutRepository.loadPayments()
-                    .find { it.externalID == externalId }
-                checkoutRepository.paymentId = payment?.id
-            }
+            checkExternalId()
 
             if (checkoutRepository.paymentId == null) {
 
@@ -90,6 +85,16 @@ internal class CreatePaymentUseCase(
                     onErrorCallbackProxy)
             }
 
+        }
+    }
+
+    private fun checkExternalId() {
+        if (checkoutRepository.paymentId != null) return
+        val externalId = checkoutRepository.externalPaymentId
+        if (externalId != null) {
+            val payment = checkoutRepository.loadPayments()
+                .find { it.externalID == externalId }
+            checkoutRepository.paymentId = payment?.id
         }
     }
 }

@@ -29,9 +29,12 @@ import money.rbk.presentation.utils.isEmailValid
  */
 class GpayPresenter(
     navigator: Navigator,
-    private val createPaymentUseCase: UseCase<PaymentInputModel, CheckoutInfoModel> = CreatePaymentUseCase(),
-    private val gpayPrepareUseCase: UseCase<CheckoutStateInputModel, GpayPrepareInfoModel> = GpayPrepareUseCase(),
-    private val gpayLoadPaymentDataUseCase: UseCase<GpayLoadPaymentDataInputModel, PaymentDataTaskModel> = GpayLoadPaymentDataUseCase()
+    private val createPaymentUseCase: UseCase<PaymentInputModel, CheckoutInfoModel>
+    = CreatePaymentUseCase(),
+    private val gpayPrepareUseCase: UseCase<CheckoutStateInputModel, GpayPrepareInfoModel>
+    = GpayPrepareUseCase(),
+    private val gpayLoadPaymentDataUseCase: UseCase<GpayLoadPaymentDataInputModel, PaymentDataTaskModel>
+    = GpayLoadPaymentDataUseCase()
 ) : BasePaymentPresenter<GpayView>(navigator) {
 
     override val canUseAnotherCard = false
@@ -54,7 +57,7 @@ class GpayPresenter(
         }
     }
 
-    fun onGpayPaymentPerformed(resultCode: Int, data: Intent?, email: String) {
+    fun onGpayPaymentPerformed(resultCode: Int, data: Intent, email: String) {
 
         when (resultCode) {
             Activity.RESULT_OK -> onGpayPaymentSuccess(data, email)
@@ -106,7 +109,7 @@ class GpayPresenter(
         onCheckoutUpdated(gpayPrepareInfo.checkoutInfoModel)
     }
 
-    private fun onGpayPaymentSuccess(data: Intent?, email: String) {
+    private fun onGpayPaymentSuccess(data: Intent, email: String) {
         view?.showProgress()
         createPaymentUseCase(PaymentInputModel.PaymentGpay(email, data),
             { onCheckoutUpdated(it) },

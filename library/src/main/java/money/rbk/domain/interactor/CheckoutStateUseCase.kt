@@ -33,7 +33,8 @@ import money.rbk.presentation.utils.formatInternationalPrice
 
 internal class CheckoutStateUseCase(
     private val checkoutRepository: CheckoutRepository = Injector.checkoutRepository,
-    private val invoiceChangesConverter: EntityConverter<List<InvoiceEvent>, CheckoutStateModel> = InvoiceChangesCheckoutStateConverter()
+    private val invoiceChangesConverter: EntityConverter<List<InvoiceEvent>, CheckoutStateModel>
+    = InvoiceChangesCheckoutStateConverter()
 ) : UseCase<CheckoutStateInputModel, CheckoutInfoModel>() {
 
     private var startTime: Long = 0
@@ -52,7 +53,9 @@ internal class CheckoutStateUseCase(
         bgExecutor(onErrorCallback) {
             val checkoutState = invoiceChangesConverter(checkoutRepository.loadInvoiceEvents())
 
-            if (checkoutState == CheckoutStateModel.PaymentProcessing || (ignoreBrowserRequest && checkoutState is CheckoutStateModel.BrowserRedirectInteraction)) {
+            if (checkoutState == CheckoutStateModel.PaymentProcessing
+                || (ignoreBrowserRequest
+                    && checkoutState is CheckoutStateModel.BrowserRedirectInteraction)) {
                 if (System.currentTimeMillis() - startTime > UseCaseConstants.MAX_POLLING_TIME) {
                     throw UseCaseException.PollingTimeExceededException(UseCaseConstants.MAX_POLLING_TIME)
                 }

@@ -18,13 +18,6 @@
 
 package money.rbk.domain.entity
 
-//TODO: Make another mapping
-// {
-//    "description":"No match to pattern. Path to item: paymentTool.cardNumber",
-//    "errorType":"schema_violated",
-//    "name":"PaymentResourceParams"
-//}
-
 class ApiError(
     val code: Code?,
     val message: String?,

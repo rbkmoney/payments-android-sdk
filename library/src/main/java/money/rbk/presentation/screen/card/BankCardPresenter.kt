@@ -23,15 +23,12 @@ import com.whiteelephant.monthpicker.MonthPickerDialog
 import money.rbk.R
 import money.rbk.domain.entity.CreditCardType
 import money.rbk.domain.entity.getCardType
-import money.rbk.domain.interactor.CancelPaymentUseCase
 import money.rbk.domain.interactor.CheckoutStateUseCase
 import money.rbk.domain.interactor.CreatePaymentUseCase
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.CheckoutStateInputModel
-import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.domain.interactor.input.PaymentInputModel
 import money.rbk.presentation.model.CheckoutInfoModel
-import money.rbk.presentation.model.EmptyIUModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePaymentPresenter
 import money.rbk.presentation.activity.web.Web3DSecureActivity
