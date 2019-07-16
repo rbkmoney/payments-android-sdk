@@ -26,7 +26,7 @@ sealed class CheckoutStateModel : BaseIUModel() {
 
     object Pending : CheckoutStateModel()
 
-    class PaymentFailed(@StringRes val reasonResId: Int) : CheckoutStateModel()
+    class PaymentFailed(@StringRes val reasonResId: Int, val canRetry: Boolean) : CheckoutStateModel()
 
     class InvoiceFailed(@StringRes val reasonResId: Int) : CheckoutStateModel()
 

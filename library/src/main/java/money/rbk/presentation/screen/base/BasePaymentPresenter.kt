@@ -35,7 +35,8 @@ abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Navigator) :
                 navigator.openErrorFragment(
                     messageRes = checkoutState.reasonResId,
                     useAnotherCard = canUseAnotherCard,
-                    allPaymentMethods = true
+                    allPaymentMethods = true,
+                    repeatAction = checkoutState.canRetry
                 )
 
             is CheckoutStateModel.InvoiceFailed ->
