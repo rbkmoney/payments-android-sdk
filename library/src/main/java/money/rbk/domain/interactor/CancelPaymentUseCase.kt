@@ -6,10 +6,6 @@ import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.domain.repository.CheckoutRepository
 import money.rbk.presentation.model.EmptyIUModel
 
-/**
- * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
- * @since 27.06.19
- */
 internal class CancelPaymentUseCase(
     private val checkoutRepository: CheckoutRepository = Injector.checkoutRepository
 ) : UseCase<EmptyInputModel, EmptyIUModel>() {

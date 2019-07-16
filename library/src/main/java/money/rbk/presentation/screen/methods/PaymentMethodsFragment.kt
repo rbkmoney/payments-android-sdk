@@ -54,6 +54,7 @@ internal class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), Paym
     }
 
     override fun hideProgress() {
+        super.hideProgress()
         checkoutActivity.hideProgress()
     }
 

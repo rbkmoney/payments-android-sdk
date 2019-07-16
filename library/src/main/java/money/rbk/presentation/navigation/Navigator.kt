@@ -68,8 +68,8 @@ class Navigator(
         replaceFragmentInActivity(GpayFragment.newInstance())
     }
 
-    fun openBankCard() {
-        replaceFragmentInActivity(BankCardFragment.newInstance())
+    fun openBankCard(clearTop: Boolean = false) {
+        replaceFragmentInActivity(BankCardFragment.newInstance(), clearTop = clearTop)
     }
 
     fun openWarningFragment(@StringRes titleRes: Int, @StringRes messageRes: Int) {
@@ -115,11 +115,6 @@ class Navigator(
                 }
 
         } != null
-
-    fun backAndOpenCardFragment() {
-        activity.supportFragmentManager.popBackStackImmediate(BankCardFragment::class.java.name, POP_BACK_STACK_INCLUSIVE)
-        openBankCard()
-    }
 
     fun back() {
         activity.supportFragmentManager.popBackStackImmediate()
@@ -187,10 +182,15 @@ class Navigator(
         get() = activity.supportFragmentManager.findFragmentById(R.id.container)
 
     private fun replaceFragmentInActivity(fragment: Fragment,
-        isRoot: Boolean = false) {
+        isRoot: Boolean = false,
+        clearTop: Boolean = false) {
         activity.supportFragmentManager.transact {
             if (isRoot) {
                 activity.supportFragmentManager.popBackStack(null, POP_BACK_STACK_INCLUSIVE)
+            }
+            if (clearTop) {
+                activity.supportFragmentManager.popBackStack(fragment.javaClass.name,
+                    POP_BACK_STACK_INCLUSIVE)
             }
             replace(containerId, fragment, fragment.javaClass.name)
             addToBackStack(fragment.javaClass.name)

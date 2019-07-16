@@ -34,11 +34,18 @@ class PaymentMethodsPresenter(
     private val paymentMethodsUseCase: UseCase<EmptyInputModel, PaymentMethodsModel> = PaymentMethodsUseCase()
 ) : BasePresenter<PaymentMethodsView>(navigator) {
 
+    lateinit var paymentMethods: List<PaymentMethodModel>
+
     override fun onViewAttached(view: PaymentMethodsView) {
-        view.showProgress()
-        paymentMethodsUseCase(EmptyInputModel,
-            { onPaymentMethodsLoaded(it) },
-            { onPaymentMethodsError(it) })
+        if (::paymentMethods.isInitialized) {
+            view.setPaymentMethods(paymentMethods)
+            view.hideProgress()
+        } else {
+            view.showProgress()
+            paymentMethodsUseCase(EmptyInputModel,
+                { onPaymentMethodsLoaded(it) },
+                { onPaymentMethodsError(it) })
+        }
     }
 
     fun onPaymentClick(payment: PaymentMethodModel) =
@@ -48,6 +55,7 @@ class PaymentMethodsPresenter(
         }
 
     private fun onPaymentMethodsLoaded(paymentMethods: PaymentMethodsModel) {
+        this.paymentMethods = paymentMethods.paymentMethods
         view?.apply {
             setPaymentMethods(paymentMethods.paymentMethods)
             hideProgress()

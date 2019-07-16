@@ -20,6 +20,7 @@ package money.rbk.presentation.screen.base
 
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
 import money.rbk.presentation.activity.checkout.CheckoutActivity
 
@@ -36,7 +37,7 @@ internal abstract class BaseFragment<T : BaseView> : Fragment(), BaseView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        
         presenter.attachView(this as? T ?: throw RuntimeException("")) //TODO: Check it
     }
 
@@ -44,5 +45,12 @@ internal abstract class BaseFragment<T : BaseView> : Fragment(), BaseView {
         super.onDestroyView()
         presenter.detachView()
     }
+
+
+    @CallSuper
+    override fun hideProgress() {
+        checkoutActivity.hideProgress()
+    }
+
 
 }

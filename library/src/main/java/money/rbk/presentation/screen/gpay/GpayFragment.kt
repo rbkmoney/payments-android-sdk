@@ -73,6 +73,7 @@ internal class GpayFragment : BaseFragment<GpayView>(), GpayView {
     }
 
     override fun hideProgress() {
+        super.hideProgress()
         btnPay.isClickable = true
         pbLoading.visibility = View.GONE
     }

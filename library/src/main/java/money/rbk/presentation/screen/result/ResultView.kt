@@ -24,6 +24,6 @@ interface ResultView : BaseView {
 
     override fun showProgress() = Unit
 
-    override fun hideProgress() = Unit
+
 
 }
