@@ -24,6 +24,8 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.FragmentActivity
+import money.rbk.R
+import kotlin.math.min
 
 fun FragmentActivity.hideKeyboard() {
     val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -36,7 +38,7 @@ fun Activity.adjustSize() {
         val lp = WindowManager.LayoutParams()
         lp.copyFrom(window.attributes)
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT
-        lp.height = screenHeight //TODO: Make more apprepriate size!
+        lp.height = min(screenHeight, resources.getDimensionPixelOffset(R.dimen.height_screen))
         window.attributes = lp
     }
 }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~
   ~ Copyright 2019 RBKmoney
   ~
@@ -54,6 +53,7 @@
     <dimen name="item_height">80dp</dimen>
 
     <dimen name="height_medium_button">48dp</dimen>
-    <dimen name="height_gpay_button">51dp</dimen> <!-- 3dp more than height_medium_button -->
+    <dimen name="height_gpay_button">51dp</dimen>  <!-- 3dp more than height_medium_button -->
+    <dimen name="height_screen">960dp</dimen>
 
 </resources>
