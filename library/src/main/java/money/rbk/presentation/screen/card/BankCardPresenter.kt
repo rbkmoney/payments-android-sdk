@@ -47,8 +47,7 @@ class BankCardPresenter(
 
     navigator: Navigator,
     private val paymentUseCase: UseCase<PaymentInputModel, CheckoutInfoModel> = CreatePaymentUseCase(),
-    private val invoiceEventsUseCase: UseCase<CheckoutStateInputModel, CheckoutInfoModel> = CheckoutStateUseCase(),
-    private val cancelPaymentUseCase: UseCase<EmptyInputModel, EmptyIUModel> = CancelPaymentUseCase()
+    private val invoiceEventsUseCase: UseCase<CheckoutStateInputModel, CheckoutInfoModel> = CheckoutStateUseCase()
 ) : BasePaymentPresenter<BankCardView>(navigator),
     MonthPickerDialog.OnDateSetListener {
 
@@ -156,10 +155,6 @@ class BankCardPresenter(
         paymentUseCase(cardPaymentInputModel,
             { onCheckoutUpdated(it) },
             { onPaymentError(it) { performPayment(cardPaymentInputModel) } })
-    }
-
-    private fun cancelPayment() {
-        cancelPaymentUseCase(EmptyInputModel, {}, {})
     }
 
     /* Callbacks */

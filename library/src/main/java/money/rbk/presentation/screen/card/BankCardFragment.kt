@@ -140,6 +140,7 @@ internal class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
     }
 
     override fun hideProgress() {
+        super.hideProgress()
         btnPay.isEnabled = true
         edCardNumber.isEnabled = true
         edCardDate.isEnabled = true

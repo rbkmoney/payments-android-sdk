@@ -22,7 +22,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_height"
-    android:background="@drawable/background_payment"
+    android:background="@drawable/selector_background_payment"
     android:paddingStart="23dp"
     android:paddingEnd="23dp"
     app:cardCornerRadius="@dimen/corner_radius"
