@@ -105,7 +105,7 @@
     </style>
 
     <style name="TextAppearance.RBKMoney.Headline.BlueLight">
-        <item name="android:textColor">@color/blue_light</item>
+        <item name="android:textColor">@color/selector_blue_light</item>
     </style>
 
     <style name="TextAppearance.RBKMoney.Headline.BlueLight.NoCaps">
