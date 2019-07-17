@@ -57,10 +57,16 @@ class GpayPresenter(
         }
     }
 
-    fun onGpayPaymentPerformed(resultCode: Int, data: Intent, email: String) {
+    fun onGpayPaymentPerformed(resultCode: Int, data: Intent?, email: String) {
 
         when (resultCode) {
-            Activity.RESULT_OK -> onGpayPaymentSuccess(data, email)
+            Activity.RESULT_OK -> {
+                if (data != null) {
+                    onGpayPaymentSuccess(data, email)
+                } else {
+                    view?.hideProgress()
+                }
+            }
             Activity.RESULT_CANCELED -> view?.hideProgress()
 
             AutoResolveHelper.RESULT_ERROR -> onGpayPaymentError(

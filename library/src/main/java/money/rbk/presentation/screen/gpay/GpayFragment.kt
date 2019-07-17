@@ -50,10 +50,6 @@ internal class GpayFragment : BaseFragment<GpayView>(), GpayView {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         btnPay.isClickable = true
-        if (data == null) {
-            return super.onActivityResult(requestCode, resultCode, data)
-        }
-
         when (requestCode) {
             Web3DSecureActivity.REQUEST_CODE -> presenter.on3DsPerformed(resultCode)
             LOAD_PAYMENT_DATA_REQUEST_CODE ->
