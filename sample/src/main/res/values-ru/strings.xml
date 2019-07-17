@@ -17,13 +17,11 @@
   -->
 
 <resources>
-    <string name="label_error">Ошибка</string>
     <string name="label_buy">Купить</string>
     <string name="label_there_is_no_name">Нет названия продукта</string>
     <string name="label_there_is_no_description">Нет описания продукта</string>
     <string name="label_cost">Цена: %1$s %2$s</string>
     <string name="label_success">Отлично!</string>
-    <string name="label_cancel">Отмена</string>
     <string name="label_payment_canceled">Платёж отменён</string>
     <string name="label_payment_success">Платёж совершён</string>
 

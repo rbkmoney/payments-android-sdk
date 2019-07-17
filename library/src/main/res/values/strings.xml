@@ -36,7 +36,7 @@
     <string name="rbc_label_date_card">MM/YY</string>
     <string name="rbc_label_ccv_card">CVV/CVC</string>
     <string name="rbc_label_number_on_card">Card number</string>
-    <string name="rbc_label_pay_f">To pay %1$s</string>
+    <string name="rbc_label_pay_f">Pay %1$s</string>
 
     <!-- Google Pay -->
     <string name="rbc_label_google_pay" translatable="false">Google Pay</string>
