@@ -28,40 +28,42 @@ enum class CreditCardType(
     val prefixes: Array<String>,
     val cardName: String,
     @DrawableRes
-    val iconRes: Int
+    val iconRes: Int?
 ) {
 
     visaelectron(
         lengths = intArrayOf(16),
-        prefixes = arrayOf("4026", "417500", "4405", "4508", "4844", "4913", "4917"),
+        prefixes = arrayOf(
+            "4026",
+            "417500",
+            "4405",
+            "4508",
+            "4844",
+            "4913",
+            "4917"),
         cardName = "Visa Electron",
         iconRes = R.drawable.ic_logo_visa_electron
     ),
-
     visa(
         lengths = intArrayOf(13, 16, 19),
         prefixes = arrayOf("4"),
         cardName = "Visa",
         iconRes = R.drawable.ic_logo_visa
     ),
-
     maestro(
         lengths = intArrayOf(12, 13, 14, 15, 16, 17, 18, 19),
         prefixes = arrayOf(
-            "50", "56", "57", "58", "59", "60", "61", "62", "63", "64",
-            "65", "66", "67", "68", "69"
+            "50",
+            *"56".."69"
         ),
         cardName = "Maestro",
         iconRes = R.drawable.ic_maestro_logo
     ),
-
     mastercard(
         lengths = intArrayOf(16),
         prefixes = arrayOf(
-            "2221", "2222", "2223", "2224", "2225", "2226", "2227", "2228", "2229",
-            "223", "224", "225", "226", "227", "228", "229",
-            "23", "24", "25", "26", "271", "2720",
-            "51", "52", "53", "54", "55"
+            *"2221".."2720",
+            *"51".."55"
         ),
         cardName = "MasterCard",
         iconRes = R.drawable.ic_master_card_logo
@@ -69,12 +71,63 @@ enum class CreditCardType(
 
     nspkmir(
         lengths = intArrayOf(13, 16),
-        prefixes = arrayOf("2200", "2201", "2202", "2203", "2204"),
+        prefixes = arrayOf(*"2200".."2204"),
         cardName = "MIR",
         iconRes = R.drawable.ic_mir
+    ),
+    dankort(
+        lengths = intArrayOf(16),
+        prefixes = arrayOf("5019"),
+        cardName = "Dankort",
+        iconRes = null
+    ),
+    amex(
+        lengths = intArrayOf(15),
+        prefixes = arrayOf(
+            "34",
+            "37"
+        ),
+        cardName = "American Express",
+        iconRes = null
+    ),
+    dinersclub(
+        lengths = intArrayOf(14, 15, 16, 17, 18, 19),
+        prefixes = arrayOf(
+            *"300".."305",
+            "3095",
+            "36",
+            "38",
+            "39"),
+        cardName = "Diners Club",
+        iconRes = null
+    ),
+    discover(
+        lengths = intArrayOf(16, 17, 18, 19),
+        prefixes = arrayOf(
+            "60110",
+            *"60112".."60114", "601174",
+            *"601177".."601179",
+            *"601186".."601199",
+            *"644".."659",
+            *"622126".."622925",
+            *"624".."626",
+            *"6282".."6288",
+            "64", "65"),
+        cardName = "Discover Card",
+        iconRes = null
+    ),
+    unionpay(
+        lengths = intArrayOf(16, 17, 18, 19),
+        prefixes = arrayOf("62"),
+        cardName = "China UnionPay",
+        iconRes = null
+    ),
+    jcb(
+        lengths = intArrayOf(16, 17, 18, 19),
+        prefixes = arrayOf(*"3528".."3589"),
+        cardName = "China UnionPay",
+        iconRes = null
     );
-
-    // TODO: "forbrugsforeningen" "dankort" "amex" "dinersclub" "discover" "unionpay" "jcb"
 
     companion object {
 
@@ -83,7 +136,7 @@ enum class CreditCardType(
                 .asSequence()
                 .find { cardType ->
                     cardType.lengths.contains(cardNumber.length) &&
-                            (cardType.prefixes.any { cardNumber.startsWith(it) })
+                        (cardType.prefixes.any { cardNumber.startsWith(it) })
                 }
 
         fun suggestCardType(creditCardNumber: String): CreditCardType? =
@@ -95,6 +148,9 @@ enum class CreditCardType(
 
     }
 }
+
+private operator fun String.rangeTo(that: String): Array<String> =
+    IntRange(this.toInt(), that.toInt()).map { it.toString() }.toTypedArray()
 
 fun String.getCardType(): CreditCardType? {
     val rawNumberString = removeSpaces()

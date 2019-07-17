@@ -28,7 +28,7 @@ sealed class NetworkException(message: String? = null, cause: Throwable? = null)
     internal class RequestExecutionException(val request: Request, e: IOException) :
         NetworkException(cause = e)
 
-    internal class ResponseReadingException(val response: Response, e: IOException) :
+    internal class ResponseReadingException(val response: Response, e: IOException? = null) :
         NetworkException(cause = e)
 
 }

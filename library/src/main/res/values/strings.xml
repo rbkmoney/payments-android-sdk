@@ -20,7 +20,6 @@
     <string name="app_name" translatable="false">RBKMoney</string>
 
     <!-- checkout -->
-    <string name="rbc_label_footer" translatable="false">© 2008–2018 RBKmoney | Direct Payments Ltd.</string>
     <string name="rbc_label_secure_payment_with">Secure payment with</string>
     <string name="rbc_label_order_details">Order details</string>
 

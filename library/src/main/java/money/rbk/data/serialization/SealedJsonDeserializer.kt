@@ -29,7 +29,7 @@ class SealedJsonDeserializer<T : Any>(private val distributor: SealedDistributor
             throw JsonParseException("Unable to parse $typeOfT")
         }
 
-        return context.deserialize<T>(json, fool.kClass.java)
+        return context.deserialize(json, fool.kClass.java)
     }
 }
 
