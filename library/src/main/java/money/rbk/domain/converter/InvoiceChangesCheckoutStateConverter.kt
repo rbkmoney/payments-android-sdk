@@ -130,8 +130,7 @@ internal class InvoiceChangesCheckoutStateConverter(
             PaymentError.Code.RejectedByIssuer,
             PaymentError.Code.AccountLimitsExceeded,
             PaymentError.Code.PaymentRejected,
-            PaymentError.Code.InvalidPaymentTool -> false
-            
+            PaymentError.Code.InvalidPaymentTool,
             PaymentError.Code.Unknown,
             PaymentError.Code.PreauthorizationFailed,
             PaymentError.Code.InsufficientFunds,
