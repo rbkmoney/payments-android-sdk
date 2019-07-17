@@ -17,20 +17,20 @@
   -->
 
 <resources>
-    <string name="app_name">RBKMoneySample</string>
+    <string name="app_name" translatable="false">RBKMoneySample</string>
 
-    <string name="label_error">Ошибка</string>
-    <string name="label_buy">Купить</string>
-    <string name="label_there_is_no_name">Нет названия продукта</string>
-    <string name="label_there_is_no_description">Нет описания продукта</string>
-    <string name="label_cost">Цена: %1$s %2$s</string>
-    <string name="label_success">Отлично!</string>
-    <string name="label_cancel">Отмена</string>
-    <string name="label_payment_canceled">Платёж отменён</string>
-    <string name="label_payment_success">Платёж совершён</string>
+    <string name="label_error">Error</string>
+    <string name="label_buy">Buy</string>
+    <string name="label_there_is_no_name">No product name</string>
+    <string name="label_there_is_no_description">No product description</string>
+    <string name="label_cost">Price: %1$s %2$s</string>
+    <string name="label_success">Success!</string>
+    <string name="label_cancel">Cancel</string>
+    <string name="label_payment_canceled">Payment cancelled</string>
+    <string name="label_payment_success">Payment success</string>
 
-    <string name="error_cant_load_invoice_by_tamplate_f">Невозможно создать новый инвойс по шаблону %1$s</string>
-    <string name="error_cant_load_invoice_template_f">Невозможно загрузить шаблон инвойса. %1$s</string>
-    <string name="error_f">Ошибка: %1$s</string>
-    <string name="error_unknown">Неизвестная ошибка</string>
+    <string name="error_cant_load_invoice_by_tamplate_f">Unable create invoice by template %1$s</string>
+    <string name="error_cant_load_invoice_template_f">Unable to load invoice. %1$s</string>
+    <string name="error_f">Error: %1$s</string>
+    <string name="error_unknown">Unknown error</string>
 </resources>

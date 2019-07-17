@@ -18,7 +18,6 @@
 
 package money.rbk.presentation.activity.checkout
 
-import android.os.Bundle
 import money.rbk.R
 import money.rbk.domain.entity.InvoiceStatus
 import money.rbk.domain.interactor.InvoiceUseCase
@@ -52,12 +51,12 @@ internal class CheckoutPresenter(
     private fun onInvoiceLoadError(throwable: Throwable) {
         throwable.printStackTrace()
         navigator.showAlert(
-            R.string.label_error,
-            R.string.error_cant_load_invoice,
-            R.string.label_retry to {
+            R.string.rbc_label_error,
+            R.string.rbc_error_cant_load_invoice,
+            R.string.rbc_label_retry to {
                 initializeInvoice()
             },
-            R.string.label_cancel to {
+            R.string.rbc_label_cancel to {
                 navigator.finish()
             })
     }
@@ -74,19 +73,19 @@ internal class CheckoutPresenter(
                 }
                 InvoiceStatus.cancelled -> {
                     hideProgress()
-                    navigator.openWarningFragment(R.string.error_invoice_cancelled,
-                        R.string.error_invalid_invoice_status)
+                    navigator.openWarningFragment(R.string.rbc_error_invoice_cancelled,
+                        R.string.rbc_error_invalid_invoice_status)
                 }
                 InvoiceStatus.paid -> {
                     hideProgress()
-                    navigator.openWarningFragment(R.string.error_invoice_already_payed,
-                        R.string.error_invalid_invoice_status)
+                    navigator.openWarningFragment(R.string.rbc_error_invoice_already_payed,
+                        R.string.rbc_error_invalid_invoice_status)
                 }
                 InvoiceStatus.fulfilled,
                 InvoiceStatus.unknown -> {
                     hideProgress()
-                    navigator.openWarningFragment(R.string.error_unknown_invoice,
-                        R.string.error_invalid_invoice_status)
+                    navigator.openWarningFragment(R.string.rbc_error_unknown_invoice,
+                        R.string.rbc_error_invalid_invoice_status)
                 }
             }
         }

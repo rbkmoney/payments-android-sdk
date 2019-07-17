@@ -27,7 +27,7 @@ abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Navigator) :
 
         when (val checkoutState = checkoutInfo.checkoutState) {
             is CheckoutStateModel.Success ->
-                navigator.openSuccessFragment(R.string.label_payed_by_card_f,
+                navigator.openSuccessFragment(R.string.rbc_label_payed_by_card_f,
                     checkoutState.paymentToolName,
                     checkoutState.email)
 
@@ -51,7 +51,7 @@ abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Navigator) :
 
             CheckoutStateModel.PaymentProcessing ->
                 navigator.openErrorFragment(
-                    messageRes = R.string.error_polling_time_exceeded,
+                    messageRes = R.string.rbc_error_polling_time_exceeded,
                     repeatAction = true,
                     allPaymentMethods = true
                 )
@@ -69,17 +69,17 @@ abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Navigator) :
         return when (error) {
             is UseCaseException.UnableRepeatPaymentException -> // TODO: Why error_connection?
                 navigator.openErrorFragment(
-                    messageRes = R.string.error_busines_logic,
+                    messageRes = R.string.rbc_error_busines_logic,
                     useAnotherCard = canUseAnotherCard,
                     allPaymentMethods = true)
 
             is NetworkException -> {
-                alert = navigator.showAlert(R.string.label_error,
-                    R.string.error_connection,
-                    R.string.label_retry to { retryPayment() },
-                    R.string.label_cancel to {
+                alert = navigator.showAlert(R.string.rbc_label_error,
+                    R.string.rbc_error_connection,
+                    R.string.rbc_label_retry to { retryPayment() },
+                    R.string.rbc_label_cancel to {
                         navigator.openErrorFragment(
-                            messageRes = R.string.error_connection,
+                            messageRes = R.string.rbc_error_connection,
                             repeatAction = true,
                             useAnotherCard = canUseAnotherCard,
                             allPaymentMethods = true)
@@ -89,7 +89,7 @@ abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Navigator) :
 
             else ->
                 navigator.openErrorFragment(
-                    messageRes = R.string.error_busines_logic,
+                    messageRes = R.string.rbc_error_busines_logic,
                     repeatAction = true,
                     useAnotherCard = canUseAnotherCard,
                     allPaymentMethods = true)
@@ -104,19 +104,19 @@ abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Navigator) :
         return when (error) {
             is UseCaseException.PollingTimeExceededException ->
                 navigator.openErrorFragment(
-                    messageRes = R.string.error_polling_time_exceeded,
+                    messageRes = R.string.rbc_error_polling_time_exceeded,
                     repeatAction = true,
                     allPaymentMethods = true
                 )
             is NetworkException ->
-                alert = navigator.showAlert(R.string.label_error,
-                    R.string.error_connection,
-                    R.string.label_retry to {
+                alert = navigator.showAlert(R.string.rbc_label_error,
+                    R.string.rbc_error_connection,
+                    R.string.rbc_label_retry to {
                         retryAction()
                     },
-                    R.string.label_cancel to {
+                    R.string.rbc_label_cancel to {
                         navigator.openErrorFragment(
-                            messageRes = R.string.error_connection,
+                            messageRes = R.string.rbc_error_connection,
                             repeatAction = true,
                             useAnotherCard = canUseAnotherCard,
                             allPaymentMethods = true)
@@ -124,7 +124,7 @@ abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Navigator) :
                 )
             else ->
                 navigator.openErrorFragment(
-                    messageRes = R.string.error_busines_logic,
+                    messageRes = R.string.rbc_error_busines_logic,
                     repeatAction = true,
                     useAnotherCard = canUseAnotherCard, // TODO: А проводился ли платёж вообще?
                     allPaymentMethods = true)

@@ -96,7 +96,7 @@ class BankCardPresenter(
             FragmentActivity.RESULT_CANCELED -> navigator.finishWithCancel()
             Web3DSecureActivity.RESULT_NETWORK_ERROR ->
                 navigator.openErrorFragment(
-                    messageRes = R.string.error_connection,
+                    messageRes = R.string.rbc_error_connection,
                     repeatAction = true,
                     useAnotherCard = canUseAnotherCard,
                     allPaymentMethods = true)

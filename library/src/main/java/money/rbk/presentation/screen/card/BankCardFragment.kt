@@ -108,7 +108,7 @@ internal class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
     }
 
     override fun setCost(cost: String) {
-        btnPay.text = getString(R.string.label_pay_f, cost)
+        btnPay.text = getString(R.string.rbc_label_pay_f, cost)
     }
 
     override fun setCardDate(formatMonthYear: String) {

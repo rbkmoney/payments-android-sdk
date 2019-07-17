@@ -83,8 +83,8 @@ internal class InvoiceChangesCheckoutStateConverter(
     private fun InvoiceChange.Refund.process(): CheckoutStateModel? {
         if (paymentID != checkoutRepository.paymentId) return null
 
-        return CheckoutStateModel.Warning(R.string.label_payment_refund,
-            R.string.error_payment_in_refund_state)
+        return CheckoutStateModel.Warning(R.string.rbc_label_payment_refund,
+            R.string.rbc_error_payment_in_refund_state)
     }
 
     private fun InvoiceChange.PaymentStatusChanged.process(): CheckoutStateModel? {
@@ -94,13 +94,13 @@ internal class InvoiceChangesCheckoutStateConverter(
             PaymentStatus.pending,
             PaymentStatus.processed,
             PaymentStatus.captured -> null
-            PaymentStatus.refunded -> CheckoutStateModel.Warning(R.string.label_payment_refund,
-                R.string.error_payment_in_refund_state)
-            PaymentStatus.cancelled -> CheckoutStateModel.PaymentFailed(R.string.error_payment_cancelled,
+            PaymentStatus.refunded -> CheckoutStateModel.Warning(R.string.rbc_label_payment_refund,
+                R.string.rbc_error_payment_in_refund_state)
+            PaymentStatus.cancelled -> CheckoutStateModel.PaymentFailed(R.string.rbc_error_payment_cancelled,
                 false)
             PaymentStatus.failed -> CheckoutStateModel.PaymentFailed(error.errorText(),
                 error.canRetry())
-            PaymentStatus.unknown -> CheckoutStateModel.PaymentFailed(R.string.error_unknown_payment,
+            PaymentStatus.unknown -> CheckoutStateModel.PaymentFailed(R.string.rbc_error_unknown_payment,
                 true)
         }
     }
@@ -118,10 +118,10 @@ internal class InvoiceChangesCheckoutStateConverter(
         val email = lastPayment?.payer?.email.orEmpty()
         return when (status) {
             InvoiceStatus.unpaid -> CheckoutStateModel.Pending
-            InvoiceStatus.cancelled -> CheckoutStateModel.InvoiceFailed(R.string.error_invoice_cancelled)
+            InvoiceStatus.cancelled -> CheckoutStateModel.InvoiceFailed(R.string.rbc_error_invoice_cancelled)
             InvoiceStatus.paid -> CheckoutStateModel.Success(paymentToolInfo, email)
             InvoiceStatus.fulfilled -> CheckoutStateModel.Success(paymentToolInfo, email)
-            InvoiceStatus.unknown -> CheckoutStateModel.InvoiceFailed(R.string.error_unknown_invoice)
+            InvoiceStatus.unknown -> CheckoutStateModel.InvoiceFailed(R.string.rbc_error_unknown_invoice)
         }
     }
 
@@ -140,14 +140,14 @@ internal class InvoiceChangesCheckoutStateConverter(
     @StringRes
     private fun PaymentError?.errorText(): Int =
         when (this?.code) {
-            PaymentError.Code.InvalidPaymentTool -> R.string.error_invalid_payment_tool
-            PaymentError.Code.AccountLimitsExceeded -> R.string.error_account_limits_exceeded
-            PaymentError.Code.InsufficientFunds -> R.string.error_insufficient_funds
-            PaymentError.Code.PreauthorizationFailed -> R.string.error_preauthorization_failed
-            PaymentError.Code.RejectedByIssuer -> R.string.error_rejected_by_issuer
-            PaymentError.Code.PaymentRejected -> R.string.error_payment_rejected
-            PaymentError.Code.Unknown -> R.string.error_payment_failed
-            null -> R.string.error_payment_failed
+            PaymentError.Code.InvalidPaymentTool -> R.string.rbc_error_invalid_payment_tool
+            PaymentError.Code.AccountLimitsExceeded -> R.string.rbc_error_account_limits_exceeded
+            PaymentError.Code.InsufficientFunds -> R.string.rbc_error_insufficient_funds
+            PaymentError.Code.PreauthorizationFailed -> R.string.rbc_error_preauthorization_failed
+            PaymentError.Code.RejectedByIssuer -> R.string.rbc_error_rejected_by_issuer
+            PaymentError.Code.PaymentRejected -> R.string.rbc_error_payment_rejected
+            PaymentError.Code.Unknown -> R.string.rbc_error_payment_failed
+            null -> R.string.rbc_error_payment_failed
         }
 
 }
