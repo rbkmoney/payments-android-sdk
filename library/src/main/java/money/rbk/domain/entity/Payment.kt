@@ -18,18 +18,11 @@
 
 package money.rbk.domain.entity
 
-import java.util.Date
-
 internal class Payment(
     val id: String,
     val externalID: String?,
-//    val invoiceID: String,
-//    val createdAt: Date,
-//    val amount: Int,
     val currency: Currency,
-    // val flow: PaymentFlow,
     val payer: Payer,
-//    val makeRecurrent: Boolean,
     val status: PaymentStatus,
     val error: PaymentError?
 )

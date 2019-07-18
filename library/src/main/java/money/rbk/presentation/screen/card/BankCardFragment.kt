@@ -44,7 +44,6 @@ import ru.tinkoff.decoro.MaskImpl
 import ru.tinkoff.decoro.slots.PredefinedSlots
 import ru.tinkoff.decoro.watchers.MaskFormatWatcher
 
-// TODO: Maybe temporary, edCardNumber after two returns get old value
 @ContainerOptions(cache = CacheImplementation.NO_CACHE)
 internal class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
 

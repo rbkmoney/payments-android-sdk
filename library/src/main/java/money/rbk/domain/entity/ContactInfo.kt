@@ -18,6 +18,6 @@
 
 package money.rbk.domain.entity
 
-class ContactInfo(
+internal class ContactInfo(
     val email: String?
 )

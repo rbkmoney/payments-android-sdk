@@ -18,7 +18,7 @@
 
 package money.rbk.presentation.model
 
-class BrowserRequestModel(
+internal class BrowserRequestModel(
     val isPost: Boolean,
     val requestUrl: String,
     val body: ByteArray? = null

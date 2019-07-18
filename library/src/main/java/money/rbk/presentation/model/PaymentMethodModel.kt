@@ -22,7 +22,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import money.rbk.R
 
-sealed class PaymentMethodModel(
+internal sealed class PaymentMethodModel(
     @StringRes val name: Int? = null,
     @StringRes val description: Int? = null,
     @DrawableRes val icon: Int

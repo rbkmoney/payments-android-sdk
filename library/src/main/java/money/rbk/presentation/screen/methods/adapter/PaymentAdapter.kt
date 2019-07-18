@@ -28,7 +28,7 @@ import money.rbk.R
 import money.rbk.presentation.model.PaymentMethodModel
 import money.rbk.presentation.screen.methods.adapter.PaymentAdapter.PaymentHolder
 
-class PaymentAdapter(
+internal class PaymentAdapter(
     private val onItemClickListener: (PaymentMethodModel) -> Unit,
     private var payments: List<PaymentMethodModel>) : RecyclerView.Adapter<PaymentHolder>() {
 

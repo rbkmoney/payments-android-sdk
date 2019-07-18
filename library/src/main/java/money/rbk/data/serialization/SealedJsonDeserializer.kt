@@ -8,7 +8,7 @@ import com.google.gson.JsonPrimitive
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
-class SealedJsonDeserializer<T : Any>(private val distributor: SealedDistributor<T>) :
+internal class SealedJsonDeserializer<T : Any>(private val distributor: SealedDistributor<T>) :
     JsonDeserializer<T> {
 
     override fun deserialize(json: JsonElement,
@@ -29,11 +29,11 @@ class SealedJsonDeserializer<T : Any>(private val distributor: SealedDistributor
     }
 }
 
-class SealedDistributor<T : Any>(val field: String,
+internal class SealedDistributor<T : Any>(val field: String,
     val values: Array<out SealedDistributorValue<T>>,
     val fallback: T? = null)
 
-interface SealedDistributorValue<T : Any> {
+internal interface SealedDistributorValue<T : Any> {
     val name: String
     val kClass: KClass<out T>
 }

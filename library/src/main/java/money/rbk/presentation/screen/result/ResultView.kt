@@ -20,10 +20,8 @@ package money.rbk.presentation.screen.result
 
 import money.rbk.presentation.screen.base.BaseView
 
-interface ResultView : BaseView {
+internal interface ResultView : BaseView {
 
     override fun showProgress() = Unit
-
-
 
 }

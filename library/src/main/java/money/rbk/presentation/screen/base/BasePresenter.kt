@@ -20,7 +20,7 @@ package money.rbk.presentation.screen.base
 
 import money.rbk.presentation.navigation.Navigator
 
-abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator) {
+internal abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator) {
 
     protected var view: View? = null
 

@@ -27,13 +27,13 @@ import androidx.fragment.app.FragmentActivity
 import money.rbk.R
 import kotlin.math.min
 
-fun FragmentActivity.hideKeyboard() {
+internal fun FragmentActivity.hideKeyboard() {
     val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     val view = currentFocus ?: View(this)
     imm.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
-fun Activity.adjustSize() {
+internal fun Activity.adjustSize() {
     if (isTablet) {
         val lp = WindowManager.LayoutParams()
         lp.copyFrom(window.attributes)
@@ -43,7 +43,7 @@ fun Activity.adjustSize() {
     }
 }
 
-val Activity.screenHeight: Int
+internal val Activity.screenHeight: Int
     get() = windowManager.defaultDisplay
         .run {
             Point().also { getSize(it) }

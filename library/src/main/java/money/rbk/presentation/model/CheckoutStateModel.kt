@@ -20,21 +20,21 @@ package money.rbk.presentation.model
 
 import androidx.annotation.StringRes
 
-sealed class CheckoutStateModel : BaseIUModel() {
+internal sealed class CheckoutStateModel : BaseIUModel() {
 
-    class Success(val paymentToolName: String, val email: String) : CheckoutStateModel()
+    internal class Success(val paymentToolName: String, val email: String) : CheckoutStateModel()
 
-    object Pending : CheckoutStateModel()
+    internal object Pending : CheckoutStateModel()
 
-    class PaymentFailed(@StringRes val reasonResId: Int, val canRetry: Boolean) : CheckoutStateModel()
+    internal class PaymentFailed(@StringRes val reasonResId: Int, val canRetry: Boolean) : CheckoutStateModel()
 
-    class InvoiceFailed(@StringRes val reasonResId: Int) : CheckoutStateModel()
+    internal class InvoiceFailed(@StringRes val reasonResId: Int) : CheckoutStateModel()
 
-    class Warning(@StringRes val titleId: Int, @StringRes val messageResId: Int) :
+    internal class Warning(@StringRes val titleId: Int, @StringRes val messageResId: Int) :
         CheckoutStateModel()
 
-    object PaymentProcessing : CheckoutStateModel()
+    internal object PaymentProcessing : CheckoutStateModel()
 
-    class BrowserRedirectInteraction(val request: BrowserRequestModel) : CheckoutStateModel()
+    internal class BrowserRedirectInteraction(val request: BrowserRequestModel) : CheckoutStateModel()
 
 }

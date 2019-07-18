@@ -38,7 +38,7 @@ import money.rbk.presentation.screen.gpay.GpayFragment
 import money.rbk.presentation.screen.methods.PaymentMethodsFragment
 import money.rbk.presentation.screen.result.ResultFragment
 
-class Navigator(
+internal class Navigator(
     private val activity: FragmentActivity,
     @IdRes
     private val containerId: Int
@@ -206,5 +206,4 @@ class Navigator(
 
 }
 
-
-typealias AlertButton = Pair<Int, () -> Unit>
+internal typealias AlertButton = Pair<Int, () -> Unit>

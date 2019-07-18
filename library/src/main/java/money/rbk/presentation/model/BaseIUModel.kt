@@ -18,4 +18,4 @@
 
 package money.rbk.presentation.model
 
-abstract class BaseIUModel
+internal abstract class BaseIUModel
