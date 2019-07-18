@@ -20,12 +20,14 @@ package money.rbk
 
 import android.app.Activity
 import android.content.Intent
+import androidx.annotation.Keep
 import money.rbk.presentation.activity.checkout.CheckoutActivity
 
 object RbkMoney {
 
-    @JvmOverloads
-    fun buildCheckoutIntent(activity: Activity,
+    @[JvmStatic JvmOverloads Keep]
+    fun buildCheckoutIntent(
+        activity: Activity,
         invoiceId: String,
         invoiceAccessToken: String,
         shopName: String,
@@ -37,5 +39,4 @@ object RbkMoney {
             shopName,
             useTestEnvironment,
             email)
-
 }
