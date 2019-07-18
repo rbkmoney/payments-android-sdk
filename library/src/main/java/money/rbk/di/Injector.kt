@@ -21,6 +21,7 @@ package money.rbk.di
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import money.rbk.data.network.Constants
 import money.rbk.data.repository.CheckoutRepositoryImpl
 import money.rbk.data.repository.GpayRepositoryImpl
 import money.rbk.data.serialization.SealedJsonDeserializer
@@ -35,6 +36,7 @@ import money.rbk.domain.entity.PaymentToolDetails
 import money.rbk.domain.entity.UserInteraction
 import money.rbk.domain.repository.CheckoutRepository
 import money.rbk.domain.repository.GpayRepository
+import okhttp3.CertificatePinner
 import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -110,7 +112,11 @@ internal object Injector {
         .addInterceptor(HttpLoggingInterceptor().also {
             it.level = HttpLoggingInterceptor.Level.BODY
         })
-        // .applySsl(context)
+        .certificatePinner(
+            CertificatePinner.Builder()
+                .add(Constants.HOST, *Constants.CERTS)
+                .build()
+        )
         // .addUserAgent(context)
         // .applyLogging()
         .build()

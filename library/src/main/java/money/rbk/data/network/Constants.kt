@@ -19,7 +19,11 @@
 package money.rbk.data.network
 
 internal object Constants {
-
-    const val BASE_URL = "https://api.rbk.money/v2"
+    const val HOST = "api.rbk.money"
+    const val BASE_URL = "https://$HOST/v2"
+    val CERTS = arrayOf(
+        "sha256/dY75Vyo/cYChbq9K4HoinKrrRKBgm/oPWPvwqSJMbpM=",
+        "sha256/6YBE8kK4d5J1qu1wEjyoKqzEIvyRY5HyM/NB2wKdcZo=",
+        "sha256/ICGRfpgmOUXIWcQ/HXPLQTkFPEFPoDyjvH7ohhQpjzs=")
 
 }
