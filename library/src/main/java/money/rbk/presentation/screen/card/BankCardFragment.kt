@@ -25,6 +25,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.core.view.ViewCompat
 import kotlinx.android.extensions.CacheImplementation
 import kotlinx.android.extensions.ContainerOptions
 import kotlinx.android.synthetic.main.rbk_fmt_card.*
@@ -70,6 +71,14 @@ internal class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.requestFocus()
+
+        ViewCompat.setImportantForAccessibility(edCardNumber,
+            ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO)
+        ViewCompat.setImportantForAccessibility(edCardDate,
+            ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO)
+        ViewCompat.setImportantForAccessibility(edCardCvv,
+            ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO)
+
         btnPay.setOnClickListener {
             activity?.hideKeyboard()
             view.requestFocus()
