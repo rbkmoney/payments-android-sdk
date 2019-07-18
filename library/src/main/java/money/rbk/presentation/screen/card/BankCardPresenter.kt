@@ -28,17 +28,17 @@ import money.rbk.domain.interactor.CreatePaymentUseCase
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.CheckoutStateInputModel
 import money.rbk.domain.interactor.input.PaymentInputModel
+import money.rbk.presentation.activity.web.Web3DSecureActivity
 import money.rbk.presentation.model.CheckoutInfoModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePaymentPresenter
-import money.rbk.presentation.activity.web.Web3DSecureActivity
 import money.rbk.presentation.utils.DateUtils
 import money.rbk.presentation.utils.ValidationUtils
 import money.rbk.presentation.utils.isEmailValid
 import money.rbk.presentation.utils.isValidCvv
 import java.util.Calendar
 
-class BankCardPresenter(
+internal class BankCardPresenter(
 
     /* Buttons */
 

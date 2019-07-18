@@ -28,7 +28,7 @@ internal typealias BgExecutor = ((Throwable) -> Unit, () -> Unit) -> Unit
 internal typealias UiExecutor = (() -> Unit) -> Unit
 internal typealias DelayedUiExecutor = (Long, () -> Unit) -> Unit
 
-abstract class UseCase<R : BaseInputModel, T : BaseIUModel> {
+internal abstract class UseCase<R : BaseInputModel, T : BaseIUModel> {
 
     private val asyncExecutor = AsyncTask.THREAD_POOL_EXECUTOR
 

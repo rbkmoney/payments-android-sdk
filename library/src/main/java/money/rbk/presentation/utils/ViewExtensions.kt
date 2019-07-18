@@ -45,7 +45,7 @@ fun EditText.setValid(
     @DrawableRes onValidDrawable: Int? = R.drawable.ic_check
 ) =
     if (isValid) {
-        this.setOkayState(onValidDrawable)
+        this.setOkayState(onValidDrawable ?: R.drawable.ic_check)
     } else {
         this.setErrorState()
     }

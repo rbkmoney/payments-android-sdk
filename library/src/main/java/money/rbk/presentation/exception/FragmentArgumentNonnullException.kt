@@ -20,7 +20,7 @@ package money.rbk.presentation.exception
 
 import androidx.fragment.app.Fragment
 
-class FragmentArgumentNonnullException(
+internal class FragmentArgumentNonnullException(
     fragmentClass: Class<in Fragment>,
     argumentName: String) :
     RuntimeException("Fragment ${fragmentClass.name} must contain non-null argument $argumentName")

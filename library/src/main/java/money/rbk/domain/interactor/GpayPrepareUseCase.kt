@@ -9,10 +9,6 @@ import money.rbk.domain.repository.GpayRepository
 import money.rbk.presentation.model.CheckoutInfoModel
 import money.rbk.presentation.model.GpayPrepareInfoModel
 
-/**
- * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
- * @since 02.07.19
- */
 internal class GpayPrepareUseCase(
     private val gpayRepository: GpayRepository = Injector.gpayRepository,
     private val checkoutStateUseCase: UseCase<CheckoutStateInputModel, CheckoutInfoModel> = CheckoutStateUseCase()

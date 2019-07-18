@@ -18,7 +18,7 @@
 
 package money.rbk.domain.entity
 
-class CardInfo(
+internal class CardInfo(
     val cardNetwork: String,
     val cardDetails: String,
     val cardDescription: String,

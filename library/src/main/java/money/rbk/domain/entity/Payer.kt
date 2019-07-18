@@ -22,7 +22,7 @@ import money.rbk.data.serialization.SealedDistributor
 import money.rbk.data.serialization.SealedDistributorValue
 import kotlin.reflect.KClass
 
-sealed class Payer(val payerType: PayerType) {
+internal sealed class Payer(val payerType: PayerType) {
 
     abstract val paymentToolInfo: String?
     abstract val email: String?

@@ -18,4 +18,4 @@
 
 package money.rbk.presentation.exception
 
-class UnknownActionException(message: String) : Exception(message)
+internal class UnknownActionException(message: String) : Exception(message)

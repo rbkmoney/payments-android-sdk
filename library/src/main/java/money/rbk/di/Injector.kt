@@ -29,7 +29,6 @@ import money.rbk.domain.entity.BrowserRequest
 import money.rbk.domain.entity.Flow
 import money.rbk.domain.entity.InvoiceChange
 import money.rbk.domain.entity.Payer
-import money.rbk.domain.entity.PaymentFlow
 import money.rbk.domain.entity.PaymentMethod
 import money.rbk.domain.entity.PaymentTool
 import money.rbk.domain.entity.PaymentToolDetails
@@ -41,7 +40,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 
-object Injector {
+internal object Injector {
 
     private const val DEFAULT_TIMEOUT: Long = 30
 
@@ -71,8 +70,8 @@ object Injector {
             .registerTypeAdapter(Flow::class.java,
                 SealedJsonDeserializer(Flow.DISTRIBUTOR))
 
-            .registerTypeAdapter(PaymentFlow::class.java,
-                SealedJsonDeserializer(PaymentFlow.DISTRIBUTOR))
+//            .registerTypeAdapter(PaymentFlow::class.java,
+//                SealedJsonDeserializer(PaymentFlow.DISTRIBUTOR))
 
             .registerTypeAdapter(UserInteraction::class.java,
                 SealedJsonDeserializer(UserInteraction.DISTRIBUTOR))

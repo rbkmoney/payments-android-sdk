@@ -8,11 +8,9 @@ import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 
-/**
- * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
- * @since 10.07.19
- */
-object WebViewClientFactory {
+internal object WebViewClientFactory {
+
+    private const val blankPage = "about:blank"
 
     private abstract class InterceptableWebViewClient(
         val onRequest: (url: String?) -> Unit,
@@ -51,7 +49,7 @@ object WebViewClientFactory {
                 super.onReceivedError(view, errorCode, description, failingUrl)
                 onError(failingUrl)
 
-                view?.loadUrl("about:blank")
+                view?.loadUrl(blankPage)
                 view?.invalidate()
             }
         }
@@ -63,7 +61,7 @@ object WebViewClientFactory {
                 super.onReceivedError(view, request, error)
                 onError(request?.url?.toString())
 
-                view?.loadUrl("about:blank")
+                view?.loadUrl(blankPage)
                 view?.invalidate()
             }
 
@@ -73,7 +71,7 @@ object WebViewClientFactory {
                 super.onReceivedHttpError(view, request, errorResponse)
                 onError(request?.url?.toString())
 
-                view?.loadUrl("about:blank")
+                view?.loadUrl(blankPage)
                 view?.invalidate()
             }
         }

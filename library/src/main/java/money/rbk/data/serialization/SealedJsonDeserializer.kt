@@ -8,11 +8,6 @@ import com.google.gson.JsonPrimitive
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
-/**
- * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
- * @since 04.07.19
- */
-
 class SealedJsonDeserializer<T : Any>(private val distributor: SealedDistributor<T>) :
     JsonDeserializer<T> {
 
@@ -23,13 +18,14 @@ class SealedJsonDeserializer<T : Any>(private val distributor: SealedDistributor
         val fieldValue = (json.asJsonObject.get(distributor.field) as? JsonPrimitive)?.asString
             ?: throw JsonParseException("Unable to find key field ${distributor.field}")
 
-        val fool = distributor.values.find { fieldValue == it.name } ?: if (distributor.fallback != null) {
-            return distributor.fallback
-        } else {
-            throw JsonParseException("Unable to parse $typeOfT")
-        }
+        val fool =
+            distributor.values.find { fieldValue == it.name } ?: if (distributor.fallback != null) {
+                return distributor.fallback
+            } else {
+                throw JsonParseException("Unable to parse $typeOfT")
+            }
 
-        return context.deserialize<T>(json, fool.kClass.java)
+        return context.deserialize(json, fool.kClass.java)
     }
 }
 

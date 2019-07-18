@@ -21,7 +21,7 @@ package money.rbk.data.response
 import money.rbk.domain.entity.ClientInfo
 import money.rbk.domain.entity.PaymentToolDetails
 
-class CreatePaymentResourceResponse(
+internal class CreatePaymentResourceResponse(
     val paymentToolToken: String,
     val clientInfo: ClientInfo?,
     val paymentSession: String?,

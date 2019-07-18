@@ -22,7 +22,7 @@ import money.rbk.data.serialization.SealedDistributor
 import money.rbk.data.serialization.SealedDistributorValue
 import kotlin.reflect.KClass
 
-sealed class BrowserRequest(val uriTemplate: String) {
+internal sealed class BrowserRequest(val uriTemplate: String) {
 
     companion object {
         val DISTRIBUTOR = SealedDistributor("requestType", BrowserRequestType.values())

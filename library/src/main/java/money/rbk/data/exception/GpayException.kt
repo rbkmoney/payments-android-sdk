@@ -2,12 +2,7 @@ package money.rbk.data.exception
 
 import com.google.android.gms.common.api.Status
 
-/**
- * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
- * @since 02.07.19
- */
-
-sealed class GpayException(message: String? = null, cause: Throwable? = null) :
+internal sealed class GpayException(message: String? = null, cause: Throwable? = null) :
     Exception(message, cause) {
 
     internal object GpayPaymentMethodTokenException :

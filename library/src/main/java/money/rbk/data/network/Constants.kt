@@ -18,7 +18,7 @@
 
 package money.rbk.data.network
 
-object Constants {
+internal object Constants {
 
     const val BASE_URL = "https://api.rbk.money/v2"
 

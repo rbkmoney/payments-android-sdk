@@ -22,13 +22,12 @@ import money.rbk.data.serialization.SealedDistributor
 import money.rbk.data.serialization.SealedDistributorValue
 import kotlin.reflect.KClass
 
-sealed class PaymentTool(protected val paymentToolType: PaymentToolType) {
+internal sealed class PaymentTool(protected val paymentToolType: PaymentToolType) {
 
     companion object {
         val DISTRIBUTOR = SealedDistributor("paymentToolType", PaymentToolType.values())
     }
 
-    //TODO: Make it secured way
     class CardData(
         val cardNumber: String,
         val expDate: String,

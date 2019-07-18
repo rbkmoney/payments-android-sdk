@@ -4,10 +4,6 @@ import com.google.android.gms.tasks.Task
 import com.google.android.gms.wallet.PaymentData
 import money.rbk.domain.entity.Currency
 
-/**
- * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
- * @since 02.07.19
- */
 internal interface GpayRepository {
 
     val gatewayMerchantId: String

@@ -28,7 +28,7 @@ import money.rbk.domain.entity.PaymentMethodToken
 import money.rbk.domain.entity.PaymentToken
 import money.rbk.domain.entity.PaymentTool
 
-sealed class PaymentInputModel(private val email: String) : BaseInputModel() {
+internal sealed class PaymentInputModel(private val email: String) : BaseInputModel() {
 
     fun getContactInfo() = ContactInfo(email = email)
 

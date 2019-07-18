@@ -20,16 +20,20 @@ package money.rbk.presentation.utils
 
 import android.util.Patterns
 import java.util.ArrayList
-import java.util.Calendar
+
+private const val SPACE_STRING = "\\s"
+private const val EMPTY_STRING = ""
+
+private const val LENGTH_CVV = 3
 
 fun String.isEmailValid(): Boolean =
     isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
-fun String.removeSpaces(): String {
-    return this.replace("\\s".toRegex(), "")
-}
+fun String.removeSpaces() = replace(SPACE_STRING.toRegex(), EMPTY_STRING)
 
-fun String.isValidCvv() = length == 3
+fun CharSequence.removeSpaces() = toString().removeSpaces()
+
+fun String.isValidCvv() = length == LENGTH_CVV
 
 fun String.isCardValidByLuna(): Boolean {
     var currentNumber: Int
@@ -57,5 +61,3 @@ fun String.isCardValidByLuna(): Boolean {
     return (unevenNumList.sum() + evenSum) % 10 == 0
 }
 
-fun CharSequence.removeSpaces() =
-    toString().replace(" ", "")

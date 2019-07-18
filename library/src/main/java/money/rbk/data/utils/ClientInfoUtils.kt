@@ -25,7 +25,7 @@ import money.rbk.presentation.utils.isTablet
 import java.util.Locale
 import java.util.UUID
 
-object ClientInfoUtils {
+internal object ClientInfoUtils {
 
     lateinit var userAgent: String
 
@@ -37,8 +37,6 @@ object ClientInfoUtils {
     }
 
     fun getUniquePsuedoID(context: Context): String {
-
-        // val android_id = Secure.getString(context.contentResolver,Secure.ANDROID_ID)
 
         val devIDShort =
             "35" + Build.BOARD.length % 10 + Build.BRAND.length % 10 + Build.CPU_ABI.length % 10 + Build.DEVICE.length % 10 + Build.MANUFACTURER.length % 10 + Build.MODEL.length % 10 + Build.PRODUCT.length % 10 + Locale.getDefault().hashCode() % 10

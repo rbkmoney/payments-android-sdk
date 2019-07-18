@@ -21,7 +21,7 @@ package money.rbk.presentation.screen.card
 import money.rbk.domain.entity.CreditCardType
 import money.rbk.presentation.screen.base.BasePaymentView
 
-interface BankCardView : BasePaymentView {
+internal interface BankCardView : BasePaymentView {
 
     fun setCardDate(formatMonthYear: String)
 

@@ -18,7 +18,7 @@
 
 package money.rbk.domain.entity
 
-class PaymentError(
+internal class PaymentError(
     val code: Code,
     val subError: PaymentError?
 ) {

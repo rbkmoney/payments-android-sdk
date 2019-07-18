@@ -18,4 +18,4 @@
 
 package money.rbk.domain.interactor.input
 
-object EmptyInputModel : BaseInputModel()
+internal object EmptyInputModel : BaseInputModel()

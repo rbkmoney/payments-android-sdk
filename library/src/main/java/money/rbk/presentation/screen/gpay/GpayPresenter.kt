@@ -23,11 +23,7 @@ import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePaymentPresenter
 import money.rbk.presentation.utils.isEmailValid
 
-/**
- * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
- * @since 27.06.19
- */
-class GpayPresenter(
+internal class GpayPresenter(
     navigator: Navigator,
     private val createPaymentUseCase: UseCase<PaymentInputModel, CheckoutInfoModel>
     = CreatePaymentUseCase(),

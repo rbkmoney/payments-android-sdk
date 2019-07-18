@@ -6,10 +6,6 @@ import money.rbk.domain.interactor.input.GpayLoadPaymentDataInputModel
 import money.rbk.domain.repository.GpayRepository
 import money.rbk.presentation.model.PaymentDataTaskModel
 
-/**
- * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
- * @since 02.07.19
- */
 internal class GpayLoadPaymentDataUseCase(
     private val gpayRepository: GpayRepository = Injector.gpayRepository
 ) : UseCase<GpayLoadPaymentDataInputModel, PaymentDataTaskModel>() {
@@ -22,7 +18,7 @@ internal class GpayLoadPaymentDataUseCase(
 
             val task = gpayRepository.loadPaymentData(inputModel.price, inputModel.currency)
 
-            uiExecutor{
+            uiExecutor {
                 onResultCallback(PaymentDataTaskModel(task))
             }
         }

@@ -18,15 +18,15 @@
 
 package money.rbk.domain.exception
 
-sealed class UseCaseException(message: String) : Exception(message) {
+internal sealed class UseCaseException(message: String) : Exception(message) {
 
-    object NoSupportedPaymentMethodsException :
+    internal object NoSupportedPaymentMethodsException :
         UseCaseException("There is no supported payment methods")
 
-    class PollingTimeExceededException(maxTime: Long) :
+    internal class PollingTimeExceededException(maxTime: Long) :
         UseCaseException("Maximum application poll time ($maxTime ms) exceeded")
 
-    class UnableRepeatPaymentException(reason: String?) :
+    internal class UnableRepeatPaymentException(reason: String?) :
         UseCaseException("Unable repeat payment ${reason ?: ""}")
 
 }

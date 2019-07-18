@@ -20,5 +20,5 @@ package money.rbk.presentation.exception
 
 import android.app.Activity
 
-class ActivityExtraNonnullException(activity: Class<in Activity>, argumentName: String) :
+internal class ActivityExtraNonnullException(activity: Class<in Activity>, argumentName: String) :
     RuntimeException("Activity ${activity.name} must contain non-null extra $argumentName")
