@@ -18,7 +18,7 @@
 
 package money.rbk.domain.interactor
 
-object UseCaseConstants {
+internal object UseCaseConstants {
     const val POLLING_DELAY = 1000L
     const val MAX_POLLING_TIME = 120000L
 }

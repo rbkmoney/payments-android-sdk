@@ -25,7 +25,7 @@ import money.rbk.presentation.utils.isTablet
 import java.util.Locale
 import java.util.UUID
 
-object ClientInfoUtils {
+internal object ClientInfoUtils {
 
     lateinit var userAgent: String
 

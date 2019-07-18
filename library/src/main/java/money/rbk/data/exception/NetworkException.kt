@@ -22,7 +22,7 @@ import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 
-sealed class NetworkException(message: String? = null, cause: Throwable? = null) :
+internal sealed class NetworkException(message: String? = null, cause: Throwable? = null) :
     Exception(message, cause) {
 
     internal class RequestExecutionException(val request: Request, e: IOException) :

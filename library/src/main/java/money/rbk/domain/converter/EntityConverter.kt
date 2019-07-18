@@ -18,4 +18,4 @@
 
 package money.rbk.domain.converter
 
-typealias EntityConverter<Entity, Model> = (Entity) -> Model
+internal typealias EntityConverter<Entity, Model> = (Entity) -> Model

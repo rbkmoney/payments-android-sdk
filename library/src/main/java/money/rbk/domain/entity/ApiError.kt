@@ -18,7 +18,7 @@
 
 package money.rbk.domain.entity
 
-class ApiError(
+internal class ApiError(
     val code: Code?,
     val message: String?,
     val subError: ApiError?

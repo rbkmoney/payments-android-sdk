@@ -22,7 +22,7 @@ import money.rbk.data.serialization.SealedDistributor
 import money.rbk.data.serialization.SealedDistributorValue
 import kotlin.reflect.KClass
 
-sealed class UserInteraction {
+internal sealed class UserInteraction {
 
     companion object {
         val DISTRIBUTOR = SealedDistributor("interactionType", InteractionType.values())

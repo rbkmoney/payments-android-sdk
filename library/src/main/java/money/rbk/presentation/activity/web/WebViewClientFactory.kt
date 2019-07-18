@@ -8,11 +8,7 @@ import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 
-/**
- * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
- * @since 10.07.19
- */
-object WebViewClientFactory {
+internal object WebViewClientFactory {
 
     private const val blankPage = "about:blank"
 

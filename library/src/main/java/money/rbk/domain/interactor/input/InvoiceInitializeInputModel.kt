@@ -18,4 +18,4 @@
 
 package money.rbk.domain.interactor.input
 
-object InvoiceInitializeInputModel : BaseInputModel()
+internal object InvoiceInitializeInputModel : BaseInputModel()

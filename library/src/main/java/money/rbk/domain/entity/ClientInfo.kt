@@ -18,7 +18,7 @@
 
 package money.rbk.domain.entity
 
-class ClientInfo(
+internal class ClientInfo(
     val fingerprint: String,
     val ip: String? = null
 )

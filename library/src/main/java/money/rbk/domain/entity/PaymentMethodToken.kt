@@ -18,6 +18,7 @@
 
 package money.rbk.domain.entity
 
+@Suppress("unused")
 class PaymentMethodToken(
     val tokenizationType: String,
     val token: String

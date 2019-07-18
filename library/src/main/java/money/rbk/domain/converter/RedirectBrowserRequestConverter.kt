@@ -28,7 +28,7 @@ import money.rbk.presentation.model.BrowserRequestModel
 private const val KEY_TERMINATION_URI = "termination_uri"
 private const val FORM_KEY_TERM_URL = "TermUrl"
 
-object RedirectBrowserRequestConverter :
+internal object RedirectBrowserRequestConverter :
     EntityConverter<UserInteraction.Redirect, BrowserRequestModel> {
 
     override fun invoke(entity: UserInteraction.Redirect): BrowserRequestModel =

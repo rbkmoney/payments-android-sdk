@@ -23,7 +23,7 @@ import money.rbk.R
 import money.rbk.presentation.utils.isCardValidByLuna
 import money.rbk.presentation.utils.removeSpaces
 
-enum class CreditCardType(
+internal enum class CreditCardType(
     val lengths: IntArray,
     val prefixes: Array<String>,
     val cardName: String,
@@ -152,7 +152,7 @@ enum class CreditCardType(
 private operator fun String.rangeTo(that: String): Array<String> =
     IntRange(this.toInt(), that.toInt()).map { it.toString() }.toTypedArray()
 
-fun String.getCardType(): CreditCardType? {
+internal fun String.getCardType(): CreditCardType? {
     val rawNumberString = removeSpaces()
     return CreditCardType.detectCardType(rawNumberString)
         .takeIf { rawNumberString.isCardValidByLuna() }

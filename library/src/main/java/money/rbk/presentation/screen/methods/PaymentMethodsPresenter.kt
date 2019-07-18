@@ -29,7 +29,7 @@ import money.rbk.presentation.model.PaymentMethodsModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePresenter
 
-class PaymentMethodsPresenter(
+internal class PaymentMethodsPresenter(
     navigator: Navigator,
     private val paymentMethodsUseCase: UseCase<EmptyInputModel, PaymentMethodsModel> = PaymentMethodsUseCase()
 ) : BasePresenter<PaymentMethodsView>(navigator) {

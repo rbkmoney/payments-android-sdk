@@ -18,7 +18,7 @@
 
 package money.rbk.domain.entity
 
-class UserInteractionForm(
+internal class UserInteractionForm(
     val key: String,
     val template: String
 )

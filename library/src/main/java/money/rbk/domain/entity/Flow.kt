@@ -22,7 +22,7 @@ import money.rbk.data.serialization.SealedDistributor
 import money.rbk.data.serialization.SealedDistributorValue
 import kotlin.reflect.KClass
 
-sealed class Flow(val type: FlowType) {
+internal sealed class Flow(val type: FlowType) {
 
     companion object {
         val DISTRIBUTOR = SealedDistributor("type", FlowType.values())

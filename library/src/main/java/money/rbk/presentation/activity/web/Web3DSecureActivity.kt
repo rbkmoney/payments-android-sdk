@@ -32,7 +32,7 @@ import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.utils.adjustSize
 import money.rbk.presentation.utils.isTablet
 
-class Web3DSecureActivity : AppCompatActivity(), Web3DSecureView {
+internal class Web3DSecureActivity : AppCompatActivity(), Web3DSecureView {
 
     companion object {
         const val REQUEST_CODE = 0x287

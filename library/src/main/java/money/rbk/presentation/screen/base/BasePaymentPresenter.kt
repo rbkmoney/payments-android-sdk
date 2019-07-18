@@ -10,11 +10,7 @@ import money.rbk.presentation.model.CheckoutInfoModel
 import money.rbk.presentation.model.CheckoutStateModel
 import money.rbk.presentation.navigation.Navigator
 
-/**
- * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
- * @since 09.07.19
- */
-abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Navigator) :
+internal abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Navigator) :
     BasePresenter<T>(navigator) {
 
     private var alert: AlertDialog? = null
