@@ -19,6 +19,7 @@
 package money.rbk.di
 
 import android.content.Context
+import com.google.android.gms.security.ProviderInstaller
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import money.rbk.data.network.Constants
@@ -26,6 +27,7 @@ import money.rbk.data.repository.CheckoutRepositoryImpl
 import money.rbk.data.repository.GpayRepositoryImpl
 import money.rbk.data.serialization.SealedJsonDeserializer
 import money.rbk.data.utils.ClientInfoUtils
+import money.rbk.data.utils.log
 import money.rbk.domain.entity.BrowserRequest
 import money.rbk.domain.entity.Flow
 import money.rbk.domain.entity.InvoiceChange
@@ -72,9 +74,6 @@ internal object Injector {
             .registerTypeAdapter(Flow::class.java,
                 SealedJsonDeserializer(Flow.DISTRIBUTOR))
 
-//            .registerTypeAdapter(PaymentFlow::class.java,
-//                SealedJsonDeserializer(PaymentFlow.DISTRIBUTOR))
-
             .registerTypeAdapter(UserInteraction::class.java,
                 SealedJsonDeserializer(UserInteraction.DISTRIBUTOR))
 
@@ -96,6 +95,12 @@ internal object Injector {
         useTestEnvironment: Boolean,
         email: String?) {
         this.email = email
+        try {
+            ProviderInstaller.installIfNeeded(applicationContext)
+        } catch (e: Exception) {
+            log(e)
+        }
+
         ClientInfoUtils.initialize(applicationContext)
         okHttpClient = newHttpClient(applicationContext)
         checkoutRepository =
