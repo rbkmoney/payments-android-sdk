@@ -28,9 +28,9 @@
         android:id="@+id/rvTemplates"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/spacing_medium"
+        android:layout_margin="@dimen/rbk_spacing_medium"
         android:background="@drawable/bg_rounded_white"
-        android:padding="@dimen/spacing_medium"
+        android:padding="@dimen/rbk_spacing_medium"
         />
 
     <FrameLayout

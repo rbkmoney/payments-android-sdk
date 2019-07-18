@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fmt_google_pay.*
+import kotlinx.android.synthetic.main.rbk_fmt_google_pay.*
 import money.rbk.R
 import money.rbk.di.Injector
 import money.rbk.domain.interactor.input.GpayLoadPaymentDataInputModel
@@ -30,7 +30,7 @@ internal class GpayFragment : BaseFragment<GpayView>(), GpayView {
     override fun onCreateView(inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.fmt_google_pay, container, false)
+        inflater.inflate(R.layout.rbk_fmt_google_pay, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

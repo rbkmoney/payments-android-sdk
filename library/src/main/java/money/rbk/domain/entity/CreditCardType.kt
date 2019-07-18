@@ -42,13 +42,13 @@ internal enum class CreditCardType(
             "4913",
             "4917"),
         cardName = "Visa Electron",
-        iconRes = R.drawable.ic_logo_visa_electron
+        iconRes = R.drawable.rbk_ic_logo_visa_electron
     ),
     visa(
         lengths = intArrayOf(13, 16, 19),
         prefixes = arrayOf("4"),
         cardName = "Visa",
-        iconRes = R.drawable.ic_logo_visa
+        iconRes = R.drawable.rbk_ic_logo_visa
     ),
     maestro(
         lengths = intArrayOf(12, 13, 14, 15, 16, 17, 18, 19),
@@ -57,7 +57,7 @@ internal enum class CreditCardType(
             *"56".."69"
         ),
         cardName = "Maestro",
-        iconRes = R.drawable.ic_maestro_logo
+        iconRes = R.drawable.rbk_ic_maestro_logo
     ),
     mastercard(
         lengths = intArrayOf(16),
@@ -66,14 +66,14 @@ internal enum class CreditCardType(
             *"51".."55"
         ),
         cardName = "MasterCard",
-        iconRes = R.drawable.ic_master_card_logo
+        iconRes = R.drawable.rbk_ic_master_card_logo
     ),
 
     nspkmir(
         lengths = intArrayOf(13, 16),
         prefixes = arrayOf(*"2200".."2204"),
         cardName = "MIR",
-        iconRes = R.drawable.ic_mir
+        iconRes = R.drawable.rbk_ic_mir
     ),
     dankort(
         lengths = intArrayOf(16),

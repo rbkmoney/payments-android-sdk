@@ -18,7 +18,7 @@
   -->
 
 <shape android:shape="rectangle" xmlns:android="http://schemas.android.com/apk/res/android">
-    <corners android:radius="@dimen/corner_radius_small"/>
-    <solid android:color="@color/white"/>
-    <stroke android:color="@color/blue_light" android:width="@dimen/divider_height"/>
+    <corners android:radius="@dimen/rbk_corner_radius_small"/>
+    <solid android:color="@color/rbk_white"/>
+    <stroke android:color="@color/rbk_blue_light" android:width="@dimen/rbk_divider_height"/>
 </shape>

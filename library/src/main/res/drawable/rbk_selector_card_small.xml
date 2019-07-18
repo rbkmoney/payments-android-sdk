@@ -17,6 +17,8 @@
   ~
   -->
 
-<resources>
-    <item name="payment_method_bank_card" type="id" />
-</resources>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_focused="true" android:drawable="@drawable/rbk_ic_card_small_focused"/>
+    <item android:state_focused="false" android:drawable="@drawable/rbk_ic_card_small"/>
+</selector>

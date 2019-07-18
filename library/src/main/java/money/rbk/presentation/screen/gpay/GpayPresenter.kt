@@ -78,7 +78,7 @@ internal class GpayPresenter(
             FragmentActivity.RESULT_CANCELED -> navigator.finishWithCancel()
             Web3DSecureActivity.RESULT_NETWORK_ERROR ->
                 navigator.openErrorFragment(
-                    messageRes = R.string.rbc_error_connection,
+                    messageRes = R.string.rbk_error_connection,
                     repeatAction = true,
                     useAnotherCard = canUseAnotherCard,
                     allPaymentMethods = true)
@@ -123,7 +123,7 @@ internal class GpayPresenter(
         when (error) {
             is GpayException.GpayNotReadyException ->
                 navigator.openErrorFragment(
-                    messageRes = R.string.rbc_error_gpay_initialization,
+                    messageRes = R.string.rbk_error_gpay_initialization,
                     repeatAction = true,
                     allPaymentMethods = true
                 )
@@ -133,7 +133,7 @@ internal class GpayPresenter(
     private fun onGpayPaymentError(gpayException: GpayException.GpayCantPerformPaymentException) {
         log(gpayException)
         navigator.openErrorFragment(
-            messageRes = R.string.rbc_error_busines_logic,
+            messageRes = R.string.rbk_error_busines_logic,
             repeatAction = true,
             useAnotherCard = false,
             allPaymentMethods = true)
@@ -144,12 +144,12 @@ internal class GpayPresenter(
         (view ?: return).hideProgress()
         return when (throwable) {
             is NetworkException -> navigator.openErrorFragment(
-                messageRes = R.string.rbc_error_connection,
+                messageRes = R.string.rbk_error_connection,
                 repeatAction = true,
                 allPaymentMethods = true)
 
             else -> navigator.openErrorFragment(
-                messageRes = R.string.rbc_error_busines_logic,
+                messageRes = R.string.rbk_error_busines_logic,
                 repeatAction = true,
                 allPaymentMethods = true)
         }

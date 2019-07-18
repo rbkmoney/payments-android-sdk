@@ -23,7 +23,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fmt_payment_methods.*
+import kotlinx.android.synthetic.main.rbk_fmt_payment_methods.*
 import money.rbk.R
 import money.rbk.presentation.model.PaymentMethodModel
 import money.rbk.presentation.screen.base.BaseFragment
@@ -41,12 +41,12 @@ internal class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), Paym
     override fun onCreateView(inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.fmt_payment_methods, container, false)
+        inflater.inflate(R.layout.rbk_fmt_payment_methods, container, false)
 
     override fun setPaymentMethods(paymentMethods: List<PaymentMethodModel>) {
         rvPaymentMethods.adapter = PaymentAdapter({ presenter.onPaymentClick(it) }, paymentMethods)
         rvPaymentMethods.layoutManager = LinearLayoutManager(activity)
-        rvPaymentMethods.addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.spacing_ten).toInt()))
+        rvPaymentMethods.addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.rbk_spacing_ten).toInt()))
     }
 
     override fun showProgress() {

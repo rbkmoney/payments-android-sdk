@@ -22,9 +22,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="@dimen/elevation"
+    android:elevation="@dimen/rbk_elevation"
     android:orientation="vertical"
-    app:cardCornerRadius="@dimen/corner_radius"
+    app:cardCornerRadius="@dimen/rbk_corner_radius"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,8 +39,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:text="@string/rbc_label_choose_payment_method"
-            android:textAppearance="@style/TextAppearance.RBKMoney.Normal"
+            android:text="@string/rbk_label_choose_payment_method"
+            android:textAppearance="@style/RbkTextAppearance.RBKMoney.Normal"
             app:layout_constraintBottom_toTopOf="@+id/rvPaymentMethods"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +59,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvChoosePaymentMethod"
             tools:itemCount="2"
-            tools:listitem="@layout/item_payment_methods"
+            tools:listitem="@layout/rbk_item_payment_methods"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

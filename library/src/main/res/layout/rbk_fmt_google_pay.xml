@@ -4,9 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="@dimen/elevation"
+    android:elevation="@dimen/rbk_elevation"
     android:orientation="vertical"
-    app:cardCornerRadius="@dimen/corner_radius"
+    app:cardCornerRadius="@dimen/rbk_corner_radius"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,10 +24,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:text="@string/rbc_label_google_pay"
+            android:text="@string/rbk_label_google_pay"
             android:layout_marginStart="3dp"
             android:layout_marginEnd="3dp"
-            android:textAppearance="@style/TextAppearance.RBKMoney.Normal"
+            android:textAppearance="@style/RbkTextAppearance.RBKMoney.Normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -36,14 +36,14 @@
 
         <EditText
             android:id="@+id/edEmail"
-            style="@style/EditText"
+            style="@style/RbkEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginStart="3dp"
             android:layout_marginEnd="3dp"
-            android:drawableStart="@drawable/selector_email"
-            android:hint="@string/rbc_label_email_for_check"
+            android:drawableStart="@drawable/rbk_selector_email"
+            android:hint="@string/rbk_label_email_for_check"
             android:imeOptions="actionDone"
             android:inputType="textEmailAddress"
             android:maxLength="100"
@@ -55,13 +55,13 @@
         <RelativeLayout
             android:id="@+id/btnPay"
             android:layout_width="0dp"
-            android:layout_height="@dimen/height_gpay_button"
+            android:layout_height="@dimen/rbk_height_gpay_button"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/googlepay_button_no_shadow_background"
+            android:background="@drawable/rbk_googlepay_button_no_shadow_background"
             android:clickable="true"
             android:focusable="true"
-            android:padding="@dimen/spacing_tiny"
+            android:padding="@dimen/rbk_spacing_tiny"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -83,7 +83,7 @@
                     android:layout_weight="1"
                     android:duplicateParentState="true"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/buy_with_googlepay_button_content"
+                    android:src="@drawable/rbk_buy_with_googlepay_button_content"
                     />
 
             </LinearLayout>
@@ -93,7 +93,7 @@
                 android:layout_height="match_parent"
                 android:duplicateParentState="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/googlepay_button_overlay"
+                android:src="@drawable/rbk_googlepay_button_overlay"
                 />
         </RelativeLayout>
 
@@ -101,7 +101,7 @@
             android:id="@+id/pbLoading"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/white_overlay"
+            android:background="@color/rbk_white_overlay"
             android:clickable="true"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"

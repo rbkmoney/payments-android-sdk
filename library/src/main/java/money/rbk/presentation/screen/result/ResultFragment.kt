@@ -23,7 +23,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fmt_payment_results.*
+import kotlinx.android.synthetic.main.rbk_fmt_payment_results.*
 import money.rbk.R
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.utils.getArgIntOrError
@@ -106,7 +106,7 @@ internal class ResultFragment : BaseFragment<ResultView>(), ResultView {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? =
-        inflater.inflate(R.layout.fmt_payment_results, container, false)
+        inflater.inflate(R.layout.rbk_fmt_payment_results, container, false)
 
     private fun showSuccess(message: String) {
         clSuccessful.visibility = View.VISIBLE

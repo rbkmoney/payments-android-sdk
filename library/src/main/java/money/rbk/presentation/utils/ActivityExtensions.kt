@@ -38,7 +38,7 @@ internal fun Activity.adjustSize() {
         val lp = WindowManager.LayoutParams()
         lp.copyFrom(window.attributes)
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT
-        lp.height = min(screenHeight, resources.getDimensionPixelOffset(R.dimen.height_screen))
+        lp.height = min(screenHeight, resources.getDimensionPixelOffset(R.dimen.rbk_height_screen))
         window.attributes = lp
     }
 }

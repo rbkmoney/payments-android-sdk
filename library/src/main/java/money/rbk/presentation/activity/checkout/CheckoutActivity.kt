@@ -24,7 +24,7 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.ac_checkout.*
+import kotlinx.android.synthetic.main.rbk_ac_checkout.*
 import money.rbk.R
 import money.rbk.di.Injector
 import money.rbk.presentation.model.InvoiceModel
@@ -71,7 +71,7 @@ internal class CheckoutActivity : AppCompatActivity(), CheckoutView {
         }
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.ac_checkout)
+        setContentView(R.layout.rbk_ac_checkout)
         adjustSize()
 
         if (savedInstanceState == null) {

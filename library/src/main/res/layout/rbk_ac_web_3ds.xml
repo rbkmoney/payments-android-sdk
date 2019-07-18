@@ -5,14 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_gradient"
+    android:background="@drawable/rbk_background_gradient"
     >
 
     <LinearLayout
         android:id="@+id/tbMain"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/white"
+        android:background="@color/rbk_white"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +26,7 @@
             android:layout_marginStart="?attr/actionBarSize"
             android:layout_weight="1"
             android:gravity="center"
-            android:textAppearance="@style/TextAppearance.RBKMoney.Normal"
+            android:textAppearance="@style/RbkTextAppearance.RBKMoney.Normal"
             tools:text="shop.ru"
             />
 
@@ -37,7 +37,7 @@
             android:layout_weight="0"
             android:background="?selectableItemBackground"
             android:gravity="center"
-            android:src="@drawable/ic_cross_green"
+            android:src="@drawable/rbk_ic_cross_green"
             />
 
     </LinearLayout>
@@ -46,9 +46,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="5dp"
-        android:elevation="@dimen/elevation"
+        android:elevation="@dimen/rbk_elevation"
         android:orientation="vertical"
-        app:cardCornerRadius="@dimen/corner_radius"
+        app:cardCornerRadius="@dimen/rbk_corner_radius"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tbMain"
         >
@@ -63,7 +63,7 @@
             android:id="@+id/lLoader"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
+            android:background="@color/rbk_white"
             android:visibility="gone"
             >
 

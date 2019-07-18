@@ -17,9 +17,8 @@
   ~
   -->
 
-<shape android:shape="rectangle" xmlns:android="http://schemas.android.com/apk/res/android">
-    <corners android:radius="@dimen/corner_radius_small"/>
-    <solid android:color="@color/white"/>
-    <stroke android:color="@color/blue_light" android:width="@dimen/thick_divider_height"/>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-</shape>
+    <item android:state_focused="true" android:drawable="@drawable/rbk_ic_cvv_focused"/>
+    <item android:state_focused="false" android:drawable="@drawable/rbk_ic_cvv"/>
+</selector>

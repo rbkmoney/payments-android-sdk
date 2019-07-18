@@ -21,10 +21,10 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/grey</item>
+        <item name="colorPrimary">@color/rbk_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/rbk_colorPrimaryDark</item>
+        <item name="colorAccent">@color/rbk_colorAccent</item>
+        <item name="android:windowBackground">@color/rbk_grey</item>
 
     </style>
 

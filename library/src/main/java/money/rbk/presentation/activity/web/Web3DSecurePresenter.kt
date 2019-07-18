@@ -13,12 +13,12 @@ internal class Web3DSecurePresenter(
     fun onError(url: String?) {
         if (!handleUrl(url)) {
             navigator.showAlert(
-                R.string.rbc_label_error,
-                R.string.rbc_error_connection,
-                R.string.rbc_label_retry to {
+                R.string.rbk_label_error,
+                R.string.rbk_error_connection,
+                R.string.rbk_label_retry to {
                     view?.loadPage() ?: Unit
                 },
-                R.string.rbc_label_cancel to {
+                R.string.rbk_label_cancel to {
                     navigator.finishWithResult(Web3DSecureActivity.RESULT_NETWORK_ERROR)
                 }
             )

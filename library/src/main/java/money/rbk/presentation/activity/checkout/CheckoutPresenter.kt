@@ -51,12 +51,12 @@ internal class CheckoutPresenter(
     private fun onInvoiceLoadError(throwable: Throwable) {
         throwable.printStackTrace()
         navigator.showAlert(
-            R.string.rbc_label_error,
-            R.string.rbc_error_cant_load_invoice,
-            R.string.rbc_label_retry to {
+            R.string.rbk_label_error,
+            R.string.rbk_error_cant_load_invoice,
+            R.string.rbk_label_retry to {
                 initializeInvoice()
             },
-            R.string.rbc_label_cancel to {
+            R.string.rbk_label_cancel to {
                 navigator.finish()
             })
     }
@@ -73,19 +73,19 @@ internal class CheckoutPresenter(
                 }
                 InvoiceStatus.cancelled -> {
                     hideProgress()
-                    navigator.openWarningFragment(R.string.rbc_error_invoice_cancelled,
-                        R.string.rbc_error_invalid_invoice_status)
+                    navigator.openWarningFragment(R.string.rbk_error_invoice_cancelled,
+                        R.string.rbk_error_invalid_invoice_status)
                 }
                 InvoiceStatus.paid -> {
                     hideProgress()
-                    navigator.openWarningFragment(R.string.rbc_error_invoice_already_payed,
-                        R.string.rbc_error_invalid_invoice_status)
+                    navigator.openWarningFragment(R.string.rbk_error_invoice_already_payed,
+                        R.string.rbk_error_invalid_invoice_status)
                 }
                 InvoiceStatus.fulfilled,
                 InvoiceStatus.unknown -> {
                     hideProgress()
-                    navigator.openWarningFragment(R.string.rbc_error_unknown_invoice,
-                        R.string.rbc_error_invalid_invoice_status)
+                    navigator.openWarningFragment(R.string.rbk_error_unknown_invoice,
+                        R.string.rbk_error_invalid_invoice_status)
                 }
             }
         }

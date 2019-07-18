@@ -23,7 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import kotlinx.android.synthetic.main.item_payment_methods.view.*
+import kotlinx.android.synthetic.main.rbk_item_payment_methods.view.*
 import money.rbk.R
 import money.rbk.presentation.model.PaymentMethodModel
 import money.rbk.presentation.screen.methods.adapter.PaymentAdapter.PaymentHolder
@@ -36,7 +36,7 @@ internal class PaymentAdapter(
         PaymentHolder(
             LayoutInflater
                 .from(parent.context)
-                .inflate(R.layout.item_payment_methods, parent, false),
+                .inflate(R.layout.rbk_item_payment_methods, parent, false),
             onItemClickListener
         )
 

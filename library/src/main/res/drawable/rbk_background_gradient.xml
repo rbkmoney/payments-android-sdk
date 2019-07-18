@@ -17,7 +17,9 @@
   ~
   -->
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_focused="true" android:drawable="@drawable/background_edit_text_focused"/>
-    <item android:drawable="@drawable/background_edit_text"/>
-</selector>
+<shape android:shape="rectangle" xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:angle="270"
+        android:startColor="@color/rbk_blue_light"
+        android:endColor="@color/rbk_purple_light"/>
+</shape>

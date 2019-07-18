@@ -23,26 +23,26 @@ import androidx.annotation.DrawableRes
 import money.rbk.R
 
 private fun EditText.setErrorState() {
-    setBackgroundResource(R.drawable.background_edit_text_error)
-    setRightDrawable(R.drawable.ic_cross)
+    setBackgroundResource(R.drawable.rbk_background_edit_text_error)
+    setRightDrawable(R.drawable.rbk_ic_cross)
 }
 
 private fun EditText.setOkayState(@DrawableRes onValidDrawable: Int?) {
-    setBackgroundResource(R.drawable.selector_edittext)
+    setBackgroundResource(R.drawable.rbk_selector_edittext)
     setRightDrawable(onValidDrawable)
 }
 
 internal fun EditText.clearState() {
-    setBackgroundResource(R.drawable.selector_edittext)
+    setBackgroundResource(R.drawable.rbk_selector_edittext)
     removeRightDrawable()
 }
 
 internal fun EditText.setValid(
     isValid: Boolean,
-    @DrawableRes onValidDrawable: Int? = R.drawable.ic_check
+    @DrawableRes onValidDrawable: Int? = R.drawable.rbk_ic_check
 ) =
     if (isValid) {
-        this.setOkayState(onValidDrawable ?: R.drawable.ic_check)
+        this.setOkayState(onValidDrawable ?: R.drawable.rbk_ic_check)
     } else {
         this.setErrorState()
     }

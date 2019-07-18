@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.RBKMoney" parent="Theme.AppCompat.DayNight.DialogWhenLarge">
-        <item name="colorPrimary">@color/blue_light</item>
-        <item name="colorPrimaryDark">@color/purple_light</item>
-        <item name="colorAccent">@color/green</item>
-        <item name="android:textAppearance">@style/TextAppearance.RBKMoney.Normal</item>
+    <style name="RbkMoneyTheme" parent="Theme.AppCompat.DayNight.DialogWhenLarge">
+        <item name="colorPrimary">@color/rbk_blue_light</item>
+        <item name="colorPrimaryDark">@color/rbk_purple_light</item>
+        <item name="colorAccent">@color/rbk_green</item>
+        <item name="android:textAppearance">@style/RbkTextAppearance.RBKMoney.Normal</item>
 
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

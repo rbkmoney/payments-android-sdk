@@ -24,7 +24,7 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.ac_web_3ds.*
+import kotlinx.android.synthetic.main.rbk_ac_web_3ds.*
 import money.rbk.R
 import money.rbk.di.Injector
 import money.rbk.presentation.model.BrowserRequestModel
@@ -65,7 +65,7 @@ internal class Web3DSecureActivity : AppCompatActivity(), Web3DSecureView {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.ac_web_3ds)
+        setContentView(R.layout.rbk_ac_web_3ds)
         adjustSize()
 
         isPost = intent?.getBooleanExtra(EXTRA_KEY_POST, false)!!

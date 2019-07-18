@@ -66,11 +66,11 @@ internal class PaymentMethodsPresenter(
         (view ?: return).hideProgress()
         return when (throwable) {
             is UseCaseException.NoSupportedPaymentMethodsException ->
-                navigator.openErrorFragment(R.string.rbc_error_no_supported_payment_methods)
+                navigator.openErrorFragment(R.string.rbk_error_no_supported_payment_methods)
             is NetworkException ->
-                navigator.openErrorFragment(R.string.rbc_error_connection)
+                navigator.openErrorFragment(R.string.rbk_error_connection)
             else ->
-                navigator.openErrorFragment(R.string.rbc_error_busines_logic)
+                navigator.openErrorFragment(R.string.rbk_error_busines_logic)
         }
     }
 

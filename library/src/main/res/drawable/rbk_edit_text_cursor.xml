@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~
   ~ Copyright 2019 RBKmoney
@@ -16,15 +17,7 @@
   ~
   -->
 
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="32dp"
-    android:height="22dp"
-    android:viewportWidth="32"
-    android:viewportHeight="22">
-    <path
-        android:fillColor="@color/blue_light"
-        android:pathData="M31.2008,6.2V3.35C31.2008,1.7825 29.9183,0.5 28.3508,0.5H3.6508C2.0833,0.5 0.8008,1.7825 0.8008,3.35V6.2H31.2008Z" />
-    <path
-        android:fillColor="@color/blue_light"
-        android:pathData="M0.8008,8.1001V18.5501C0.8008,20.1176 2.0833,21.4001 3.6508,21.4001H28.3508C29.9183,21.4001 31.2008,20.1176 31.2008,18.5501V8.1001H0.8008Z" />
-</vector>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+    <size android:width="@dimen/rbk_divider_height" />
+    <solid android:color="@color/rbk_blue_light"  />
+</shape>

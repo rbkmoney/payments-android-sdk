@@ -17,5 +17,5 @@
   -->
 
 <resources>
-    <bool name="rbc_isTablet">true</bool>
+    <bool name="rbk_isTablet">true</bool>
 </resources>

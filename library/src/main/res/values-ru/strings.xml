@@ -19,52 +19,52 @@
 <resources>
 
     <!-- checkout -->
-    <string name="rbc_label_secure_payment_with">Безопасная оплата с</string>
-    <string name="rbc_label_order_details">Детали заказа</string>
+    <string name="rbk_label_secure_payment_with">Безопасная оплата с</string>
+    <string name="rbk_label_order_details">Детали заказа</string>
 
     <!-- payment_methods -->
-    <string name="rbc_label_all_payment_methods">Все способы оплаты</string>
-    <string name="rbc_label_choose_payment_method">Выберите способ оплаты</string>
-    <string name="rbc_label_card">Банковская карта</string>
+    <string name="rbk_label_all_payment_methods">Все способы оплаты</string>
+    <string name="rbk_label_choose_payment_method">Выберите способ оплаты</string>
+    <string name="rbk_label_card">Банковская карта</string>
 
     <!-- card -->
-    <string name="rbc_label_payment_by_card">Оплата банковской картой</string>
-    <string name="rbc_label_email_for_check">Email для чека</string>
-    <string name="rbc_label_name_on_the_card">Имя на карте</string>
-    <string name="rbc_label_date_card">ММ/ГГ</string>
-    <string name="rbc_label_ccv_card">CVV/CVC</string>
-    <string name="rbc_label_number_on_card">Номер на карте</string>
-    <string name="rbc_label_pay_f">Оплатить %1$s</string>
+    <string name="rbk_label_payment_by_card">Оплата банковской картой</string>
+    <string name="rbk_label_email_for_check">Email для чека</string>
+    <string name="rbk_label_name_on_the_card">Имя на карте</string>
+    <string name="rbk_label_date_card">ММ/ГГ</string>
+    <string name="rbk_label_ccv_card">CVV/CVC</string>
+    <string name="rbk_label_number_on_card">Номер на карте</string>
+    <string name="rbk_label_pay_f">Оплатить %1$s</string>
 
     <!-- result -->
-    <string name="rbc_label_successful_payment">Успешная\nоплата!</string>
-    <string name="rbc_label_unsuccessful_payment">Не оплачено</string>
-    <string name="rbc_label_try_again">Попробовать еще раз</string>
-    <string name="rbc_label_use_another_card">Использовать другую карту</string>
-    <string name="rbc_label_retry">Повторить снова</string>
-    <string name="rbc_label_payed_by_card_f">Заказ оплачен картой %1$s\nЧек отправлен по адресу %2$s</string>
-    <string name="rbc_label_cancel">Отмена</string>
-    <string name="rbc_label_error">Ошибка</string>
-    <string name="rbc_label_payment_refund">Возврат платежа</string>
+    <string name="rbk_label_successful_payment">Успешная\nоплата!</string>
+    <string name="rbk_label_unsuccessful_payment">Не оплачено</string>
+    <string name="rbk_label_try_again">Попробовать еще раз</string>
+    <string name="rbk_label_use_another_card">Использовать другую карту</string>
+    <string name="rbk_label_retry">Повторить снова</string>
+    <string name="rbk_label_payed_by_card_f">Заказ оплачен картой %1$s\nЧек отправлен по адресу %2$s</string>
+    <string name="rbk_label_cancel">Отмена</string>
+    <string name="rbk_label_error">Ошибка</string>
+    <string name="rbk_label_payment_refund">Возврат платежа</string>
 
-    <string name="rbc_error_invoice_cancelled">Инвойс отменён</string>
-    <string name="rbc_error_unknown_invoice">Неизвестная ошибка инвойса</string>
-    <string name="rbc_error_unknown_payment">Неизвестная ошибка платежа</string>
-    <string name="rbc_error_payment_cancelled">Платёж отменён</string>
-    <string name="rbc_error_invalid_payment_tool">Неверный платежный инструмент</string>
-    <string name="rbc_error_account_limits_exceeded">Превышены лимиты</string>
-    <string name="rbc_error_insufficient_funds">Недостаточно средств на счете</string>
-    <string name="rbc_error_preauthorization_failed">Предварительная авторизация отклонена</string>
-    <string name="rbc_error_rejected_by_issuer">Платёж отклонён эмитентом</string>
-    <string name="rbc_error_payment_rejected">Платёж отклонён</string>
-    <string name="rbc_error_payment_failed">Ошибка платежа</string>
-    <string name="rbc_error_connection">Отсутствует интернет соединение</string>
-    <string name="rbc_error_polling_time_exceeded">Превышено время опроса сервера</string>
-    <string name="rbc_error_invalid_invoice_status">Недопустимый статус инвойса.</string>
-    <string name="rbc_error_busines_logic">В процессе проведения платежа возникла непредвиденная ошибка. Пожалуйста, повторите попытку платежа. В случае сохранения ошибки обратитесь в службу поддежки</string>
-    <string name="rbc_error_payment_in_refund_state">Ваш платеж находится в статусе возврата или возвращен</string>
-    <string name="rbc_error_cant_load_invoice">Невозможно загрузить инвойс</string>
-    <string name="rbc_error_no_supported_payment_methods">Нет поддерживаемых платёжных методов</string>
-    <string name="rbc_error_gpay_initialization">Не удалось инициализировать Google Pay</string>
-    <string name="rbc_error_invoice_already_payed">Инвойс уже оплачен</string>
+    <string name="rbk_error_invoice_cancelled">Инвойс отменён</string>
+    <string name="rbk_error_unknown_invoice">Неизвестная ошибка инвойса</string>
+    <string name="rbk_error_unknown_payment">Неизвестная ошибка платежа</string>
+    <string name="rbk_error_payment_cancelled">Платёж отменён</string>
+    <string name="rbk_error_invalid_payment_tool">Неверный платежный инструмент</string>
+    <string name="rbk_error_account_limits_exceeded">Превышены лимиты</string>
+    <string name="rbk_error_insufficient_funds">Недостаточно средств на счете</string>
+    <string name="rbk_error_preauthorization_failed">Предварительная авторизация отклонена</string>
+    <string name="rbk_error_rejected_by_issuer">Платёж отклонён эмитентом</string>
+    <string name="rbk_error_payment_rejected">Платёж отклонён</string>
+    <string name="rbk_error_payment_failed">Ошибка платежа</string>
+    <string name="rbk_error_connection">Отсутствует интернет соединение</string>
+    <string name="rbk_error_polling_time_exceeded">Превышено время опроса сервера</string>
+    <string name="rbk_error_invalid_invoice_status">Недопустимый статус инвойса.</string>
+    <string name="rbk_error_busines_logic">В процессе проведения платежа возникла непредвиденная ошибка. Пожалуйста, повторите попытку платежа. В случае сохранения ошибки обратитесь в службу поддежки</string>
+    <string name="rbk_error_payment_in_refund_state">Ваш платеж находится в статусе возврата или возвращен</string>
+    <string name="rbk_error_cant_load_invoice">Невозможно загрузить инвойс</string>
+    <string name="rbk_error_no_supported_payment_methods">Нет поддерживаемых платёжных методов</string>
+    <string name="rbk_error_gpay_initialization">Не удалось инициализировать Google Pay</string>
+    <string name="rbk_error_invoice_already_payed">Инвойс уже оплачен</string>
 </resources>

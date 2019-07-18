@@ -27,7 +27,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import kotlinx.android.extensions.CacheImplementation
 import kotlinx.android.extensions.ContainerOptions
-import kotlinx.android.synthetic.main.fmt_card.*
+import kotlinx.android.synthetic.main.rbk_fmt_card.*
 import money.rbk.R
 import money.rbk.di.Injector
 import money.rbk.domain.entity.CreditCardType
@@ -65,7 +65,7 @@ internal class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? =
-        inflater.inflate(R.layout.fmt_card, container, false)
+        inflater.inflate(R.layout.rbk_fmt_card, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -107,7 +107,7 @@ internal class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
     }
 
     override fun setCost(cost: String) {
-        btnPay.text = getString(R.string.rbc_label_pay_f, cost)
+        btnPay.text = getString(R.string.rbk_label_pay_f, cost)
     }
 
     override fun setCardDate(formatMonthYear: String) {
