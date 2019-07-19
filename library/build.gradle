@@ -115,8 +115,8 @@ project.afterEvaluate {
 
                     // License Info
                     def license = root.appendNode('licenses').appendNode('license')
-                    license.appendNode('name', 'The MIT License')
-                    license.appendNode('url', 'https://opensource.org/licenses/MIT')
+                    license.appendNode('name', 'The Apache Software License, Version 2.0')
+                    license.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0')
                     license.appendNode('distribution', 'repo')
 
                     // Source Control Info
