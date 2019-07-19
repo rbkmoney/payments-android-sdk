@@ -39,7 +39,7 @@ dependencies {
     * `email : String` (опциональное) - Электронная почта по умолчанию для отправки чеков
 
 2. Запустить `Activity` с помощью полученного интента:
-```kotlin
+```swift
         startActivityForResult(RbkMoney.buildCheckoutIntent(this,
             invoiceModel.id,
             invoiceModel.invoiceAccessToken,
