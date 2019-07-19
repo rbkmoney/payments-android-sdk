@@ -19,12 +19,15 @@
 package money.rbk.di
 
 import android.content.Context
+import com.google.android.gms.security.ProviderInstaller
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import money.rbk.data.network.Constants
 import money.rbk.data.repository.CheckoutRepositoryImpl
 import money.rbk.data.repository.GpayRepositoryImpl
 import money.rbk.data.serialization.SealedJsonDeserializer
 import money.rbk.data.utils.ClientInfoUtils
+import money.rbk.data.utils.log
 import money.rbk.domain.entity.BrowserRequest
 import money.rbk.domain.entity.Flow
 import money.rbk.domain.entity.InvoiceChange
@@ -35,6 +38,7 @@ import money.rbk.domain.entity.PaymentToolDetails
 import money.rbk.domain.entity.UserInteraction
 import money.rbk.domain.repository.CheckoutRepository
 import money.rbk.domain.repository.GpayRepository
+import okhttp3.CertificatePinner
 import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -70,9 +74,6 @@ internal object Injector {
             .registerTypeAdapter(Flow::class.java,
                 SealedJsonDeserializer(Flow.DISTRIBUTOR))
 
-//            .registerTypeAdapter(PaymentFlow::class.java,
-//                SealedJsonDeserializer(PaymentFlow.DISTRIBUTOR))
-
             .registerTypeAdapter(UserInteraction::class.java,
                 SealedJsonDeserializer(UserInteraction.DISTRIBUTOR))
 
@@ -94,14 +95,20 @@ internal object Injector {
         useTestEnvironment: Boolean,
         email: String?) {
         this.email = email
+        try {
+            ProviderInstaller.installIfNeeded(applicationContext)
+        } catch (e: Exception) {
+            log(e)
+        }
+
         ClientInfoUtils.initialize(applicationContext)
-        okHttpClient = newHttpClient(applicationContext)
+        okHttpClient = newHttpClient()
         checkoutRepository =
             CheckoutRepositoryImpl(okHttpClient, invoiceId, invoiceAccessToken, shopName)
         gpayRepository = GpayRepositoryImpl(applicationContext, useTestEnvironment)
     }
 
-    private fun newHttpClient(context: Context): OkHttpClient = OkHttpClient.Builder()
+    private fun newHttpClient(): OkHttpClient = OkHttpClient.Builder()
         .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
         .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
         .connectionPool(ConnectionPool(4, 10L, TimeUnit.MINUTES))
@@ -110,9 +117,11 @@ internal object Injector {
         .addInterceptor(HttpLoggingInterceptor().also {
             it.level = HttpLoggingInterceptor.Level.BODY
         })
-        // .applySsl(context)
-        // .addUserAgent(context)
-        // .applyLogging()
+        .certificatePinner(
+            CertificatePinner.Builder()
+                .add(Constants.HOST, *Constants.CERTS)
+                .build()
+        )
         .build()
 
 }

@@ -19,38 +19,35 @@
 package money.rbk.presentation.utils
 
 import android.widget.EditText
-import android.widget.TextView
-import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
-import androidx.core.content.ContextCompat
 import money.rbk.R
 
 private fun EditText.setErrorState() {
-    setBackgroundResource(R.drawable.background_edit_text_error)
-    setRightDrawable(R.drawable.ic_cross)
+    setBackgroundResource(R.drawable.rbk_background_edit_text_error)
+    setRightDrawable(R.drawable.rbk_ic_cross)
 }
 
 private fun EditText.setOkayState(@DrawableRes onValidDrawable: Int?) {
-    setBackgroundResource(R.drawable.selector_edittext)
+    setBackgroundResource(R.drawable.rbk_selector_edittext)
     setRightDrawable(onValidDrawable)
 }
 
-fun EditText.clearState() {
-    setBackgroundResource(R.drawable.selector_edittext)
+internal fun EditText.clearState() {
+    setBackgroundResource(R.drawable.rbk_selector_edittext)
     removeRightDrawable()
 }
 
-fun EditText.setValid(
+internal fun EditText.setValid(
     isValid: Boolean,
-    @DrawableRes onValidDrawable: Int? = R.drawable.ic_check
+    @DrawableRes onValidDrawable: Int? = R.drawable.rbk_ic_check
 ) =
     if (isValid) {
-        this.setOkayState(onValidDrawable ?: R.drawable.ic_check)
+        this.setOkayState(onValidDrawable ?: R.drawable.rbk_ic_check)
     } else {
         this.setErrorState()
     }
 
-fun EditText.setRightDrawable(@DrawableRes drawableId: Int?) {
+internal fun EditText.setRightDrawable(@DrawableRes drawableId: Int?) {
     if (drawableId == null) {
         removeRightDrawable()
     } else {
@@ -63,11 +60,7 @@ fun EditText.setRightDrawable(@DrawableRes drawableId: Int?) {
     }
 }
 
-fun EditText.removeRightDrawable() {
+internal fun EditText.removeRightDrawable() {
     val drawables = this.compoundDrawables
     this.setCompoundDrawablesWithIntrinsicBounds(drawables[0], drawables[1], null, drawables[3])
-}
-
-fun TextView.setTextColorResource(@ColorRes colorRes: Int) {
-    setTextColor(ContextCompat.getColor(context, colorRes))
 }

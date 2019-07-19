@@ -18,41 +18,44 @@
 
 <resources>
 
-    <dimen name="spacing_xxsmall">2dp</dimen>
-    <dimen name="spacing_tiny">2dp</dimen>
-    <dimen name="spacing_xsmall">4dp</dimen>
-    <dimen name="spacing_small">8dp</dimen>
-    <dimen name="spacing_medium">12dp</dimen>
-    <dimen name="spacing_gpay_button">13dp</dimen> <!-- 3ds less than spacing_default -->
-    <dimen name="spacing_default">16dp</dimen>
-    <dimen name="spacing_large">18dp</dimen>
-    <dimen name="spacing_xlarge">20dp</dimen>
-    <dimen name="spacing_xxlarge">24dp</dimen>
-    <dimen name="spacing_huge">32dp</dimen>
-    <dimen name="spacing_xxxhuge">50dp</dimen>
+    <!-- Margins and paddings -->
+    <dimen name="rbk_spacing_xxxtiny">2dp</dimen>
+    <dimen name="rbk_spacing_xxtiny">3dp</dimen>
+    <dimen name="rbk_spacing_xtiny">4dp</dimen>
+    <dimen name="rbk_spacing_tiny">5dp</dimen>
+    <dimen name="rbk_spacing_xxxsmall">8dp</dimen>
+    <dimen name="rbk_spacing_xxsmall">10dp</dimen>
+    <dimen name="rbk_spacing_xsmall">12dp</dimen>
+    <dimen name="rbk_spacing_small">15dp</dimen>
+    <dimen name="rbk_spacing_medium">16dp</dimen>
+    <dimen name="rbk_spacing_large">20dp</dimen>
+    <dimen name="rbk_spacing_xlarge">23dp</dimen>
+    <dimen name="rbk_spacing_xxlarge">25dp</dimen>
+    <dimen name="rbk_spacing_xxxlarge">30dp</dimen>
+    <dimen name="rbk_spacing_huge">32dp</dimen>
+    <dimen name="rbk_spacing_xxxhuge">50dp</dimen>
 
-    <dimen name="spacing_ten">10dp</dimen>
+    <dimen name="rbk_spacing_google_pay">17dp</dimen>
 
-    <dimen name="spacing_xsmall_еу">5dp</dimen>
+    <dimen name="rbk_elevation">10dp</dimen>
 
-    <dimen name="elevation">10dp</dimen>
+    <dimen name="rbk_font_xtiny">10sp</dimen>
+    <dimen name="rbk_font_tiny">11sp</dimen>
+    <dimen name="rbk_font_medium">16sp</dimen>
+    <dimen name="rbk_font_xxxlarge">30sp</dimen>
 
-    <dimen name="font_xtiny">10sp</dimen>
-    <dimen name="font_tiny">11sp</dimen>
-    <dimen name="font_medium">16sp</dimen>
-    <dimen name="font_xxxlarge">30sp</dimen>
+    <dimen name="rbk_corner_radius">9dp</dimen>
+    <dimen name="rbk_corner_radius_small">3dp</dimen>
 
-    <dimen name="corner_radius">9dp</dimen>
-    <dimen name="corner_radius_small">3dp</dimen>
+    <dimen name="rbk_background_corner_radius">3dp</dimen>
+    <dimen name="rbk_divider_height">1dp</dimen>
+    <dimen name="rbk_thick_divider_height">2dp</dimen>
 
-    <dimen name="background_corner_radius">3dp</dimen>
-    <dimen name="divider_height">1dp</dimen>
-    <dimen name="thick_divider_height">2dp</dimen>
+    <dimen name="rbk_item_height">80dp</dimen>
 
-    <dimen name="item_height">80dp</dimen>
+    <dimen name="rbk_height_medium_button">48dp</dimen>
+    <dimen name="rbk_height_gpay_button">51dp</dimen>  <!-- 3dp more than height_medium_button -->
+    <dimen name="rbk_height_screen">960dp</dimen>
 
-    <dimen name="height_medium_button">48dp</dimen>
-    <dimen name="height_gpay_button">51dp</dimen>  <!-- 3dp more than height_medium_button -->
-    <dimen name="height_screen">960dp</dimen>
 
 </resources>

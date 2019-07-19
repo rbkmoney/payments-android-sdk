@@ -22,4 +22,4 @@ import android.content.Context
 import money.rbk.R
 
 internal val Context.isTablet
-    get() = resources.getBoolean(R.bool.rbc_isTablet)
+    get() = resources.getBoolean(R.bool.rbk_isTablet)

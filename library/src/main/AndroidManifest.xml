@@ -29,13 +29,13 @@
         <activity
             android:name="money.rbk.presentation.activity.checkout.CheckoutActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:theme="@style/Theme.RBKMoney"
+            android:theme="@style/RbkMoneyTheme"
             android:windowSoftInputMode="stateUnchanged|adjustPan"
             />
 
         <activity
             android:name="money.rbk.presentation.activity.web.Web3DSecureActivity"
-            android:theme="@style/Theme.RBKMoney"
+            android:theme="@style/RbkMoneyTheme"
             />
 
         <meta-data

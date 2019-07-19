@@ -2,12 +2,7 @@ package money.rbk.presentation.utils
 
 import java.util.Calendar
 
-/**
- * @author Arthur Korchagin (artur.korchagin@simbirsoft.com)
- * @since 09.07.19
- */
-
-object ValidationUtils {
+internal object ValidationUtils {
 
     const val MAX_YEARS_CARD_VALIDITY = 30
 

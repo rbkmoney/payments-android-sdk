@@ -29,4 +29,5 @@ internal sealed class UseCaseException(message: String) : Exception(message) {
     internal class UnableRepeatPaymentException(reason: String?) :
         UseCaseException("Unable repeat payment ${reason ?: ""}")
 
+    internal object VulnerableDeviceException : UseCaseException("")
 }

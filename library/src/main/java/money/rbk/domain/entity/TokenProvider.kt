@@ -18,7 +18,7 @@
 
 package money.rbk.domain.entity
 
-enum class TokenProvider {
+internal enum class TokenProvider {
     applepay,
     googlepay,
     samsungpay,

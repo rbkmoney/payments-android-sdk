@@ -18,7 +18,7 @@
 
 package money.rbk.domain.entity
 
-enum class Currency(val symbol: String) {
+internal enum class Currency(val symbol: String) {
     RUB("\u20BD"),
     EUR("€"),
     USD("$"),

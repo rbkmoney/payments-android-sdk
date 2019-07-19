@@ -25,9 +25,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.core.view.ViewCompat
 import kotlinx.android.extensions.CacheImplementation
 import kotlinx.android.extensions.ContainerOptions
-import kotlinx.android.synthetic.main.fmt_card.*
+import kotlinx.android.synthetic.main.rbk_fmt_card.*
 import money.rbk.R
 import money.rbk.di.Injector
 import money.rbk.domain.entity.CreditCardType
@@ -44,7 +45,6 @@ import ru.tinkoff.decoro.MaskImpl
 import ru.tinkoff.decoro.slots.PredefinedSlots
 import ru.tinkoff.decoro.watchers.MaskFormatWatcher
 
-// TODO: Maybe temporary, edCardNumber after two returns get old value
 @ContainerOptions(cache = CacheImplementation.NO_CACHE)
 internal class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
 
@@ -66,11 +66,19 @@ internal class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? =
-        inflater.inflate(R.layout.fmt_card, container, false)
+        inflater.inflate(R.layout.rbk_fmt_card, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.requestFocus()
+
+        ViewCompat.setImportantForAccessibility(edCardNumber,
+            ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO)
+        ViewCompat.setImportantForAccessibility(edCardDate,
+            ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO)
+        ViewCompat.setImportantForAccessibility(edCardCvv,
+            ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO)
+
         btnPay.setOnClickListener {
             activity?.hideKeyboard()
             view.requestFocus()
@@ -108,7 +116,7 @@ internal class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
     }
 
     override fun setCost(cost: String) {
-        btnPay.text = getString(R.string.rbc_label_pay_f, cost)
+        btnPay.text = getString(R.string.rbk_label_pay_f, cost)
     }
 
     override fun setCardDate(formatMonthYear: String) {

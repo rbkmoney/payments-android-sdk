@@ -18,4 +18,4 @@
 
 package money.rbk.presentation.model
 
-class PaymentMethodsModel(val paymentMethods: List<PaymentMethodModel>) : BaseIUModel()
+internal class PaymentMethodsModel(val paymentMethods: List<PaymentMethodModel>) : BaseIUModel()

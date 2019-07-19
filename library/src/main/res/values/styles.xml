@@ -18,112 +18,112 @@
 
 <resources>
 
-    <style name="Theme.RBKMoney" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/blue_light</item>
-        <item name="colorPrimaryDark">@color/purple_light</item>
-        <item name="colorAccent">@color/green</item>
-        <item name="android:textAppearance">@style/TextAppearance.RBKMoney.Normal</item>
+    <style name="RbkMoneyTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/rbk_blue_light</item>
+        <item name="colorPrimaryDark">@color/rbk_purple_light</item>
+        <item name="colorAccent">@color/rbk_green</item>
+        <item name="android:textAppearance">@style/RbkTextAppearance.RBKMoney.Normal</item>
         <item name="android:screenOrientation">portrait</item>
     </style>
 
-    <style name="RBKMoney" />
+    <style name="RbkMoney" />
 
-    <style name="Button" parent="RBKMoney" />
+    <style name="RbkButton" parent="RbkMoney" />
 
-    <style name="Button.Borderless">
+    <style name="RbkButton.Borderless">
         <item name="android:background">?selectableItemBackground</item>
-        <item name="android:textAppearance">@style/TextAppearance.RBKMoney.Headline.BlueLight</item>
+        <item name="android:textAppearance">@style/RbkTextAppearance.RBKMoney.Headline.BlueLight</item>
     </style>
 
-    <style name="Button.Frame">
-        <item name="android:background">@drawable/background_button_frame</item>
-        <item name="android:textAppearance">@style/TextAppearance.RBKMoney.Normal.BlueLight</item>
+    <style name="RbkButton.Frame">
+        <item name="android:background">@drawable/rbk_background_button_frame</item>
+        <item name="android:textAppearance">@style/RbkTextAppearance.RBKMoney.Normal.BlueLight</item>
     </style>
 
-    <style name="EditText" parent="RBKMoney">
-        <item name="android:textCursorDrawable">@drawable/edit_text_cursor</item>
+    <style name="RbkEditText" parent="RbkMoney">
+        <item name="android:textCursorDrawable">@drawable/rbk_edit_text_cursor</item>
         <item name="android:maxLines">1</item>
-        <item name="android:padding">@dimen/spacing_medium</item>
-        <item name="android:drawablePadding">@dimen/spacing_small</item>
-        <item name="android:background">@drawable/selector_edittext</item>
-        <item name="android:textSize">@dimen/font_medium</item>
+        <item name="android:padding">@dimen/rbk_spacing_xsmall</item>
+        <item name="android:drawablePadding">@dimen/rbk_spacing_xxxsmall</item>
+        <item name="android:background">@drawable/rbk_selector_edittext</item>
+        <item name="android:textSize">@dimen/rbk_font_medium</item>
     </style>
 
-    <style name="Button.Accent" parent="Button">
-        <item name="android:paddingLeft">@dimen/spacing_xxlarge</item>
-        <item name="android:paddingRight">@dimen/spacing_xxlarge</item>
-        <item name="android:textAppearance">@style/TextAppearance.RBKMoney.Normal.White</item>
-        <item name="android:background">@drawable/accent_button_background</item>
+    <style name="RbkButton.Accent" parent="RbkButton">
+        <item name="android:paddingLeft">@dimen/rbk_spacing_xxlarge</item>
+        <item name="android:paddingRight">@dimen/rbk_spacing_xxlarge</item>
+        <item name="android:textAppearance">@style/RbkTextAppearance.RBKMoney.Normal.White</item>
+        <item name="android:background">@drawable/rbk_accent_button_background</item>
         <item name="android:textAllCaps">false</item>
     </style>
 
     <!-- TextAppearances -->
 
-    <style name="TextAppearance.RBKMoney" parent="TextAppearance.AppCompat" />
+    <style name="RbkTextAppearance.RBKMoney" parent="TextAppearance.AppCompat" />
 
-    <style name="TextAppearance.RBKMoney.Normal" parent="TextAppearance.RBKMoney">
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">@dimen/font_medium</item>
+    <style name="RbkTextAppearance.RBKMoney.Normal" parent="RbkTextAppearance.RBKMoney">
+        <item name="android:textColor">@color/rbk_black</item>
+        <item name="android:textSize">@dimen/rbk_font_medium</item>
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <style name="TextAppearance.RBKMoney.Normal.White">
-        <item name="android:textColor">@color/white</item>
+    <style name="RbkTextAppearance.RBKMoney.Normal.White">
+        <item name="android:textColor">@color/rbk_white</item>
     </style>
 
-    <style name="TextAppearance.RBKMoney.Normal.BlueLight">
-        <item name="android:textColor">@color/blue_light</item>
+    <style name="RbkTextAppearance.RBKMoney.Normal.BlueLight">
+        <item name="android:textColor">@color/rbk_blue_light</item>
     </style>
 
-    <style name="TextAppearance.RBKMoney.Footer" parent="TextAppearance.RBKMoney.Normal.White">
-        <item name="android:textSize">@dimen/font_xtiny</item>
+    <style name="RbkTextAppearance.RBKMoney.Footer" parent="RbkTextAppearance.RBKMoney.Normal.White">
+        <item name="android:textSize">@dimen/rbk_font_xtiny</item>
         <item name="android:fontFamily">sans-serif-regular</item>
     </style>
 
-    <style name="TextAppearance.RBKMoney.Title" parent="TextAppearance.RBKMoney.Normal">
-        <item name="android:textSize">@dimen/font_xxxlarge</item>
+    <style name="RbkTextAppearance.RBKMoney.Title" parent="RbkTextAppearance.RBKMoney.Normal">
+        <item name="android:textSize">@dimen/rbk_font_xxxlarge</item>
     </style>
 
-    <style name="TextAppearance.RBKMoney.Title.White">
-        <item name="android:textColor">@color/white</item>
+    <style name="RbkTextAppearance.RBKMoney.Title.White">
+        <item name="android:textColor">@color/rbk_white</item>
     </style>
 
-    <style name="TextAppearance.RBKMoney.Title.Red">
-        <item name="android:textColor">@color/red</item>
+    <style name="RbkTextAppearance.RBKMoney.Title.Red">
+        <item name="android:textColor">@color/rbk_red</item>
     </style>
 
-    <style name="TextAppearance.RBKMoney.Headline" parent="TextAppearance.RBKMoney.Normal">
+    <style name="RbkTextAppearance.RBKMoney.Headline" parent="RbkTextAppearance.RBKMoney.Normal">
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">sans-serif-black</item>
-        <item name="android:textSize">@dimen/font_tiny</item>
+        <item name="android:textSize">@dimen/rbk_font_tiny</item>
         <item name="android:letterSpacing">0.2</item>
         <item name="android:lineSpacingExtra">2sp</item>
     </style>
 
-    <style name="TextAppearance.RBKMoney.Headline.White">
-        <item name="android:textColor">@color/white</item>
+    <style name="RbkTextAppearance.RBKMoney.Headline.White">
+        <item name="android:textColor">@color/rbk_white</item>
     </style>
 
-    <style name="TextAppearance.RBKMoney.Headline.BlueLight">
-        <item name="android:textColor">@color/selector_blue_light</item>
+    <style name="RbkTextAppearance.RBKMoney.Headline.BlueLight">
+        <item name="android:textColor">@color/rbk_selector_blue_light</item>
     </style>
 
-    <style name="TextAppearance.RBKMoney.Headline.BlueLight.NoCaps">
+    <style name="RbkTextAppearance.RBKMoney.Headline.BlueLight.NoCaps">
         <item name="android:textAllCaps">false</item>
     </style>
 
-    <style name="TextAppearance.RBKMoney.Headline.BlueGrey">
-        <item name="android:textColor">@color/light_blue_grey</item>
+    <style name="RbkTextAppearance.RBKMoney.Headline.BlueGrey">
+        <item name="android:textColor">@color/rbk_light_blue_grey</item>
     </style>
 
-    <style name="TextAppearance.RBKMoney.Description" parent="TextAppearance.RBKMoney.Normal">
-        <item name="android:textSize">@dimen/font_tiny</item>
-        <item name="android:textColor">@color/grey</item>
+    <style name="RbkTextAppearance.RBKMoney.Description" parent="RbkTextAppearance.RBKMoney.Normal">
+        <item name="android:textSize">@dimen/rbk_font_tiny</item>
+        <item name="android:textColor">@color/rbk_grey</item>
         <item name="android:textStyle">italic</item>
     </style>
 
-    <style name="TextAppearance.RBKMoney.Description.White">
-        <item name="android:textColor">@color/white</item>
+    <style name="RbkTextAppearance.RBKMoney.Description.White">
+        <item name="android:textColor">@color/rbk_white</item>
     </style>
 
 </resources>

@@ -23,7 +23,7 @@ import money.rbk.data.serialization.SealedDistributor
 import money.rbk.data.serialization.SealedDistributorValue
 import kotlin.reflect.KClass
 
-sealed class PaymentToolDetails {
+internal sealed class PaymentToolDetails {
 
     companion object {
         val DISTRIBUTOR = SealedDistributor("detailsType", DetailsType.values())

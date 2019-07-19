@@ -26,16 +26,16 @@ private const val EMPTY_STRING = ""
 
 private const val LENGTH_CVV = 3
 
-fun String.isEmailValid(): Boolean =
+internal fun String.isEmailValid(): Boolean =
     isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
-fun String.removeSpaces() = replace(SPACE_STRING.toRegex(), EMPTY_STRING)
+internal fun String.removeSpaces() = replace(SPACE_STRING.toRegex(), EMPTY_STRING)
 
-fun CharSequence.removeSpaces() = toString().removeSpaces()
+internal fun CharSequence.removeSpaces() = toString().removeSpaces()
 
-fun String.isValidCvv() = length == LENGTH_CVV
+internal fun String.isValidCvv() = length == LENGTH_CVV
 
-fun String.isCardValidByLuna(): Boolean {
+internal fun String.isCardValidByLuna(): Boolean {
     var currentNumber: Int
     var evenSum = 0
     val unevenNumList = ArrayList<Int>()

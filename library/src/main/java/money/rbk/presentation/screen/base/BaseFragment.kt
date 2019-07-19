@@ -23,6 +23,7 @@ import android.view.View
 import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
 import money.rbk.presentation.activity.checkout.CheckoutActivity
+import java.lang.IllegalStateException
 
 internal abstract class BaseFragment<T : BaseView> : Fragment(), BaseView {
 
@@ -30,7 +31,7 @@ internal abstract class BaseFragment<T : BaseView> : Fragment(), BaseView {
 
     val checkoutActivity: CheckoutActivity
         get() = (activity as? CheckoutActivity)
-            ?: throw TODO("BaseFragment can be attached only to CheckoutActivity")
+            ?: throw IllegalStateException("BaseFragment can be attached only to CheckoutActivity")
 
     val navigator
         get() = checkoutActivity.navigator
@@ -38,7 +39,7 @@ internal abstract class BaseFragment<T : BaseView> : Fragment(), BaseView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        presenter.attachView(this as? T ?: throw RuntimeException("")) //TODO: Check it
+        presenter.attachView(this as? T ?: throw IllegalStateException("${javaClass.name} can't be casted to `T`"))
     }
 
     override fun onDestroyView() {
@@ -51,6 +52,5 @@ internal abstract class BaseFragment<T : BaseView> : Fragment(), BaseView {
     override fun hideProgress() {
         checkoutActivity.hideProgress()
     }
-
 
 }
