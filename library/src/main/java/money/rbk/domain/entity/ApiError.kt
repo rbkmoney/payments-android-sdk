@@ -18,29 +18,11 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.extension.findEnumOrNull
-import money.rbk.data.extension.getNullable
-import money.rbk.data.serialization.Deserializer
-import org.json.JSONObject
-//{
-//    "description":"No match to pattern. Path to item: paymentTool.cardNumber",
-//    "errorType":"schema_violated",
-//    "name":"PaymentResourceParams"
-//}
-
-data class ApiError(
+internal class ApiError(
     val code: Code?,
     val message: String?,
     val subError: ApiError?
 ) {
-    companion object : Deserializer<JSONObject, ApiError> {
-        override fun fromJson(json: JSONObject): ApiError = ApiError(
-            code = json.getNullable<String>("code")?.let { findEnumOrNull<Code>(it) },
-            message = json.getNullable("message"),
-            subError = json.getNullable("subError")
-        )
-    }
-
     enum class Code {
 
         /**	Недоступная в рамках действующего договора операция. */

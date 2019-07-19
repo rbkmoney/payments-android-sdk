@@ -21,6 +21,7 @@ package money.rbk.domain.interactor
 import money.rbk.di.Injector
 import money.rbk.domain.entity.PaymentMethod
 import money.rbk.domain.entity.TokenProvider
+import money.rbk.domain.exception.UseCaseException
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.EmptyInputModel
 import money.rbk.domain.repository.CheckoutRepository
@@ -31,21 +32,10 @@ internal class PaymentMethodsUseCase(
     private val repository: CheckoutRepository = Injector.checkoutRepository) :
     UseCase<EmptyInputModel, PaymentMethodsModel>() {
 
-    // TODO: Make support for cards types
     override fun invoke(
         inputModel: EmptyInputModel,
         onResultCallback: (PaymentMethodsModel) -> Unit,
         onErrorCallback: (Throwable) -> Unit) {
-
-        try {
-            val paymentMethods = repository.getPaymentMethodsSync()
-            if (paymentMethods != null) {
-                onResultCallback(PaymentMethodsModel(paymentMethods.mapPaymentMethods()))
-                return
-            }
-        } catch (error: Throwable) {
-            onErrorCallback(error)
-        }
 
         bgExecutor(onErrorCallback) {
 
@@ -69,4 +59,9 @@ internal class PaymentMethodsUseCase(
             }
         }
             .distinct()
+            .also {
+                if (it.isEmpty()) {
+                    throw UseCaseException.NoSupportedPaymentMethodsException
+                }
+            }
 }

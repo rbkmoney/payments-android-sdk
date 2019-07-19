@@ -18,16 +18,16 @@
 
 package money.rbk.sample.activity
 
-import money.rbk.sample.network.model.InvoiceResponse
+import money.rbk.sample.network.model.InvoiceModel
 import money.rbk.sample.network.model.InvoiceTemplateResponse
 
 interface MainView {
 
-    fun setTemplates(invoiceTemplates: List<InvoiceTemplateResponse>)
+    fun setTemplates(invoiceTemplates: List<InvoiceTemplateResponse>, invoices: List<InvoiceModel>)
 
     fun showInvoiceTemplateError(error: String?)
 
-    fun startCheckout(shopAndInvoice: Pair<String, InvoiceResponse>)
+    fun startCheckout(invoiceModel: InvoiceModel)
 
     fun showInvoiceCreateError(error: String?)
 

@@ -18,36 +18,25 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.exception.ParseException
-import money.rbk.data.extension.findEnumOrNull
-import money.rbk.data.extension.parseNullableList
-import money.rbk.data.extension.parseStringList
-import money.rbk.data.serialization.Deserializer
-import org.json.JSONObject
+import money.rbk.data.serialization.SealedDistributor
+import money.rbk.data.serialization.SealedDistributorValue
+import kotlin.reflect.KClass
 
-sealed class PaymentMethod {
+internal sealed class PaymentMethod {
 
-    data class PaymentMethodBankCard(
+    companion object {
+        val DISTRIBUTOR = SealedDistributor("method", Method.values(), Unknown)
+    }
+
+    class PaymentMethodBankCard(
         val paymentSystems: List<CreditCardType>,
         val tokenProviders: List<TokenProvider>?
     ) : PaymentMethod()
 
-    companion object :
-        Deserializer<JSONObject, PaymentMethod> {
-        override fun fromJson(json: JSONObject): PaymentMethod {
-            val method = json.getString("method")
-            return when (findEnumOrNull<Method>(method)) {
-                Method.BankCard -> PaymentMethodBankCard(
-                    json.parseStringList("paymentSystems")
-                        .mapNotNull { findEnumOrNull<CreditCardType>(it) },
-                    json.parseNullableList("tokenProviders", TokenProvider)
-                )
-                null -> throw ParseException.UnsupportedPaymentMethodException(method)
-            }
-        }
-    }
+    object Unknown : PaymentMethod()
 
-    private enum class Method {
-        BankCard
+    private enum class Method(override val kClass: KClass<out PaymentMethod>) :
+        SealedDistributorValue<PaymentMethod> {
+        BankCard(PaymentMethodBankCard::class)
     }
 }

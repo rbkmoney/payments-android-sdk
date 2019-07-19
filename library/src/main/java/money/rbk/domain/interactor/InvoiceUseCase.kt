@@ -18,23 +18,20 @@
 
 package money.rbk.domain.interactor
 
+import money.rbk.BuildConfig
 import money.rbk.di.Injector
-import money.rbk.domain.converter.EntityConverter
-import money.rbk.domain.converter.InvoiceChangesConverter
-import money.rbk.domain.entity.InvoiceEvent
-import money.rbk.domain.entity.InvoiceStatus
+import money.rbk.domain.exception.UseCaseException
 import money.rbk.domain.extension.cost
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.InvoiceInitializeInputModel
 import money.rbk.domain.repository.CheckoutRepository
-import money.rbk.presentation.model.CheckoutState
+import money.rbk.domain.repository.GpayRepository
 import money.rbk.presentation.model.InvoiceModel
-import money.rbk.presentation.model.InvoiceStateModel
-import money.rbk.presentation.utils.formatPrice
+import money.rbk.presentation.utils.RootChecker
 
 internal class InvoiceUseCase(
     private val repository: CheckoutRepository = Injector.checkoutRepository,
-    private val invoiceChangesConverter: EntityConverter<List<InvoiceEvent>, CheckoutState> = InvoiceChangesConverter()) :
+    private val gpayRepository: GpayRepository = Injector.gpayRepository) :
     UseCase<InvoiceInitializeInputModel, InvoiceModel>() {
 
     override fun invoke(
@@ -43,22 +40,20 @@ internal class InvoiceUseCase(
         onErrorCallback: (Throwable) -> Unit) {
 
         bgExecutor(onErrorCallback) {
+            if(!BuildConfig.DEBUG && RootChecker.isDeviceRooted) {
+                throw UseCaseException.VulnerableDeviceException
+            }
 
             val invoice = repository.loadInvoice()
-            repository.loadPaymentMethods()
 
-            val checkoutState =
-                when (invoice.status) {
-                    InvoiceStatus.unpaid -> CheckoutState(InvoiceStateModel.Pending)
-                    else -> invoiceChangesConverter(repository.loadInvoiceEvents())
-                }
+            gpayRepository.init(invoice.shopID)
 
             val invoiceModel = InvoiceModel(
                 invoice.id,
                 repository.shopName,
                 invoice.cost,
                 invoice.product + invoice.description?.let { ". $it" }.orEmpty(),
-                checkoutState
+                invoice.status
             )
 
             uiExecutor {

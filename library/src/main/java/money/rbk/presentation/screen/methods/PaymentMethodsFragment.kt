@@ -23,15 +23,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fmt_payment_methods.*
+import kotlinx.android.synthetic.main.rbk_fmt_payment_methods.*
 import money.rbk.R
-import money.rbk.presentation.activity.checkout.CheckoutActivity
 import money.rbk.presentation.model.PaymentMethodModel
 import money.rbk.presentation.screen.base.BaseFragment
 import money.rbk.presentation.screen.common.MarginItemDecoration
 import money.rbk.presentation.screen.methods.adapter.PaymentAdapter
 
-class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethodsView {
+internal class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethodsView {
 
     override val presenter: PaymentMethodsPresenter by lazy { PaymentMethodsPresenter(navigator) }
 
@@ -42,25 +41,21 @@ class PaymentMethodsFragment : BaseFragment<PaymentMethodsView>(), PaymentMethod
     override fun onCreateView(inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.fmt_payment_methods, container, false)
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        (activity as? CheckoutActivity)?.setBackButtonVisibility(false)
-    }
+        inflater.inflate(R.layout.rbk_fmt_payment_methods, container, false)
 
     override fun setPaymentMethods(paymentMethods: List<PaymentMethodModel>) {
-        rvPaymentMethods.adapter = PaymentAdapter(presenter::onPaymentClick, paymentMethods)
+        rvPaymentMethods.adapter = PaymentAdapter({ presenter.onPaymentClick(it) }, paymentMethods)
         rvPaymentMethods.layoutManager = LinearLayoutManager(activity)
-        rvPaymentMethods.addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.spacing_small).toInt()))
+        rvPaymentMethods.addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.rbk_spacing_xxsmall).toInt()))
     }
 
     override fun showProgress() {
-        pbLoading.visibility = View.VISIBLE
+        checkoutActivity.showProgress()
     }
 
     override fun hideProgress() {
-        pbLoading.visibility = View.GONE
+        super.hideProgress()
+        checkoutActivity.hideProgress()
     }
 
 }

@@ -24,25 +24,38 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.FragmentActivity
+import money.rbk.R
+import money.rbk.presentation.exception.ActivityExtraNonnullException
+import kotlin.math.min
 
-fun FragmentActivity.hideKeyboard() {
+internal fun FragmentActivity.hideKeyboard() {
     val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     val view = currentFocus ?: View(this)
     imm.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
-fun Activity.adjustSize() {
+internal fun Activity.adjustSize() {
     if (isTablet) {
         val lp = WindowManager.LayoutParams()
         lp.copyFrom(window.attributes)
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT
-        lp.height = screenHeight
+        lp.height = min(screenHeight, resources.getDimensionPixelOffset(R.dimen.rbk_height_screen))
         window.attributes = lp
     }
 }
 
-val Activity.screenHeight: Int
+internal val Activity.screenHeight: Int
     get() = windowManager.defaultDisplay
         .run {
-            Point().also(::getSize).y
+            Point().also { getSize(it) }
+                .y
         }
+
+internal fun Activity.getExtraBooleanOrError(key: String): Boolean =
+    intent?.getBooleanExtra(key, false) ?: throw ActivityExtraNonnullException(this.javaClass, key)
+
+internal fun Activity.getExtraStringOrError(key: String): String =
+    intent?.getStringExtra(key) ?: throw ActivityExtraNonnullException(this.javaClass, key)
+
+internal fun Activity.getExtraIntOrError(key: String): Int =
+    intent?.getIntExtra(key, 0) ?: throw ActivityExtraNonnullException(this.javaClass, key)

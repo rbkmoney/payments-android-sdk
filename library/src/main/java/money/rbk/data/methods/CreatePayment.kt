@@ -18,7 +18,6 @@
 
 package money.rbk.data.methods
 
-import money.rbk.data.extension.toJsonObject
 import money.rbk.data.methods.base.PostRequest
 import money.rbk.data.response.CreatePaymentResponse
 import money.rbk.domain.entity.Flow
@@ -26,19 +25,16 @@ import money.rbk.domain.entity.Payer
 
 internal class CreatePayment(
     invoiceID: String,
-    invoiceAccessToken: String,
+    override val invoiceAccessToken: String,
+    externalID: String,
     payer: Payer,
     flow: Flow
 ) : PostRequest<CreatePaymentResponse> {
 
     override val endpoint: String = "/processing/invoices/$invoiceID/payments"
 
-    override val invoiceAccessToken = invoiceAccessToken
-
-    override fun convertJsonToResponse(jsonString: String): CreatePaymentResponse =
-        CreatePaymentResponse.fromJson(jsonString.toJsonObject())
-
     override val payload: List<Pair<String, Any>> = listOf(
+        "externalID" to externalID,
         "payer" to payer,
         "flow" to flow)
 

@@ -18,17 +18,7 @@
 
 package money.rbk.domain.entity
 
-import org.json.JSONObject
-import money.rbk.data.serialization.Deserializer
-
-class UserInteractionForm(
+internal class UserInteractionForm(
     val key: String,
     val template: String
-) {
-    companion object : Deserializer<JSONObject, UserInteractionForm> {
-        override fun fromJson(json: JSONObject): UserInteractionForm = UserInteractionForm(
-            key = json.getString("key"),
-            template = json.getString("template")
-        )
-    }
-}
+)

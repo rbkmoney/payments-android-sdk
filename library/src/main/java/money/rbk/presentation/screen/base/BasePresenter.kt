@@ -18,13 +18,9 @@
 
 package money.rbk.presentation.screen.base
 
-import money.rbk.R
-import money.rbk.data.exception.NetworkServiceException
-import money.rbk.data.exception.ParseException
-import money.rbk.presentation.dialog.AlertButton
 import money.rbk.presentation.navigation.Navigator
 
-abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator) {
+internal abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator) {
 
     protected var view: View? = null
 
@@ -38,41 +34,8 @@ abstract class BasePresenter<View : BaseView>(protected val navigator: Navigator
         onViewDetached()
     }
 
-    fun onError(error: Throwable, retryButton: AlertButton? = null) {
-        when (error) {
-            is NetworkServiceException -> error.process(retryButton)
-            is ParseException -> error.process(retryButton)
-        }
-
-        view?.hideProgress()
-        error.printStackTrace()
-    }
-
     open fun onViewAttached(view: View) = Unit
 
     open fun onViewDetached() = Unit
-
-    //TODO: Make different handling this branches
-    private fun NetworkServiceException.process(retryButton: AlertButton?) =
-        when (this) {
-
-            NetworkServiceException.NoInternetException ->
-                navigator.openErrorFragment(
-                    messageRes = R.string.error_connection,
-                    positiveButtonPair = retryButton)
-
-            is NetworkServiceException.RequestExecutionException,
-            is NetworkServiceException.ResponseReadingException,
-            is NetworkServiceException.ApiException,
-            is NetworkServiceException.InternalServerException ->
-                navigator.openErrorFragment(
-                    messageRes = R.string.error_busines_logic,
-                    positiveButtonPair = retryButton)
-        }
-
-    private fun ParseException.process(retryButton: AlertButton?) {
-        navigator.openErrorFragment(R.string.error, R.string.error_busines_logic,
-            retryButton)
-    }
 
 }

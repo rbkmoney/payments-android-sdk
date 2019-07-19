@@ -20,44 +20,22 @@ package money.rbk.presentation.utils
 
 import android.util.Patterns
 import java.util.ArrayList
-import java.util.Calendar
 
-fun String.isEmailValid(): Boolean =
+private const val SPACE_STRING = "\\s"
+private const val EMPTY_STRING = ""
+
+private const val LENGTH_CVV = 3
+
+internal fun String.isEmailValid(): Boolean =
     isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
-fun String.isDateValid(): Boolean {
-    if (isBlank() or (length == 5).not()) {
-        return false
-    }
+internal fun String.removeSpaces() = replace(SPACE_STRING.toRegex(), EMPTY_STRING)
 
-    val currentDate = Calendar.getInstance()
-    val currentYear = currentDate.get(Calendar.YEAR) % 100
-    val currentMonth = currentDate.get(Calendar.MONTH) + 1
+internal fun CharSequence.removeSpaces() = toString().removeSpaces()
 
-    val monthYear = split("/")
+internal fun String.isValidCvv() = length == LENGTH_CVV
 
-    val userMonth = monthYear[0].toInt()
-    val userYear = monthYear[1].toInt()
-
-    return when {
-        userMonth > 12 -> false
-        currentYear > userYear -> false
-        currentYear == userYear -> userMonth >= currentMonth
-        else -> true
-    }
-}
-
-fun String.removeSpaces(): String {
-    return this.replace("\\s".toRegex(), "")
-}
-
-fun String.clearLength(): Int {
-    return removeSpaces().length
-}
-
-fun String.isValidCvv() = length == 3
-
-fun String.isCardValidByLuna(): Boolean {
+internal fun String.isCardValidByLuna(): Boolean {
     var currentNumber: Int
     var evenSum = 0
     val unevenNumList = ArrayList<Int>()
@@ -83,12 +61,3 @@ fun String.isCardValidByLuna(): Boolean {
     return (unevenNumList.sum() + evenSum) % 10 == 0
 }
 
-val String.cardMask
-    get() = "*${substring(Math.max(count() - 4, 0), count())}"
-
-fun Int.toDozenString(): String =
-    if (this / 10 == 0) {
-        "0$this"
-    } else {
-        this.toString()
-    }

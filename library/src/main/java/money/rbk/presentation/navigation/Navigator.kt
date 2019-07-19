@@ -18,102 +18,182 @@
 
 package money.rbk.presentation.navigation
 
-import android.app.Activity
-import android.util.Log
-import android.widget.Toast
+import android.content.Intent
+import android.util.SparseArray
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import androidx.fragment.app.FragmentTransaction
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.wallet.AutoResolvableResult
+import com.google.android.gms.wallet.AutoResolveHelper
+import com.whiteelephant.monthpicker.MonthPickerDialog
 import money.rbk.R
-import money.rbk.presentation.dialog.AlertButton
-import money.rbk.presentation.dialog.showAlert
 import money.rbk.presentation.screen.card.BankCardFragment
+import money.rbk.presentation.screen.gpay.GpayFragment
 import money.rbk.presentation.screen.methods.PaymentMethodsFragment
+import money.rbk.presentation.screen.result.ResultFragment
 
-// TODO: Activity Scope
-class Navigator(
+internal class Navigator(
     private val activity: FragmentActivity,
     @IdRes
-    private val containerId: Int) {
+    private val containerId: Int
+) {
+
+    companion object {
+        private val expectedResultFragments = SparseArray<String>()
+    }
+
+    fun resolveTask(task: Task<out AutoResolvableResult>, requestCode: Int) {
+        expectedResultFragments.put(requestCode, currentFragment?.tag)
+        AutoResolveHelper.resolveTask(task, activity, requestCode)
+    }
+
+    fun safeOpenPaymentMethods() =
+        (activity.supportFragmentManager.findFragmentById(R.id.container) == null).also {
+            if (it) {
+                replaceFragmentInActivity(PaymentMethodsFragment.newInstance())
+            }
+        }
 
     fun openPaymentMethods() {
-        if (activity.supportFragmentManager.findFragmentById(R.id.container) == null) {
-            replaceFragmentInActivity(PaymentMethodsFragment.newInstance())
-        }
+        replaceFragmentInActivity(PaymentMethodsFragment.newInstance(), isRoot = true)
     }
 
-    fun openGooglePay() = inProgress()
-
-    private fun inProgress() {
-        Toast.makeText(activity, "Данный функционал находится в стадии разработки",
-            Toast.LENGTH_LONG)
-            .show()
+    fun openGooglePay() {
+        replaceFragmentInActivity(GpayFragment.newInstance())
     }
 
-    fun openBankCard() {
-        replaceFragmentInActivity(BankCardFragment.newInstance())
+    fun openBankCard(clearTop: Boolean = false) {
+        replaceFragmentInActivity(BankCardFragment.newInstance(), clearTop = clearTop)
     }
 
-    fun openInvoiceCancelled() {
-        openErrorFragment(message = activity.getString(R.string.error_invoice_cancelled))
+    fun openWarningFragment(@StringRes titleRes: Int, @StringRes messageRes: Int) {
+        replaceFragmentInActivity(
+            ResultFragment.newInstanceUnknown(
+                activity.getString(messageRes),
+                activity.getString(titleRes)
+            ),
+            isRoot = true
+        )
     }
 
     fun openSuccessFragment(@StringRes messageRes: Int, vararg formatArgs: String) {
-        val finish = {
-            activity.setResult(Activity.RESULT_OK)
-            activity.finish()
-        }
-
-        activity.showAlert(
-            activity.getString(R.string.label_successful_payment),
-            activity.getString(messageRes, *formatArgs),
-            positiveButtonPair = R.string.label_ok to finish)
-    }
-
-    //TODO: Make proper back stack
-    fun back() {
-        if (activity.supportFragmentManager.findFragmentById(R.id.container) is BankCardFragment) {
-            replaceFragmentInActivity(PaymentMethodsFragment.newInstance())
-        } else {
-            activity.finish()
-        }
+        replaceFragmentInActivity(
+            ResultFragment.newInstanceSuccess(
+                activity.getString(messageRes, *formatArgs)
+            ),
+            isRoot = true
+        )
     }
 
     fun openErrorFragment(
-        @StringRes titleRes: Int = R.string.error_unpaid,
+        @StringRes messageRes: Int,
+        repeatAction: Boolean = false,
+        useAnotherCard: Boolean = false,
+        allPaymentMethods: Boolean = false
+    ) {
+
+        replaceFragmentInActivity(ResultFragment.newInstanceError(
+            message = activity.getString(messageRes),
+            repeatAction = repeatAction,
+            useAnotherCard = useAnotherCard,
+            allPaymentMethods = allPaymentMethods
+        ))
+    }
+
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean =
+        expectedResultFragments[requestCode]?.also {
+            activity.supportFragmentManager.findFragmentByTag(it)
+                ?.let { fragment ->
+                    expectedResultFragments.remove(requestCode)
+                    fragment.onActivityResult(requestCode, resultCode, data)
+                }
+
+        } != null
+
+    fun back() {
+        activity.supportFragmentManager.popBackStackImmediate()
+    }
+
+    fun showDateDialog(callback: MonthPickerDialog.OnDateSetListener,
+        startYear: Int,
+        maxYear: Int,
+        startMonth: Int) {
+
+        MonthPickerDialog.Builder(
+            activity,
+            callback,
+            startYear,
+            startMonth
+        )
+            .setYearRange(startYear, maxYear)
+            .build()
+            .show()
+    }
+
+    fun showAlert(
+        @StringRes titleRes: Int,
         @StringRes messageRes: Int,
         positiveButtonPair: AlertButton? = null,
-        negativeButtonPair: AlertButton? = null) =
-        openErrorFragment(
-            titleRes,
-            activity.getString(messageRes),
-            positiveButtonPair,
-            negativeButtonPair)
+        negativeButtonPair: AlertButton? = null): AlertDialog =
+        AlertDialog.Builder(activity)
+            .setTitle(titleRes)
+            .setOnCancelListener {
+                negativeButtonPair?.second?.invoke()
+            }
+            .setMessage(messageRes)
+            .apply {
+                if (positiveButtonPair != null) {
+                    setPositiveButton(positiveButtonPair.first) { _, _ -> positiveButtonPair.second() }
+                }
+                if (negativeButtonPair != null) {
+                    setNegativeButton(negativeButtonPair.first) { _, _ -> negativeButtonPair.second() }
+                }
+            }
+            .show()
 
-    fun openErrorFragment(
-        @StringRes titleRes: Int = R.string.error_unpaid,
-        message: CharSequence,
-        positiveButtonPair: AlertButton? = null,
-        negativeButtonPair: AlertButton? = null) {
-        activity.showAlert(
-            activity.getString(titleRes),
-            message,
-            positiveButtonPair = positiveButtonPair,
-            negativeButtonPair = negativeButtonPair)
+    fun finishWithCancel() {
+        activity.setResult(FragmentActivity.RESULT_CANCELED)
+        activity.finish()
     }
 
-    private fun replaceFragmentInActivity(fragment: Fragment) {
-        activity.supportFragmentManager.transact {
-            replace(containerId, fragment)
-        }
+    fun finishWithSuccess() {
+        activity.setResult(FragmentActivity.RESULT_OK)
+        activity.finish()
     }
 
-    private fun addFragmentToActivity(fragment: Fragment, tag: String) {
+    fun finishWithResult(resultCode: Int) {
+        activity.setResult(resultCode)
+        activity.finish()
+    }
+
+    fun finish() {
+        activity.finish()
+    }
+
+    /*  Private methods */
+
+    private val currentFragment: Fragment?
+        get() = activity.supportFragmentManager.findFragmentById(R.id.container)
+
+    private fun replaceFragmentInActivity(fragment: Fragment,
+        isRoot: Boolean = false,
+        clearTop: Boolean = false) {
         activity.supportFragmentManager.transact {
-            add(fragment, tag)
+            if (isRoot) {
+                activity.supportFragmentManager.popBackStack(null, POP_BACK_STACK_INCLUSIVE)
+            }
+            if (clearTop) {
+                activity.supportFragmentManager.popBackStack(fragment.javaClass.name,
+                    POP_BACK_STACK_INCLUSIVE)
+            }
+            replace(containerId, fragment, fragment.javaClass.name)
+            addToBackStack(fragment.javaClass.name)
         }
     }
 
@@ -121,7 +201,9 @@ class Navigator(
         beginTransaction().apply {
             action()
         }
-            .commit()
+            .commitAllowingStateLoss()
     }
 
 }
+
+internal typealias AlertButton = Pair<Int, () -> Unit>

@@ -18,6 +18,4 @@
 
 package money.rbk.domain.converter
 
-interface EntityConverter<Entity, Model> {
-    operator fun invoke(entity: Entity): Model
-}
+internal typealias EntityConverter<Entity, Model> = (Entity) -> Model

@@ -22,14 +22,14 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import money.rbk.R
 
-sealed class PaymentMethodModel(
+internal sealed class PaymentMethodModel(
     @StringRes val name: Int? = null,
     @StringRes val description: Int? = null,
     @DrawableRes val icon: Int
 ) : BaseIUModel() {
 
-    object BankCard : PaymentMethodModel(name = R.string.label_card, icon = R.drawable.selector_card)
+    object BankCard : PaymentMethodModel(name = R.string.rbk_label_card, icon = R.drawable.rbk_selector_card)
 
-    object GooglePay : PaymentMethodModel(icon = R.drawable.ic_google_pay)
+    object GooglePay : PaymentMethodModel(icon = R.drawable.rbk_ic_google_pay)
 
 }

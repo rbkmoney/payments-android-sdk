@@ -18,12 +18,14 @@
 
 package money.rbk.sample.activity
 
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
-import money.rbk.sample.network.NetworkService
-import money.rbk.sample.network.model.InvoiceResponse
+import money.rbk.sample.app.RBKSampleApplication
+import money.rbk.sample.network.model.InvoiceModel
 import money.rbk.sample.network.model.InvoiceTemplateResponse
 
 class MainPresenter {
@@ -35,10 +37,16 @@ class MainPresenter {
     fun attachView(view: MainView) {
         mainView = view
         view.showProgress()
-        NetworkService.getInvoiceTemplates()
+
+
+        Single.zip(
+            RBKSampleApplication.networkService.getInvoiceTemplates(),
+            RBKSampleApplication.networkService.getInvoices(),
+            BiFunction<List<InvoiceTemplateResponse>, List<InvoiceModel>, Pair<List<InvoiceTemplateResponse>, List<InvoiceModel>>> { invoiceTemplates, invoices -> invoiceTemplates to invoices }
+        )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(::onTemplatesLoaded, ::onTemplatesLoadError)
+            .subscribe({ onTemplatesLoaded(it) }, { onTemplatesLoadError(it) })
             .disposeWhenDetach()
     }
 
@@ -47,20 +55,24 @@ class MainPresenter {
         mainView = null
     }
 
-    fun onBuyClick(invoiceTemplate: InvoiceTemplateResponse) {
+    fun onBuyFromInvoiceClick(invoice: InvoiceModel) {
+        onInvoiceCreated(invoice)
+    }
+
+    fun onBuyFromTemplateClick(invoiceTemplate: InvoiceTemplateResponse) {
         mainView?.apply {
             showProgress()
-            NetworkService.createInvoiceWithTemplate(invoiceTemplate.id)
+            RBKSampleApplication.networkService.createInvoiceWithTemplate(invoiceTemplate.id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(::onInvoiceCreated, ::onInvoiceCreateError)
+                .subscribe({ onInvoiceCreated(it) }, { onInvoiceCreateError(it) })
                 .disposeWhenDetach()
         }
     }
 
-    private fun onInvoiceCreated(response: Pair<String, InvoiceResponse>) {
+    private fun onInvoiceCreated(invoiceModel: InvoiceModel) {
         mainView?.apply {
-            startCheckout(response)
+            startCheckout(invoiceModel)
             hideProgress()
         }
     }
@@ -73,9 +85,10 @@ class MainPresenter {
         }
     }
 
-    private fun onTemplatesLoaded(invoiceTemplatesList: List<InvoiceTemplateResponse>) {
+    private fun onTemplatesLoaded(data: Pair<List<InvoiceTemplateResponse>, List<InvoiceModel>>) {
+        val (invoiceTemplates, invoices) = data
         mainView?.apply {
-            setTemplates(invoiceTemplatesList)
+            setTemplates(invoiceTemplates, invoices)
             hideProgress()
         }
     }

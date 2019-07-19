@@ -28,7 +28,7 @@ import money.rbk.RbkMoney
 import money.rbk.sample.R
 import money.rbk.sample.adapter.InvoiceTemplatesAdapter
 import money.rbk.sample.dialog.showAlert
-import money.rbk.sample.network.model.InvoiceResponse
+import money.rbk.sample.network.model.InvoiceModel
 import money.rbk.sample.network.model.InvoiceTemplateResponse
 
 class MainActivity : AppCompatActivity(), MainView {
@@ -46,34 +46,40 @@ class MainActivity : AppCompatActivity(), MainView {
         presenter.attachView(this)
     }
 
-    override fun setTemplates(invoiceTemplates: List<InvoiceTemplateResponse>) {
+    override fun setTemplates(invoiceTemplates: List<InvoiceTemplateResponse>,
+        invoices: List<InvoiceModel>) {
         rvTemplates.layoutManager = LinearLayoutManager(this)
-        rvTemplates.adapter = InvoiceTemplatesAdapter(invoiceTemplates, presenter::onBuyClick)
+        rvTemplates.adapter = InvoiceTemplatesAdapter(invoiceTemplates,
+            invoices,
+            { presenter.onBuyFromTemplateClick(it) },
+            { presenter.onBuyFromInvoiceClick(it) })
         rvTemplates.visibility = View.VISIBLE
     }
 
     override fun showInvoiceTemplateError(error: String?) {
         showAlert(R.string.label_error,
-            getString(R.string.error_cant_load_invoice_template,
+            getString(R.string.error_cant_load_invoice_template_f,
                 error?.let {
-                    getString(R.string.error_f, error) ?: getString(R.string.error_unknown)
-                }))
+                    getString(R.string.error_f, error)
+                } ?: getString(R.string.error_unknown)))
     }
 
     override fun showInvoiceCreateError(error: String?) {
         showAlert(R.string.label_error,
-            getString(R.string.error_cant_load_invoice,
+            getString(R.string.error_cant_load_invoice_by_tamplate_f,
                 error?.let {
-                    getString(R.string.error_f, error) ?: getString(R.string.error_unknown)
-                }))
+                    getString(R.string.error_f, error)
+                } ?: getString(R.string.error_unknown)))
     }
 
-    override fun startCheckout(shopAndInvoice: Pair<String, InvoiceResponse>) {
-        val (shopName, invoiceResponse) = shopAndInvoice
+    override fun startCheckout(invoiceModel: InvoiceModel) {
+
         startActivityForResult(RbkMoney.buildCheckoutIntent(this,
-            invoiceResponse.invoice.id,
-            invoiceResponse.invoiceAccessToken.payload,
-            shopName
+            invoiceModel.id,
+            invoiceModel.invoiceAccessToken,
+            invoiceModel.shopName,
+            true,
+            "test@test.com"
         ),
             CHECKOUT_REQUEST_CODE)
     }

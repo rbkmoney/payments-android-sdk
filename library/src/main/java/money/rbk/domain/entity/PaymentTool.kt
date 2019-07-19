@@ -18,40 +18,34 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.serialization.Serializable
-import org.json.JSONObject
+import money.rbk.data.serialization.SealedDistributor
+import money.rbk.data.serialization.SealedDistributorValue
+import kotlin.reflect.KClass
 
-const val PaymentToolCardDataType = "CardData"
-const val PaymentToolTokenizedCardDataType = "TokenizedCardData"
+internal sealed class PaymentTool(protected val paymentToolType: PaymentToolType) {
 
-sealed class PaymentTool(open val paymentToolType: String) : Serializable {
+    companion object {
+        val DISTRIBUTOR = SealedDistributor("paymentToolType", PaymentToolType.values())
+    }
 
-    //TODO: Make it secured way ???
-    data class CardData(
+    class CardData(
         val cardNumber: String,
         val expDate: String,
         val cvv: String,
         val cardHolder: String
-    ) : PaymentTool(PaymentToolCardDataType) {
+    ) : PaymentTool(PaymentToolType.CardData)
 
-        override fun toJson(): JSONObject =
-            JSONObject().apply {
-                put("paymentToolType", paymentToolType)
-                put("cardNumber", cardNumber)
-                put("expDate", expDate)
-                put("cvv", cvv)
-                put("cardHolder", cardHolder + "Ivan Zdorovko")
-            }
-    }
+    class TokenizedCardData(
+        val gatewayMerchantID: String,
+        val paymentToken: PaymentToken,
+        val provider: String
 
-    data class PaymentToolTokenizedCardData(
-        val provider: TokenProvider
-    ) : PaymentTool(PaymentToolTokenizedCardDataType) {
-        override fun toJson(): JSONObject =
-            JSONObject().apply {
-                put("paymentToolType", paymentToolType)
-                put("provider", provider.name)
-            }
+    ) : PaymentTool(PaymentToolType.TokenizedCardData)
+
+    enum class PaymentToolType(override val kClass: KClass<out PaymentTool>) :
+        SealedDistributorValue<PaymentTool> {
+        CardData(PaymentTool.CardData::class),
+        TokenizedCardData(PaymentTool.TokenizedCardData::class)
     }
 
 }

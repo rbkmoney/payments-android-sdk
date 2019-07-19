@@ -18,29 +18,7 @@
 
 package money.rbk.domain.entity
 
-import org.json.JSONObject
-import money.rbk.data.serialization.Deserializer
-import money.rbk.data.serialization.Serializable
-
-data class ClientInfo(
+internal class ClientInfo(
     val fingerprint: String,
     val ip: String? = null
-) : Serializable {
-
-    companion object :
-        Deserializer<JSONObject, ClientInfo> {
-        override fun fromJson(json: JSONObject): ClientInfo =
-            ClientInfo(
-                fingerprint = json.getString("fingerprint"),
-                ip = json.optString("ip")
-            )
-    }
-
-    override fun toJson(): JSONObject =
-        JSONObject().apply {
-            put("fingerprint", fingerprint)
-            ip?.let { put("ip", it) }
-
-        }
-
-}
+)

@@ -18,7 +18,7 @@
 
 package money.rbk.presentation.screen.base
 
-interface BaseView {
+internal interface BaseView {
 
     fun showProgress()
     fun hideProgress()

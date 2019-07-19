@@ -27,8 +27,8 @@ buildscript {
         ]
 
         plugin = [
-                dexcount : '0.8.6',
-                fabric   : '1.29.0'
+                dexcount: '0.8.6',
+                fabric  : '1.30.0'
         ]
 
         androidx = [
@@ -42,24 +42,28 @@ buildscript {
         ]
 
         decoroVersion = '1.3.5'
+        playServicesWallet = '17.0.0'
 
-        kotlinVersion = '1.3.31'
+        kotlinVersion = '1.3.41'
         okhttpVersion = '3.14.2'
-
+        gsonVersion = '2.8.5'
         leakcanaryVersion = '1.6.3'
         crashliticsVersion = '2.10.1'
 
         datepickerVersion = '1.3.0'
+
+        libraryVersionCode = 17
+        libraryVersion = "0.0.$libraryVersionCode"
     }
 
     repositories {
         google()
         jcenter()
         maven { url 'https://maven.fabric.io/public' }
-        
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.android.tools.build:gradle:3.4.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "com.getkeepsafe.dexcount:dexcount-gradle-plugin:$plugin.dexcount"
         classpath "io.fabric.tools:gradle:$plugin.fabric"
@@ -69,19 +73,19 @@ buildscript {
 plugins {
     id "io.gitlab.arturbosch.detekt" version '1.0.0.RC7'
     id "com.github.ben-manes.versions" version '0.21.0'
+    id "com.jfrog.bintray" version "1.7.3"
 }
 
 detekt {
     version = "1.0.0.RC7"
     profile("main") {
-        input = "$projectDir/app/src/main/java"
+        input = "$projectDir/library/src/main/java"
         config = "$projectDir/gradle/linter/detekt-config.yml"
         output = "${project.buildDir}/reports/detekt"
         filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
         parallel = true
     }
 }
-
 
 allprojects {
     repositories {

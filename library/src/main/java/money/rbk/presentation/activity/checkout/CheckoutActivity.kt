@@ -20,59 +20,87 @@ package money.rbk.presentation.activity.checkout
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.ac_checkout.*
+import kotlinx.android.synthetic.main.rbk_ac_checkout.*
 import money.rbk.R
 import money.rbk.di.Injector
 import money.rbk.presentation.model.InvoiceModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.utils.adjustSize
-import money.rbk.presentation.utils.extra
+import money.rbk.presentation.utils.getExtraBooleanOrError
+import money.rbk.presentation.utils.getExtraStringOrError
+import money.rbk.presentation.utils.isTablet
 
-class CheckoutActivity : AppCompatActivity(), CheckoutView {
+internal class CheckoutActivity : AppCompatActivity(), CheckoutView {
 
     companion object {
         private const val KEY_INVOICE_ID = "invoice_id"
         private const val KEY_INVOICE_ACCESS_TOKEN = "invoice_access_token"
         private const val KEY_SHOP_NAME = "shop_name"
+        private const val KEY_EMAIL = "email"
+        private const val KEY_USE_TEST_ENVIRONMENT = "use_test_environment"
 
         fun buildIntent(
             activity: Activity,
             invoiceId: String,
             invoiceAccessToken: String,
-            shopName: String
+            shopName: String,
+            useTestEnvironment: Boolean,
+            email: String?
         ) = Intent(activity, CheckoutActivity::class.java)
             .apply {
                 putExtra(KEY_INVOICE_ID, invoiceId)
                 putExtra(KEY_INVOICE_ACCESS_TOKEN, invoiceAccessToken)
                 putExtra(KEY_SHOP_NAME, shopName)
+                putExtra(KEY_USE_TEST_ENVIRONMENT, useTestEnvironment)
+                putExtra(KEY_EMAIL, email)
             }
     }
 
     val navigator by lazy { Navigator(this, R.id.container) }
 
-    private val invoiceId by extra<String>(KEY_INVOICE_ID)
-    private val invoiceAccessToken by extra<String>(KEY_INVOICE_ACCESS_TOKEN)
-    private val shopName by extra<String>(KEY_SHOP_NAME)
-
     private val presenter by lazy { CheckoutPresenter(navigator) }
 
+    private val isRootFragment
+        get() = supportFragmentManager.backStackEntryCount <= 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (!isTablet) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.ac_checkout)
+        setContentView(R.layout.rbk_ac_checkout)
         adjustSize()
 
         if (savedInstanceState == null) {
-            Injector.init(applicationContext, invoiceId, invoiceAccessToken, shopName)
+            val invoiceId = getExtraStringOrError(KEY_INVOICE_ID)
+            val invoiceAccessToken = getExtraStringOrError(KEY_INVOICE_ACCESS_TOKEN)
+            val shopName = getExtraStringOrError(KEY_SHOP_NAME)
+            val useTestEnvironment = getExtraBooleanOrError(KEY_USE_TEST_ENVIRONMENT)
+            val email = getExtraStringOrError(KEY_EMAIL)
+
+            Injector.init(applicationContext,
+                invoiceId,
+                invoiceAccessToken,
+                shopName,
+                useTestEnvironment,
+                email)
         }
 
         presenter.attachView(this)
         initViews()
+
+        supportFragmentManager.addOnBackStackChangedListener { onBackStackChanged() }
+        onBackStackChanged()
+
     }
 
     override fun showInvoice(invoiceModel: InvoiceModel) {
+        groupInvoiceInfo.visibility = View.VISIBLE
         tvShopName.text = invoiceModel.shopName
         tvPrice.text = invoiceModel.cost
         tvOrderDetails.text = invoiceModel.orderDetails
@@ -85,16 +113,15 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
 
     private fun initViews() {
         ibtnBack.setOnClickListener {
-            navigator.back()
+            onBackPressed()
         }
         ibtnClose.setOnClickListener {
             finish()
         }
     }
 
-    //TODO: Only for a while
-    fun setBackButtonVisibility(isVisible: Boolean) {
-        ibtnBack.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+    private fun onBackStackChanged() {
+        ibtnBack.visibility = if (isRootFragment) View.INVISIBLE else View.VISIBLE
     }
 
     override fun showProgress() {
@@ -106,7 +133,17 @@ class CheckoutActivity : AppCompatActivity(), CheckoutView {
     }
 
     override fun onBackPressed() {
-        navigator.back()
+        if (isRootFragment) {
+            finish()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (!navigator.onActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
     }
 
 }

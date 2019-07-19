@@ -18,6 +18,9 @@
 
 package money.rbk.presentation.screen.methods
 
+import money.rbk.R
+import money.rbk.data.exception.NetworkException
+import money.rbk.domain.exception.UseCaseException
 import money.rbk.domain.interactor.PaymentMethodsUseCase
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.EmptyInputModel
@@ -26,14 +29,23 @@ import money.rbk.presentation.model.PaymentMethodsModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePresenter
 
-class PaymentMethodsPresenter(
+internal class PaymentMethodsPresenter(
     navigator: Navigator,
     private val paymentMethodsUseCase: UseCase<EmptyInputModel, PaymentMethodsModel> = PaymentMethodsUseCase()
 ) : BasePresenter<PaymentMethodsView>(navigator) {
 
+    lateinit var paymentMethods: List<PaymentMethodModel>
+
     override fun onViewAttached(view: PaymentMethodsView) {
-        view.showProgress()
-        paymentMethodsUseCase(EmptyInputModel, ::onPaymentMethodsLoaded, ::onPaymentMethodsError)
+        if (::paymentMethods.isInitialized) {
+            view.setPaymentMethods(paymentMethods)
+            view.hideProgress()
+        } else {
+            view.showProgress()
+            paymentMethodsUseCase(EmptyInputModel,
+                { onPaymentMethodsLoaded(it) },
+                { onPaymentMethodsError(it) })
+        }
     }
 
     fun onPaymentClick(payment: PaymentMethodModel) =
@@ -43,17 +55,23 @@ class PaymentMethodsPresenter(
         }
 
     private fun onPaymentMethodsLoaded(paymentMethods: PaymentMethodsModel) {
+        this.paymentMethods = paymentMethods.paymentMethods
         view?.apply {
-            hideProgress()
             setPaymentMethods(paymentMethods.paymentMethods)
+            hideProgress()
         }
     }
 
     private fun onPaymentMethodsError(throwable: Throwable) {
-        view?.apply {
-            hideProgress()
+        (view ?: return).hideProgress()
+        return when (throwable) {
+            is UseCaseException.NoSupportedPaymentMethodsException ->
+                navigator.openErrorFragment(R.string.rbk_error_no_supported_payment_methods)
+            is NetworkException ->
+                navigator.openErrorFragment(R.string.rbk_error_connection)
+            else ->
+                navigator.openErrorFragment(R.string.rbk_error_busines_logic)
         }
-        throwable.printStackTrace()
     }
 
 }

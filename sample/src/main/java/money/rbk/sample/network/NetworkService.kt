@@ -18,12 +18,12 @@
 
 package money.rbk.sample.network
 
+import android.app.Application
 import com.squareup.moshi.Moshi
 import io.reactivex.Observable
 import io.reactivex.Single
 import money.rbk.sample.BuildConfig
-import money.rbk.sample.network.model.InvoiceResponse
-import money.rbk.sample.network.model.InvoiceTemplate
+import money.rbk.sample.network.model.InvoiceModel
 import money.rbk.sample.network.model.InvoiceTemplateResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -32,9 +32,11 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
-object NetworkService {
+class NetworkService(private val app: Application) {
 
-    private const val DEFAULT_TIMEOUT: Long = 180
+    companion object {
+        private const val DEFAULT_TIMEOUT: Long = 180
+    }
 
     private val apiService by lazy {
         Retrofit.Builder()
@@ -46,19 +48,29 @@ object NetworkService {
             .create(ApiService::class.java)
     }
 
-    fun createInvoiceWithTemplate(invoiceTemplateId: String): Single<Pair<String, InvoiceResponse>> =
-        Single.just(getBuiltInInvoiceTemplates())
+    fun createInvoiceWithTemplate(invoiceTemplateId: String): Single<InvoiceModel> =
+        getBuiltInInvoiceTemplates()
             .map { templates -> templates.first { it.id == invoiceTemplateId } }
             .flatMap { invoiceTemplate ->
                 apiService.createInvoiceWithTemplate(
                     authorization = "Bearer ${invoiceTemplate.accessToken}",
                     invoiceTemplateId = invoiceTemplateId)
-                    .map { response -> invoiceTemplate.shopName to response }
+                    .map { response ->
+                        InvoiceModel(
+                            id = response.invoice.id,
+                            shopId = response.invoice.shopID,
+                            shopName = invoiceTemplate.shopName,
+                            invoiceAccessToken = response.invoiceAccessToken.payload,
+                            description = response.invoice.description
+                        )
+                    }
             }
 
+    fun getInvoices(): Single<List<InvoiceModel>> = apiService.getInvoices()
+
     fun getInvoiceTemplates(): Single<List<InvoiceTemplateResponse>> =
-        Observable
-            .fromIterable(getBuiltInInvoiceTemplates())
+        getBuiltInInvoiceTemplates()
+            .flatMapObservable { Observable.fromIterable(it) }
             .flatMapSingle { invoiceTemplate ->
                 apiService.getInvoiceTemplateByID(
                     authorization = "Bearer ${invoiceTemplate.accessToken}",
@@ -72,18 +84,10 @@ object NetworkService {
         .addInterceptor(HttpLoggingInterceptor().also {
             it.level = HttpLoggingInterceptor.Level.BODY
         })
+        .addInterceptor(MockInterceptor(app.assets))
         .build()
 
-    private fun getBuiltInInvoiceTemplates() = listOf(
-        InvoiceTemplate(BuildConfig.INVOICE_TEMPLATE_ID_RUB,
-            BuildConfig.INVOICE_TEMPLATE_ACCESS_TOKEN_RUB,
-            BuildConfig.SHOP_NAME_RUB),
-        InvoiceTemplate(BuildConfig.INVOICE_TEMPLATE_ID_EUR,
-            BuildConfig.INVOICE_TEMPLATE_ACCESS_TOKEN_EUR,
-            BuildConfig.SHOP_NAME_EUR),
-        InvoiceTemplate(BuildConfig.INVOICE_TEMPLATE_ID_UDS,
-            BuildConfig.INVOICE_TEMPLATE_ACCESS_TOKEN_USD,
-            BuildConfig.SHOP_NAME_USD)
-    )
+    private fun getBuiltInInvoiceTemplates() =
+        apiService.getInvoiceTemplates()
 
 }

@@ -18,41 +18,74 @@
 
 package money.rbk.data.extension
 
-import money.rbk.data.exception.NetworkServiceException.*
-import money.rbk.data.exception.ParseException
+import com.google.gson.Gson
+import money.rbk.data.exception.ClientError
+import money.rbk.data.exception.InternalServerError
+import money.rbk.data.exception.NetworkException.RequestExecutionException
+import money.rbk.data.exception.NetworkException.ResponseReadingException
+import money.rbk.data.exception.ResponseParsingException
+import money.rbk.data.extension.ServerConstants.AUTHORIZATION_BEARER
+import money.rbk.data.extension.ServerConstants.HEADER_ACCEPT
+import money.rbk.data.extension.ServerConstants.HEADER_ACCEPT_LANGUAGE
+import money.rbk.data.extension.ServerConstants.HEADER_AUTHORIZATION
+import money.rbk.data.extension.ServerConstants.HEADER_CONTENT_TYPE
+import money.rbk.data.extension.ServerConstants.HEADER_USER_AGENT
+import money.rbk.data.extension.ServerConstants.HEADER_X_REQUEST_ID
+import money.rbk.data.extension.ServerConstants.MIME_APPLICATION_JSON
+import money.rbk.data.extension.ServerConstants.MIME_APPLICATION_JSON_UTF8
+import money.rbk.data.extension.ServerConstants.clientErrorCodes
+import money.rbk.data.extension.ServerConstants.serverErrorCodes
 import money.rbk.data.methods.base.ApiRequest
 import money.rbk.data.methods.base.PostRequest
 import money.rbk.data.network.Constants
-import money.rbk.data.serialization.Serializable
 import money.rbk.data.utils.ClientInfoUtils
 import money.rbk.data.utils.log
+import money.rbk.di.Injector
 import money.rbk.domain.entity.ApiError
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
-import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
+import java.lang.reflect.ParameterizedType
+import java.text.ParseException
 import java.util.Locale
 import java.util.UUID
 
-internal fun <T> OkHttpClient.execute(
-    apiRequest: ApiRequest<T>
-): T {
+private object ServerConstants {
+    const val HEADER_ACCEPT = "Accept"
+    const val HEADER_CONTENT_TYPE = "Content-Type"
+    const val HEADER_ACCEPT_LANGUAGE = "Accept-Language"
+    const val HEADER_AUTHORIZATION = "Authorization"
+    const val HEADER_X_REQUEST_ID = "X-Request-ID"
+    const val HEADER_USER_AGENT = "User-Agent"
+
+    const val MIME_APPLICATION_JSON = "application/json"
+    const val MIME_APPLICATION_JSON_UTF8 = "application/json; charset=utf-8"
+
+    const val AUTHORIZATION_BEARER = "Bearer"
+
+    val serverErrorCodes = 500..599
+    val clientErrorCodes = 400..499
+}
+
+internal fun <T> OkHttpClient.execute(apiRequest: ApiRequest<T>): T {
+    val gson = Injector.gson
+
     val url = "${Constants.BASE_URL}${apiRequest.endpoint}"
 
     val userAgent = ClientInfoUtils.userAgent
 
     val requestBuilder = Request.Builder()
         .url(url)
-        .addHeader("Accept", "application/json")
-        .addHeader("Content-Type", "application/json; charset=utf-8")
-        .addHeader("Accept-Language", Locale.getDefault().language)
-        .addHeader("Authorization", "Bearer ${apiRequest.invoiceAccessToken}")
-        .addHeader("X-Request-ID", UUID.randomUUID().toString())
-        .addHeader("User-Agent", userAgent)
+        .addHeader(HEADER_ACCEPT, MIME_APPLICATION_JSON)
+        .addHeader(HEADER_CONTENT_TYPE, MIME_APPLICATION_JSON_UTF8)
+        .addHeader(HEADER_ACCEPT_LANGUAGE, getLanguage())
+        .addHeader(HEADER_AUTHORIZATION, "$AUTHORIZATION_BEARER ${apiRequest.invoiceAccessToken}")
+        .addHeader(HEADER_X_REQUEST_ID, generateRequestId())
+        .addHeader(HEADER_USER_AGENT, userAgent)
 
     apiRequest.headers
         .forEach {
@@ -60,7 +93,7 @@ internal fun <T> OkHttpClient.execute(
         }
 
     if (apiRequest is PostRequest<T>) {
-        requestBuilder.post(RequestBody.create(null, createRequestBody(apiRequest.payload)))
+        requestBuilder.post(RequestBody.create(null, createRequestBody(apiRequest.payload, gson)))
     } else {
         requestBuilder.get()
     }
@@ -74,49 +107,41 @@ internal fun <T> OkHttpClient.execute(
     }
 
     val stringBody: String = try {
-        response.body()!!.string()
+        response.body()?.string()
     } catch (e: IOException) {
         throw ResponseReadingException(response, e)
-
-    }
+    } ?: throw ResponseReadingException(response)
 
     log(javaClass.name, "[${request.method()}] ${request.url()}", stringBody)
 
     when (val code = response.code()) {
-        in 500..599 -> throw InternalServerException(code)
-        //TODO: Parse another type of errors
-        in 400..499 -> throw ApiException(code, ApiError.fromJson(stringBody.toJsonObject()))
+        in serverErrorCodes -> throw InternalServerError(code)
+        in clientErrorCodes -> throw ClientError(code, gson.fromJson(stringBody, ApiError::class.java))
     }
 
     try {
-        return apiRequest.convertJsonToResponse(stringBody)
+        val type =
+            (apiRequest.javaClass.genericInterfaces[0] as ParameterizedType).actualTypeArguments[0]
+        return gson.fromJson(stringBody, type)
     } catch (e: JSONException) {
-        throw ParseException.ResponseParsingException(stringBody, e)
+        throw ResponseParsingException(stringBody, e)
+    } catch (e: ParseException) {
+        throw ResponseParsingException(stringBody, e)
     }
 }
 
-internal fun String.toJsonObject(): JSONObject =
-    try {
-        JSONObject(this)
-    } catch (e: JSONException) {
-        throw ParseException.ResponseParsingException(this, e)
-    }
+private fun getLanguage() = Locale.getDefault().language
 
-internal fun String.toJsonArray(): JSONArray =
-    try {
-        JSONArray(this)
-    } catch (e: JSONException) {
-        throw ParseException.ResponseParsingException(this, e)
-    }
+private fun generateRequestId() = UUID.randomUUID().toString().take(10)
 
-internal fun createRequestBody(body: List<Pair<String, Any>>): String {
+internal fun createRequestBody(body: List<Pair<String, Any>>, gson: Gson): String {
     val jsonObject = JSONObject()
     body.forEach { (key, value) ->
-        if (value is Serializable) {
-            jsonObject.put(key, value.toJson())
-        } else {
-            jsonObject.put(key, value)
+        val jsonValue = when (value) {
+            is String -> value
+            else -> JSONObject(gson.toJson(value))
         }
+        jsonObject.put(key, jsonValue)
     }
     return jsonObject.toString()
 }

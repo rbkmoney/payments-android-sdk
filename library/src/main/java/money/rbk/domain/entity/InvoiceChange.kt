@@ -18,78 +18,50 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.extension.findEnumOrNull
-import money.rbk.data.extension.getNullable
-import money.rbk.data.extension.parse
-import money.rbk.data.extension.parseNullable
-import money.rbk.data.extension.parseString
-import money.rbk.data.serialization.Deserializer
-import org.json.JSONObject
+import money.rbk.data.serialization.SealedDistributor
+import money.rbk.data.serialization.SealedDistributorValue
+import kotlin.reflect.KClass
 
-internal sealed class InvoiceChange(val eventType: EventType) {
+internal sealed class InvoiceChange {
 
-    companion object : Deserializer<JSONObject, InvoiceChange> {
-        override fun fromJson(json: JSONObject): InvoiceChange {
-            val type = json.getString("changeType")
-            return when (findEnumOrNull<InvoiceChangeType>(type)) {
-                InvoiceChangeType.InvoiceCreated -> InvoiceCreated(
-                    invoice = json.parse("invoice", Invoice)
-                )
-                InvoiceChangeType.InvoiceStatusChanged -> InvoiceStatusChanged(
-                    status = json.parseString("status", InvoiceStatus),
-                    reason = json.getNullable("reason")
-                )
-                InvoiceChangeType.PaymentStarted -> PaymentStarted(
-                    payment = json.parse("payment", Payment)
-                )
-                InvoiceChangeType.PaymentStatusChanged -> PaymentStatusChanged(
-                    status = json.parseString("status", PaymentStatus),
-                    paymentID = json.getString("paymentID"),
-                    error = json.parseNullable("error", PaymentError)
-                )
-                InvoiceChangeType.PaymentInteractionRequested -> PaymentInteractionRequested(
-                    paymentID = json.getString("paymentID"),
-                    userInteraction = json.parse("userInteraction", UserInteraction)
-                )
-                null -> throw UnknownInvoiceChangeTypeException(type)
-            }
-        }
+    companion object {
+        val DISTRIBUTOR = SealedDistributor("changeType", InvoiceChangeType.values())
     }
 
-    data class InvoiceCreated(val invoice: Invoice) :
-        InvoiceChange(EventType.Invoice)
+    class InvoiceCreated(val invoice: Invoice) :
+        InvoiceChange()
 
-    data class InvoiceStatusChanged(
+    class InvoiceStatusChanged(
         val status: InvoiceStatus,
-        val reason: String?) : InvoiceChange(EventType.Invoice)
+        val reason: String?) : InvoiceChange()
 
-    data class PaymentStarted(val payment: Payment) :
-        InvoiceChange(EventType.Payment)
+    class PaymentStarted(val payment: Payment) :
+        InvoiceChange()
 
-    data class PaymentStatusChanged(
+    class PaymentStatusChanged(
         val status: PaymentStatus,
         val paymentID: String,
-        val error: PaymentError?) : InvoiceChange(EventType.Payment)
+        val error: PaymentError?) : InvoiceChange()
 
-    data class PaymentInteractionRequested(
+    class PaymentInteractionRequested(
         val paymentID: String,
         val userInteraction: UserInteraction
-    ) : InvoiceChange(EventType.Payment)
+    ) : InvoiceChange()
 
-    private enum class InvoiceChangeType {
-        InvoiceCreated,
-        InvoiceStatusChanged,
-        PaymentStarted,
-        PaymentStatusChanged,
-        PaymentInteractionRequested
-    }
+    class Refund(
+        val paymentID: String
+    ) : InvoiceChange()
 
-    enum class EventType {
-        Invoice,
-        Payment
+    private enum class InvoiceChangeType(override val kClass: KClass<out InvoiceChange>) :
+        SealedDistributorValue<InvoiceChange> {
+
+        InvoiceCreated(InvoiceChange.InvoiceCreated::class),
+        InvoiceStatusChanged(InvoiceChange.InvoiceStatusChanged::class),
+        PaymentStarted(InvoiceChange.PaymentStarted::class),
+        PaymentStatusChanged(InvoiceChange.PaymentStatusChanged::class),
+        PaymentInteractionRequested(InvoiceChange.PaymentInteractionRequested::class),
+        RefundStarted(InvoiceChange.Refund::class),
+        RefundStatusChanged(InvoiceChange.Refund::class)
     }
 
 }
-
-class UnknownInvoiceChangeTypeException(type: String) :
-    Throwable("Unknown invoice change type: $type")

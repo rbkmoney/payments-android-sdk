@@ -18,7 +18,6 @@
 
 package money.rbk.data.methods
 
-import money.rbk.data.extension.toJsonObject
 import money.rbk.data.methods.base.PostRequest
 import money.rbk.data.response.CreatePaymentResourceResponse
 import money.rbk.data.utils.ClientInfoUtils
@@ -26,18 +25,13 @@ import money.rbk.domain.entity.ClientInfo
 import money.rbk.domain.entity.PaymentTool
 
 internal class CreatePaymentResource(
-    invoiceAccessToken: String,
+    override val invoiceAccessToken: String,
     paymentTool: PaymentTool
 ) : PostRequest<CreatePaymentResourceResponse> {
 
     private val clientInfo by lazy { ClientInfo(fingerprint = ClientInfoUtils.fingerprint) }
 
     override val endpoint = "/processing/payment-resources"
-
-    override val invoiceAccessToken = invoiceAccessToken
-
-    override fun convertJsonToResponse(jsonString: String): CreatePaymentResourceResponse =
-        CreatePaymentResourceResponse.fromJson(jsonString.toJsonObject())
 
     override val payload = listOf(
         "paymentTool" to paymentTool,

@@ -18,54 +18,37 @@
 
 package money.rbk.domain.entity
 
-import money.rbk.data.exception.ParseException
-import money.rbk.data.extension.findEnumOrNull
-import money.rbk.data.extension.getNullable
-import money.rbk.data.extension.parse
-import money.rbk.data.extension.parseNullable
-import money.rbk.data.serialization.Deserializer
-import money.rbk.data.serialization.Serializable
-import org.json.JSONObject
+import money.rbk.data.serialization.SealedDistributor
+import money.rbk.data.serialization.SealedDistributorValue
+import kotlin.reflect.KClass
 
-sealed class Payer : Serializable {
+internal sealed class Payer(val payerType: PayerType) {
 
-    companion object : Deserializer<JSONObject, Payer> {
-        override fun fromJson(json: JSONObject): Payer {
-            val payerType = json.getString("payerType")
-            return when (findEnumOrNull<PayerType>(payerType)) {
-                PayerType.PaymentResourcePayer -> PaymentResourcePayer(
-                    paymentToolToken = json.getString("paymentToolToken"),
-                    paymentSession = json.getNullable("paymentSession"),
-                    paymentToolDetails = json.parseNullable("paymentToolDetails",
-                        PaymentToolDetails),
-                    clientInfo = json.parseNullable("clientInfo", ClientInfo),
-                    contactInfo = json.parse("contactInfo", ContactInfo)
-                )
-                null -> throw ParseException.UnknownPayerTypeException(payerType)
-            }
-        }
+    abstract val paymentToolInfo: String?
+    abstract val email: String?
+
+    companion object {
+        val DISTRIBUTOR = SealedDistributor("payerType", PayerType.values())
     }
 
-    data class PaymentResourcePayer(
+    class PaymentResourcePayer(
         val paymentToolToken: String,
         val paymentSession: String?,
         val contactInfo: ContactInfo,
         val paymentToolDetails: PaymentToolDetails? = null,
         val clientInfo: ClientInfo? = null
-    ) : Payer() {
+    ) : Payer(PayerType.PaymentResourcePayer) {
 
-        override fun toJson(): JSONObject = JSONObject().apply {
-            put("payerType", PayerType.PaymentResourcePayer.name)
-            put("paymentToolToken", paymentToolToken)
-            paymentSession?.let { put("paymentSession", it) }
-            put("contactInfo", contactInfo.toJson())
-            paymentToolDetails?.let { put("paymentToolDetails", it) }
-            clientInfo?.let { put("clientInfo", it) }
-        }
+        override val email: String?
+            get() = contactInfo.email
+
+        override val paymentToolInfo: String?
+            get() = paymentToolDetails?.paymentInfo
     }
 
-    private enum class PayerType {
-        PaymentResourcePayer
+    enum class PayerType(override val kClass: KClass<out Payer>) :
+        SealedDistributorValue<Payer> {
+        PaymentResourcePayer(Payer.PaymentResourcePayer::class)
     }
 
 }

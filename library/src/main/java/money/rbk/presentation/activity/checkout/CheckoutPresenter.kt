@@ -19,52 +19,87 @@
 package money.rbk.presentation.activity.checkout
 
 import money.rbk.R
+import money.rbk.data.utils.log
+import money.rbk.domain.entity.InvoiceStatus
+import money.rbk.domain.exception.UseCaseException
 import money.rbk.domain.interactor.InvoiceUseCase
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.InvoiceInitializeInputModel
-import money.rbk.presentation.dialog.AlertButton
 import money.rbk.presentation.model.InvoiceModel
-import money.rbk.presentation.model.InvoiceStateModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePresenter
 
-class CheckoutPresenter(
+internal class CheckoutPresenter(
     navigator: Navigator,
     private val invoiceUseCase: UseCase<InvoiceInitializeInputModel, InvoiceModel> = InvoiceUseCase()
 ) : BasePresenter<CheckoutView>(navigator) {
 
-    private val retryInitializeButton: AlertButton? by lazy {
-        R.string.label_try_again to { initializeInvoice() }
-    }
-
     override fun onViewAttached(view: CheckoutView) {
         super.onViewAttached(view)
-        view.showProgress()
         initializeInvoice()
     }
 
+    /* Private Actions */
+
     private fun initializeInvoice() {
+        view?.showProgress()
         invoiceUseCase(InvoiceInitializeInputModel,
-            ::onInvoiceLoaded,
-            ::onInvoiceLoadError)
+            { onInvoiceLoaded(it) },
+            { onInvoiceLoadError(it) })
     }
 
+    /* Callbacks */
+
     private fun onInvoiceLoadError(throwable: Throwable) {
-        onError(throwable, retryInitializeButton)
+        log(throwable)
+
+        if (throwable is UseCaseException.VulnerableDeviceException) {
+            navigator.showAlert(
+                R.string.rbk_label_error,
+                R.string.rbk_error_vulnerable_device,
+                null,
+                R.string.rbk_label_ok to {
+                    navigator.finish()
+                })
+        } else {
+            navigator.showAlert(
+                R.string.rbk_label_error,
+                R.string.rbk_error_cant_load_invoice,
+                R.string.rbk_label_retry to {
+                    initializeInvoice()
+                },
+                R.string.rbk_label_cancel to {
+                    navigator.finish()
+                })
+        }
     }
 
     private fun onInvoiceLoaded(invoice: InvoiceModel) {
         view?.apply {
-            hideProgress()
             showInvoice(invoice)
-            return when (invoice.checkoutState.invoiceStateModel) {
-                is InvoiceStateModel.Cancelled ->
-                    navigator.openInvoiceCancelled()
-                is InvoiceStateModel.Success ->
-                    navigator.openSuccessFragment(R.string.empty)
-                InvoiceStateModel.Pending,
-                InvoiceStateModel.Unknown,
-                null -> navigator.openPaymentMethods()
+
+            return when (invoice.status) {
+                InvoiceStatus.unpaid -> {
+                    if (!navigator.safeOpenPaymentMethods()) {
+                        hideProgress()
+                    } else Unit
+                }
+                InvoiceStatus.cancelled -> {
+                    hideProgress()
+                    navigator.openWarningFragment(R.string.rbk_error_invoice_cancelled,
+                        R.string.rbk_error_invalid_invoice_status)
+                }
+                InvoiceStatus.paid -> {
+                    hideProgress()
+                    navigator.openWarningFragment(R.string.rbk_error_invoice_already_payed,
+                        R.string.rbk_error_invalid_invoice_status)
+                }
+                InvoiceStatus.fulfilled,
+                InvoiceStatus.unknown -> {
+                    hideProgress()
+                    navigator.openWarningFragment(R.string.rbk_error_unknown_invoice,
+                        R.string.rbk_error_invalid_invoice_status)
+                }
             }
         }
     }

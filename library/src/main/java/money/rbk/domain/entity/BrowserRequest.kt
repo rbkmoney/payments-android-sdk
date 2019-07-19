@@ -18,43 +18,28 @@
 
 package money.rbk.domain.entity
 
-import org.json.JSONObject
-import money.rbk.data.extension.findEnumOrNull
-import money.rbk.data.extension.parseList
-import money.rbk.data.serialization.Deserializer
+import money.rbk.data.serialization.SealedDistributor
+import money.rbk.data.serialization.SealedDistributorValue
+import kotlin.reflect.KClass
 
-sealed class BrowserRequest(private val requestType: BrowserRequestType,  open val uriTemplate: String) {
+internal sealed class BrowserRequest(val uriTemplate: String) {
 
-    companion object : Deserializer<JSONObject, BrowserRequest> {
-        override fun fromJson(json: JSONObject): BrowserRequest {
-            val type = json.getString("requestType")
-            return when (findEnumOrNull<BrowserRequestType>(type)) {
-                BrowserRequestType.BrowserGetRequest -> BrowserGetRequest(
-                    uriTemplate = json.getString("uriTemplate")
-                )
-                BrowserRequestType.BrowserPostRequest -> BrowserPostRequest(
-                    uriTemplate = json.getString("uriTemplate"),
-                    form = json.parseList("form", UserInteractionForm)
-                )
-                null -> throw UnknownBrowserRequestTypeException(type)
-            }
-        }
+    companion object {
+        val DISTRIBUTOR = SealedDistributor("requestType", BrowserRequestType.values())
     }
 
-    data class BrowserGetRequest(
-        override val uriTemplate: String
-    ) : BrowserRequest(BrowserRequestType.BrowserGetRequest, uriTemplate)
+    class BrowserGetRequest(
+        uriTemplate: String
+    ) : BrowserRequest(uriTemplate)
 
-    data class BrowserPostRequest(
-        override val uriTemplate: String,
+    class BrowserPostRequest(
+        uriTemplate: String,
         val form: List<UserInteractionForm>
-    ) : BrowserRequest(BrowserRequestType.BrowserPostRequest, uriTemplate)
+    ) : BrowserRequest(uriTemplate)
 
-    private enum class BrowserRequestType {
-        BrowserGetRequest,
-        BrowserPostRequest
+    private enum class BrowserRequestType(override val kClass: KClass<out BrowserRequest>) :
+        SealedDistributorValue<BrowserRequest> {
+        BrowserGetRequest(BrowserRequest.BrowserGetRequest::class),
+        BrowserPostRequest(BrowserRequest.BrowserPostRequest::class)
     }
 }
-
-class UnknownBrowserRequestTypeException(val type: String) :
-    Throwable("Unknown browser request type: $type")

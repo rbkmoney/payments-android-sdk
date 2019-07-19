@@ -178,7 +178,7 @@ exceptions:
   ThrowingNewInstanceOfSameException:
     active: false
   TooGenericExceptionCaught:
-    active: true
+    active: false
     exceptionNames:
      - ArrayIndexOutOfBoundsException
      - Error
@@ -292,7 +292,7 @@ naming:
     active: true
     classPattern: '[A-Z$][a-zA-Z0-9$]*'
   EnumNaming:
-    active: true
+    active: false
     enumEntryPattern: '^[A-Z][_a-zA-Z0-9]*'
   ForbiddenClassName:
     active: false

@@ -1,0 +1,30 @@
+<!--
+  ~
+  ~ Copyright 2019 RBKmoney
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="86dp"
+    android:height="86dp"
+    android:viewportWidth="50"
+    android:viewportHeight="50">
+  <path
+      android:pathData="M25,50C38.8071,50 50,38.8071 50,25C50,11.1929 38.8071,0 25,0C11.1929,0 0,11.1929 0,25C0,38.8071 11.1929,50 25,50Z"
+      android:fillColor="#ffffff"/>
+  <path
+      android:pathData="M28.42,35.54C28.42,37.44 26.9,39 24.96,39C24.5053,39.0013 24.0548,38.9127 23.6344,38.7393C23.214,38.5659 22.832,38.3111 22.5105,37.9895C22.1889,37.668 21.9341,37.286 21.7607,36.8656C21.5873,36.4453 21.4987,35.9947 21.5,35.54C21.5,33.64 23.02,32.08 24.96,32.08C25.4148,32.0787 25.8653,32.1673 26.2857,32.3407C26.706,32.5141 27.088,32.7689 27.4095,33.0905C27.7311,33.412 27.9859,33.794 28.1593,34.2144C28.3327,34.6347 28.4213,35.0853 28.42,35.54ZM26.55,28.62H23.34C23.1107,28.6202 22.8902,28.532 22.7244,28.3736C22.5586,28.2153 22.4603,27.999 22.45,27.77L21.77,12.93C21.7646,12.8098 21.7836,12.6898 21.8259,12.5771C21.8682,12.4645 21.9329,12.3616 22.0161,12.2747C22.0993,12.1877 22.1993,12.1186 22.3099,12.0714C22.4206,12.0242 22.5397,11.9999 22.66,12H27.26C27.76,12 28.17,12.42 28.15,12.93L27.44,27.77C27.4296,28.0008 27.33,28.2185 27.162,28.3771C26.9941,28.5357 26.771,28.6228 26.54,28.62H26.55Z"
+      android:fillColor="#FC9B51"/>
+</vector>

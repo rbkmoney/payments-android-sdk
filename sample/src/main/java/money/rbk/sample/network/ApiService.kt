@@ -20,8 +20,11 @@ package money.rbk.sample.network
 
 import io.reactivex.Single
 import money.rbk.sample.network.model.EmptyRequest
+import money.rbk.sample.network.model.Invoice
 import money.rbk.sample.network.model.InvoiceResponse
+import money.rbk.sample.network.model.InvoiceTemplate
 import money.rbk.sample.network.model.InvoiceTemplateResponse
+import money.rbk.sample.network.model.InvoiceModel
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -47,4 +50,16 @@ interface ApiService {
         @Path("invoice_template_id") invoiceTemplateId: String
     ): Single<InvoiceTemplateResponse>
 
+    fun getInvoiceByID(
+        @Header("Authorization") authorization: String,
+        @Header("X-Request-ID") requestId: Long = System.currentTimeMillis(),
+        @Header("Content-Type") contentType: String = "application/json; charset=utf-8",
+        @Path("invoiceID") invoiceID: String
+    ) : Single<Invoice>
+
+    @GET("test_invoice_templates")
+    fun getInvoiceTemplates(): Single<List<InvoiceTemplate>>
+
+    @GET("test_invoices")
+    fun getInvoices(): Single<List<InvoiceModel>>
 }

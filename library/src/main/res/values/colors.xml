@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~
   ~ Copyright 2019 RBKmoney
   ~
@@ -18,28 +17,25 @@
   -->
 
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="rbk_colorPrimary">#008577</color>
+    <color name="rbk_colorPrimaryDark">#00574B</color>
+    <color name="rbk_colorAccent">#D81B60</color>
 
-    <color name="purple_light">#8330EC</color>
-    <color name="blue_light">#685BFF</color>
+    <color name="rbk_purple_light">#8330EC</color>
+    <color name="rbk_blue_light">#685BFF</color>
 
-    <color name="black">#292929</color>
+    <color name="rbk_black">#292929</color>
 
-    <color name="transparent">#00FFFFFF</color>
 
-    <color name="white">#FFFFFF</color>
-    <color name="white_overlay">#88FFFFFF</color>
-    <color name="green">#38CD8F</color>
-    <color name="grey">#BABABA</color>
+    <color name="rbk_white">#FFFFFF</color>
+    <color name="rbk_white_overlay">#88FFFFFF</color>
+    <color name="rbk_green">#38CD8F</color>
+    <color name="rbk_grey">#BABABA</color>
 
-    <color name="light_blue_grey">#ADBFFF</color>
-    <color name="light_pink">#FFF8E5</color>
+    <color name="rbk_light_blue_grey">#ADBFFF</color>
 
-    <color name="yellow">#FFC107</color>
+    <color name="rbk_yellow">#FFC107</color>
+    <color name="rbk_light_grey">#979797</color>
+    <color name="rbk_red">#e75542</color>
 
-    <color name="light_grey">#979797</color>
-
-    <color name="red">#e75542</color>
 </resources>

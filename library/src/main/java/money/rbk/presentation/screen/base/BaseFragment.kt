@@ -20,26 +20,37 @@ package money.rbk.presentation.screen.base
 
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
 import money.rbk.presentation.activity.checkout.CheckoutActivity
+import java.lang.IllegalStateException
 
-abstract class BaseFragment<T : BaseView> : Fragment(), BaseView {
+internal abstract class BaseFragment<T : BaseView> : Fragment(), BaseView {
 
     protected abstract val presenter: BasePresenter<T>
 
-    val navigator by lazy {
-        (activity as? CheckoutActivity)?.navigator
-            ?: throw TODO("BaseFragment can be attached only to CheckoutActivity")
-    }
+    val checkoutActivity: CheckoutActivity
+        get() = (activity as? CheckoutActivity)
+            ?: throw IllegalStateException("BaseFragment can be attached only to CheckoutActivity")
+
+    val navigator
+        get() = checkoutActivity.navigator
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter.attachView(this as? T ?: throw RuntimeException("")) //TODO: Check it
+        
+        presenter.attachView(this as? T ?: throw IllegalStateException("${javaClass.name} can't be casted to `T`"))
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.detachView()
+    }
+
+
+    @CallSuper
+    override fun hideProgress() {
+        checkoutActivity.hideProgress()
     }
 
 }
