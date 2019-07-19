@@ -70,4 +70,5 @@
     <string name="rbk_error_no_supported_payment_methods">Cannot find any available payment methods</string>
     <string name="rbk_error_gpay_initialization">Failed to initialize Google Pay</string>
     <string name="rbk_error_invoice_already_payed">Invoice is already paid</string>
+    <string name="rbk_error_vulnerable_device">Your device is vulnerable. Unable to pay.</string>
 </resources>

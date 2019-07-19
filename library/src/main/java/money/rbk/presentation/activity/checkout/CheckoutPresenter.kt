@@ -19,7 +19,9 @@
 package money.rbk.presentation.activity.checkout
 
 import money.rbk.R
+import money.rbk.data.utils.log
 import money.rbk.domain.entity.InvoiceStatus
+import money.rbk.domain.exception.UseCaseException
 import money.rbk.domain.interactor.InvoiceUseCase
 import money.rbk.domain.interactor.base.UseCase
 import money.rbk.domain.interactor.input.InvoiceInitializeInputModel
@@ -49,16 +51,27 @@ internal class CheckoutPresenter(
     /* Callbacks */
 
     private fun onInvoiceLoadError(throwable: Throwable) {
-        throwable.printStackTrace()
-        navigator.showAlert(
-            R.string.rbk_label_error,
-            R.string.rbk_error_cant_load_invoice,
-            R.string.rbk_label_retry to {
-                initializeInvoice()
-            },
-            R.string.rbk_label_cancel to {
-                navigator.finish()
-            })
+        log(throwable)
+
+        if (throwable is UseCaseException.VulnerableDeviceException) {
+            navigator.showAlert(
+                R.string.rbk_label_error,
+                R.string.rbk_error_vulnerable_device,
+                null,
+                R.string.rbk_label_ok to {
+                    navigator.finish()
+                })
+        } else {
+            navigator.showAlert(
+                R.string.rbk_label_error,
+                R.string.rbk_error_cant_load_invoice,
+                R.string.rbk_label_retry to {
+                    initializeInvoice()
+                },
+                R.string.rbk_label_cancel to {
+                    navigator.finish()
+                })
+        }
     }
 
     private fun onInvoiceLoaded(invoice: InvoiceModel) {
