@@ -56,7 +56,7 @@ dependencies {
     * Activity.RESULT_CANCELED - пользователь отменил операцию либо произошла ошибка
 
 
-```kotlin
+```swift
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CHECKOUT_REQUEST_CODE) {
