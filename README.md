@@ -5,8 +5,8 @@
 SDK включает в себя все небходимые интерфейсы.
 
 Репозиторий включает в себя:
-* [Код библиотеки payments-android-sdk](https://github.com/rbkmoney/payments-android-sdk/tree/master/library)
-* [Код примера интеграции SDK](https://github.com/rbkmoney/payments-android-sdk/tree/master/sample)
+* [Код библиотеки payments-android-sdk](./library)
+* [Код примера интеграции SDK](./sample)
 
 # Подключение библиотеки
 
@@ -19,7 +19,7 @@ dependencies {
 ```
 
 ## Продажа цифровых товаров
-В случае, когда в приложении продаются цифровые товары, необхожимо отключить Google Pay.
+В случае, если в приложении продаются цифровые товары, необхожимо отключить Google Pay.
 В AndroidManifest добавить:
 
 ```xml
@@ -38,8 +38,8 @@ dependencies {
     * `useTestEnvironment : Boolean` (опциональное) - Использовать тестовое окружение для Google Pay
     * `email : String` (опциональное) - Электронная почта по умолчанию для отправки чеков
 
-2. Запустить Activity с помощью полученного интента:
-```
+2. Запустить `Activity` с помощью полученного интента:
+```kotlin
         startActivityForResult(RbkMoney.buildCheckoutIntent(this,
             invoiceModel.id,
             invoiceModel.invoiceAccessToken,
@@ -56,7 +56,7 @@ dependencies {
     * Activity.RESULT_CANCELED - пользователь отменил операцию либо произошла ошибка
 
 
-```
+```kotlin
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CHECKOUT_REQUEST_CODE) {
@@ -71,15 +71,15 @@ dependencies {
 
 # Использование примера
 
-Для использования [примера](https://github.com/rbkmoney/payments-android-sdk/tree/master/sample) необходимо:
-* Добавить в файл [assets/test_invoices.json](https://github.com/rbkmoney/payments-android-sdk/tree/master/sample/src/main/assets/test_invoices.json):
+Для использования [примера](./sample) необходимо:
+* Добавить в файл [assets/test_invoices.json](./sample/src/main/assets/test_invoices.json):
     - `id` - Идентификатор инвойса
     - `invoiceAccessToken` - Токен доступа инвойса
     - `shopId` - Идентификатор магазина
     - `shopName` - Название магазина
     - `description` - Описание инвойса
     
-* Либо, для создания инвойса по шаблону добавить в файл [assets/test_invoice_templates.json](https://github.com/rbkmoney/payments-android-sdk/tree/master/sample/src/main/assets/test_invoice_templates.json):
+* Либо, для создания инвойса по шаблону добавить в файл [assets/test_invoice_templates.json](./sample/src/main/assets/test_invoice_templates.json):
     - shopName - Название магазина
     - invoiceTemplateId - Идентификатор шаблона инвойса
     - invoiceTemplateAccessToken - Токен доступа шаблона инвойса
