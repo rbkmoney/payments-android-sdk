@@ -9,7 +9,6 @@ internal class Web3DSecurePresenter(
     navigator: Navigator
 ) : BasePresenter<Web3DSecureView>(navigator) {
 
-    //TODO: Обработка не только интернет соединения
     fun onError(url: String?) {
         if (!handleUrl(url)) {
             navigator.showAlert(

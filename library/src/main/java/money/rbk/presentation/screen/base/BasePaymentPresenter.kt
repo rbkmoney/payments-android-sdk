@@ -63,7 +63,7 @@ internal abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Nav
         (view ?: return).hideProgress()
 
         return when (error) {
-            is UseCaseException.UnableRepeatPaymentException -> // TODO: Why error_connection?
+            is UseCaseException.UnableRepeatPaymentException ->
                 navigator.openErrorFragment(
                     messageRes = R.string.rbk_error_busines_logic,
                     useAnotherCard = canUseAnotherCard,
@@ -122,7 +122,7 @@ internal abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Nav
                 navigator.openErrorFragment(
                     messageRes = R.string.rbk_error_busines_logic,
                     repeatAction = true,
-                    useAnotherCard = canUseAnotherCard, // TODO: А проводился ли платёж вообще?
+                    useAnotherCard = canUseAnotherCard,
                     allPaymentMethods = true)
         }
     }

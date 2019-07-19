@@ -36,7 +36,7 @@ internal object ClientInfoUtils {
         generateFingerprint(context)
     }
 
-    fun getUniquePsuedoID(context: Context): String {
+    private fun getUniquePsuedoID(context: Context): String {
 
         val devIDShort =
             "35" + Build.BOARD.length % 10 + Build.BRAND.length % 10 + Build.CPU_ABI.length % 10 + Build.DEVICE.length % 10 + Build.MANUFACTURER.length % 10 + Build.MODEL.length % 10 + Build.PRODUCT.length % 10 + Locale.getDefault().hashCode() % 10
@@ -47,41 +47,13 @@ internal object ClientInfoUtils {
                 .get(null)
                 .toString()
             return UUID(devIDShort.hashCode().toLong(), serial.hashCode().toLong()).toString()
-        } catch (exception: Exception) {
+        } catch (exception: Exception) { /* silent */
         }
 
         return UUID(devIDShort.hashCode().toLong(), serial.hashCode().toLong()).toString()
     }
 
     private fun generateFingerprint(context: Context) {
-        //TODO: Maybe use this values for fingerprint
-        // Unique device hash / identifier
-        // Android ID
-        // Android version data
-        // Audio information
-        // Battery information
-        // Build information
-        // Carrier information
-        // CPU information
-        // Device name
-        // Storage information
-        // Emulator detection
-        // Root status
-        // Kernel information
-        // Boot information
-        // Network configuration
-        // Pasteboard data
-        // Memory information
-        // Proximity sensor data
-        // Local language
-        // Local timezone
-        // Screen brightness
-        // Screen resolution
-        // System uptime
-        // MAC address
-        // Wifi SSID
-        // TCP/IP Fingerprint
-        // Passive SSL/TLS handshake analysis
 
         fingerprint = getUniquePsuedoID(context)
     }

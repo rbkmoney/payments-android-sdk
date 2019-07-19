@@ -25,6 +25,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.FragmentActivity
 import money.rbk.R
+import money.rbk.presentation.exception.ActivityExtraNonnullException
 import kotlin.math.min
 
 internal fun FragmentActivity.hideKeyboard() {
@@ -49,3 +50,12 @@ internal val Activity.screenHeight: Int
             Point().also { getSize(it) }
                 .y
         }
+
+internal fun Activity.getExtraBooleanOrError(key: String): Boolean =
+    intent?.getBooleanExtra(key, false) ?: throw ActivityExtraNonnullException(this.javaClass, key)
+
+internal fun Activity.getExtraStringOrError(key: String): String =
+    intent?.getStringExtra(key) ?: throw ActivityExtraNonnullException(this.javaClass, key)
+
+internal fun Activity.getExtraIntOrError(key: String): Int =
+    intent?.getIntExtra(key, 0) ?: throw ActivityExtraNonnullException(this.javaClass, key)

@@ -30,6 +30,8 @@ import money.rbk.di.Injector
 import money.rbk.presentation.model.InvoiceModel
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.utils.adjustSize
+import money.rbk.presentation.utils.getExtraBooleanOrError
+import money.rbk.presentation.utils.getExtraStringOrError
 import money.rbk.presentation.utils.isTablet
 
 internal class CheckoutActivity : AppCompatActivity(), CheckoutView {
@@ -75,12 +77,11 @@ internal class CheckoutActivity : AppCompatActivity(), CheckoutView {
         adjustSize()
 
         if (savedInstanceState == null) {
-            // TODO Fix all force unwraps
-            val invoiceId = intent?.getStringExtra(KEY_INVOICE_ID)!!
-            val invoiceAccessToken = intent?.getStringExtra(KEY_INVOICE_ACCESS_TOKEN)!!
-            val shopName = intent?.getStringExtra(KEY_SHOP_NAME)!!
-            val useTestEnvironment = intent?.getBooleanExtra(KEY_USE_TEST_ENVIRONMENT, false)!!
-            val email = intent?.getStringExtra(KEY_EMAIL)!!
+            val invoiceId = getExtraStringOrError(KEY_INVOICE_ID)
+            val invoiceAccessToken = getExtraStringOrError(KEY_INVOICE_ACCESS_TOKEN)
+            val shopName = getExtraStringOrError(KEY_SHOP_NAME)
+            val useTestEnvironment = getExtraBooleanOrError(KEY_USE_TEST_ENVIRONMENT)
+            val email = getExtraStringOrError(KEY_EMAIL)
 
             Injector.init(applicationContext,
                 invoiceId,
