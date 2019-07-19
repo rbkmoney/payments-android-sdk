@@ -1,4 +1,5 @@
 -keep class money.rbk.domain.entity.** { *; }
+-keep class money.rbk.data.response.** { *; }
 
 ## GSON ##
 # Gson uses generic type information stored in a class file when working with fields. Proguard
