@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     override fun showInvoiceTemplateError(error: String?) {
-        showAlert(R.string.rbk_label_error,
+        showAlert(R.string.label_error,
             getString(R.string.error_cant_load_invoice_template_f,
                 error?.let {
                     getString(R.string.error_f, error)
@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     override fun showInvoiceCreateError(error: String?) {
-        showAlert(R.string.rbk_label_error,
+        showAlert(R.string.label_error,
             getString(R.string.error_cant_load_invoice_by_tamplate_f,
                 error?.let {
                     getString(R.string.error_f, error)
@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     private fun onPaymentCanceled() {
-        showAlert(R.string.rbk_label_cancel, getString(R.string.label_payment_canceled))
+        showAlert(R.string.label_cancel, getString(R.string.label_payment_canceled))
     }
 
 }

@@ -24,6 +24,8 @@
     <string name="label_there_is_no_description">No product description</string>
     <string name="label_cost">Price: %1$s %2$s</string>
     <string name="label_success">Success!</string>
+    <string name="label_error">Error</string>
+    <string name="label_cancel">Cancel</string>
     <string name="label_payment_canceled">Payment cancelled</string>
     <string name="label_payment_success">Payment success</string>
 
