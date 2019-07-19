@@ -63,6 +63,10 @@ android {
     }
 }
 
+//repositories {
+//    maven { url "${System.env.HOME}/.m2/repository" }
+//}
+
 def retrofitVersion = '2.6.0'
 def rxJavaVersion = '2.2.10'
 def rxAndroidVersion = '2.1.1'
@@ -71,6 +75,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "androidx.appcompat:appcompat:$androidx.appcompat"
     implementation "androidx.recyclerview:recyclerview:$androidx.recyclerview"
+
+    //implementation "money.rbk:payments-android-sdk:$libraryVersion"
 
     releaseImplementation project(':library')
     debugImplementation project(':library')
