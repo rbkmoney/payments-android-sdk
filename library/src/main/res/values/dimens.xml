@@ -18,16 +18,24 @@
 
 <resources>
 
-    <dimen name="rbk_spacing_tiny">2dp</dimen>
-    <dimen name="rbk_spacing_xsmall">4dp</dimen>
-    <dimen name="rbk_spacing_small">8dp</dimen>
-    <dimen name="rbk_spacing_medium">12dp</dimen>
-    <dimen name="rbk_spacing_default">16dp</dimen>
-    <dimen name="rbk_spacing_xxlarge">24dp</dimen>
+    <!-- Margins and paddings -->
+    <dimen name="rbk_spacing_xxxtiny">2dp</dimen>
+    <dimen name="rbk_spacing_xxtiny">3dp</dimen>
+    <dimen name="rbk_spacing_xtiny">4dp</dimen>
+    <dimen name="rbk_spacing_tiny">5dp</dimen>
+    <dimen name="rbk_spacing_xxxsmall">8dp</dimen>
+    <dimen name="rbk_spacing_xxsmall">10dp</dimen>
+    <dimen name="rbk_spacing_xsmall">12dp</dimen>
+    <dimen name="rbk_spacing_small">15dp</dimen>
+    <dimen name="rbk_spacing_medium">16dp</dimen>
+    <dimen name="rbk_spacing_large">20dp</dimen>
+    <dimen name="rbk_spacing_xlarge">23dp</dimen>
+    <dimen name="rbk_spacing_xxlarge">25dp</dimen>
+    <dimen name="rbk_spacing_xxxlarge">30dp</dimen>
     <dimen name="rbk_spacing_huge">32dp</dimen>
     <dimen name="rbk_spacing_xxxhuge">50dp</dimen>
 
-    <dimen name="rbk_spacing_ten">10dp</dimen>
+    <dimen name="rbk_spacing_google_pay">17dp</dimen>
 
     <dimen name="rbk_elevation">10dp</dimen>
 
@@ -48,5 +56,6 @@
     <dimen name="rbk_height_medium_button">48dp</dimen>
     <dimen name="rbk_height_gpay_button">51dp</dimen>  <!-- 3dp more than height_medium_button -->
     <dimen name="rbk_height_screen">960dp</dimen>
+
 
 </resources>

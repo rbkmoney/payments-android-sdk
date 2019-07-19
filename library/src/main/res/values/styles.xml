@@ -43,8 +43,8 @@
     <style name="RbkEditText" parent="RbkMoney">
         <item name="android:textCursorDrawable">@drawable/rbk_edit_text_cursor</item>
         <item name="android:maxLines">1</item>
-        <item name="android:padding">@dimen/rbk_spacing_medium</item>
-        <item name="android:drawablePadding">@dimen/rbk_spacing_small</item>
+        <item name="android:padding">@dimen/rbk_spacing_xsmall</item>
+        <item name="android:drawablePadding">@dimen/rbk_spacing_xxxsmall</item>
         <item name="android:background">@drawable/rbk_selector_edittext</item>
         <item name="android:textSize">@dimen/rbk_font_medium</item>
     </style>

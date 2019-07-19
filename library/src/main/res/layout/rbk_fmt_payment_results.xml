@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="@dimen/rbk_spacing_xxxhuge"
-        android:paddingBottom="15dp"
+        android:paddingBottom="@dimen/rbk_spacing_small"
         android:visibility="gone"
         >
 
@@ -77,9 +77,9 @@
             style="@style/RbkButton.Accent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/rbk_spacing_default"
-            android:layout_marginTop="@dimen/rbk_spacing_default"
-            android:layout_marginEnd="@dimen/rbk_spacing_default"
+            android:layout_marginStart="@dimen/rbk_spacing_medium"
+            android:layout_marginTop="@dimen/rbk_spacing_medium"
+            android:layout_marginEnd="@dimen/rbk_spacing_medium"
             android:layout_marginBottom="@dimen/rbk_spacing_huge"
             android:text="@string/rbk_label_ok"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -126,8 +126,8 @@
             android:gravity="center_horizontal"
             android:textAppearance="@style/RbkTextAppearance.RBKMoney.Normal"
             tools:text="@tools:sample/lorem/random"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
+            android:paddingStart="@dimen/rbk_spacing_large"
+            android:paddingEnd="@dimen/rbk_spacing_large"
             />
 
         <Button
@@ -135,9 +135,9 @@
             style="@style/RbkButton.Accent"
             android:layout_width="match_parent"
             android:layout_height="@dimen/rbk_height_medium_button"
-            android:layout_marginStart="@dimen/rbk_spacing_default"
+            android:layout_marginStart="@dimen/rbk_spacing_medium"
             android:layout_marginTop="@dimen/rbk_spacing_huge"
-            android:layout_marginEnd="@dimen/rbk_spacing_default"
+            android:layout_marginEnd="@dimen/rbk_spacing_medium"
             android:text="@string/rbk_label_try_again"
             />
 
@@ -146,9 +146,9 @@
             style="@style/RbkButton.Frame"
             android:layout_width="match_parent"
             android:layout_height="@dimen/rbk_height_medium_button"
-            android:layout_marginStart="@dimen/rbk_spacing_default"
-            android:layout_marginTop="@dimen/rbk_spacing_medium"
-            android:layout_marginEnd="@dimen/rbk_spacing_default"
+            android:layout_marginStart="@dimen/rbk_spacing_medium"
+            android:layout_marginTop="@dimen/rbk_spacing_xsmall"
+            android:layout_marginEnd="@dimen/rbk_spacing_medium"
             android:text="@string/rbk_label_use_another_card"
             />
 
@@ -157,9 +157,9 @@
             style="@style/RbkButton.Borderless"
             android:layout_width="match_parent"
             android:layout_height="@dimen/rbk_height_medium_button"
-            android:layout_marginStart="@dimen/rbk_spacing_default"
-            android:layout_marginTop="@dimen/rbk_spacing_medium"
-            android:layout_marginEnd="@dimen/rbk_spacing_default"
+            android:layout_marginStart="@dimen/rbk_spacing_medium"
+            android:layout_marginTop="@dimen/rbk_spacing_xsmall"
+            android:layout_marginEnd="@dimen/rbk_spacing_medium"
             android:text="@string/rbk_label_all_payment_methods"
             />
 
@@ -191,9 +191,9 @@
             android:id="@+id/ivUnknown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/rbk_spacing_small"
+            android:layout_marginStart="@dimen/rbk_spacing_xxxsmall"
             android:layout_marginTop="@dimen/rbk_spacing_huge"
-            android:layout_marginEnd="@dimen/rbk_spacing_small"
+            android:layout_marginEnd="@dimen/rbk_spacing_xxxsmall"
             android:src="@drawable/rbk_ic_info"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -204,9 +204,9 @@
             android:id="@+id/tvRefundMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/rbk_spacing_default"
+            android:layout_marginStart="@dimen/rbk_spacing_medium"
             android:layout_marginTop="@dimen/rbk_spacing_huge"
-            android:layout_marginEnd="@dimen/rbk_spacing_default"
+            android:layout_marginEnd="@dimen/rbk_spacing_medium"
             android:gravity="center_horizontal"
             android:textAppearance="@style/RbkTextAppearance.RBKMoney.Normal"
             app:layout_constraintBottom_toBottomOf="parent"
