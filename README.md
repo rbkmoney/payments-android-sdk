@@ -71,7 +71,8 @@ dependencies {
 
 # Использование примера
 
-Для использования [примера](./sample) необходимо:
+Для запуска [примера](./sample) необходимо:
+
 * Добавить в файл [assets/test_invoices.json](./sample/src/main/assets/test_invoices.json):
     - `id` - Идентификатор инвойса
     - `invoiceAccessToken` - Токен доступа инвойса
@@ -79,10 +80,10 @@ dependencies {
     - `shopName` - Название магазина
     - `description` - Описание инвойса
     
-* Либо, для создания инвойса по шаблону добавить в файл [assets/test_invoice_templates.json](./sample/src/main/assets/test_invoice_templates.json):
-    - shopName - Название магазина
-    - invoiceTemplateId - Идентификатор шаблона инвойса
-    - invoiceTemplateAccessToken - Токен доступа шаблона инвойса
+* Для создания инвойса по шаблону добавить в файл [assets/test_invoice_templates.json](./sample/src/main/assets/test_invoice_templates.json):
+    - `shopName` - Название магазина
+    - `invoiceTemplateId` - Идентификатор шаблона инвойса
+    - `invoiceTemplateAccessToken` - Токен доступа шаблона инвойса
     
 
 # Ссылки
