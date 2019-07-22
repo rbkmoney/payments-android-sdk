@@ -12,9 +12,9 @@ SDK включает в себя все небходимые интерфейс�
 
 ## Gradle
 ```groovy
-def libraryVersion = '0.0.17'
+def libraryVersion = '0.0.19'
 dependencies {
-    implementation "money.rbk:payments-android-sdk:$libraryVersion"
+    implementation "rbkmoney-org:payments-android-sdk:$libraryVersion"
 }
 ```
 

@@ -78,7 +78,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$androidx.appcompat"
     implementation "androidx.recyclerview:recyclerview:$androidx.recyclerview"
 
-    /* implementation "money.rbk:payments-android-sdk:$libraryVersion" */
+    /* implementation "rbkmoney-org:payments-android-sdk:$libraryVersion" */
 
     releaseImplementation project(':library')
     debugImplementation project(':library')
