@@ -99,7 +99,7 @@ project.afterEvaluate {
     publishing {
         publications {
             aar(MavenPublication) {
-                groupId = "money.rbk"
+                groupId = "rbkmoney-org"
                 artifactId "payments-android-sdk"
                 version = libraryVersion
 
@@ -141,7 +141,7 @@ project.afterEvaluate {
                     def dev = developers.appendNode('developer')
                     dev.appendNode('id', 'rbkmoney')
                     dev.appendNode('name', 'RBKmoney')
-                    dev.appendNode('email', 'help@rbk.money')
+                    dev.appendNode('email', 'developers@rbk.money')
                 }
             }
         }
@@ -157,10 +157,10 @@ bintray {
     configurations = ['archives']
     // Package info for BinTray
     pkg {
-        repo = 'maven'
+        userOrg = 'rbkmoney-org'
+        repo = 'payments-android-sdk'
         name = 'payments-android-sdk'
-        userOrg = user
-        licenses = ['MIT']
+        licenses = ['Apache-2.0']
         vcsUrl = 'git@github.com:rbkmoney/payments-android-sdk.git'
         version {
             name = libraryVersion
