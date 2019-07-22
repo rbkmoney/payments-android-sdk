@@ -98,7 +98,10 @@ dependencies {
     implementation "ru.tinkoff.decoro:decoro:$decoroVersion"
 }
 
+
+
 project.afterEvaluate {
+    version libraryVersion
     publishing {
         publications {
             aar(MavenPublication) {
