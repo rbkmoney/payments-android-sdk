@@ -76,7 +76,7 @@ internal fun <T> OkHttpClient.execute(apiRequest: ApiRequest<T>): T {
 
     val url = "${Constants.BASE_URL}${apiRequest.endpoint}"
 
-    val userAgent = ClientInfoUtils.userAgent
+    val userAgent = Injector.clientInfoUtils.userAgent
 
     val requestBuilder = Request.Builder()
         .url(url)

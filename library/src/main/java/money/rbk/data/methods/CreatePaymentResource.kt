@@ -26,10 +26,11 @@ import money.rbk.domain.entity.PaymentTool
 
 internal class CreatePaymentResource(
     override val invoiceAccessToken: String,
+    clientInfoUtils: ClientInfoUtils,
     paymentTool: PaymentTool
 ) : PostRequest<CreatePaymentResourceResponse> {
 
-    private val clientInfo by lazy { ClientInfo(fingerprint = ClientInfoUtils.fingerprint) }
+    private val clientInfo by lazy { ClientInfo(fingerprint = clientInfoUtils.fingerprint) }
 
     override val endpoint = "/processing/payment-resources"
 
