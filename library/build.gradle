@@ -98,6 +98,15 @@ dependencies {
     implementation "ru.tinkoff.decoro:decoro:$decoroVersion"
 }
 
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+artifacts {
+    archives sourcesJar
+}
+
 archivesBaseName = "payments-android-sdk"
 
 publish {
@@ -115,8 +124,8 @@ publish {
     publishVersion = publishVersionID
 
     desc = 'RBK.money Payment Android SDK'
-    website = 'https://github.com/rbkmoney/payments-android-sdk'
-    repository = 'git@github.com:rbkmoney/payments-android-sdk.git'
+    website = 'https://rbk.money/'
+    repository = 'https://github.com/rbkmoney/payments-android-sdk'
     version libraryVersion
 
     publishing {
@@ -127,6 +136,7 @@ publish {
                 version = libraryVersion
 
                 artifact("$buildDir/outputs/aar/payments-android-sdk-release.aar")
+                artifact sourcesJar
 
                 pom.withXml {
                     def root = asNode()

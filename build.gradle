@@ -53,7 +53,7 @@ buildscript {
 
         datepickerVersion = '1.3.0'
 
-        libraryVersionCode = 36
+        libraryVersionCode = 20
         libraryVersion = "0.0.$libraryVersionCode"
     }
 
