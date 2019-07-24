@@ -18,6 +18,7 @@
 
 package money.rbk.di
 
+import android.app.Application
 import android.content.Context
 import com.google.android.gms.security.ProviderInstaller
 import com.google.gson.Gson
@@ -50,6 +51,7 @@ internal object Injector {
 
     internal lateinit var checkoutRepository: CheckoutRepository
     internal lateinit var gpayRepository: GpayRepository
+    internal lateinit var clientInfoUtils: ClientInfoUtils
 
     private lateinit var okHttpClient: OkHttpClient
 
@@ -101,10 +103,10 @@ internal object Injector {
             log(e)
         }
 
-        ClientInfoUtils.initialize(applicationContext)
+        clientInfoUtils = ClientInfoUtils(applicationContext as Application)
         okHttpClient = newHttpClient()
         checkoutRepository =
-            CheckoutRepositoryImpl(okHttpClient, invoiceId, invoiceAccessToken, shopName)
+            CheckoutRepositoryImpl(okHttpClient, clientInfoUtils, invoiceId, invoiceAccessToken, shopName)
         gpayRepository = GpayRepositoryImpl(applicationContext, useTestEnvironment)
     }
 

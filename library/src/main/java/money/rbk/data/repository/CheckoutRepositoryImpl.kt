@@ -27,6 +27,7 @@ import money.rbk.data.methods.GetInvoicePaymentMethods
 import money.rbk.data.methods.GetPayments
 import money.rbk.data.response.CreatePaymentResourceResponse
 import money.rbk.data.response.CreatePaymentResponse
+import money.rbk.data.utils.ClientInfoUtils
 import money.rbk.domain.entity.ContactInfo
 import money.rbk.domain.entity.Flow
 import money.rbk.domain.entity.Invoice
@@ -41,6 +42,7 @@ import java.util.UUID
 
 internal class CheckoutRepositoryImpl(
     private val okHttpClient: OkHttpClient,
+    private val clientInfoUtils: ClientInfoUtils,
     private val invoiceId: String,
     private val invoiceAccessToken: String,
     override val shopName: String
@@ -83,7 +85,7 @@ internal class CheckoutRepositoryImpl(
         this.contactInfo = contactInfo
 
         val createPaymentResource: CreatePaymentResourceResponse =
-            okHttpClient.execute(CreatePaymentResource(invoiceAccessToken, paymentTool))
+            okHttpClient.execute(CreatePaymentResource(invoiceAccessToken, clientInfoUtils, paymentTool))
 
         val externalID = UUID.randomUUID()
             .toString()

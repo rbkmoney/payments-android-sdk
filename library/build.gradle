@@ -16,11 +16,11 @@
  *
  */
 
+apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.getkeepsafe.dexcount'
-apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 dexcount {
@@ -70,8 +70,11 @@ configurations {
     implementation.extendsFrom optional
 }
 
+def playServicesAdsVersion = '18.1.0'
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    compileOnly "com.google.android.gms:play-services-ads:$playServicesAdsVersion"
 
     /* androidx */
     implementation "androidx.appcompat:appcompat:$androidx.appcompat"
@@ -95,15 +98,45 @@ dependencies {
     implementation "ru.tinkoff.decoro:decoro:$decoroVersion"
 }
 
-project.afterEvaluate {
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+archivesBaseName = "payments-android-sdk"
+
+publish {
+
+    def groupProjectID = 'rbk.money'
+    def artifactProjectID = 'payments-android-sdk'
+    def publishVersionID = libraryVersion
+
+    userOrg = 'rbkmoney-org'
+    groupId = groupProjectID
+
+    repoName = artifactProjectID
+    artifactId = artifactProjectID
+
+    publishVersion = publishVersionID
+
+    desc = 'RBK.money Payment Android SDK'
+    website = 'https://rbk.money/'
+    repository = 'https://github.com/rbkmoney/payments-android-sdk'
+    version libraryVersion
+
     publishing {
         publications {
-            aar(MavenPublication) {
-                groupId = "money.rbk"
-                artifactId "payments-android-sdk"
+            Project(MavenPublication) {
+                groupId = groupProjectID
+                artifactId = artifactProjectID
                 version = libraryVersion
 
-                artifact bundleReleaseAar
+                artifact("$buildDir/outputs/aar/payments-android-sdk-release.aar")
+                artifact sourcesJar
 
                 pom.withXml {
                     def root = asNode()
@@ -140,32 +173,11 @@ project.afterEvaluate {
                     def developers = root.appendNode('developers')
                     def dev = developers.appendNode('developer')
                     dev.appendNode('id', 'rbkmoney')
-                    dev.appendNode('name', 'RBKmoney')
-                    dev.appendNode('email', 'help@rbk.money')
+                    dev.appendNode('name', 'rbkmoney')
+                    dev.appendNode('email', 'developers@rbk.money')
                 }
             }
         }
     }
-}
-
-archivesBaseName = "payments-android-sdk"
-
-bintray {
-    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
-    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
-    // jFrog plugin must be declared for this line to work
-    configurations = ['archives']
-    // Package info for BinTray
-    pkg {
-        repo = 'maven'
-        name = 'payments-android-sdk'
-        userOrg = user
-        licenses = ['MIT']
-        vcsUrl = 'git@github.com:rbkmoney/payments-android-sdk.git'
-        version {
-            name = libraryVersion
-            desc = "RBK.money Payments v$libraryVersion"
-            vcsTag = "v$libraryVersion"
-        }
-    }
+    publications = ['Project']
 }
