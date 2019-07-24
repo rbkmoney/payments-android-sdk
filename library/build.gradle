@@ -111,11 +111,11 @@ archivesBaseName = "payments-android-sdk"
 
 publish {
 
-    def groupProjectID = 'rbkmoney-org'
+    def groupProjectID = 'rbk.money'
     def artifactProjectID = 'payments-android-sdk'
     def publishVersionID = libraryVersion
 
-    userOrg = groupProjectID
+    userOrg = 'rbkmoney-org'
     groupId = groupProjectID
 
     repoName = artifactProjectID

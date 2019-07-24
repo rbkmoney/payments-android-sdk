@@ -14,7 +14,7 @@ SDK включает в себя все небходимые интерфейс�
 ```groovy
 def libraryVersion = '0.0.20'
 dependencies {
-    implementation "rbkmoney-org:payments-android-sdk:$libraryVersion"
+    implementation "rbk.money:payments-android-sdk:$libraryVersion"
 }
 ```
 
