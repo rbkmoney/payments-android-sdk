@@ -77,20 +77,24 @@ internal object WebViewClientFactory {
                 request: WebResourceRequest?,
                 error: WebResourceError?) {
                 super.onReceivedError(view, request, error)
-                onError(request?.url?.toString())
+                if(request?.isForMainFrame == true) {
+                    onError(request.url.toString())
 
-                view?.loadUrl(blankPage)
-                view?.invalidate()
+                    view?.loadUrl(blankPage)
+                    view?.invalidate()
+                }
             }
 
             override fun onReceivedHttpError(view: WebView?,
                 request: WebResourceRequest?,
                 errorResponse: WebResourceResponse?) {
                 super.onReceivedHttpError(view, request, errorResponse)
-                onError(request?.url?.toString())
+                if(request?.isForMainFrame == true) {
+                    onError(request.url.toString())
 
-                view?.loadUrl(blankPage)
-                view?.invalidate()
+                    view?.loadUrl(blankPage)
+                    view?.invalidate()
+                }
             }
         }
     }
