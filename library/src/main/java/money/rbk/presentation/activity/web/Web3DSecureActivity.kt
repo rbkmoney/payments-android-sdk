@@ -74,6 +74,10 @@ internal class Web3DSecureActivity : AppCompatActivity(), Web3DSecureView {
         redirectUrl = getExtraStringOrError(EXTRA_KEY_URL)
         body = intent?.getByteArrayExtra(EXTRA_KEY_BODY)
 
+        webView.settings.domStorageEnabled = true
+        webView.settings.databaseEnabled = true
+        webView.settings.javaScriptEnabled = true
+
         webView.webViewClient =
             WebViewClientFactory.build({ presenter.onRequest(it) },
                 { presenter.onError(it) },
