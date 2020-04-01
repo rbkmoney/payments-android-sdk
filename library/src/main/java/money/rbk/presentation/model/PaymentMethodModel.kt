@@ -25,11 +25,11 @@ import money.rbk.R
 internal sealed class PaymentMethodModel(
     @StringRes val name: Int? = null,
     @StringRes val description: Int? = null,
-    @DrawableRes val icon: Int
+    @DrawableRes val icon: Int? = null
 ) : BaseIUModel() {
 
     object BankCard : PaymentMethodModel(name = R.string.rbk_label_card, icon = R.drawable.rbk_selector_card)
 
-    object GooglePay : PaymentMethodModel(icon = R.drawable.rbk_ic_google_pay)
+    object GooglePay : PaymentMethodModel(name = R.string.rbk_label_embedded_payment_methods, icon = R.drawable.rbk_selector_phone)
 
 }
