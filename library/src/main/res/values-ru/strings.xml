@@ -68,4 +68,5 @@
     <string name="rbk_error_gpay_initialization">Не удалось инициализировать Google Pay</string>
     <string name="rbk_error_invoice_already_payed">Инвойс уже оплачен</string>
     <string name="rbk_error_vulnerable_device">Ваше устройство является уязвимым, невозможно осуществить платёж</string>
+    <string name="rbk_label_embedded_payment_methods">Встроенные способы оплаты</string>
 </resources>

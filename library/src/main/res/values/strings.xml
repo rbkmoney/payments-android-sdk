@@ -71,4 +71,5 @@
     <string name="rbk_error_gpay_initialization">Failed to initialize Google Pay</string>
     <string name="rbk_error_invoice_already_payed">Invoice is already paid</string>
     <string name="rbk_error_vulnerable_device">Your device is vulnerable. Unable to pay.</string>
+    <string name="rbk_label_embedded_payment_methods">Embedded payment methods</string>
 </resources>

@@ -62,16 +62,23 @@ internal class PaymentAdapter(
                 if (name == null) {
                     view.tvPaymentType.visibility = View.GONE
                 } else {
+                    view.tvPaymentType.visibility = View.VISIBLE
                     view.tvPaymentType.setText(name)
                 }
 
                 if (description == null) {
                     view.tvDescription.visibility = View.GONE
                 } else {
+                    view.tvDescription.visibility = View.VISIBLE
                     view.tvDescription.setText(description)
                 }
 
-                view.ivPaymentIcon.setImageResource(icon)
+                if(icon == null) {
+                    view.ivPaymentIcon.visibility = View.GONE
+                } else {
+                    view.ivPaymentIcon.visibility = View.VISIBLE
+                    view.ivPaymentIcon.setImageResource(icon)
+                }
 
             }
 
