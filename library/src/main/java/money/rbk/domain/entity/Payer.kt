@@ -36,7 +36,8 @@ internal sealed class Payer(val payerType: PayerType) {
         val paymentSession: String?,
         val contactInfo: ContactInfo,
         val paymentToolDetails: PaymentToolDetails? = null,
-        val clientInfo: ClientInfo? = null
+        val clientInfo: ClientInfo? = null,
+        val sessionInfo: SessionInfo? = null
     ) : Payer(PayerType.PaymentResourcePayer) {
 
         override val email: String?

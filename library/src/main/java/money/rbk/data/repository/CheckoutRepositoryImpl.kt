@@ -28,6 +28,7 @@ import money.rbk.data.methods.GetPayments
 import money.rbk.data.response.CreatePaymentResourceResponse
 import money.rbk.data.response.CreatePaymentResponse
 import money.rbk.data.utils.ClientInfoUtils
+import money.rbk.domain.converter.TERM_URI
 import money.rbk.domain.entity.ContactInfo
 import money.rbk.domain.entity.Flow
 import money.rbk.domain.entity.Invoice
@@ -36,6 +37,7 @@ import money.rbk.domain.entity.Payer
 import money.rbk.domain.entity.Payment
 import money.rbk.domain.entity.PaymentMethod
 import money.rbk.domain.entity.PaymentTool
+import money.rbk.domain.entity.SessionInfo
 import money.rbk.domain.repository.CheckoutRepository
 import okhttp3.OkHttpClient
 import java.util.UUID
@@ -95,7 +97,7 @@ internal class CheckoutRepositoryImpl(
             Payer.PaymentResourcePayer(
                 createPaymentResource.paymentToolToken,
                 createPaymentResource.paymentSession,
-                contactInfo), Flow.PaymentFlowInstant))
+                contactInfo, sessionInfo = SessionInfo(TERM_URI)), Flow.PaymentFlowInstant))
             .also {
                 paymentId = it.id
             }
