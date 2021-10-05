@@ -24,7 +24,7 @@ import money.rbk.domain.entity.UserInteraction
 import money.rbk.domain.entity.UserInteractionForm
 import money.rbk.presentation.model.BrowserRequestModel
 
-internal const val TERM_URI = "RBKmoney://success/"
+internal const val TERM_URI = "internal://termination.url"
 
 private const val KEY_TERM_URI = "termination_uri"
 
