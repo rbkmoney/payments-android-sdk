@@ -61,7 +61,7 @@ class NetworkService(private val app: Application) {
                             shopId = response.invoice.shopID,
                             shopName = invoiceTemplate.shopName,
                             invoiceAccessToken = response.invoiceAccessToken.payload,
-                            description = response.invoice.description
+                            description = response.invoice.description.orEmpty()
                         )
                     }
             }
