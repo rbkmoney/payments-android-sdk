@@ -74,7 +74,6 @@ configurations {
 def playServicesAdsVersion = '18.1.0'
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     compileOnly "com.google.android.gms:play-services-ads:$playServicesAdsVersion"
 
     /* androidx */

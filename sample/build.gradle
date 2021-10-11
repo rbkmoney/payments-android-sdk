@@ -66,7 +66,6 @@ def rxJavaVersion = '2.2.10'
 def rxAndroidVersion = '2.1.1'
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "androidx.appcompat:appcompat:$androidx.appcompat"
     implementation "androidx.recyclerview:recyclerview:$androidx.recyclerview"
 
