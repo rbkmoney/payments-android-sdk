@@ -41,7 +41,7 @@ buildscript {
         ]
 
         decoroVersion = '1.3.5'
-        playServicesWallet = '17.0.0'
+        playServicesWallet = '18.1.3'
 
         kotlinVersion = '1.5.20'
         okhttpVersion = '4.9.1'
