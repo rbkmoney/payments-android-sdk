@@ -36,6 +36,4 @@ local.properties
 
 config/private.properties
 
-sample/fabric.properties
-
 signing/release

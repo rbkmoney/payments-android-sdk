@@ -24,8 +24,6 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
-apply plugin: 'io.fabric'
-
 android {
 
     compileSdkVersion app.compileSdkVersion
@@ -92,9 +90,6 @@ dependencies {
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanaryVersion"
     debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:$leakcanaryVersion"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanaryVersion"
-    implementation("com.crashlytics.sdk.android:crashlytics:$crashliticsVersion@aar") {
-        transitive = true
-    }
 }
 
 apply from: "${project.rootDir}/gradle/modules/config.gradle"

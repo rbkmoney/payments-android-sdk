@@ -28,7 +28,6 @@ buildscript {
 
         plugin = [
                 dexcount      : '0.8.6',
-                fabric        : '1.30.0',
                 bintrayRelease: '0.9.1',
         ]
 
@@ -59,14 +58,12 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven { url 'https://maven.fabric.io/public' }
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "com.getkeepsafe.dexcount:dexcount-gradle-plugin:$plugin.dexcount"
-        classpath "io.fabric.tools:gradle:$plugin.fabric"
         classpath "com.novoda:bintray-release:$plugin.bintrayRelease"
     }
 }
