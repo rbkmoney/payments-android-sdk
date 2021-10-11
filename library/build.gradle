@@ -47,6 +47,7 @@ android {
         targetSdkVersion app.targetSdkVersion
         versionCode libraryVersionCode
         versionName libraryVersion
+        buildConfigField("String", "VERSION_NAME", "\"${versionName}\"")
     }
 
     resourcePrefix 'rbk_'
