@@ -44,7 +44,7 @@ buildscript {
         playServicesWallet = '17.0.0'
 
         kotlinVersion = '1.5.20'
-        okhttpVersion = '3.14.9'
+        okhttpVersion = '4.9.1'
         gsonVersion = '2.8.5'
         leakcanaryVersion = '1.6.3'
         crashliticsVersion = '2.10.1'

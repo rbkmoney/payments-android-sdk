@@ -20,10 +20,10 @@ package money.rbk.sample.network
 
 import android.content.res.AssetManager
 import okhttp3.Interceptor
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Protocol
 import okhttp3.Response
-import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 
 class MockInterceptor(private val assets: AssetManager) : Interceptor {
 
@@ -35,9 +35,9 @@ class MockInterceptor(private val assets: AssetManager) : Interceptor {
         return fileBytes
     }
 
-    override fun intercept(chain: Interceptor.Chain?) =
-        chain?.request()?.run {
-            val segment = url().pathSegments()
+    override fun intercept(chain: Interceptor.Chain) =
+        chain.request().run {
+            val segment = url.pathSegments
                 .last()
 
             if (segment in listOf("test_invoice_templates", "test_invoices")) {
@@ -47,8 +47,7 @@ class MockInterceptor(private val assets: AssetManager) : Interceptor {
                     .code(200)
                     .request(this)
                     .message("Success")
-                    .body(ResponseBody.create(MediaType.parse("application/json"),
-                        readAssets(segment)))
+                    .body(readAssets(segment).toResponseBody("application/json".toMediaTypeOrNull()))
                     .build()
 
             } else {
