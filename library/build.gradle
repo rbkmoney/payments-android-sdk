@@ -79,7 +79,7 @@ dependencies {
 
     /* androidx */
     implementation "androidx.appcompat:appcompat:$androidx.appcompat"
-    implementation "androidx.fragment:fragment:$androidx.fragment"
+    implementation "androidx.fragment:fragment-ktx:$androidx.fragment"
     implementation "androidx.constraintlayout:constraintlayout:$androidx.constraintlayout"
     implementation "androidx.vectordrawable:vectordrawable:$androidx.vectordrawable"
     implementation "androidx.cardview:cardview:$androidx.cardview"
