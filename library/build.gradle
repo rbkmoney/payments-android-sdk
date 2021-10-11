@@ -71,7 +71,7 @@ configurations {
     implementation.extendsFrom optional
 }
 
-def playServicesAdsVersion = '18.1.0'
+def playServicesAdsVersion = '20.4.0'
 
 dependencies {
     compileOnly "com.google.android.gms:play-services-ads:$playServicesAdsVersion"
