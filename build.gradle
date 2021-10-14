@@ -51,6 +51,7 @@ buildscript {
     }
 
     repositories {
+        flatDir{dirs 'monthandyearpicker'}
         google()
         jcenter()
     }
