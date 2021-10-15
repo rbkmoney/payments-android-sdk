@@ -53,7 +53,7 @@ buildscript {
     repositories {
         flatDir{dirs 'monthandyearpicker'}
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
@@ -81,7 +81,7 @@ detekt {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
