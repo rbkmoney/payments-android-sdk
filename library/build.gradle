@@ -19,6 +19,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'maven-publish'
 
 android {
     compileSdkVersion app.compileSdkVersion
@@ -89,3 +90,55 @@ artifacts {
 }
 
 archivesBaseName = "payments-android-sdk"
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'rbk.money'
+            artifactId = 'payments-android-sdk'
+            version = libraryVersion
+
+            artifact("$buildDir/outputs/aar/payments-android-sdk-release.aar")
+            artifact sourcesJar
+
+            pom.withXml {
+                def root = asNode()
+
+                // Basic Info
+                root.appendNode('name', 'RBK.money Payment Android SDK')
+                root.appendNode('description', 'The Android SDK for RBK.money')
+                root.appendNode('url', 'https://rbk.money/')
+
+                // License Info
+                def license = root.appendNode('licenses').appendNode('license')
+                license.appendNode('name', 'The Apache Software License, Version 2.0')
+                license.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0')
+                license.appendNode('distribution', 'repo')
+
+                // Source Control Info
+                def scm = root.appendNode('scm')
+                scm.appendNode('url', 'https://github.com/rbkmoney/payments-android-sdk')
+                scm.appendNode('connection', 'git@github.com:rbkmoney/payments-android-sdk.git')
+
+                // Dependencies
+                def dependenciesNode = root.appendNode('dependencies')
+
+                configurations.implementation.allDependencies.each { dp ->
+                    if (dp.group) {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', dp.group)
+                        dependencyNode.appendNode('artifactId', dp.name)
+                        dependencyNode.appendNode('version', dp.version)
+                    }
+                }
+
+                // Developer info
+                def developers = root.appendNode('developers')
+                def dev = developers.appendNode('developer')
+                dev.appendNode('id', 'rbkmoney')
+                dev.appendNode('name', 'rbkmoney')
+                dev.appendNode('email', 'developers@rbk.money')
+            }
+        }
+    }
+}
