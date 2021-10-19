@@ -41,7 +41,7 @@ internal class GpayPrepareUseCase(
         }
 
         gpayRepository.checkReadyToPay()
-            .addOnCompleteListener { task ->
+            ?.addOnCompleteListener { task ->
                 try {
                     val result = task.getResult(ApiException::class.java)
                     if (result == true) {
