@@ -46,12 +46,15 @@ internal abstract class BasePaymentPresenter<T : BasePaymentView>(navigator: Nav
                     checkoutState.email)
 
             is CheckoutStateModel.PaymentFailed ->
-                navigator.openErrorFragment(
-                    messageRes = checkoutState.reasonResId,
-                    useAnotherCard = canUseAnotherCard,
-                    allPaymentMethods = true,
-                    repeatAction = checkoutState.canRetry
-                )
+                if (!checkoutInfo.resetPayment) {
+                    navigator.openErrorFragment(
+                        messageRes = checkoutState.reasonResId,
+                        useAnotherCard = canUseAnotherCard,
+                        allPaymentMethods = true,
+                        repeatAction = checkoutState.canRetry
+                    )
+                }
+
 
             is CheckoutStateModel.InvoiceFailed ->
                 navigator.openErrorFragment(

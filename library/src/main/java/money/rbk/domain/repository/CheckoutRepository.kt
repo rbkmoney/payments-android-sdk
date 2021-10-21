@@ -38,6 +38,8 @@ internal interface CheckoutRepository {
 
     var externalPaymentId: String?
 
+    var resetPayment: Boolean
+
     fun loadInvoice(): Invoice
 
     fun loadPaymentMethods(): List<PaymentMethod>
@@ -49,6 +51,8 @@ internal interface CheckoutRepository {
         contactInfo: ContactInfo): CreatePaymentResponse
 
     fun loadInvoiceEvents(): List<InvoiceEvent>
+
+    fun loadLastInvoiceEvent(): InvoiceEvent?
 
     fun loadPayments(): List<Payment>
 }

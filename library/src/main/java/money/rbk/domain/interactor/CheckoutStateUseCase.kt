@@ -51,6 +51,7 @@ internal class CheckoutStateUseCase(
         onResultCallback: (CheckoutInfoModel) -> Unit,
         onErrorCallback: (Throwable) -> Unit) {
         bgExecutor(onErrorCallback) {
+            val previousState = checkoutRepository.loadLastInvoiceEvent()?.let { invoiceChangesConverter(listOf(it)) }
             val checkoutState = invoiceChangesConverter(checkoutRepository.loadInvoiceEvents())
 
             if (checkoutState == CheckoutStateModel.PaymentProcessing
@@ -64,12 +65,15 @@ internal class CheckoutStateUseCase(
                     requestCheckoutState(ignoreBrowserRequest, onResultCallback, onErrorCallback)
                 }
             } else {
+                val resetPayment = checkoutState is CheckoutStateModel.PaymentFailed && checkoutState == previousState
+                checkoutRepository.resetPayment = resetPayment
                 val invoice = checkoutRepository.loadInvoice()
                 val checkoutInfo = CheckoutInfoModel(
                     price = invoice.amount.formatInternationalPrice(),
                     currency = invoice.currency,
                     formattedPriceAndCurrency = invoice.cost,
-                    checkoutState = checkoutState
+                    checkoutState = checkoutState,
+                    resetPayment = resetPayment
                 )
                 uiExecutor {
                     onResultCallback(checkoutInfo)

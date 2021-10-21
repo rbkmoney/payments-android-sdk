@@ -58,6 +58,8 @@ internal class CheckoutRepositoryImpl(
     override var paymentId: String? = null
     @Volatile
     override var externalPaymentId: String? = null
+    @Volatile
+    override var resetPayment: Boolean = false
 
     private var invoiceEvents: MutableList<InvoiceEvent> = mutableListOf()
 
@@ -111,5 +113,7 @@ internal class CheckoutRepositoryImpl(
                 invoiceEvents.addAll(it)
                 invoiceEvents
             }
+
+    override fun loadLastInvoiceEvent(): InvoiceEvent? = invoiceEvents.lastOrNull()
 
 }

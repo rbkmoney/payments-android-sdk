@@ -24,5 +24,6 @@ internal class CheckoutInfoModel(
     val formattedPriceAndCurrency: String,
     val price: String,
     val currency: Currency,
-    val checkoutState: CheckoutStateModel
+    val checkoutState: CheckoutStateModel,
+    val resetPayment: Boolean
 ) : BaseIUModel()

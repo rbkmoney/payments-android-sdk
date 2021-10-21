@@ -26,7 +26,7 @@ internal sealed class CheckoutStateModel : BaseIUModel() {
 
     internal object Pending : CheckoutStateModel()
 
-    internal class PaymentFailed(@StringRes val reasonResId: Int, val canRetry: Boolean) : CheckoutStateModel()
+    internal data class PaymentFailed(@StringRes val reasonResId: Int, val canRetry: Boolean) : CheckoutStateModel()
 
     internal class InvoiceFailed(@StringRes val reasonResId: Int) : CheckoutStateModel()
 
