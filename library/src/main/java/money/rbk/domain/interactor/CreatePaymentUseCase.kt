@@ -47,10 +47,13 @@ internal class CreatePaymentUseCase(
 
         val onResultCallbackProxy = { checkoutInfo: CheckoutInfoModel ->
             if (checkoutInfo.checkoutState is CheckoutStateModel.PaymentFailed) {
-                checkoutRepository.paymentId = null
-                checkoutRepository.externalPaymentId = null
+                resetPayment()
             }
             onResultCallback(checkoutInfo)
+        }
+
+        if (checkoutRepository.resetPayment) {
+            resetPayment()
         }
 
         bgExecutor(onErrorCallbackProxy) {
@@ -86,6 +89,11 @@ internal class CreatePaymentUseCase(
             }
 
         }
+    }
+
+    private fun resetPayment() {
+        checkoutRepository.paymentId = null
+        checkoutRepository.externalPaymentId = null
     }
 
     private fun checkExternalId() {

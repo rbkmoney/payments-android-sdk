@@ -19,7 +19,7 @@
 package money.rbk.presentation.activity.web
 
 import money.rbk.R
-import money.rbk.domain.converter.TERMINATION_URI
+import money.rbk.domain.converter.TERM_URI
 import money.rbk.presentation.navigation.Navigator
 import money.rbk.presentation.screen.base.BasePresenter
 
@@ -50,7 +50,7 @@ internal class Web3DSecurePresenter(
         navigator.finishWithCancel()
     }
 
-    private fun handleUrl(url: String?) = url.equals(TERMINATION_URI, ignoreCase = true)
+    private fun handleUrl(url: String?) = url.equals(TERM_URI, ignoreCase = true)
         .also {
             if (it) {
                 navigator.finishWithSuccess()

@@ -22,8 +22,8 @@ buildscript {
         /* Application */
         app = [
                 minSdkVersion    : 22,
-                targetSdkVersion : 28,
-                compileSdkVersion: 28,
+                targetSdkVersion : 30,
+                compileSdkVersion: 30,
         ]
 
         plugin = [
@@ -46,7 +46,7 @@ buildscript {
         playServicesWallet = '17.0.0'
 
         kotlinVersion = '1.3.41'
-        okhttpVersion = '3.14.2'
+        okhttpVersion = '3.14.9'
         gsonVersion = '2.8.5'
         leakcanaryVersion = '1.6.3'
         crashliticsVersion = '2.10.1'

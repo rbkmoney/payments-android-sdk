@@ -24,10 +24,9 @@ import money.rbk.domain.entity.UserInteraction
 import money.rbk.domain.entity.UserInteractionForm
 import money.rbk.presentation.model.BrowserRequestModel
 
-internal const val TERMINATION_URI = "RBKmoney://success/"
+internal const val TERM_URI = "internal://termination.url"
 
-private const val KEY_TERMINATION_URI = "termination_uri"
-private const val FORM_KEY_TERM_URL = "TermUrl"
+private const val KEY_TERM_URI = "termination_uri"
 
 internal object RedirectBrowserRequestConverter :
     EntityConverter<UserInteraction.Redirect, BrowserRequestModel> {
@@ -35,23 +34,29 @@ internal object RedirectBrowserRequestConverter :
     override fun invoke(entity: UserInteraction.Redirect): BrowserRequestModel =
         when (entity.request) {
             is BrowserRequest.BrowserGetRequest ->
-                BrowserRequestModel(false, entity.request.uriTemplate)
+                BrowserRequestModel(false, processedString(entity.request.uriTemplate, TERM_URI.encode()))
             is BrowserRequest.BrowserPostRequest ->
-                BrowserRequestModel(true, entity.request.uriTemplate,
+                BrowserRequestModel(true, processedString(entity.request.uriTemplate, TERM_URI.encode()),
                     buildPostData(entity.request.form))
         }
 
     private fun buildPostData(entity: List<UserInteractionForm>): ByteArray =
         entity
             .joinToString(separator = "&", transform = { form ->
-                val template =
-                    if (form.key == FORM_KEY_TERM_URL) {
-                        form.template.replace("{?$KEY_TERMINATION_URI}",
-                            "?$KEY_TERMINATION_URI=${TERMINATION_URI.encode()}")
-                    } else {
-                        form.template
-                    }
-                "${form.key}=${template.encode()}"
+                val template = processedString(form.template, TERM_URI)
+                "${form.key.encode()}=${template.encode()}"
             })
             .toByteArray()
+
+    private fun processedString(template: String, terminationURI: String): String =
+        template
+            .replace("{$KEY_TERM_URI}", terminationURI)
+            .replace("{+$KEY_TERM_URI}", terminationURI)
+            .replace("{#$KEY_TERM_URI}", "#${terminationURI}")
+            .replace("{.$KEY_TERM_URI}", ".${terminationURI}")
+            .replace("{/$KEY_TERM_URI}", "/${terminationURI}")
+            .replace("{?$KEY_TERM_URI}", "?$KEY_TERM_URI=${terminationURI}")
+            .replace("{&$KEY_TERM_URI}", "&$KEY_TERM_URI=${terminationURI}")
+            .replace("{;$KEY_TERM_URI}", ";$KEY_TERM_URI=${terminationURI}")
+
 }

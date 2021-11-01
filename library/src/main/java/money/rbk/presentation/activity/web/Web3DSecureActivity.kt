@@ -95,7 +95,7 @@ internal class Web3DSecureActivity : AppCompatActivity(), Web3DSecureView {
         showProgress()
 
         if (isPost) {
-            webView.postUrl(redirectUrl, body)
+            body?.let { webView.postUrl(redirectUrl, it) }
         } else {
             webView.loadUrl(redirectUrl)
         }
