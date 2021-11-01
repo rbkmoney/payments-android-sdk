@@ -37,7 +37,7 @@ internal class GpayLoadPaymentDataUseCase(
             val task = gpayRepository.loadPaymentData(inputModel.price, inputModel.currency)
 
             uiExecutor {
-                onResultCallback(PaymentDataTaskModel(task))
+                task?.let { onResultCallback(PaymentDataTaskModel(it)) }
             }
         }
 

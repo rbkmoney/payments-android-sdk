@@ -105,7 +105,7 @@ internal class BankCardFragment : BaseFragment<BankCardView>(), BankCardView {
         maskFormatWatcher.removeFromTextView()
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }

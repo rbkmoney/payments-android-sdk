@@ -38,7 +38,6 @@ import money.rbk.data.extension.ServerConstants.serverErrorCodes
 import money.rbk.data.methods.base.ApiRequest
 import money.rbk.data.methods.base.PostRequest
 import money.rbk.data.network.Constants
-import money.rbk.data.utils.ClientInfoUtils
 import money.rbk.data.utils.log
 import money.rbk.di.Injector
 import money.rbk.domain.entity.ApiError
@@ -107,14 +106,14 @@ internal fun <T> OkHttpClient.execute(apiRequest: ApiRequest<T>): T {
     }
 
     val stringBody: String = try {
-        response.body()?.string()
+        response.body?.string()
     } catch (e: IOException) {
         throw ResponseReadingException(response, e)
     } ?: throw ResponseReadingException(response)
 
-    log(javaClass.name, "[${request.method()}] ${request.url()}", stringBody)
+    log(javaClass.name, "[${request.method}] ${request.url}", stringBody)
 
-    when (val code = response.code()) {
+    when (val code = response.code) {
         in serverErrorCodes -> throw InternalServerError(code)
         in clientErrorCodes -> throw ClientError(code, gson.fromJson(stringBody, ApiError::class.java))
     }

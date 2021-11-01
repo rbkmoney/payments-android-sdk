@@ -16,28 +16,10 @@
  *
  */
 
-apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.getkeepsafe.dexcount'
-apply plugin: 'com.jfrog.bintray'
-
-dexcount {
-    format = "tree"
-    includeClasses = true
-    includeClassCount = true
-    includeFieldCount = true
-    includeTotalMethodCount = true
-    orderByMethodCount = true
-    verbose = true
-    maxTreeDepth = Integer.MAX_VALUE
-    teamCityIntegration = false
-    teamCitySlug = null
-    runOnEachPackage = true
-    maxMethodCount = Integer.MAX_VALUE
-    enabled = true
-}
+apply plugin: 'maven-publish'
 
 android {
     compileSdkVersion app.compileSdkVersion
@@ -47,6 +29,7 @@ android {
         targetSdkVersion app.targetSdkVersion
         versionCode libraryVersionCode
         versionName libraryVersion
+        buildConfigField("String", "VERSION_NAME", "\"${versionName}\"")
     }
 
     resourcePrefix 'rbk_'
@@ -70,15 +53,15 @@ configurations {
     implementation.extendsFrom optional
 }
 
-def playServicesAdsVersion = '18.1.0'
+def playServicesAdsVersion = '20.4.0'
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    implementation project("monthandyearpicker")
     compileOnly "com.google.android.gms:play-services-ads:$playServicesAdsVersion"
 
     /* androidx */
     implementation "androidx.appcompat:appcompat:$androidx.appcompat"
-    implementation "androidx.fragment:fragment:$androidx.fragment"
+    implementation "androidx.fragment:fragment-ktx:$androidx.fragment"
     implementation "androidx.constraintlayout:constraintlayout:$androidx.constraintlayout"
     implementation "androidx.vectordrawable:vectordrawable:$androidx.vectordrawable"
     implementation "androidx.cardview:cardview:$androidx.cardview"
@@ -94,7 +77,6 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
 
-    implementation "com.whiteelephant:monthandyearpicker:$datepickerVersion"
     implementation "ru.tinkoff.decoro:decoro:$decoroVersion"
 }
 
@@ -109,75 +91,54 @@ artifacts {
 
 archivesBaseName = "payments-android-sdk"
 
-publish {
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'rbk.money'
+            artifactId = 'payments-android-sdk'
+            version = libraryVersion
 
-    def groupProjectID = 'rbk.money'
-    def artifactProjectID = 'payments-android-sdk'
-    def publishVersionID = libraryVersion
+            artifact("$buildDir/outputs/aar/payments-android-sdk-release.aar")
+            artifact sourcesJar
 
-    userOrg = 'rbkmoney-org'
-    groupId = groupProjectID
+            pom.withXml {
+                def root = asNode()
 
-    repoName = artifactProjectID
-    artifactId = artifactProjectID
+                // Basic Info
+                root.appendNode('name', 'RBK.money Payment Android SDK')
+                root.appendNode('description', 'The Android SDK for RBK.money')
+                root.appendNode('url', 'https://rbk.money/')
 
-    publishVersion = publishVersionID
+                // License Info
+                def license = root.appendNode('licenses').appendNode('license')
+                license.appendNode('name', 'The Apache Software License, Version 2.0')
+                license.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0')
+                license.appendNode('distribution', 'repo')
 
-    desc = 'RBK.money Payment Android SDK'
-    website = 'https://rbk.money/'
-    repository = 'https://github.com/rbkmoney/payments-android-sdk'
-    version libraryVersion
+                // Source Control Info
+                def scm = root.appendNode('scm')
+                scm.appendNode('url', 'https://github.com/rbkmoney/payments-android-sdk')
+                scm.appendNode('connection', 'git@github.com:rbkmoney/payments-android-sdk.git')
 
-    publishing {
-        publications {
-            Project(MavenPublication) {
-                groupId = groupProjectID
-                artifactId = artifactProjectID
-                version = libraryVersion
+                // Dependencies
+                def dependenciesNode = root.appendNode('dependencies')
 
-                artifact("$buildDir/outputs/aar/payments-android-sdk-release.aar")
-                artifact sourcesJar
-
-                pom.withXml {
-                    def root = asNode()
-
-                    // Basic Info
-                    root.appendNode('name', 'RBK.money Payment Android SDK')
-                    root.appendNode('description', 'The Android SDK for RBK.money')
-                    root.appendNode('url', 'https://rbk.money/')
-
-                    // License Info
-                    def license = root.appendNode('licenses').appendNode('license')
-                    license.appendNode('name', 'The Apache Software License, Version 2.0')
-                    license.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0')
-                    license.appendNode('distribution', 'repo')
-
-                    // Source Control Info
-                    def scm = root.appendNode('scm')
-                    scm.appendNode('url', 'https://github.com/rbkmoney/payments-android-sdk')
-                    scm.appendNode('connection', 'git@github.com:rbkmoney/payments-android-sdk.git')
-
-                    // Dependencies
-                    def dependenciesNode = root.appendNode('dependencies')
-
-                    configurations.implementation.allDependencies.each { dp ->
-                        if (dp.group) {
-                            def dependencyNode = dependenciesNode.appendNode('dependency')
-                            dependencyNode.appendNode('groupId', dp.group)
-                            dependencyNode.appendNode('artifactId', dp.name)
-                            dependencyNode.appendNode('version', dp.version)
-                        }
+                configurations.implementation.allDependencies.each { dp ->
+                    if (dp.group) {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', dp.group)
+                        dependencyNode.appendNode('artifactId', dp.name)
+                        dependencyNode.appendNode('version', dp.version)
                     }
-
-                    // Developer info
-                    def developers = root.appendNode('developers')
-                    def dev = developers.appendNode('developer')
-                    dev.appendNode('id', 'rbkmoney')
-                    dev.appendNode('name', 'rbkmoney')
-                    dev.appendNode('email', 'developers@rbk.money')
                 }
+
+                // Developer info
+                def developers = root.appendNode('developers')
+                def dev = developers.appendNode('developer')
+                dev.appendNode('id', 'rbkmoney')
+                dev.appendNode('name', 'rbkmoney')
+                dev.appendNode('email', 'developers@rbk.money')
             }
         }
     }
-    publications = ['Project']
 }

@@ -26,9 +26,9 @@ internal interface GpayRepository {
 
     val gatewayMerchantId: String
 
-    fun checkReadyToPay(): Task<Boolean>
+    fun checkReadyToPay(): Task<Boolean>?
 
-    fun loadPaymentData(price: String, currency: Currency): Task<PaymentData>
+    fun loadPaymentData(price: String, currency: Currency): Task<PaymentData>?
 
     fun init(shopId: String)
 

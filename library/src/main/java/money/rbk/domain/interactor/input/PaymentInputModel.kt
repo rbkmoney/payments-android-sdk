@@ -27,6 +27,7 @@ import money.rbk.domain.entity.ContactInfo
 import money.rbk.domain.entity.PaymentMethodToken
 import money.rbk.domain.entity.PaymentToken
 import money.rbk.domain.entity.PaymentTool
+import org.json.JSONObject
 
 internal sealed class PaymentInputModel(private val email: String) : BaseInputModel() {
 
@@ -52,26 +53,31 @@ internal sealed class PaymentInputModel(private val email: String) : BaseInputMo
         private val intent: Intent) : PaymentInputModel(email) {
 
         fun getPaymentTool(gatewayMerchantID: String): PaymentTool {
-            val paymentData = PaymentData.getFromIntent(intent)
-            val paymentMethodToken = paymentData?.paymentMethodToken
+            val paymentDataFromIntent = PaymentData.getFromIntent(intent)
+            val paymentDataJson = paymentDataFromIntent?.toJson()
+            val paymentData = if (paymentDataJson.isNullOrEmpty()) null else JSONObject(paymentDataJson)
+            val paymentMethodData = paymentData?.getJSONObject("paymentMethodData")
                 ?: throw GpayException.GpayPaymentMethodTokenException
+
+            val cardInfo = paymentMethodData.getJSONObject("info")
+            val tokenizationData = paymentMethodData.getJSONObject("tokenizationData")
 
             return PaymentTool.TokenizedCardData(
                 gatewayMerchantID = gatewayMerchantID,
                 paymentToken = PaymentToken(
                     cardInfo = CardInfo(
-                        paymentData.cardInfo.cardNetwork,
-                        paymentData.cardInfo.cardDetails,
-                        paymentData.cardInfo.cardDescription,
-                        when (paymentData.cardInfo.cardClass) {
+                        cardNetwork = cardInfo.getString("cardNetwork"),
+                        cardDetails = cardInfo.getString("cardDetails"),
+                        cardDescription = paymentMethodData.getString("description"),
+                        cardClass = when (paymentDataFromIntent?.cardInfo?.cardClass) {
                             WalletConstants.CARD_CLASS_DEBIT -> CardInfo.CardClass.DEBIT
                             WalletConstants.CARD_CLASS_PREPAID -> CardInfo.CardClass.PREPAID
                             else -> CardInfo.CardClass.CREDIT
                         }
                     ),
                     paymentMethodToken = PaymentMethodToken(
-                        tokenizationType = "PAYMENT_GATEWAY",
-                        token = paymentMethodToken.token
+                        tokenizationType = tokenizationData.getString("type"),
+                        token = tokenizationData.getString("token")
                     )
                 ),
                 provider = "GooglePay"

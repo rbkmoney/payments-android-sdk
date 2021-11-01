@@ -26,28 +26,21 @@ buildscript {
                 compileSdkVersion: 30,
         ]
 
-        plugin = [
-                dexcount      : '0.8.6',
-                fabric        : '1.30.0',
-                bintrayRelease: '0.9.1',
-        ]
-
         androidx = [
-                appcompat       : '1.0.2',
-                fragment        : '1.0.0',
-                constraintlayout: '1.1.3',
-                annotation      : '1.0.2',
-                vectordrawable  : '1.0.1',
+                appcompat       : '1.3.1',
+                fragment        : '1.3.6',
+                constraintlayout: '2.1.1',
+                vectordrawable  : '1.1.0',
                 cardview        : '1.0.0',
-                recyclerview    : '1.0.0'
+                recyclerview    : '1.2.1'
         ]
 
         decoroVersion = '1.3.5'
-        playServicesWallet = '17.0.0'
+        playServicesWallet = '18.1.3'
 
-        kotlinVersion = '1.3.41'
-        okhttpVersion = '3.14.9'
-        gsonVersion = '2.8.5'
+        kotlinVersion = '1.5.20'
+        okhttpVersion = '4.9.1'
+        gsonVersion = '2.8.6'
         leakcanaryVersion = '1.6.3'
         crashliticsVersion = '2.10.1'
 
@@ -58,24 +51,21 @@ buildscript {
     }
 
     repositories {
+        flatDir{dirs 'monthandyearpicker'}
         google()
-        jcenter()
-        maven { url 'https://maven.fabric.io/public' }
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.2'
+        classpath 'com.android.tools.build:gradle:7.0.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "com.getkeepsafe.dexcount:dexcount-gradle-plugin:$plugin.dexcount"
-        classpath "io.fabric.tools:gradle:$plugin.fabric"
-        classpath "com.novoda:bintray-release:$plugin.bintrayRelease"
     }
 }
 
 plugins {
     id "io.gitlab.arturbosch.detekt" version '1.0.0.RC7'
     id "com.github.ben-manes.versions" version '0.21.0'
-    id "com.jfrog.bintray" version "1.7.3"
+    id "maven-publish"
 }
 
 detekt {
@@ -92,7 +82,7 @@ detekt {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
